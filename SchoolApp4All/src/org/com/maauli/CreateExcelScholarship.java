@@ -37,11 +37,11 @@ public class CreateExcelScholarship {
     
     static ResourceBundle bundle = ResourceBundle.getBundle("org.com.accesser.school");
 
-    String driver = bundle.getString("DBDRIVER");
+    String driver = "";
 
-	static String user = bundle.getString("DBUSER");
+	String user = "";
 
-	static String pwd = bundle.getString("DBPASSWD");
+	String pwd = "";
 	
 	static Connection connection = null;
 
@@ -73,8 +73,12 @@ public class CreateExcelScholarship {
 		String dbUser 	= "";
 		String dbPass 	= "";
 		
+		driver = sessionData.getConfigMap().get("DBDRIVER");
+		user = sessionData.getConfigMap().get("DBUSER");
+		pwd = sessionData.getConfigMap().get("DBPASSWD");
+		
 		try {
-			String url = bundle.getString("DBURL_"+sessionData.getDBName());
+			String url = sessionData.getConfigMap().get("DBURL_"+sessionData.getDBName());
 			dbUser = sessionData.getDBUser();
 			dbPass = sessionData.getDBPass();
 			if(dbUser.equalsIgnoreCase(null) || dbUser.equalsIgnoreCase("")){
@@ -127,8 +131,8 @@ public class CreateExcelScholarship {
 			Statement st = null;
 			ResultSet rs = null;*/
 			connectDatabase(sessionData);
-			path = ce.createTodayFolder(ce.getDriveName() + bundle.getString("TEMPLATE_PATH_"+sessionData.getDBName()),true)+"/";
-			scholarship_print_headers = bundle.getString("SCHOLARSHIP_PRINT_HEADERS").split(",");
+			path = ce.createTodayFolder(ce.getDriveName() + sessionData.getConfigMap().get("TEMPLATE_PATH_"+sessionData.getDBName()),true)+"/";
+			scholarship_print_headers = sessionData.getConfigMap().get("SCHOLARSHIP_PRINT_HEADERS").split(",");
 			
 			HSSFWorkbook wb = new HSSFWorkbook();
 			

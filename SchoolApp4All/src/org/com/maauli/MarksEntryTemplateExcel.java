@@ -31,7 +31,7 @@ import org.com.security.EncryptDecryptStr;
 
 public class MarksEntryTemplateExcel {
     
-	String driver = bundle.getString("DBDRIVER");
+	static String driver = "";
 
 	boolean validateUserFlag = false;
 
@@ -61,15 +61,19 @@ public class MarksEntryTemplateExcel {
 	
 	Common commonObj = new Common();
 	
-	static String user = bundle.getString("DBUSER");
+	static String user = "";
 
-	static String pwd = bundle.getString("DBPASSWD");
+	static String pwd = "";
 	
-    public void MarksEntryTemplateMethod(SessionData sessionData, String groupTitle, String categoryType, String query, 
+    public void MarksEntryTemplateMethod(SessionData sessionData1, String groupTitle, String categoryType, String query, 
     		List<String> printList, boolean fieldSentInList, String headers, String fields, String maxMarks, String exam, String std, String div, 
     		TreeMap studentLCMap) throws SQLException {
     	System.gc();
     	int index = 0;
+    	sessionData = sessionData1;
+    	user = sessionData.getConfigMap().get("DBUSER");
+    	pwd = sessionData.getConfigMap().get("DBPASSWD");
+    	driver = sessionData.getConfigMap().get("DBDRIVER");
     	String excel_readonly = "";
     	headerClass = headers;
     	PreparedStatement psmnt = null;
@@ -77,8 +81,8 @@ public class MarksEntryTemplateExcel {
 		ResultSet rs = null;
 		try {
 			connectDatabase(sessionData);
-			path = commonObj.createTodayFolder(commonObj.getDriveName() + bundle.getString("TEMPLATE_PATH_"+sessionData.getDBName()),true);
-			excel_readonly = bundle.getString("EXCEL_READONLY");
+			path = commonObj.createTodayFolder(commonObj.getDriveName() + sessionData.getConfigMap().get("TEMPLATE_PATH_"+sessionData.getDBName()),true);
+			excel_readonly = sessionData.getConfigMap().get("EXCEL_READONLY");
 			
 			if(printList.size() <= 0){
 				st = connection.createStatement();
@@ -232,7 +236,7 @@ public class MarksEntryTemplateExcel {
 			FileOutputStream fileOut = new FileOutputStream(filePath);
 			wb.write(fileOut);
 //			commonObj.setPasswordToExcel(filePath, fileOut);
-//			commonObj.CreatePasswordProtectedZip(path,"");
+//			commonObj.CreatePasswordProtectedZip(sessionDatapath,"");
 //			fileOut.close();
 			logger.info("Data is saved in excel file.");
 			
@@ -377,7 +381,7 @@ public class MarksEntryTemplateExcel {
 		String dbPass 	= "";
 		
 		try {
-			String url = bundle.getString("DBURL_"+sessionData.getDBName());
+			String url = sessionData.getConfigMap().get("DBURL_"+sessionData.getDBName());
 			dbUser = sessionData.getDBUser();
 			dbPass = sessionData.getDBPass();
 			if(dbUser.equalsIgnoreCase(null) || dbUser.equalsIgnoreCase("")){

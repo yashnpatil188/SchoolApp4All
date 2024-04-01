@@ -50,8 +50,8 @@ public class MarksSheet_IX_PDF {
 		double total = 0, totalObtained = 0, subjectMarks = 0, subjectTotal = 0, percent = 0;
 		int subjectHeadCount = maxSubMarks.size(), addRow = 0;
 		String subTitle = "", grNo = "", subGrade = "", totalGrade = "", outOfMarks = "", finalSubMarks = "0";
-		String bonafide_header = bundle.getString("BONAFIDE_HEADER_" + sessionData.getAppType());
-		String bonafide_header_0 = bundle.getString("BONAFIDE_HEADER_0_" + sessionData.getAppType());
+		String bonafide_header = sessionData.getConfigMap().get("BONAFIDE_HEADER_" + sessionData.getAppType());
+		String bonafide_header_0 = sessionData.getConfigMap().get("BONAFIDE_HEADER_0_" + sessionData.getAppType());
 		if(!bonafide_header_0.trim().equalsIgnoreCase("")){
 			bonafide_header_0 = bonafide_header_0 + " \n";
 //			displayRows = 25;
@@ -69,7 +69,7 @@ public class MarksSheet_IX_PDF {
 				examHeader = "FINAL EXAM";
 			}
 			path = commonObj.createTodayFolder(
-					commonObj.getDriveName() + bundle.getString("REPORT_PDF_PATH_" + sessionData.getDBName()), true)
+					commonObj.getDriveName() + sessionData.getConfigMap().get("REPORT_PDF_PATH_" + sessionData.getDBName()), true)
 					+ "/";
 			fileName = "Mark_Grade_Sheet_" + std + "_" + div + "_" + commonObj.timeInMillis() + ".pdf";
 			fileAddress = path + fileName;

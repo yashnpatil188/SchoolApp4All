@@ -76,11 +76,11 @@ public class CreatePDF {
 		user_role = retUserRole;
 		section = sec;
     	logger.info("section :: "+section);
-    	std     = bundle.getString(section.toUpperCase()+"_STD");
+    	std     = sessionData.getConfigMap().get(section.toUpperCase()+"_STD");
     	logger.info("std :: "+std);
-    	div     = bundle.getString(section.toUpperCase()+"_DIV");
+    	div     = sessionData.getConfigMap().get(section.toUpperCase()+"_DIV");
     	logger.info("div :: "+div);
-    	secName = bundle.getString(section.toUpperCase()+"_SEC");
+    	secName = sessionData.getConfigMap().get(section.toUpperCase()+"_SEC");
     	logger.info("secName :: "+secName);
     	
 		List<String> recLCList = new ArrayList();
@@ -101,7 +101,7 @@ public class CreatePDF {
 		logger.info("remark :: "+remark);
 		logger.info("conduct :: "+conduct);
 		
-		path = commonLc.createTodayFolder(commonLc.getDriveName() + bundle.getString("LC_PDF_PATH_"+sessionData.getDBName()),true)+"/";
+		path = commonLc.createTodayFolder(commonLc.getDriveName() + sessionData.getConfigMap().get("LC_PDF_PATH_"+sessionData.getDBName()),true)+"/";
 		
 		if(leavingDate.contains("/")){
 			leavingDate = commonLc.MM_dd_mm_yyyy(leavingDate);
@@ -140,9 +140,9 @@ public class CreatePDF {
 			document.open();
 			
 			try {
-				lcCountYear = findStudentDB.getPatternCount(sessionData, "HS_GENERAL_REGISTER", "ORIGINAL_LC", commonLc.getAcademicYear(commonLc.getCurrentDate()));
+				lcCountYear = findStudentDB.getPatternCount(sessionData, "HS_GENERAL_REGISTER", "ORIGINAL_LC", commonLc.getAcademicYear(sessionData,commonLc.getCurrentDate()));
 				logger.info("lcCountYear => "+lcCountYear);
-				dupLcCountYear = findStudentDB.getPatternCount(sessionData, "HS_GENERAL_REGISTER", "DUPLICATE_LC", commonLc.getAcademicYear(commonLc.getCurrentDate()));
+				dupLcCountYear = findStudentDB.getPatternCount(sessionData, "HS_GENERAL_REGISTER", "DUPLICATE_LC", commonLc.getAcademicYear(sessionData,commonLc.getCurrentDate()));
 				logger.info("dupLcCountYear => "+dupLcCountYear);
 			} catch (Exception e) {
 				logger.info("CountYear Exception == "+e);
@@ -389,7 +389,7 @@ public class CreatePDF {
 					dupLcCountYear = dupLcCountYear +1;
 					String dupLcCount =  String.format("%03d", dupLcCountYear);
 //					newLcNo = (dupLcCount)+"/"+(Integer.parseInt(currentYear)-1)+"-"+currentYear.substring(2);
-					newLcNo = (dupLcCount)+"/"+commonLc.getAcademicYear(todayDate);
+					newLcNo = (dupLcCount)+"/"+commonLc.getAcademicYear(sessionData,todayDate);
 					logger.info("duplicate LC No.: "+newLcNo);
 					duplicateLcNo = newLcNo;
 					duplicateLcDate = issueDate;
@@ -398,7 +398,7 @@ public class CreatePDF {
 					lcCountYear = lcCountYear +1;
 					LcCount =  String.format("%03d", lcCountYear);
 //					newLcNo = (LcCount)+"/"+(Integer.parseInt(currentYear)-1)+"-"+currentYear.substring(2);
-					newLcNo = (LcCount)+"/"+commonLc.getAcademicYear(todayDate);
+					newLcNo = (LcCount)+"/"+commonLc.getAcademicYear(sessionData,todayDate);
 					logger.info("New LC No.: "+newLcNo);
 					origLcNo = newLcNo;
 					originalLcDate = issueDate;

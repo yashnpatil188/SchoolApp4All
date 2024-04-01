@@ -99,42 +99,42 @@ public class StudyCertificatePDF {
 		user_role = retUserRole;
 		section = sec;
     	logger.info("section :: "+section);
-    	std     = bundle.getString(section.toUpperCase()+"_STD");
+    	std     = sessionData1.getConfigMap().get(section.toUpperCase()+"_STD");
     	logger.info("std :: "+std);
-    	div     = bundle.getString(section.toUpperCase()+"_DIV");
+    	div     = sessionData1.getConfigMap().get(section.toUpperCase()+"_DIV");
     	logger.info("div :: "+div);
-    	secName = bundle.getString(section.toUpperCase()+"_SEC");
+    	secName = sessionData1.getConfigMap().get(section.toUpperCase()+"_SEC");
     	logger.info("secName :: "+secName);
-    	app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
-        bonafide_header = bundle.getString("BONAFIDE_HEADER_"+sessionData.getAppType());
-        bonafide_header_0 = bundle.getString("BONAFIDE_HEADER_0_"+sessionData.getAppType());
-        footer = bundle.getString("FOOTER_"+sessionData1.getAppType());
-        String img_path = bundle.getString("IMAGE_PATH");
-        String pdf_header_img_path = bundle.getString("IMAGE_PDF_BONAFIDE_HEADER_"+sessionData.getAppType());
-		String pdf_header_bonafide_image_flag = bundle.getString("PDF_HEADER_STUDY_CERT_IMAGE_FLAG");
-		float image_pdf_scalepercent = Float.parseFloat(bundle.getString("IMAGE_PDF_BONAFIDE_SCALEPERCENT")) - 9.0f;
-		int image_pdf_pos_x = Integer.parseInt(bundle.getString("IMAGE_PDF_BONAFIDE_POS_X"));
-		int image_pdf_pos_y = Integer.parseInt(bundle.getString("IMAGE_PDF_BONAFIDE_POS_Y"))+45;
+    	app_header = sessionData1.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData1.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData1.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData1.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData1.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData1.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+        bonafide_header = sessionData1.getConfigMap().get("BONAFIDE_HEADER_"+sessionData.getAppType());
+        bonafide_header_0 = sessionData1.getConfigMap().get("BONAFIDE_HEADER_0_"+sessionData.getAppType());
+        footer = sessionData1.getConfigMap().get("FOOTER_"+sessionData1.getAppType());
+        String img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
+        String pdf_header_img_path = sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_HEADER_"+sessionData.getAppType());
+		String pdf_header_bonafide_image_flag = sessionData1.getConfigMap().get("PDF_HEADER_STUDY_CERT_IMAGE_FLAG");
+		float image_pdf_scalepercent = Float.parseFloat(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_SCALEPERCENT")) - 9.0f;
+		int image_pdf_pos_x = Integer.parseInt(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_POS_X"));
+		int image_pdf_pos_y = Integer.parseInt(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_POS_Y"))+45;
     	
 		List<String> recLCList = new ArrayList();
 		
 		String separator ="----------------------------------------------------------------------------------------------------------------------------------";
 		logger.info("view_save :: "+view_save);
-		path = commonLc.createTodayFolder(commonLc.getDriveName() + bundle.getString("BONAFIDE_PDF_PATH_"+sessionData.getDBName()),true)+"/";
+		path = commonLc.createTodayFolder(commonLc.getDriveName() + sessionData1.getConfigMap().get("BONAFIDE_PDF_PATH_"+sessionData.getDBName()),true)+"/";
 		
 		int lcCountYear = 0;
 		int dupLcCountYear = 0;
@@ -226,7 +226,7 @@ public class StudyCertificatePDF {
 						SimpleDateFormat today = new SimpleDateFormat("dd/MM/yyyy");
 						todayDate = today.format(date);
 						
-						String currentAcademicYear = commonLc.getAcademicYear(todayDate.toString());
+						String currentAcademicYear = commonLc.getAcademicYear(sessionData1,todayDate.toString());
 						
 						String is_was = "is";
 						if(originalLC != null && !originalLC.equalsIgnoreCase("null") && !originalLC.equalsIgnoreCase("-")){
@@ -324,7 +324,7 @@ public class StudyCertificatePDF {
 						Chunk chunkMatter5 = new Chunk(" in the academic year ");
 						chunkMatter5.setFont(fontClass1);
 						
-						Chunk chunkAdmAcademic = new Chunk(commonLc.getAcademicYear(doaDb));
+						Chunk chunkAdmAcademic = new Chunk(commonLc.getAcademicYear(sessionData1,doaDb));
 						chunkAdmAcademic.setUnderline(0.8f, -2f); //0.8 thick, -2 y-location
 						chunkAdmAcademic.setFont(fontClassBold1);
 
@@ -349,14 +349,14 @@ public class StudyCertificatePDF {
 						Chunk chunkMatter7 = new Chunk(" in the present academic year ");
 						chunkMatter7.setFont(fontClass1);
 						
-						Chunk chunkMatter11 = new Chunk(commonLc.getAcademicYear(todayDate)+".");
+						Chunk chunkMatter11 = new Chunk(commonLc.getAcademicYear(sessionData1,todayDate)+".");
 						chunkMatter11.setUnderline(0.8f, -2f); //0.8 thick, -2 y-location
 						chunkMatter11.setFont(fontClassBold1);
 						
 						Chunk chunkMatter9 = new Chunk(". "+he_she+"  left the school from Std. ");
 						chunkMatter9.setFont(fontClass1);
 						
-						Chunk chunkMatter10 = new Chunk(" in the academic year "+commonLc.getAcademicYear(originalLCDate)+".");
+						Chunk chunkMatter10 = new Chunk(" in the academic year "+commonLc.getAcademicYear(sessionData1,originalLCDate)+".");
 						chunkMatter10.setFont(fontClass1);
 						
 						Phrase phrase = new Phrase();

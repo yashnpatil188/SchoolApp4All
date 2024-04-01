@@ -152,37 +152,37 @@ public class StudentSubAllot extends JFrame {
 		selectDiv = "Select";
 		section = sec;
 		logger.info("section :: " + section);
-		std = bundle.getString(section.toUpperCase() + "_STD");
+		std = sessionData1.getConfigMap().get(section.toUpperCase() + "_STD");
 		logger.info("std :: " + std);
-		div = bundle.getString(section.toUpperCase() + "_DIV");
+		div = sessionData1.getConfigMap().get(section.toUpperCase() + "_DIV");
 		logger.info("div :: " + div);
-		secName = bundle.getString(section.toUpperCase() + "_SEC");
+		secName = sessionData1.getConfigMap().get(section.toUpperCase() + "_SEC");
 		logger.info("secName :: " + secName);
-		img_path = bundle.getString("IMAGE_PATH");
+		img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
 		logger.info("img_path :: " + img_path);
-		img_home = bundle.getString("IMAGE_HOME");
-		img_logo = bundle.getString("IMAGE_LOGO");
-		img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-		img_logout = bundle.getString("IMAGE_LOGOUT");
-		img_titleband = bundle.getString("IMAGE_TITLEBAND");
-		img_leftband = bundle.getString("IMAGE_LEFTBAND");
-		img_menuband = bundle.getString("IMAGE_MENUBAND");
-		img_mainband = bundle.getString("IMAGE_MAINBAND");
-		app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+		img_home = sessionData1.getConfigMap().get("IMAGE_HOME");
+		img_logo = sessionData1.getConfigMap().get("IMAGE_LOGO");
+		img_myaccount = sessionData1.getConfigMap().get("IMAGE_MYACCOUNT");
+		img_logout = sessionData1.getConfigMap().get("IMAGE_LOGOUT");
+		img_titleband = sessionData1.getConfigMap().get("IMAGE_TITLEBAND");
+		img_leftband = sessionData1.getConfigMap().get("IMAGE_LEFTBAND");
+		img_menuband = sessionData1.getConfigMap().get("IMAGE_MENUBAND");
+		img_mainband = sessionData1.getConfigMap().get("IMAGE_MAINBAND");
+		app_header = sessionData1.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData1.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData1.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData1.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData1.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData1.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
 
 		subTitleClass = retSubTitle;
 		logger.info("subTitleClass :: " + subTitleClass);
@@ -384,7 +384,7 @@ public class StudentSubAllot extends JFrame {
 
 						frame.setVisible(false);
 						String[] arguments = new String[] {""};
-		                LoginView.main(arguments);
+		                SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					logger.info("Exception logoutButton ===>>>" + e1);
@@ -692,8 +692,8 @@ public class StudentSubAllot extends JFrame {
 		// findPanel.add(year_label);
 
 		String todayDate = commonObj.getCurrentDate();
-		String currentAcademic = commonObj.getAcademicYear(todayDate);
-		String yearList = currentAcademic + "," + Common.getPreviousYear(currentAcademic);
+		String currentAcademic = commonObj.getAcademicYear(sessionData,todayDate);
+		String yearList = currentAcademic + "," + Common.getPreviousYear(sessionData,currentAcademic);
 		String academicYearList[] = yearList.split(",");
 		
 		final JComboBox academicYear_combo = new JComboBox(academicYearList);
@@ -747,6 +747,9 @@ public class StudentSubAllot extends JFrame {
 		final JRadioButton createSubject_radio = new JRadioButton();
 		createSubject_radio.setBounds(mainCentre - 350, 55, 20, 20);
 		findPanel.add(createSubject_radio);
+		if(!sessionData.getUserRole().equalsIgnoreCase("ADMINISTRATOR")) {
+			createSubject_radio.setEnabled(false);
+		}
 
 		final JLabel createSubject_label = new JLabel("Create Subject");
 		createSubject_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));
@@ -757,6 +760,9 @@ public class StudentSubAllot extends JFrame {
 		final JRadioButton allotSubject_radio = new JRadioButton();
 		allotSubject_radio.setBounds(mainCentre - 160, 55, 20, 20);
 		findPanel.add(allotSubject_radio);
+		if(!sessionData.getUserRole().equalsIgnoreCase("ADMINISTRATOR")) {
+			allotSubject_radio.setEnabled(false);
+		}
 
 		final JLabel allotSubject_label = new JLabel("Marks Allotment");
 		allotSubject_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));
@@ -767,6 +773,9 @@ public class StudentSubAllot extends JFrame {
 		final JRadioButton studentSubject_radio = new JRadioButton();
 		studentSubject_radio.setBounds(mainCentre + 70, 55, 20, 20);
 		findPanel.add(studentSubject_radio);
+//		if(!sessionData.getUserRole().equalsIgnoreCase("ADMINISTRATOR")) {
+//			studentSubject_radio.setEnabled(false);
+//		}
 
 		final JLabel studentSubject_label = new JLabel("Student Subject Allotment");
 		studentSubject_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));

@@ -189,9 +189,9 @@ public class StrengthAge extends JFrame {
 		category = retCatType;
 		section = sec;
 		logger.info("section :: " + section);
-		std = bundle.getString(section.toUpperCase() + "_STD");
+		std = sessionData.getConfigMap().get(section.toUpperCase() + "_STD");
 		logger.info("std :: " + std);
-		String secName = bundle.getString(section.toUpperCase() + "_SEC");
+		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		if(secName.contains("Section")){
 			secName = secName.substring(0, secName.indexOf("Section"));
 		}
@@ -213,40 +213,40 @@ public class StrengthAge extends JFrame {
 			}
 		}
 		
-		div = bundle.getString(section.toUpperCase() + "_DIV");
+		div = sessionData.getConfigMap().get(section.toUpperCase() + "_DIV");
 		logger.info("div :: " + div);
-		secName = bundle.getString(section.toUpperCase() + "_SEC");
+		secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		logger.info("secName :: " + secName);
-		categoryList = bundle.getString("CATEGORY_LIST");
-		img_path = bundle.getString("IMAGE_PATH");
+		categoryList = sessionData.getConfigMap().get("CATEGORY_LIST");
+		img_path = sessionData.getConfigMap().get("IMAGE_PATH");
 		logger.info("img_path :: " + img_path);
-		img_home = bundle.getString("IMAGE_HOME");
-		img_logo = bundle.getString("IMAGE_LOGO");
-		img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-		img_logout = bundle.getString("IMAGE_LOGOUT");
-		img_titleband = bundle.getString("IMAGE_TITLEBAND");
-		img_leftband = bundle.getString("IMAGE_LEFTBAND");
-		img_menuband = bundle.getString("IMAGE_MENUBAND");
-		img_mainband = bundle.getString("IMAGE_MAINBAND");
-		lc_visible_master_only = bundle.getString("LC_VISIBLE_MASTER_ONLY");
-		app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+		img_home = sessionData.getConfigMap().get("IMAGE_HOME");
+		img_logo = sessionData.getConfigMap().get("IMAGE_LOGO");
+		img_myaccount = sessionData.getConfigMap().get("IMAGE_MYACCOUNT");
+		img_logout = sessionData.getConfigMap().get("IMAGE_LOGOUT");
+		img_titleband = sessionData.getConfigMap().get("IMAGE_TITLEBAND");
+		img_leftband = sessionData.getConfigMap().get("IMAGE_LEFTBAND");
+		img_menuband = sessionData.getConfigMap().get("IMAGE_MENUBAND");
+		img_mainband = sessionData.getConfigMap().get("IMAGE_MAINBAND");
+		lc_visible_master_only = sessionData.getConfigMap().get("LC_VISIBLE_MASTER_ONLY");
+		app_header = sessionData.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
 
 		String todayDate = commonObj.getCurrentDate();
-		academicYearClass = commonObj.getAcademicYear(todayDate);
+		academicYearClass = commonObj.getAcademicYear(sessionData1,todayDate);
 		
 		if(lc_visible_master_only.equalsIgnoreCase("true") && !sessionData.getConfigMap().get("SchoolApp_IP").contains("127.0.0.1")) {
     		lc_visible_flag = false;
@@ -259,7 +259,7 @@ public class StrengthAge extends JFrame {
 			academicYearClass = academicYear;
 		}
 		else{
-			academicYearClass = commonObj.getAcademicYear(todayDate);
+			academicYearClass = commonObj.getAcademicYear(sessionData1,todayDate);
 		}
 		try {
 			if(dbValidate.connectDatabase(sessionData)){
@@ -406,7 +406,7 @@ public class StrengthAge extends JFrame {
 
 						frame.setVisible(false);
 						String[] arguments = new String[] {""};
-		                LoginView.main(arguments);
+		                SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					logger.info("Exception logoutButton ===>>>" + e1);
@@ -881,7 +881,7 @@ public class StrengthAge extends JFrame {
 					Date selectedFromDate = (Date) datePickerFrom.getModel().getValue();
 					dateTillSelected = commonObj.dateToYYYYMMDD(selectedFromDate);
 					tillDateAcademic = commonObj.formatyyyymmddtoddmmyyyy(dateTillSelected);
-					tillDateAcademic = commonObj.getAcademicYear(tillDateAcademic);
+					tillDateAcademic = commonObj.getAcademicYear(sessionData,tillDateAcademic);
 		        }
 
 				if (!tillDateAcademic.equalsIgnoreCase(academicSel) && date_radio.isSelected()) {
@@ -1218,7 +1218,7 @@ public class StrengthAge extends JFrame {
 								if(std.equalsIgnoreCase("")){
 									std = "All";
 								}
-								secName = bundle.getString(section.toUpperCase() + "_SEC");
+								secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 								if(secName.contains("Section")){
 									secName = secName.substring(0, secName.indexOf("Section"));
 								}

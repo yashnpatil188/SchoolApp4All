@@ -104,46 +104,46 @@ public class NOCPDF {
 		user_role = retUserRole;
 		section = sec;
     	logger.info("section :: "+section);
-    	std     = bundle.getString(section.toUpperCase()+"_STD");
+    	std     = sessionData1.getConfigMap().get(section.toUpperCase()+"_STD");
     	logger.info("std :: "+std);
-    	div     = bundle.getString(section.toUpperCase()+"_DIV");
+    	div     = sessionData1.getConfigMap().get(section.toUpperCase()+"_DIV");
     	logger.info("div :: "+div);
-    	secName = bundle.getString(section.toUpperCase()+"_SEC");
+    	secName = sessionData1.getConfigMap().get(section.toUpperCase()+"_SEC");
     	logger.info("secName :: "+secName);
-    	app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header = sessionData1.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData1.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData1.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData1.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData1.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData1.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
     	
-        noc_header = bundle.getString("NOC_HEADER_"+sessionData.getAppType());
-        noc_header_0 = bundle.getString("NOC_HEADER_0_"+sessionData.getAppType());
-        footer = bundle.getString("FOOTER_"+sessionData1.getAppType());
+        noc_header = sessionData1.getConfigMap().get("NOC_HEADER_"+sessionData.getAppType());
+        noc_header_0 = sessionData1.getConfigMap().get("NOC_HEADER_0_"+sessionData.getAppType());
+        footer = sessionData1.getConfigMap().get("FOOTER_"+sessionData1.getAppType());
         
-        String img_path = bundle.getString("IMAGE_PATH");
-        String pdf_header_img_path = bundle.getString("IMAGE_PDF_BONAFIDE_HEADER_"+sessionData.getAppType());
-		String pdf_header_bonafide_image_flag = bundle.getString("PDF_HEADER_NOC_IMAGE_FLAG");
-		float image_pdf_scalepercent = Float.parseFloat(bundle.getString("IMAGE_PDF_BONAFIDE_SCALEPERCENT")) - 9.0f;
-		int image_pdf_pos_x = Integer.parseInt(bundle.getString("IMAGE_PDF_BONAFIDE_POS_X"));
-		int image_pdf_pos_y = Integer.parseInt(bundle.getString("IMAGE_PDF_BONAFIDE_POS_Y"))+45;
-		int image_pdf_office_pos_y = Integer.parseInt(bundle.getString("IMAGE_PDF_BONAFIDE_OFFICE_POS_Y"))+45;
-		isFooterRequired = Boolean.parseBoolean(bundle.getString("FOOTER_REQUIRED"));
+        String img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
+        String pdf_header_img_path = sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_HEADER_"+sessionData.getAppType());
+		String pdf_header_bonafide_image_flag = sessionData1.getConfigMap().get("PDF_HEADER_NOC_IMAGE_FLAG");
+		float image_pdf_scalepercent = Float.parseFloat(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_SCALEPERCENT")) - 9.0f;
+		int image_pdf_pos_x = Integer.parseInt(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_POS_X"));
+		int image_pdf_pos_y = Integer.parseInt(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_POS_Y"))+45;
+		int image_pdf_office_pos_y = Integer.parseInt(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_OFFICE_POS_Y"))+45;
+		isFooterRequired = Boolean.parseBoolean(sessionData1.getConfigMap().get("FOOTER_REQUIRED"));
     	
 		List<String> recLCList = new ArrayList();
 		
 		String separator ="----------------------------------------------------------------------------------------------------------------------------------";
 		logger.info("view_save :: "+view_save);
-		path = commonLc.createTodayFolder(commonLc.getDriveName() + bundle.getString("NOC_PDF_PATH_"+sessionData.getDBName()),true)+"/";
+		path = commonLc.createTodayFolder(commonLc.getDriveName() + sessionData1.getConfigMap().get("NOC_PDF_PATH_"+sessionData.getDBName()),true)+"/";
 		
 		int lcCountYear = 0;
 		int dupLcCountYear = 0;
@@ -235,6 +235,7 @@ public class NOCPDF {
 							if(lcDateDb.equalsIgnoreCase("null") || lcDateDb == null){
 								lcDateDb = "";
 							}
+							String pen_db = LCDetaillist.get(23);
 							//lcDateDb = commonLc.formatdd_MM_yyyy(lcDateDb);
 							
 							String todayDate = "";
@@ -243,7 +244,7 @@ public class NOCPDF {
 							SimpleDateFormat today = new SimpleDateFormat("dd/MM/yyyy");
 							todayDate = today.format(date);
 							
-							String currentAcademicYear = commonLc.getAcademicYear(todayDate.toString());
+							String currentAcademicYear = commonLc.getAcademicYear(sessionData1,todayDate.toString());
 							if(currentAcademicYear.equalsIgnoreCase(academicYear)){
 								is_was = "is";
 							}
@@ -446,7 +447,12 @@ public class NOCPDF {
 							paraBirthPlace.setAlignment(Element.ALIGN_LEFT);
 							document.add(paraBirthPlace);
 							
-							Chunk chunkGrNo = new Chunk("G. R. Number : "+grDb);
+							String gr_pen = "G. R. Number : "+grDb;
+							if(pen_db != null && !pen_db.equalsIgnoreCase("null") && !pen_db.equalsIgnoreCase("")) {
+								gr_pen += "           "
+										+ "                    PEN No.: "+pen_db;
+							}
+							Chunk chunkGrNo = new Chunk(gr_pen);
 							chunkGrNo.setFont(fontClass1);
 							Paragraph paraGrNo = new Paragraph();
 							paraGrNo.setSpacingBefore(10);

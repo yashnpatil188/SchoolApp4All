@@ -54,7 +54,7 @@ public class LoginDetails {
 		mainCentre = (screenWidth - 150) / 2;
 		
 		frame = new JFrame("Welcome to "+sessionData1.getAppName());
-		img_login = bundle.getString("IMAGE_LOGIN");
+		img_login = sessionData.getConfigMap().get("IMAGE_LOGIN");// sessionData.getConfigMap().get("IMAGE_LOGIN");
 		JFrame f = new JFrame("Connectivity in progress. Don't Close");
 		
 		try {
@@ -66,6 +66,7 @@ public class LoginDetails {
 		    
 			if(dbValidate.connectDatabase(sessionData1)){
 				dbValidate.addRenewCodeColumn(sessionData1);
+				dbValidate.addPenNumberColumn(sessionData1);
 				dbValidate.addBalanceFeeColumn(sessionData1);
 				dbValidate.update_max_allowed_packet(sessionData1);
 				tm = dbValidate.getAuthenticationDetails(sessionData, sessionData.getSchoolName());
@@ -82,7 +83,7 @@ public class LoginDetails {
 					commonObj.renewLogic(sessionData1, tm);
 					frame.setVisible(false);
 					String[] arguments = new String[] {""};
-	                LoginView.main(arguments);
+	                SchoolForAllLoginView.main(arguments);
 				}
 				else {
 					try{
@@ -100,7 +101,7 @@ public class LoginDetails {
 					        	commonObj.renewLogic(sessionData1, tm);
 					        	frame.setVisible(false);
 					        	String[] arguments = new String[] {""};
-				                LoginView.main(arguments);
+				                SchoolForAllLoginView.main(arguments);
 					        } else if(daysLeft < 0){
 					        	dbValidate.updateAuthenticationDetails();
 					        	f.setVisible(false);
@@ -109,7 +110,7 @@ public class LoginDetails {
 								validateAuthentication = false;
 								frame.setVisible(false);
 								String[] arguments = new String[] {""};
-				                LoginView.main(arguments);
+				                SchoolForAllLoginView.main(arguments);
 					        }
 						}
 						/*else{
@@ -145,7 +146,7 @@ public class LoginDetails {
 			frame.setSize(screenWidth, screenHeight);
 			frame.setResizable(false);
 			
-			img_path	= bundle.getString("IMAGE_PATH");
+			img_path	= sessionData.getConfigMap().get("IMAGE_PATH");
 	    	logger.info("img_path :: "+img_path);
 	
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -243,7 +244,7 @@ public class LoginDetails {
 					try {
 						frame.setVisible(false);
 						String[] arguments = new String[] {""};
-		                LoginView.main(arguments);
+		                SchoolForAllLoginView.main(arguments);
 					} catch (Exception e) {
 						logger.info(e);
 					}
@@ -354,14 +355,14 @@ public class LoginDetails {
 			if(validateFlag){
 				if (!userStatusSession.equalsIgnoreCase("NEW") && dbValidate.connectDatabase(sessionData)) {
 					LinkedHashMap<String, String> configMap = new LinkedHashMap<String, String>();
-					configMap = dbValidate.getConfigMap(sessionData, "config_data", sessionData.getDBName()+"|"+sessionData.getDBName());
-					configMap.put("SchoolApp_IP", bundle.getString("DBURL_"+sessionData.getDBName()));
+					configMap = dbValidate.getConfigMap(sessionData, sessionData.getDBName(), "config_data", sessionData.getDBName()+"|"+sessionData.getDBName());
+					configMap.put("SchoolApp_IP", sessionData.getSchoolApp_ip());
 					
-					String startDate = bundle.getString("ACADEMIC_YEAR_START_"+sessionData.getDBName());
+					String startDate = sessionData.getConfigMap().get("ACADEMIC_YEAR_START_"+sessionData.getDBName());
 					startDate = commonObj.formatyyyymmddtoddmmyyyy(commonObj.getCurrentYear().substring(0,4) + "-" + startDate);//yyyy-mm-dd
 					configMap.put("ACADEMIC_START_DATE", startDate);
 					
-					String endDate = bundle.getString("ACADEMIC_YEAR_END_"+sessionData.getDBName());
+					String endDate = sessionData.getConfigMap().get("ACADEMIC_YEAR_END_"+sessionData.getDBName());
 					endDate = commonObj.formatyyyymmddtoddmmyyyy(commonObj.getCurrentYear().substring(0,4) + "-" + endDate);//yyyy-mm-dd
 					configMap.put("ACADEMIC_END_DATE", endDate);
 					

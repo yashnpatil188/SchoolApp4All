@@ -47,30 +47,30 @@ public class ProgressReport_PDF {
 			int spaceBefore = -40;
 			String subTitle = "", grNo = "", configValue="", sem = "", footer = "", footer1 = "", footer2 = "";
 			String[] optionalList;
-			String bonafide_header = bundle.getString("BONAFIDE_HEADER_" + sessionData.getAppType());
-			String bonafide_header_0 = bundle.getString("BONAFIDE_HEADER_0_" + sessionData.getAppType());
+			String bonafide_header = sessionData.getConfigMap().get("BONAFIDE_HEADER_" + sessionData.getAppType());
+			String bonafide_header_0 = sessionData.getConfigMap().get("BONAFIDE_HEADER_0_" + sessionData.getAppType());
 			if(sessionData.getConfigMap().get("FOOTER") != null) {
 				footer = sessionData.getConfigMap().get("FOOTER");
 			}
 			else {
-				footer = bundle.getString("FOOTER_"+sessionData.getAppType());
+				footer = sessionData.getConfigMap().get("FOOTER_"+sessionData.getAppType());
 			}
 			
 			if(sessionData.getConfigMap().get("FOOTER1") != null) {
 				footer1 = sessionData.getConfigMap().get("FOOTER1");
 			}
 			else {
-				footer1 = bundle.getString("FOOTER1_"+sessionData.getAppType());
+				footer1 = sessionData.getConfigMap().get("FOOTER1_"+sessionData.getAppType());
 			}
 			
 			if(sessionData.getConfigMap().get("FOOTER2") != null) {
 				footer2 = sessionData.getConfigMap().get("FOOTER2");
 			}
 			else {
-				footer2 = bundle.getString("FOOTER2_"+sessionData.getAppType());
+				footer2 = sessionData.getConfigMap().get("FOOTER2_"+sessionData.getAppType());
 			}
 			
-			int startMonth = Integer.parseInt(bundle.getString("ACADEMIC_START_MONTH"));
+			int startMonth = Integer.parseInt(sessionData.getConfigMap().get("ACADEMIC_START_MONTH"));
 			int semStartMonth = startMonth;
 			if(exam.equalsIgnoreCase("Semester 2")) {
 				sem = "SEM2";
@@ -85,7 +85,7 @@ public class ProgressReport_PDF {
 			}
 			
 			path = commonObj.createTodayFolder(
-					commonObj.getDriveName() + bundle.getString("REPORT_PDF_PATH_" + sessionData.getDBName()), true)
+					commonObj.getDriveName() + sessionData.getConfigMap().get("REPORT_PDF_PATH_" + sessionData.getDBName()), true)
 					+ "/";
 			fileName = "Progress_Report_"+academic+"_" + std + "_" + div + "_" + commonObj.timeInMillis() + ".pdf";
 			fileAddress = path + fileName;

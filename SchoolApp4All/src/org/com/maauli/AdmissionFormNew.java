@@ -155,6 +155,7 @@ public class AdmissionFormNew extends JFrame {
 	public AdmissionFormNew(SessionData sessionData1, String sec,
 			String retUserName, String retUserRole, String pageStatus, String gr, LinkedHashMap<String,LinkedHashMap<String, String>> retFoundStudentList) {
 		System.gc();
+		sessionData = sessionData1;
 		foundStudentList = retFoundStudentList;
 		academicYearDB = "";
 		admittedStdBranch = "";
@@ -166,45 +167,45 @@ public class AdmissionFormNew extends JFrame {
 		section = sec;
 		logger.info("section :: " + section);
 		dateToday = commonObj.getCurrentDate();
-		academicYear = commonObj.getAcademicYear(dateToday);
-		std = bundle.getString(section.toUpperCase() + "_STD");
+		academicYear = commonObj.getAcademicYear(sessionData1,dateToday);
+		std = sessionData1.getConfigMap().get(section.toUpperCase() + "_STD");
 		std = "Select,"+std;
 		logger.info("std :: " + std);
-		div = bundle.getString(section.toUpperCase() + "_DIV");
+		div = sessionData1.getConfigMap().get(section.toUpperCase() + "_DIV");
 		div = "Select,"+div;
 		logger.info("div :: " + div);
-		secName = bundle.getString(section.toUpperCase() + "_SEC");
+		secName = sessionData1.getConfigMap().get(section.toUpperCase() + "_SEC");
 		logger.info("secName :: " + secName);
-		religionList = bundle.getString("RELIGION_LIST");
-		categoryList = bundle.getString("CATEGORY_NAMES");
-		img_path = bundle.getString("IMAGE_PATH");
+		religionList = sessionData1.getConfigMap().get("RELIGION_LIST");
+		categoryList = sessionData1.getConfigMap().get("CATEGORY_NAMES");
+		img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
 		logger.info("img_path :: " + img_path);
-		img_home = bundle.getString("IMAGE_HOME");
-		img_logo = bundle.getString("IMAGE_LOGO");
-		img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-		img_logout = bundle.getString("IMAGE_LOGOUT");
-		img_titleband = bundle.getString("IMAGE_TITLEBAND");
-		img_leftband = bundle.getString("IMAGE_LEFTBAND");
-		img_menuband = bundle.getString("IMAGE_MENUBAND");
-		img_mainband = bundle.getString("IMAGE_MAINBAND");
-		lc_visible_master_only = bundle.getString("LC_VISIBLE_MASTER_ONLY");
-		app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
-        payment_status = bundle.getString("PAYMENT_STATUS");
-        app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+		img_home = sessionData1.getConfigMap().get("IMAGE_HOME");
+		img_logo = sessionData1.getConfigMap().get("IMAGE_LOGO");
+		img_myaccount = sessionData1.getConfigMap().get("IMAGE_MYACCOUNT");
+		img_logout = sessionData1.getConfigMap().get("IMAGE_LOGOUT");
+		img_titleband = sessionData1.getConfigMap().get("IMAGE_TITLEBAND");
+		img_leftband = sessionData1.getConfigMap().get("IMAGE_LEFTBAND");
+		img_menuband = sessionData1.getConfigMap().get("IMAGE_MENUBAND");
+		img_mainband = sessionData1.getConfigMap().get("IMAGE_MAINBAND");
+		lc_visible_master_only = sessionData1.getConfigMap().get("LC_VISIBLE_MASTER_ONLY");
+		app_header = sessionData1.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData1.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData1.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData1.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData1.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData1.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+        payment_status = sessionData1.getConfigMap().get("PAYMENT_STATUS");
+        app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
         
         if(lc_visible_master_only.equalsIgnoreCase("true") && !sessionData.getConfigMap().get("SchoolApp_IP").contains("127.0.0.1")) {
     		lc_visible_flag = false;
@@ -328,7 +329,7 @@ public class AdmissionFormNew extends JFrame {
 
  						frame.setVisible(false);
  						String[] arguments = new String[] {""};
- 		                LoginView.main(arguments);
+ 		                SchoolForAllLoginView.main(arguments);
  					}
  				} catch (Exception e1) {
  					logger.info("Exception logoutButton ===>>>" + e1);
@@ -766,7 +767,7 @@ public class AdmissionFormNew extends JFrame {
  		if(academicYearDB.equalsIgnoreCase("")){
  			academicYearDB = academicYear;
  		}
- 		String nextYear = commonObj.getNextYear(academicYearDB);
+ 		String nextYear = commonObj.getNextYear(sessionData, academicYearDB);
  		if(academicYearDB.equalsIgnoreCase(nextYear)) {
  			nextYear = academicYear;
  		}
@@ -1546,7 +1547,7 @@ public class AdmissionFormNew extends JFrame {
  		adhaarCard_text3.setBounds(280, 530, 50, 25);
  		bottombandPanel.add(adhaarCard_text3);
  		
- 		// /////////////Hobbies insert into EXTRA_1//////////////
+ 		///////////////Hobbies insert into EXTRA_1//////////////
  		JLabel hobbies_label = new JLabel("Hobbies :");
  		hobbies_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));
  		hobbies_label.setBounds(30, 560, 130, 50);
@@ -1565,6 +1566,26 @@ public class AdmissionFormNew extends JFrame {
  			hobbies_text.setText(hobbies);
  		}
  		bottombandPanel.add(hobbies_text);
+ 		
+		///////////////Permanent Education Number insert into PEN//////////////
+		JLabel pen_label = new JLabel("Permanent Education Number:");
+		pen_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));
+		pen_label.setBounds(620, 560, 300, 50);
+		bottombandPanel.add(pen_label);
+		
+		final JTextField pen_text = new JTextField();
+		pen_text.setFont(new Font("Book Antiqua", Font.BOLD, 16));
+		pen_text.setBounds(880, 570, 230, 25);
+		String pen = "";
+		if(classPageStatus.equalsIgnoreCase("VIEW")){
+			pen = commonObj.revertCommaApostrophy(studentInfo[38]);
+			pen_text.setText(pen);
+			pen_text.setEditable(false);
+		} else if(classPageStatus.equalsIgnoreCase("EDIT")){
+			pen = commonObj.revertCommaApostrophy(studentInfo[38]);
+			pen_text.setText(pen);
+		}
+		bottombandPanel.add(pen_text);
  		
  		String stdAdmittedWords = "";
  		if(classPageStatus.equalsIgnoreCase("EDIT")){
@@ -1627,7 +1648,7 @@ public class AdmissionFormNew extends JFrame {
 				String adhaarCard3 = "";
 				String adhaarCard = "";
 				String otherReligion = "";
-				String hobbies = "";
+				String hobbies = "", pen = "";
 				String academicSel = year_combo.getSelectedItem().toString();
 
 				gr_no = gr_no_text.getText().trim();
@@ -1681,6 +1702,7 @@ public class AdmissionFormNew extends JFrame {
 				adhaarCard  = adhaarCard1+adhaarCard2+adhaarCard3;
 				hobbies = hobbies_text.getText();
 				hobbies = commonObj.replaceCommaApostrophy(hobbies);
+				pen = pen_text.getText();
 
 				int reply = 0;
 				try {
@@ -1759,7 +1781,7 @@ public class AdmissionFormNew extends JFrame {
 				String adhaarCard3 = "";
 				String adhaarCard = "";
 				String otherReligion = "";
-				String hobbies = "";
+				String hobbies = "", pen = "";
 				String lastSchoolUdise = "";
 				String academicSel = year_combo.getSelectedItem().toString();
 
@@ -1818,7 +1840,8 @@ public class AdmissionFormNew extends JFrame {
 				adhaarCard  = adhaarCard1+adhaarCard2+adhaarCard3;
 				hobbies = hobbies_text.getText();
 				hobbies = commonObj.replaceCommaApostrophy(hobbies);
-
+				pen = pen_text.getText().trim();
+				
 				boolean checkGrNoFlag = false;
 				String lastGrNo = "";
 				try {
@@ -1976,9 +1999,9 @@ public class AdmissionFormNew extends JFrame {
 						} else if(category.equalsIgnoreCase("Select")){
 							validateFields = false;
 							JOptionPane.showMessageDialog(null, "Please select Category");
-						} else if (cast.length() > 20) {
+						} else if (cast.length() > 30) {
 							validateFields = false;
-							JOptionPane.showMessageDialog(null, commonObj.charExceeded("Cast", cast, 20));
+							JOptionPane.showMessageDialog(null, commonObj.charExceeded("Cast", cast, 30));
 						} else if (commonObj.checkComma(cast) || commonObj.validateSpecial(cast)) {
 							validateFields = false;
 							JOptionPane.showMessageDialog(null, "Please enter valid Cast without |-:';,");
@@ -2030,6 +2053,12 @@ public class AdmissionFormNew extends JFrame {
 						} else if (commonObj.checkComma(hobbies)) {
 							validateFields = false;
 							JOptionPane.showMessageDialog(null, "hobbies cannot contain |:;");
+						} else if (!pen.equalsIgnoreCase("") && (!commonObj.validateNumber(pen))) {
+							validateFields = false;
+							JOptionPane.showMessageDialog(null, "Please enter valid Permanent Education Number");
+						} else if (pen.length() > 20) {
+							validateFields = false;
+							JOptionPane.showMessageDialog(null, commonObj.charExceeded("Permanent Education Number", pen, 20));
 						}
 					}
 					Boolean flagValue = false;
@@ -2047,7 +2076,7 @@ public class AdmissionFormNew extends JFrame {
 												emailId, permanentAdd, residentAdd, contact1, contact2, birthDate, dobWords,
 												birthPlace, nationality, religion, category, cast, motherTongue, lastSchool, admittedStd, admittedDiv,
 												presentStd, presentDiv, dateAdmitted, paymentStatus, userName, section,adhaarCard,otherReligion,suid,
-												taluka, district,state,country,subcast, academicSel, hobbies, lastSchoolUdise);
+												taluka, district,state,country,subcast, academicSel, hobbies, lastSchoolUdise, pen);
 									} catch (Exception e1) {
 										JOptionPane.showMessageDialog(null, "Error : "+ e1);
 									}
@@ -2061,7 +2090,7 @@ public class AdmissionFormNew extends JFrame {
 										emailId, permanentAdd, residentAdd, contact1, contact2, birthDate, dobWords, birthPlace,
 										nationality, religion, category, cast, motherTongue, lastSchool, admittedStd, admittedDiv,
 										presentStd, presentDiv, dateAdmitted, paymentStatus, userName, section, adhaarCard, otherReligion, academicSel,suid,
-										taluka, district,state,country,subcast, hobbies, admittedStdBranch, oldAcademicYear, lastSchoolUdise);
+										taluka, district,state,country,subcast, hobbies, admittedStdBranch, oldAcademicYear, lastSchoolUdise, pen);
 							}
 							
 							if (flagValue) {//generate PDF
@@ -2750,7 +2779,7 @@ public class AdmissionFormNew extends JFrame {
 					int reply = 0;
 					reply = JOptionPane.showConfirmDialog(null, classGr+" will be deleted permanently?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
 					if (dbValidate.connectDatabase(sessionData) && reply == JOptionPane.YES_OPTION) {
-						dbValidate.deleteForm(sessionData, classGr, section, sessionData);
+						dbValidate.deleteForm(sessionData, classGr, section);
 						commonObj.showMessageDialog("Data deleted for GR No.: "+classGr);
 						foundStudentList.remove(classGr);
 						frame.setVisible(false);
@@ -2810,11 +2839,20 @@ public class AdmissionFormNew extends JFrame {
 		
 		labelStudentImg.addMouseListener(new MouseAdapter() {
  			public void mouseClicked(MouseEvent me) {
- 				boolean retFlag = false, isUpdate = false, validate = true;
+ 				boolean retFlag = false, isUpdate = false, validate = true, checkGrNoFlag = false;
  				try {
  					String gr = gr_no_text.getText();
  					String name = lastName_text.getText().trim() +" "+ firstName_text.getText().trim() +" "+ fatherName_text.getText().trim() +" "+ motherName_text.getText().trim();
- 					boolean checkGrNoFlag = dbValidate.validateGrNo(sessionData, gr, section, "student_imgs");
+ 					
+ 					if(name.trim().equalsIgnoreCase("")) {
+ 						isUpdate = false;
+ 						validate = false;
+ 						JOptionPane.showMessageDialog(null, "Please enter Name before uploading image.");
+ 					}
+ 					
+ 					if (dbValidate.connectDatabase(sessionData)){
+ 						checkGrNoFlag = dbValidate.validateGrNo(sessionData, gr, section, "student_imgs");
+ 					}
  					
  					if(classPageStatus.equalsIgnoreCase("Submit") && !checkGrNoFlag) {
  						isUpdate = false;
@@ -2849,19 +2887,38 @@ public class AdmissionFormNew extends JFrame {
  									String fileName = gr+"_"+sessionData.getSectionName()+".jpg";
  									destinationPath = studentImagePath + fileName;
  									commonObj.copyFileUsingStream(sourcePath, destinationPath);
- 									
 // 									////code to store in database
 // 									byte[] imgByte = commonObj.convertImage(imgPath, fileName);
 // 									if (dbValidate.connectDatabase(sessionData)){
-// 										retFlag = dbValidate.insertStudentImage(sessionData, name, gr, fileName, isUpdate);
+// 										retFlag = dbValidate.insertStudentImage(sessionData, name, gr, destinationPath);
 // 									}
  									
  									/////to display in screen on selection
- 									byte[] imgByte = commonObj.convertImage(destinationPath, fileName);
-									labelStudentImg.setIcon(new ImageIcon(imgByte));
+// 									byte[] imgByte = commonObj.convertImage(destinationPath, fileName);
+//									labelStudentImg.setIcon(new ImageIcon(imgByte));
+ 									
+// 									if(retFlag) {
+ 										byte b[] = null;
+ 	 									ImageIcon studentImage;
+ 	 									try {
+ 	 										b = commonObj.imageToByteArray(destinationPath);
+ 	 									} catch (IOException e2) {
+ 	 										commonObj.logException(e2);
+ 	 									}
+ 	 									
+ 	 									if(b == null) {
+ 	 							 			studentImage = new ImageIcon(img_path + "student.jpg");
+ 	 							 		}
+ 	 							 		else {
+ 	 							 			studentImage = new ImageIcon(b);
+ 	 							 		}
+ 	 									labelStudentImg.setIcon(new ImageIcon(studentImage.getImage().getScaledInstance(120, 140, Image.SCALE_DEFAULT)));
+ 	 							        labelStudentImg.setBounds(960, -130, 120, 417);
+// 	 							      labelStudentImg.revalidate();
+// 									}
 									
  								} catch (Exception e1) {
- 									JOptionPane.showMessageDialog(null, "Error : "+ e1);
+ 									JOptionPane.showMessageDialog(null, "Error while upload: "+ e1);
  								}
  							} else if (reply == JOptionPane.NO_OPTION) {
  								JOptionPane.showMessageDialog(null, "You have cancelled to upload.");

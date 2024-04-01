@@ -83,11 +83,11 @@ public class CreateLcPDF {
 		user_role = retUserRole;
 		section = sec;
     	logger.info("section :: "+section);
-    	std     = bundle.getString(section.toUpperCase()+"_STD");
+    	std     = sessionData.getConfigMap().get(section.toUpperCase()+"_STD");
     	logger.info("std :: "+std);
-    	div     = bundle.getString(section.toUpperCase()+"_DIV");
+    	div     = sessionData.getConfigMap().get(section.toUpperCase()+"_DIV");
     	logger.info("div :: "+div);
-    	secName = bundle.getString(section.toUpperCase()+"_SEC");
+    	secName = sessionData.getConfigMap().get(section.toUpperCase()+"_SEC");
     	logger.info("secName :: "+secName);
     	lcTypeClass = lcType;
     	
@@ -113,7 +113,7 @@ public class CreateLcPDF {
 		logger.info("reason :: "+reason);
 		logger.info("remark2 :: "+remark2);
 		logger.info("progress :: "+progress);
-		path = commonLc.createTodayFolder(commonLc.getDriveName() + bundle.getString("LC_PDF_PATH_"+sessionData.getDBName()),true)+"/";
+		path = commonLc.createTodayFolder(commonLc.getDriveName() + sessionData.getConfigMap().get("LC_PDF_PATH_"+sessionData.getDBName()),true)+"/";
 		
 		int lcCountYear = 0;
 		int dupLcCountYear = 0;
@@ -211,7 +211,7 @@ public class CreateLcPDF {
 						String AdmittedStd2 = "";
 						
 						if(studyingSinceDb.equalsIgnoreCase("") || studyingSinceDb.equalsIgnoreCase("NA") || studyingSinceDb.equalsIgnoreCase("-") || studyingSinceDb.equalsIgnoreCase("null")){
-							studyingSinceDb		= commonLc.getStudyingSince(dateAdmittedDb, academic);
+							studyingSinceDb		= commonLc.getStudyingSince(sessionData, dateAdmittedDb, academic);
 //							studyingSinceDb		= studyingSinceDb.substring(0, 4); 
 						}
 						
@@ -250,7 +250,7 @@ public class CreateLcPDF {
 								originalLcDate = originalLcDateDb;
 								newLcNo = origLcDb;
 								leavingDate = originalLcDateDb;
-								showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(leavingDate);
+								showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,leavingDate);
 								
 								logger.info("original showNewLcNo=="+showNewLcNo);
 										
@@ -259,8 +259,8 @@ public class CreateLcPDF {
 									lcType  = "DUPLICATE";
 									newLcNo = duplicateLcDb;
 									leavingDate = duplicateLcDateDb;
-									showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(leavingDate);
-									showOrigLcNo = origLcNo + "/" + commonLc.getAcademicYear(originalLcDateDb);
+									showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,leavingDate);
+									showOrigLcNo = origLcNo + "/" + commonLc.getAcademicYear(sessionData,originalLcDateDb);
 									logger.info("duplicate showNewLcNo =="+showNewLcNo);
 									
 									if(!triplicateLcDb.equalsIgnoreCase("") && !triplicateLcDb.equalsIgnoreCase("NA") && !triplicateLcDb.equalsIgnoreCase("-")
@@ -269,9 +269,9 @@ public class CreateLcPDF {
 										newLcNo = triplicateLcDb;
 										leavingDate = triplicateLcDateDb;
 										
-										showNewLcNo =  triplicateLcDb + "/" + commonLc.getAcademicYear(triplicateLcDateDb);
-										showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(originalLcDateDb);
-										showDupLcNo = duplicateLcDb + "/" + commonLc.getAcademicYear(duplicateLcDateDb);
+										showNewLcNo =  triplicateLcDb + "/" + commonLc.getAcademicYear(sessionData,triplicateLcDateDb);
+										showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(sessionData,originalLcDateDb);
+										showDupLcNo = duplicateLcDb + "/" + commonLc.getAcademicYear(sessionData,duplicateLcDateDb);
 										logger.info("triplicate showNewLcNo =="+showNewLcNo);
 									}
 								}
@@ -284,22 +284,22 @@ public class CreateLcPDF {
 										&& !triplicateLcDb.equalsIgnoreCase("null") && triplicateLcDb != null){
 									lcType  = "TRIPLICATE";
 									newLcNo = triplicateLcDb;
-									showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(triplicateLcDateDb);
-									showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(originalLcDateDb);
-									showDupLcNo = duplicateLcDb + "/" + commonLc.getAcademicYear(duplicateLcDateDb);
+									showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,triplicateLcDateDb);
+									showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(sessionData,originalLcDateDb);
+									showDupLcNo = duplicateLcDb + "/" + commonLc.getAcademicYear(sessionData,duplicateLcDateDb);
 								}
 								else if(!duplicateLcDb.equalsIgnoreCase("") && !duplicateLcDb.equalsIgnoreCase("NA") && !duplicateLcDb.equalsIgnoreCase("-")
 										&& !duplicateLcDb.equalsIgnoreCase("null") && duplicateLcDb != null){
 									lcType  = "DUPLICATE";
 									newLcNo = duplicateLcDb;
-									showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(duplicateLcDateDb);
-									showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(originalLcDateDb);
+									showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,duplicateLcDateDb);
+									showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(sessionData,originalLcDateDb);
 								}
 								else if(!origLcDb.equalsIgnoreCase("") && !origLcDb.equalsIgnoreCase("NA") && !origLcDb.equalsIgnoreCase("-")
 										&& !origLcDb.equalsIgnoreCase("null") && origLcDb != null){
 									lcType  = "ORIGINAL";
 									newLcNo = origLcDb;
-									showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(originalLcDateDb);
+									showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,originalLcDateDb);
 								}
 							}
 							else if(origLcDb.equalsIgnoreCase("") || origLcDb.equalsIgnoreCase("NA") || origLcDb.equalsIgnoreCase("-")
@@ -307,11 +307,11 @@ public class CreateLcPDF {
 								lcType  = "ORIGINAL";
 								lcCountYear = lcCountYear +1;
 								newLcNo =  String.format("%04d", lcCountYear);
-								showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(leavingDate);
+								showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,leavingDate);
 								logger.info("New LC No.: "+newLcNo);
 								origLcNo = newLcNo;
 								originalLcDate = leavingDate;
-//								showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(leavingDate);
+//								showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,leavingDate);
 								logger.info("original showNewLcNo in VALIDATE =="+showNewLcNo);
 							}
 							else if((duplicateLcDb.equalsIgnoreCase("") || duplicateLcDb.equalsIgnoreCase("NA") || duplicateLcDb.equalsIgnoreCase("-")
@@ -319,9 +319,9 @@ public class CreateLcPDF {
 								dupLcCountYear = dupLcCountYear +1;
 								lcType  = "DUPLICATE";
 								newLcNo = String.format("%04d", dupLcCountYear);
-								showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(leavingDate);
+								showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,leavingDate);
 								logger.info("original showNewLcNo=="+showNewLcNo);
-								showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(originalLcDateDb);
+								showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(sessionData,originalLcDateDb);
 								logger.info("duplicate showOrigLcNo=="+showOrigLcNo);
 							}
 							else if(triplicateLcDb.equalsIgnoreCase("") || triplicateLcDb.equalsIgnoreCase("NA") || triplicateLcDb.equalsIgnoreCase("-")
@@ -329,11 +329,11 @@ public class CreateLcPDF {
 								tripLcCountYear = tripLcCountYear +1;
 								lcType  = "TRIPLICATE";
 								newLcNo = String.format("%04d", tripLcCountYear);
-								showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(leavingDate);
+								showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,leavingDate);
 								logger.info("original showNewLcNo=="+showNewLcNo);
-								showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(originalLcDateDb);
+								showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(sessionData,originalLcDateDb);
 								logger.info("showOrigLcNo=="+showOrigLcNo);
-								showDupLcNo = duplicateLcDb + "/" + commonLc.getAcademicYear(duplicateLcDateDb);
+								showDupLcNo = duplicateLcDb + "/" + commonLc.getAcademicYear(sessionData,duplicateLcDateDb);
 								logger.info("showdupLcNo=="+showDupLcNo);
 							}
 							
@@ -347,7 +347,7 @@ public class CreateLcPDF {
 		//						originalLcDate = originalLcDateDb;
 		//						newLcNo = origLcDb;
 								leavingDate = originalLcDateDb;
-								showNewLcNo =  origLcDb + "/" + commonLc.getAcademicYear(originalLcDateDb);
+								showNewLcNo =  origLcDb + "/" + commonLc.getAcademicYear(sessionData,originalLcDateDb);
 								
 								logger.info("original showNewLcNo=="+showNewLcNo);
 										
@@ -356,8 +356,8 @@ public class CreateLcPDF {
 									lcType  = "DUPLICATE";
 		//							newLcNo = duplicateLcDb;
 									leavingDate = duplicateLcDateDb;
-									showNewLcNo =  duplicateLcDb + "/" + commonLc.getAcademicYear(duplicateLcDateDb);
-									showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(originalLcDateDb);
+									showNewLcNo =  duplicateLcDb + "/" + commonLc.getAcademicYear(sessionData,duplicateLcDateDb);
+									showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(sessionData,originalLcDateDb);
 									logger.info("duplicate showNewLcNo=="+showNewLcNo);
 									
 									if(!triplicateLcDb.equalsIgnoreCase("") && !triplicateLcDb.equalsIgnoreCase("NA") && !triplicateLcDb.equalsIgnoreCase("-")
@@ -365,9 +365,9 @@ public class CreateLcPDF {
 										lcType  = "TRIPLICATE";
 			//							newLcNo = duplicateLcDb;
 										leavingDate = triplicateLcDateDb;
-										showNewLcNo =  triplicateLcDb + "/" + commonLc.getAcademicYear(triplicateLcDateDb);
-										showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(originalLcDateDb);
-										showDupLcNo = duplicateLcDb + "/" + commonLc.getAcademicYear(duplicateLcDateDb);
+										showNewLcNo =  triplicateLcDb + "/" + commonLc.getAcademicYear(sessionData,triplicateLcDateDb);
+										showOrigLcNo = origLcDb + "/" + commonLc.getAcademicYear(sessionData,originalLcDateDb);
+										showDupLcNo = duplicateLcDb + "/" + commonLc.getAcademicYear(sessionData,duplicateLcDateDb);
 										logger.info("duplicate showNewLcNo=="+showNewLcNo);
 									}
 								}
@@ -379,13 +379,13 @@ public class CreateLcPDF {
 		//					originalLcDate = originalLcDateDb;
 		//					newLcNo = origLcDb;
 		//					leavingDate = originalLcDateDb;
-		//					showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(leavingDate);
+		//					showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,leavingDate);
 		//					logger.info("original showNewLcNo=="+showNewLcNo);
 		//					
 		//					if(!duplicateLcDb.equalsIgnoreCase("") && !duplicateLcDb.equalsIgnoreCase("NA")){
 		//						newLcNo = duplicateLcDb;
 		//						leavingDate = duplicateLcDateDb;
-		//						showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(leavingDate);
+		//						showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,leavingDate);
 		//						logger.info("duplicate showNewLcNo=="+showNewLcNo);
 		//					}
 		//				}
@@ -397,7 +397,7 @@ public class CreateLcPDF {
 		//					newLcNo = (dupLcCount);
 		//					duplicateLcNo = newLcNo;
 		//					duplicateLcDate = leavingDate;
-		//					showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(leavingDate);
+		//					showNewLcNo =  newLcNo + "/" + commonLc.getAcademicYear(sessionData,leavingDate);
 		//				}
 						
 						logger.info("origLcNo - - - "+origLcNo);

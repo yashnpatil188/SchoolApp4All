@@ -158,6 +158,7 @@ public class Reports extends JFrame {
 	static int app_header_2_heightSpace = 0;
 
 	static ResourceBundle bundle = ResourceBundle.getBundle("org.com.accesser.school");
+	static boolean marks_flag_std = false;
 
 	static Logger logger = Logger.getLogger(Reports.class.getName());
 
@@ -176,45 +177,45 @@ public class Reports extends JFrame {
 		category = retCatType;
 		section = sec;
 		logger.info("section :: " + section);
-		std = bundle.getString(section.toUpperCase() + "_STD");
+		std = sessionData.getConfigMap().get(section.toUpperCase() + "_STD");
 		logger.info("std :: " + std);
-		div = bundle.getString(section.toUpperCase() + "_DIV");
+		div = sessionData.getConfigMap().get(section.toUpperCase() + "_DIV");
 		logger.info("div :: " + div);
-		secName = bundle.getString(section.toUpperCase() + "_SEC");
+		secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		logger.info("secName :: " + secName);
-		reportList = bundle.getString("REPORT_LIST");
-		img_path = bundle.getString("IMAGE_PATH");
+		reportList = sessionData.getConfigMap().get("REPORT_LIST");
+		img_path = sessionData.getConfigMap().get("IMAGE_PATH");
 		logger.info("img_path :: " + img_path);
-		img_home = bundle.getString("IMAGE_HOME");
-		img_logo = bundle.getString("IMAGE_LOGO");
-		img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-		img_logout = bundle.getString("IMAGE_LOGOUT");
-		img_titleband = bundle.getString("IMAGE_TITLEBAND");
-		img_leftband = bundle.getString("IMAGE_LEFTBAND");
-		img_menuband = bundle.getString("IMAGE_MENUBAND");
-		img_mainband = bundle.getString("IMAGE_MAINBAND");
-		app_header = bundle.getString("APP_HEADER_" + sessionData.getAppType());
-		app_header_0 = bundle.getString("APP_HEADER_0_" + sessionData.getAppType());
-		app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_" + sessionData.getAppType());
-		app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_" + sessionData.getAppType()));
+		img_home = sessionData.getConfigMap().get("IMAGE_HOME");
+		img_logo = sessionData.getConfigMap().get("IMAGE_LOGO");
+		img_myaccount = sessionData.getConfigMap().get("IMAGE_MYACCOUNT");
+		img_logout = sessionData.getConfigMap().get("IMAGE_LOGOUT");
+		img_titleband = sessionData.getConfigMap().get("IMAGE_TITLEBAND");
+		img_leftband = sessionData.getConfigMap().get("IMAGE_LEFTBAND");
+		img_menuband = sessionData.getConfigMap().get("IMAGE_MENUBAND");
+		img_mainband = sessionData.getConfigMap().get("IMAGE_MAINBAND");
+		app_header = sessionData.getConfigMap().get("APP_HEADER_" + sessionData.getAppType());
+		app_header_0 = sessionData.getConfigMap().get("APP_HEADER_0_" + sessionData.getAppType());
+		app_header_0_fontName = sessionData.getConfigMap().get("APP_HEADER_0_FONTNAME_" + sessionData.getAppType());
+		app_header_0_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_FONTSIZE_" + sessionData.getAppType()));
 		app_header_0_widthSpace = Integer
-				.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_" + sessionData.getAppType()));
+				.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_" + sessionData.getAppType()));
 		app_header_0_heightSpace = Integer
-				.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_" + sessionData.getAppType()));
-		app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_" + sessionData.getAppType());
-		app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_" + sessionData.getAppType()));
-		app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_" + sessionData.getAppType()));
+				.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_" + sessionData.getAppType()));
+		app_header_fontName = sessionData.getConfigMap().get("APP_HEADER_FONTNAME_" + sessionData.getAppType());
+		app_header_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_FONTSIZE_" + sessionData.getAppType()));
+		app_header_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_WIDTHSPACE_" + sessionData.getAppType()));
 		app_header_heightSpace = Integer
-				.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_" + sessionData.getAppType()));
-		app_header_2 = bundle.getString("APP_HEADER_2_" + sessionData.getAppType());
-		app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_" + sessionData.getAppType());
-		app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_" + sessionData.getAppType()));
+				.parseInt(sessionData.getConfigMap().get("APP_HEADER_HEIGHTSPACE_" + sessionData.getAppType()));
+		app_header_2 = sessionData.getConfigMap().get("APP_HEADER_2_" + sessionData.getAppType());
+		app_header_2_fontName = sessionData.getConfigMap().get("APP_HEADER_2_FONTNAME_" + sessionData.getAppType());
+		app_header_2_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_FONTSIZE_" + sessionData.getAppType()));
 		app_header_2_widthSpace = Integer
-				.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_" + sessionData.getAppType()));
+				.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_" + sessionData.getAppType()));
 		app_header_2_heightSpace = Integer
-				.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_" + sessionData.getAppType()));
+				.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_" + sessionData.getAppType()));
 
-		examCategory = bundle.getString("EXAM_CATEGORY");
+		examCategory = sessionData.getConfigMap().get("EXAM_CATEGORY");
 
 		if (!retExam.equalsIgnoreCase("")) {
 			examClass = retExam;
@@ -231,8 +232,12 @@ public class Reports extends JFrame {
 			examDisplay = "Final";
 		}
 
+		if (!retExam.equalsIgnoreCase("")) {
+			marks_flag_std = Boolean.parseBoolean(sessionData1.getConfigMap().get("RESULT_MARKS_"+stdClass.replaceAll(" ", "_")));
+		}
+		
 		String todayDate = commonObj.getCurrentDate();
-		// academicYearClass = commonObj.getAcademicYear(todayDate);
+		// academicYearClass = commonObj.getAcademicYear(sessionData1,todayDate);
 		if (!academicYear.equalsIgnoreCase("")) {
 			academicYearClass = academicYear;
 		}
@@ -383,7 +388,7 @@ public class Reports extends JFrame {
 
 						frame.setVisible(false);
 						String[] arguments = new String[] { "" };
-						LoginView.main(arguments);
+						SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					logger.info("Exception logoutButton ===>>>" + e1);
@@ -1106,7 +1111,7 @@ public class Reports extends JFrame {
 											academicSel, exam);
 									grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicSel, std,
 											div, exam, section, lastNameClass, firstNameClass, fatherNameClass,
-											leftDataMap);
+											leftDataMap, marks_flag_std);
 								} else {
 									maxSubMarks = dbValidate.findMaxMarksSubTitle(sessionData, "", "", std,
 											subjectTitle, academicSel);
@@ -1175,7 +1180,7 @@ public class Reports extends JFrame {
 											academicSel, exam);
 									grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicSel, std,
 											div, exam, section, lastNameClass, firstNameClass, fatherNameClass,
-											null);//leftDataMap set as null as IV all students created LC
+											null, marks_flag_std);//leftDataMap set as null as IV all students created LC
 								} else {
 									maxSubMarks = dbValidate.findMaxMarksSubTitle(sessionData, "", "", std,
 											subjectTitle, academicSel);
@@ -1220,7 +1225,7 @@ public class Reports extends JFrame {
 								ArrayList<String> categoryList = new ArrayList<String>();
 								// categoryList = dbValidate.getCategoryList(sessionData, academicSel, std, div,
 								// exam);
-								String[] category_names = bundle.getString("CATEGORY_NAMES").split(",");
+								String[] category_names = sessionData.getConfigMap().get("CATEGORY_NAMES").split(",");
 								for (int i = 0; i < category_names.length; i++) {
 									categoryList.add(category_names[i]);
 								}
@@ -1234,7 +1239,7 @@ public class Reports extends JFrame {
 										div, exam, "RELIGION", categorywiseReportMap);
 								listSize = categorywiseReportMap.size();
 								ArrayList<String> categoryList = new ArrayList<String>();
-								String[] religion_list = bundle.getString("RELIGION_LIST").split(",");
+								String[] religion_list = sessionData.getConfigMap().get("RELIGION_LIST").split(",");
 								for (int i = 0; i < religion_list.length; i++) {
 									categoryList.add(religion_list[i]);
 								}
@@ -1278,7 +1283,7 @@ public class Reports extends JFrame {
 												academicSel, exam);
 										grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicSel,
 												std, div, exam, section, lastNameClass, firstNameClass, fatherNameClass,
-												null);//leftDataMap set as null as IV all students created LC
+												null, marks_flag_std);//leftDataMap set as null as IV all students created LC
 									} else {
 										maxSubMarks = dbValidate.findMaxMarksSubTitle(sessionData, "", "", std,
 												subjectTitle, academicSel);
@@ -1320,7 +1325,7 @@ public class Reports extends JFrame {
 											leftDataMap, "Exam Register");
 									grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicSel, std,
 											div, exam, section, lastNameClass, firstNameClass, fatherNameClass,
-											leftDataMap);
+											leftDataMap, marks_flag_std);
 									studentOptSubAllotMap = dbValidate.getStudentOptSubAllot(sessionData, academicSel,
 											std, div, false);
 									marksSemDataMap = dbValidate.getMarksheetGradewise(sessionData, std, div,
@@ -1346,7 +1351,7 @@ public class Reports extends JFrame {
 											leftDataMap, "Exam Register");
 									grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicSel, std,
 											div, exam, section, lastNameClass, firstNameClass, fatherNameClass,
-											leftDataMap);
+											leftDataMap, marks_flag_std);
 									studentOptSubAllotMap = dbValidate.getStudentOptSubAllot(sessionData, academicSel,
 											std, div, false);
 									marksSemDataMap = dbValidate.getMarksheetGradewise(sessionData, std, div,
@@ -1362,7 +1367,7 @@ public class Reports extends JFrame {
 								}
 							} else if (catType.equalsIgnoreCase("Gradewise Classification")) {
 								LinkedHashMap<String, LinkedHashMap<String, Integer>> grStudentMapGrade = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
-								String stdStr = bundle.getString(section.toUpperCase() + "_STD");
+								String stdStr = sessionData.getConfigMap().get(section.toUpperCase() + "_STD");
 								if (std.equalsIgnoreCase("")) {
 									stdStr = stdStr.replace(",IX", "");
 									stdStr = stdStr.replace(",X", "");

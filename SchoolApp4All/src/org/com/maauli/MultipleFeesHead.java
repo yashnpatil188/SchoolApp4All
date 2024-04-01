@@ -148,52 +148,52 @@ public class MultipleFeesHead extends JFrame {
     	sessionData = sessionData1;
         user_name = sessionData1.getUserName();
         user_role = sessionData1.getUserRole();
-        String std = bundle.getString(sessionData1.getSectionName().toUpperCase() + "_STD");
+        String std = sessionData1.getConfigMap().get(sessionData1.getSectionName().toUpperCase() + "_STD");
 //        frame.setVisible(false);
 //        frame.dispose();
         frame = new JFrame("Welcome to "+sessionData1.getAppName());
-        img_path = bundle.getString("IMAGE_PATH");
+        img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
         logger.info("img_path :: " + img_path);
-        img_home = bundle.getString("IMAGE_HOME");
-        img_founder = bundle.getString("IMGAGE_FOUNDER");
-        img_logo = bundle.getString("IMAGE_LOGO");
-        img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-        img_logout = bundle.getString("IMAGE_LOGOUT");
-        img_titleband = bundle.getString("IMAGE_TITLEBAND");
-        img_leftband = bundle.getString("IMAGE_LEFTBAND");
-        img_menuband = bundle.getString("IMAGE_MENUBAND");
-        img_mainband = bundle.getString("IMAGE_MAINBAND");
-        img_databand = bundle.getString("IMAGE_DATABAND");
-        sms_required = bundle.getString("SMS_REQUIRED");
-        fee_required = bundle.getString("FEE_REQUIRED");
-        account_required = bundle.getString("ACCOUNT_REQUIRED");
-    	staff_required = bundle.getString("STAFF_REQUIRED");
-        url = bundle.getString("DBURL_"+sessionData1.getDBName());
-        secName = bundle.getString(sessionData.getSectionName().toUpperCase() + "_SEC");
+        img_home = sessionData1.getConfigMap().get("IMAGE_HOME");
+        img_founder = sessionData1.getConfigMap().get("IMGAGE_FOUNDER");
+        img_logo = sessionData1.getConfigMap().get("IMAGE_LOGO");
+        img_myaccount = sessionData1.getConfigMap().get("IMAGE_MYACCOUNT");
+        img_logout = sessionData1.getConfigMap().get("IMAGE_LOGOUT");
+        img_titleband = sessionData1.getConfigMap().get("IMAGE_TITLEBAND");
+        img_leftband = sessionData1.getConfigMap().get("IMAGE_LEFTBAND");
+        img_menuband = sessionData1.getConfigMap().get("IMAGE_MENUBAND");
+        img_mainband = sessionData1.getConfigMap().get("IMAGE_MAINBAND");
+        img_databand = sessionData1.getConfigMap().get("IMAGE_DATABAND");
+        sms_required = sessionData1.getConfigMap().get("SMS_REQUIRED");
+        fee_required = sessionData1.getConfigMap().get("FEE_REQUIRED");
+        account_required = sessionData1.getConfigMap().get("ACCOUNT_REQUIRED");
+    	staff_required = sessionData1.getConfigMap().get("STAFF_REQUIRED");
+        url = sessionData1.getConfigMap().get("DBURL_"+sessionData1.getDBName());
+        secName = sessionData1.getConfigMap().get(sessionData.getSectionName().toUpperCase() + "_SEC");
         
-        app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+        app_header = sessionData1.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData1.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData1.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData1.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData1.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData1.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
     	
-        jrc_required = bundle.getString("JRC_REQUIRED");
-        sch_required = bundle.getString("SCH_REQUIRED");
-        schigh_required = bundle.getString("SCHIGH_REQUIRED");
-        scpri_required = bundle.getString("SCPRI_REQUIRED");
-        scppr_required = bundle.getString("SCPPR_REQUIRED");
-        show_founder = bundle.getString("SHOW_FOUNDER");
-        show_donatedby = bundle.getString("SHOW_DONATEDBY");
+        jrc_required = sessionData1.getConfigMap().get("JRC_REQUIRED");
+        sch_required = sessionData1.getConfigMap().get("SCH_REQUIRED");
+        schigh_required = sessionData1.getConfigMap().get("SCHIGH_REQUIRED");
+        scpri_required = sessionData1.getConfigMap().get("SCPRI_REQUIRED");
+        scppr_required = sessionData1.getConfigMap().get("SCPPR_REQUIRED");
+        show_founder = sessionData1.getConfigMap().get("SHOW_FOUNDER");
+        show_donatedby = sessionData1.getConfigMap().get("SHOW_DONATEDBY");
         todayDate = commonObj.getCurrentDate();
         LinkedHashMap<String, LinkedHashMap<String, String>> headerMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
         LinkedHashMap<String, String> shortCategoryMap = new LinkedHashMap<String, String>();
@@ -318,7 +318,7 @@ public class MultipleFeesHead extends JFrame {
 
 						frame.setVisible(false);
 						String[] arguments = new String[] { "" };
-						LoginView.main(arguments);
+						SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					commonObj.logException(e1);
@@ -650,7 +650,7 @@ public class MultipleFeesHead extends JFrame {
         academic_label.setBounds(40, 30, 150, 50);
         bottombandPanel.add(academic_label);
 
-        String yearList = commonObj.getAcademicYear(todayDate)+","+commonObj.getNextYear(todayDate);
+        String yearList = commonObj.getAcademicYear(sessionData1,todayDate)+","+commonObj.getNextYear(sessionData, todayDate);
         String academicYearList[] = yearList.split(",");
 //        String academicYearList[] = {academicYear};
         final JComboBox academicYear_combo = new JComboBox(academicYearList);
@@ -1131,7 +1131,7 @@ public class MultipleFeesHead extends JFrame {
 //
 //						frame.setVisible(false);
 //						String[] arguments = new String[] { "" };
-//						LoginView.main(arguments);
+//						SchoolForAllLoginView.main(arguments);
 //					}
 //				} catch (Exception e1) {
 //					commonObj.logException(e1);

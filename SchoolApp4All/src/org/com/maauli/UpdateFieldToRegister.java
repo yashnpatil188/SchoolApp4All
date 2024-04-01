@@ -85,8 +85,8 @@ public class UpdateFieldToRegister {
 		int screenWidth = commonObj.screeWidth();
 		int screenHeight = commonObj.screeHeight();
 		String dateToday = commonObj.getCurrentDate();
-    	String academicYear = commonObj.getAcademicYear(dateToday);
-    	String previousYear = commonObj.getPreviousYear(academicYear);
+    	String academicYear = commonObj.getAcademicYear(sessionData,dateToday);
+    	String previousYear = commonObj.getPreviousYear(sessionData,academicYear);
 		
 		JFrame f = new JFrame("Data update in progress. Don't Close");
 		f.setBounds(screenWidth/2 - 150, screenHeight/2, 90, 25);

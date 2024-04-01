@@ -207,52 +207,52 @@ public class AttendanceUpdate extends JFrame {
 
 		category = retCatType;
 		section = sec;
-		std = bundle.getString(section.toUpperCase() + "_STD");
-		div = bundle.getString(section.toUpperCase() + "_DIV");
-		secName = bundle.getString(section.toUpperCase() + "_SEC");
-		categoryList = bundle.getString("ATTENDANCE_CATEGORY");
-		attendanceList = bundle.getString("ATTENDANCE_STATUS");
-		examCategory = bundle.getString("EXAM_CATEGORY");
-		monthlyList = bundle.getString("MONTH_LIST");
+		std = sessionData.getConfigMap().get(section.toUpperCase() + "_STD");
+		div = sessionData.getConfigMap().get(section.toUpperCase() + "_DIV");
+		secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
+		categoryList = sessionData.getConfigMap().get("ATTENDANCE_CATEGORY");
+		attendanceList = sessionData.getConfigMap().get("ATTENDANCE_STATUS");
+		examCategory = sessionData.getConfigMap().get("EXAM_CATEGORY");
+		monthlyList = sessionData.getConfigMap().get("MONTH_LIST");
 		monthClass = retMonth;
 		if (!retMonth.equalsIgnoreCase("")) {
 			monthlyList = "All," + monthlyList;
 		} else {
 			monthlyList = "Select,All," + monthlyList;
 		}
-		img_path = bundle.getString("IMAGE_PATH");
-		img_home = bundle.getString("IMAGE_HOME");
-		img_logo = bundle.getString("IMAGE_LOGO");
-		img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-		img_logout = bundle.getString("IMAGE_LOGOUT");
-		img_titleband = bundle.getString("IMAGE_TITLEBAND");
-		img_leftband = bundle.getString("IMAGE_LEFTBAND");
-		img_menuband = bundle.getString("IMAGE_MENUBAND");
-		img_mainband = bundle.getString("IMAGE_MAINBAND");
-		app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+		img_path = sessionData.getConfigMap().get("IMAGE_PATH");
+		img_home = sessionData.getConfigMap().get("IMAGE_HOME");
+		img_logo = sessionData.getConfigMap().get("IMAGE_LOGO");
+		img_myaccount = sessionData.getConfigMap().get("IMAGE_MYACCOUNT");
+		img_logout = sessionData.getConfigMap().get("IMAGE_LOGOUT");
+		img_titleband = sessionData.getConfigMap().get("IMAGE_TITLEBAND");
+		img_leftband = sessionData.getConfigMap().get("IMAGE_LEFTBAND");
+		img_menuband = sessionData.getConfigMap().get("IMAGE_MENUBAND");
+		img_mainband = sessionData.getConfigMap().get("IMAGE_MAINBAND");
+		app_header = sessionData.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
 
 		String todayDate = commonObj.getCurrentDate();
-		academicYearClass = commonObj.getAcademicYear(todayDate);
+		academicYearClass = commonObj.getAcademicYear(sessionData,todayDate);
 		if (!academicYear.equalsIgnoreCase("")) {
 			academicYearClass = academicYear;
 		}
 		try {
 			if(dbValidate.connectDatabase(sessionData)){
-				studentLCMap = dbValidate.findStudentLCList(sessionData1, "", stdClass, divClass, "", "", "", academicYear, "", "", section);
+				studentLCMap = dbValidate.findStudentLCList(sessionData, "", stdClass, divClass, "", "", "", academicYear, "", "", section);
 				yearList = dbValidate.findYearList(sessionData, "CLASS_ALLOTMENT");
 			}
 		} catch (Exception e1) {
@@ -292,7 +292,7 @@ public class AttendanceUpdate extends JFrame {
 		dispose();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		frame = new JFrame("Welcome to "+sessionData1.getAppName());
+		frame = new JFrame("Welcome to "+sessionData.getAppName());
 		Common commonObj = new Common();
 		screenWidth = commonObj.screeWidth();
 		screenHeight = commonObj.screeHeight();
@@ -394,7 +394,7 @@ public class AttendanceUpdate extends JFrame {
 
 						frame.setVisible(false);
 						String[] arguments = new String[] {""};
-		                LoginView.main(arguments);
+		                SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					commonObj.logException(e1);
@@ -895,7 +895,7 @@ public class AttendanceUpdate extends JFrame {
 
 						if (reply == JOptionPane.YES_OPTION) {
 							String templatePath = commonObj.getDriveName()
-									+ bundle.getString("TEMPLATE_PATH_" + sessionData.getDBName())
+									+ sessionData.getConfigMap().get("TEMPLATE_PATH_" + sessionData.getDBName())
 									+ commonObj.getCurrentDatein_dd_MMM_yyyy();
 							if (dbValidate.connectDatabase(sessionData)) {
 								JFrame f = new JFrame("Attendance downlaod in progress. Don't Close");
@@ -966,7 +966,7 @@ public class AttendanceUpdate extends JFrame {
 					}
 					
 					if(validateFields){
-						String default_path = commonObj.getDriveName() + bundle.getString("TEMPLATE_PATH_"+sessionData.getDBName());
+						String default_path = commonObj.getDriveName() + sessionData.getConfigMap().get("TEMPLATE_PATH_"+sessionData.getDBName());
 						JFileChooser fileChooser = new JFileChooser(default_path);
 						int returnValue = fileChooser.showOpenDialog(null);
 						if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -2170,7 +2170,7 @@ public class AttendanceUpdate extends JFrame {
 						}
 					    
 					    if(isHalfDayClass && reasonMap.size() > 0 
-					    		&& bundle.getString("SMS_ATTENDANCE_FLAG").equalsIgnoreCase("true")){
+					    		&& sessionData.getConfigMap().get("SMS_ATTENDANCE_FLAG").equalsIgnoreCase("true")){
 							
 					    	List<String> passGrList = new ArrayList();
 							LinkedHashMap foundStudentMap = new LinkedHashMap<>();
@@ -2190,7 +2190,7 @@ public class AttendanceUpdate extends JFrame {
 								foundStudentMap.put(grNoSms, grMap);
 								
 								smsText = grMap.get("reason");
-								smsTemplateId = bundle.getString("SMS_ATTENDANCE_REASON_TEMP_ID");
+								smsTemplateId = sessionData.getConfigMap().get("SMS_ATTENDANCE_REASON_TEMP_ID");
 								
 								String smsResponse = commonObj.sendHspSms(sessionData, passGrList, foundStudentMap, smsText, smsTemplateId, sessionData.getSectionName(), "", 
 										academicYearClass, stdClass, divClass, "", "HALFATT");

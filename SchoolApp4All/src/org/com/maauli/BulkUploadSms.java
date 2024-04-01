@@ -60,25 +60,25 @@ public class BulkUploadSms {
 
 	public static void uploadSms(SessionData sessionData, String filePath, String currentDirectory, String moduleName) {
 		try {
-			String sms_url = bundle.getString("SMS_URL");
-			String sms_user = bundle.getString("SMS_" + sessionData.getAppType() + "_USER");
-			String sms_pass = bundle.getString("SMS_" + sessionData.getAppType() + "_PASS");
-			String sms_sender = bundle.getString("SMS_" + sessionData.getAppType() + "_SENDER");
-			String apiKey = bundle.getString(sessionData.getAppType() + "_APIKEY");
-			String sms_pe_id = bundle.getString("SMS_PE_ID");
+			String sms_url = sessionData.getConfigMap().get("SMS_URL");
+			String sms_user = sessionData.getConfigMap().get("SMS_" + sessionData.getAppType() + "_USER");
+			String sms_pass = sessionData.getConfigMap().get("SMS_" + sessionData.getAppType() + "_PASS");
+			String sms_sender = sessionData.getConfigMap().get("SMS_" + sessionData.getAppType() + "_SENDER");
+			String apiKey = sessionData.getConfigMap().get(sessionData.getAppType() + "_APIKEY");
+			String sms_pe_id = sessionData.getConfigMap().get("SMS_PE_ID");
 			String phone = "";
 			String name = "";
 			String message = "", smsTemplateId = "";
 			String type = "TRANS";
-			String academic = commonObj.getAcademicYear(commonObj.getCurrentDate());
+			String academic = commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate());
 			int noOfResultCount = 0;
-			String sms_maauli_flag = bundle.getString("SMS_MAAULI_FLAG");
+			String sms_maauli_flag = sessionData.getConfigMap().get("SMS_MAAULI_FLAG");
 			
 			if(sessionData.getUserName().equalsIgnoreCase("prp") && sms_maauli_flag.equalsIgnoreCase("true")){
-				sms_user = bundle.getString("SMS_USER");
-				sms_pass = bundle.getString("SMS_PASS");
-				sms_sender = bundle.getString("SMS_SENDER");
-				apiKey = bundle.getString("SMS_APIKEY");
+				sms_user = sessionData.getConfigMap().get("SMS_USER");
+				sms_pass = sessionData.getConfigMap().get("SMS_PASS");
+				sms_sender = sessionData.getConfigMap().get("SMS_SENDER");
+				apiKey = sessionData.getConfigMap().get("SMS_APIKEY");
 			}
 
 			fileName = "errors_in_bulkUpload_" + commonObj.timeInMillis() + ".txt";

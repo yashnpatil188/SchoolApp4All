@@ -36,11 +36,11 @@ public class CreateExcel {
     
     static ResourceBundle bundle = ResourceBundle.getBundle("org.com.accesser.school");
 
-    String driver = bundle.getString("DBDRIVER");
+    String driver = "";
 
-	static String user = bundle.getString("DBUSER");
+	String user = "";
 
-	static String pwd = bundle.getString("DBPASSWD");
+	String pwd = "";
 
 	Connection connection = null;
 
@@ -68,8 +68,12 @@ public class CreateExcel {
 		String dbUser 	= "";
 		String dbPass 	= "";
 		
+		driver = sessionData.getConfigMap().get("DBDRIVER");
+		user = sessionData.getConfigMap().get("DBUSER");
+		pwd = sessionData.getConfigMap().get("DBPASSWD");
+		
 		try {
-			String url = bundle.getString("DBURL_"+sessionData.getDBName());
+			String url = sessionData.getConfigMap().get("DBURL_"+sessionData.getDBName());
 			dbUser = sessionData.getDBUser();
 			dbPass = sessionData.getDBPass();
 			if(dbUser.equalsIgnoreCase(null) || dbUser.equalsIgnoreCase("")){
@@ -121,7 +125,7 @@ public class CreateExcel {
 			Statement st = null;
 			ResultSet rs = null;
 			connectDatabase(sessionData);
-			path = ce.createTodayFolder(ce.getDriveName() + bundle.getString("TEMPLATE_PATH_"+sessionData.getDBName()),true)+"/";
+			path = ce.createTodayFolder(ce.getDriveName() + sessionData.getConfigMap().get("TEMPLATE_PATH_"+sessionData.getDBName()),true)+"/";
 			
 			if(printList.size() <= 0){
 				st = connection.createStatement();
@@ -141,6 +145,10 @@ public class CreateExcel {
 	
 					while (resultSet.next()) {
 						fields = resultSet.getString("FIELDS");
+					}
+					if(fields.equalsIgnoreCase("") && groupTitle.equalsIgnoreCase("FEES") && categoryType.equalsIgnoreCase("COLLECTION")) {
+						JOptionPane.showMessageDialog(null, "Please go to Help page and click button with description \n "
+								+ "Insert Excel Data for Fees Report Quarterly & Collection");
 					}
 				} catch (Exception e) {
 					logger.info("getField list from excelData table Exception=" + e);

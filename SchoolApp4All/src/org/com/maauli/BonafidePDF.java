@@ -107,61 +107,61 @@ public class BonafidePDF {
 		user_role = retUserRole;
 		section = sec;
     	logger.info("section :: "+section);
-    	std     = bundle.getString(section.toUpperCase()+"_STD");
+    	std     = sessionData1.getConfigMap().get(section.toUpperCase()+"_STD");
     	logger.info("std :: "+std);
-    	div     = bundle.getString(section.toUpperCase()+"_DIV");
+    	div     = sessionData1.getConfigMap().get(section.toUpperCase()+"_DIV");
     	logger.info("div :: "+div);
-    	secName = bundle.getString(section.toUpperCase()+"_SEC");
+    	secName = sessionData1.getConfigMap().get(section.toUpperCase()+"_SEC");
     	logger.info("secName :: "+secName);
-    	app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
-        bonafide_header = bundle.getString("BONAFIDE_HEADER_"+sessionData.getAppType());
-        bonafide_header_0 = bundle.getString("BONAFIDE_HEADER_0_"+sessionData.getAppType());
-        kumar = bundle.getString("KUMAR");
-        kumari = bundle.getString("KUMARI");
-        isMotherName = Boolean.parseBoolean(bundle.getString("MOTHER_NAME"));
-        isFooterRequired = Boolean.parseBoolean(bundle.getString("FOOTER_REQUIRED"));
-        footer = bundle.getString("FOOTER_"+sessionData1.getAppType());
-        Boolean showAdhaar = Boolean.parseBoolean(bundle.getString("SHOW_ADHAAR_BONAFIDE_"+sessionData1.getAppType()));
-        Boolean showSUID = Boolean.parseBoolean(bundle.getString("SHOW_SUID_BONAFIDE_"+sessionData1.getAppType()));
-        String img_path = bundle.getString("IMAGE_PATH");
-		int image_pdf_office_pos_y = Integer.parseInt(bundle.getString("IMAGE_PDF_BONAFIDE_OFFICE_POS_Y"))+45;
+    	app_header = sessionData1.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData1.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData1.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData1.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData1.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData1.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+        bonafide_header = sessionData1.getConfigMap().get("BONAFIDE_HEADER_"+sessionData.getAppType());
+        bonafide_header_0 = sessionData1.getConfigMap().get("BONAFIDE_HEADER_0_"+sessionData.getAppType());
+        kumar = sessionData1.getConfigMap().get("KUMAR");
+        kumari = sessionData1.getConfigMap().get("KUMARI");
+        isMotherName = Boolean.parseBoolean(sessionData1.getConfigMap().get("MOTHER_NAME"));
+        isFooterRequired = Boolean.parseBoolean(sessionData1.getConfigMap().get("FOOTER_REQUIRED"));
+        footer = sessionData1.getConfigMap().get("FOOTER_"+sessionData1.getAppType());
+        Boolean showAdhaar = Boolean.parseBoolean(sessionData1.getConfigMap().get("SHOW_ADHAAR_BONAFIDE_"+sessionData1.getAppType()));
+        Boolean showSUID = Boolean.parseBoolean(sessionData1.getConfigMap().get("SHOW_SUID_BONAFIDE_"+sessionData1.getAppType()));
+        String img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
+		int image_pdf_office_pos_y = Integer.parseInt(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_OFFICE_POS_Y"))+45;
 		
-		boolean pdf_header_bonafide_logo_flag = Boolean.parseBoolean(bundle.getString("PDF_HEADER_BONAFIDE_LOGO_FLAG"));
+		boolean pdf_header_bonafide_logo_flag = Boolean.parseBoolean(sessionData1.getConfigMap().get("PDF_HEADER_BONAFIDE_LOGO_FLAG"));
 		if(pdf_header_bonafide_logo_flag) {
-			pdf_logo_img_path = bundle.getString("IMAGE_PDF_LOGO_"+sessionData.getAppType());
+			pdf_logo_img_path = sessionData1.getConfigMap().get("IMAGE_PDF_LOGO_"+sessionData.getAppType());
 		}
 		
-		String pdf_header_bonafide_image_flag = bundle.getString("PDF_HEADER_BONAFIDE_IMAGE_FLAG");
+		String pdf_header_bonafide_image_flag = sessionData1.getConfigMap().get("PDF_HEADER_BONAFIDE_IMAGE_FLAG");
 		if(pdf_header_bonafide_image_flag.equalsIgnoreCase("true")) {
-			pdf_header_img_path = bundle.getString("IMAGE_PDF_BONAFIDE_HEADER_"+sessionData.getAppType());
+			pdf_header_img_path = sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_HEADER_"+sessionData.getAppType());
 		}
-		float image_pdf_scalepercent = Float.parseFloat(bundle.getString("IMAGE_PDF_BONAFIDE_SCALEPERCENT")) - 9.0f;
-		int image_pdf_pos_x = Integer.parseInt(bundle.getString("IMAGE_PDF_BONAFIDE_POS_X"));
-		int image_pdf_pos_y = Integer.parseInt(bundle.getString("IMAGE_PDF_BONAFIDE_POS_Y"))+45;
+		float image_pdf_scalepercent = Float.parseFloat(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_SCALEPERCENT")) - 9.0f;
+		int image_pdf_pos_x = Integer.parseInt(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_POS_X"));
+		int image_pdf_pos_y = Integer.parseInt(sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_POS_Y"))+45;
 		
-		int image_pdf_logo_pos_x = Integer.parseInt(bundle.getString("IMAGE_PDF_LOGO_POS_X"));
-		int image_pdf_logo_pos_y = Integer.parseInt(bundle.getString("IMAGE_PDF_LOGO_POS_Y"))+45;
-		float image_pdf_logo_scalepercent = Float.parseFloat(bundle.getString("IMAGE_PDF_LOGO_SCALEPERCENT")) - 9.0f;
+		int image_pdf_logo_pos_x = Integer.parseInt(sessionData1.getConfigMap().get("IMAGE_PDF_LOGO_POS_X"));
+		int image_pdf_logo_pos_y = Integer.parseInt(sessionData1.getConfigMap().get("IMAGE_PDF_LOGO_POS_Y"))+45;
+		float image_pdf_logo_scalepercent = Float.parseFloat(sessionData1.getConfigMap().get("IMAGE_PDF_LOGO_SCALEPERCENT")) - 9.0f;
     	
 		List<String> recLCList = new ArrayList();
 		
 		String separator ="----------------------------------------------------------------------------------------------------------------------------------";
 		logger.info("view_save :: "+view_save);
-		path = commonLc.createTodayFolder(commonLc.getDriveName() + bundle.getString("BONAFIDE_PDF_PATH_"+sessionData.getDBName()),true)+"/";
+		path = commonLc.createTodayFolder(commonLc.getDriveName() + sessionData1.getConfigMap().get("BONAFIDE_PDF_PATH_"+sessionData.getDBName()),true)+"/";
 		
 		int lcCountYear = 0;
 		int dupLcCountYear = 0;
@@ -243,10 +243,14 @@ public class BonafidePDF {
 						String bonafide_header_2		= "";
 					    String bonafide_header_3		= "";
 						try {
-							bonafide_header_2 = bundle.getString("BONAFIDE_HEADER_2_"+sessionData.getAppType()+"_"+currentStdDb+"_"+sessionData.getSectionName());
-					        bonafide_header_3 = bundle.getString("BONAFIDE_HEADER_3_"+sessionData.getAppType()+"_"+currentStdDb+"_"+sessionData.getSectionName());
+							bonafide_header_2 = sessionData1.getConfigMap().get("BONAFIDE_HEADER_2_"+sessionData.getAppType()+"_"+currentStdDb+"_"+sessionData.getSectionName());
+					        bonafide_header_3 = sessionData1.getConfigMap().get("BONAFIDE_HEADER_3_"+sessionData.getAppType()+"_"+currentStdDb+"_"+sessionData.getSectionName());
+					        if(bonafide_header_2 == null) {
+					        	bonafide_header_2 = "";
+					        	bonafide_header_3 = "";
+					        }
 						}
-						catch(MissingResourceException me) {
+						catch(Exception me) {
 							logger.warn(me);
 						}
 						String currentDivDb = LCDetaillist.get(3);
@@ -279,13 +283,14 @@ public class BonafidePDF {
 							nameDb = nameDb +", "+motherNameDb;
 						}
 						String suid_db = LCDetaillist.get(22);
+						String pen_db = LCDetaillist.get(23);
 						String todayDate = "";
 						
 						Date date = new Date();
 						SimpleDateFormat today = new SimpleDateFormat("dd/MM/yyyy");
 						todayDate = today.format(date);
 						
-						String currentAcademicYear = commonLc.getAcademicYear(todayDate.toString());
+						String currentAcademicYear = commonLc.getAcademicYear(sessionData1,todayDate.toString());
 						if(currentAcademicYear.equalsIgnoreCase(academicYear)){
 							is_was = "is";
 						}
@@ -743,8 +748,23 @@ public class BonafidePDF {
 							document.add(paraAdhaarNo);
 						}
 						
-						Chunk chunkSuid = new Chunk("Student Udise ID : "+suid_db);
+						String udise_pen = "Student Udise ID : "+suid_db;
+						if(pen_db != null && !pen_db.equalsIgnoreCase("null") && !pen_db.equalsIgnoreCase("")) {
+							udise_pen += "           "
+									+ "                    PEN No.: "+pen_db;
+						}
+						
+						Chunk chunkSuid = new Chunk(udise_pen);
 						if(showSUID) {
+							chunkSuid.setFont(fontClass1);
+							Paragraph paraSuid = new Paragraph();
+							paraSuid.setSpacingBefore(0);
+							paraSuid.add(chunkSuid);
+							paraSuid.setAlignment(Element.ALIGN_LEFT);
+							document.add(paraSuid);
+						}else {
+							udise_pen = "PEN No.: "+pen_db;
+							chunkSuid = new Chunk(udise_pen);
 							chunkSuid.setFont(fontClass1);
 							Paragraph paraSuid = new Paragraph();
 							paraSuid.setSpacingBefore(0);
@@ -1006,6 +1026,15 @@ public class BonafidePDF {
 								paraSuidOffice.add(chunkSuid);
 								paraSuidOffice.setAlignment(Element.ALIGN_LEFT);
 								document.add(paraSuidOffice);
+							}else {
+								udise_pen = "PEN No.: "+pen_db;
+								chunkSuid = new Chunk(udise_pen);
+								chunkSuid.setFont(fontClass1);
+								Paragraph paraSuid = new Paragraph();
+								paraSuid.setSpacingBefore(0);
+								paraSuid.add(chunkSuid);
+								paraSuid.setAlignment(Element.ALIGN_LEFT);
+								document.add(paraSuid);
 							}
 							
 							if(isFooterRequired) {

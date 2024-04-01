@@ -50,8 +50,8 @@ public class MarksGradeSheet_PDF {
 		String dispTotalA = "", dispTotalB = "", dispTotalAB = "";
 		int subjectHeadCount = maxSubMarks.size(), addRow = 0, fontSize = 10;
 		String subTitle = "", grNo = "", subGrade = "", totalGrade = "";
-		String bonafide_header = bundle.getString("BONAFIDE_HEADER_" + sessionData.getAppType());
-		String bonafide_header_0 = bundle.getString("BONAFIDE_HEADER_0_" + sessionData.getAppType());
+		String bonafide_header = sessionData.getConfigMap().get("BONAFIDE_HEADER_" + sessionData.getAppType());
+		String bonafide_header_0 = sessionData.getConfigMap().get("BONAFIDE_HEADER_0_" + sessionData.getAppType());
 		LinkedHashMap<String, String> subMarksDetails;
 
 		try {
@@ -70,7 +70,7 @@ public class MarksGradeSheet_PDF {
 				examHeader = "SECOND SEMESTER";
 			}
 			path = commonObj.createTodayFolder(
-					commonObj.getDriveName() + bundle.getString("REPORT_PDF_PATH_" + sessionData.getDBName()), true)
+					commonObj.getDriveName() + sessionData.getConfigMap().get("REPORT_PDF_PATH_" + sessionData.getDBName()), true)
 					+ "/";
 			fileName = "Mark_Grade_Sheet_" + std + "_" + div + "_" + commonObj.timeInMillis() + ".pdf";
 			fileAddress = path + fileName;
