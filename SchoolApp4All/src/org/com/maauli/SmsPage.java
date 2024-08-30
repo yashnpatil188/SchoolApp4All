@@ -300,10 +300,10 @@ public class SmsPage extends JFrame {
         		fee_visible_flag = true;
         	}
 			if (dbValidate.connectDatabase(sessionData)) {
-				String userActive = dbValidate.checkFormData(sessionData, user_name, "LEAVING CERTIFICATE", user_role, section);
-				if (userActive.equalsIgnoreCase("") || userActive.equalsIgnoreCase(null)) {
-					dbValidate.insertFormData(user_name, "LEAVING CERTIFICATE", user_role, section);
-				}
+				Boolean userActive = dbValidate.checkFormData(sessionData, user_name, "LEAVING CERTIFICATE", user_role, section);
+//				if (userActive.equalsIgnoreCase("") || userActive.equalsIgnoreCase(null)) {
+//					dbValidate.insertFormData(user_name, "LEAVING CERTIFICATE", user_role, section);
+//				}
 			}
 		} catch (Exception e1) {
 			logger.info("Exception insertFormData ===>>>" + e1);

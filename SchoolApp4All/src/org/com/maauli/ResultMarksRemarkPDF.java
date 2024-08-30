@@ -32,7 +32,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-public class ResultMarksPDF {
+public class ResultMarksRemarkPDF {
 	ResourceBundle bundle    		= ResourceBundle.getBundle("org.com.accesser.school"); 
     static Logger logger 			= Logger.getLogger(ResultGradePDF.class.getName());
     static String secName 			= "";
@@ -41,7 +41,7 @@ public class ResultMarksPDF {
     static String fileAddress		= "";
     static Common commonObj = new Common();
     
-	public ResultMarksPDF(SessionData sessionData, String sec, String academic, LinkedHashMap grStudentMap, 
+	public ResultMarksRemarkPDF(SessionData sessionData, String sec, String academic, LinkedHashMap grStudentMap, 
 			List<String> subjectTitleList, String exam,	String std, String div, String note, 
 			Map<String,String> maxMarksMapOrder, Map<String,String> gradeMarksMapOrder) {
 
@@ -315,7 +315,7 @@ public class ResultMarksPDF {
 			      table.addCell(cell10);
 			      
 			      PdfPCell cell11 = new PdfPCell (new Paragraph ("SUBJECT", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
-			      cell11.setColspan (6);
+			      cell11.setColspan (4);
 			      cell11.setHorizontalAlignment (Element.ALIGN_CENTER);
 			      cell11.setPaddingBottom(5.0f);
 			      table.addCell(cell11);
@@ -331,12 +331,15 @@ public class ResultMarksPDF {
 			      cell13.setHorizontalAlignment (Element.ALIGN_CENTER);
 			      table.addCell(cell13);
 			      
-			     
-			      
 			      PdfPCell cell14 = new PdfPCell (new Paragraph ("OBTAINED", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
 			      cell14.setColspan (2);
 			      cell14.setHorizontalAlignment (Element.ALIGN_CENTER);
 			      table.addCell(cell14);
+			      
+			      PdfPCell cell20 = new PdfPCell (new Paragraph ("REMARK", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+			      cell20.setColspan (2);
+			      cell20.setHorizontalAlignment (Element.ALIGN_CENTER);
+			      table.addCell(cell20);
 			      
 			      String subjectMarksObtained = "";
 			      String subjectName = "";
@@ -344,16 +347,18 @@ public class ResultMarksPDF {
 			      String maxMarksList = "\n";
 			      String minMarksList = "";
 			      String marksList = "";
+			      String remarkList = "";
 			      String subjectGradeList = "";
 			      String maxMarksGradeList = "";
 			      String minMarksGradeList = "";
 			      String marksGradeList = "";
+			      String remarkGradeList = "";
 			      String optionalHeader = "";
 			      optionalHeader = "Optional Subjects";
 			      maxMarksGradeList = maxMarksGradeList + "\n \n";
 			      minMarksGradeList = minMarksGradeList + "\n \n";
 			      marksGradeList = marksGradeList + "\n ";
-			      String dispMarks = "";
+			      String dispMarks = "", remark = "PASS";
 			      String dispPassStatus = "";
 			      String dispReason = "";
 			      String dispAbsentMarks = "";
@@ -370,9 +375,11 @@ public class ResultMarksPDF {
 			      Paragraph maxMarksPara = new Paragraph ();
 			      Paragraph minMarksPara = new Paragraph ();
 			      Paragraph marksPara = new Paragraph ();
+			      Paragraph remarkPara = new Paragraph ();
 			      Paragraph optionalHeaderPara = new Paragraph ();
 			      Paragraph optionalSubPara = new Paragraph ();
 			      Paragraph optionalMarksPara = new Paragraph ();
+//			      Paragraph optionalRemarkPara = new Paragraph ();
 			      Paragraph spaceAfterSubjectPara = new Paragraph ();
 			      float gradeMarksSpace = -3.0f;
 			      double avgDivisor = 0.0;
@@ -401,7 +408,7 @@ public class ResultMarksPDF {
 										}
 										dispReason = subjectMarksObtained.substring(subjectMarksObtained.indexOf("#")+1, subjectMarksObtained.indexOf("@"));
 										dispAbsentMarks = subjectMarksObtained.substring(subjectMarksObtained.indexOf("@")+1, subjectMarksObtained.indexOf(")"));
-
+										
 										if(dispReason.equalsIgnoreCase("MG")){
 											dispMarks = (int)(Double.parseDouble(dispMarks.substring(0, dispMarks.indexOf("(")))) + " (MG)";
 										}
@@ -416,6 +423,11 @@ public class ResultMarksPDF {
 								else{
 									dispMarks = subjectMarksObtained;
 								}
+							}
+							
+							if(dispMarks.contains("F")) {
+								dispMarks = dispMarks.substring(0, dispMarks.indexOf("("));
+								remark = "FAIL";
 							}
 							
 							if(gradeMarksMapOrder.get(item).toString().equalsIgnoreCase("Marks")){
@@ -437,6 +449,7 @@ public class ResultMarksPDF {
 								minTotalMarks = minTotalMarks + minIndividualMarks;
 								minMarksList = minMarksList + "\n       "+(int) minIndividualMarks+"\n";
 								marksList = marksList + "\n    "+dispMarks+"\n";
+								remarkList = remarkList + "\n    "+remark+"\n";
 								subjectTitleMatched.add(item);
 							}
 							else{
@@ -558,7 +571,7 @@ public class ResultMarksPDF {
 			      cell15.addElement(spaceAfterSubjectPara);
 			      spaceAfterSubjects = "";
 			      
-			      cell15.setColspan (6);
+			      cell15.setColspan (4);
 			      cell15.setHorizontalAlignment (Element.ALIGN_LEFT);
 			      cell15.setPadding (-8.0f);
 			      table.addCell(cell15);
@@ -623,6 +636,32 @@ public class ResultMarksPDF {
 			      cell18.setHorizontalAlignment (Element.ALIGN_CENTER);
 			      cell18.setPaddingLeft(10f);
 			      table.addCell(cell18);
+			      
+			      Chunk remarkChunk = new Chunk();
+			      remarkChunk.append(remarkList);
+				  Font remarkFont = FontFactory.getFont("TIMES_ROMAN");
+				  remarkFont.setStyle(Font.UNDEFINED);
+				  remarkFont.setSize(12);
+				  remarkChunk.setFont(remarkFont);
+				  remarkPara.add(remarkChunk);
+				  remarkPara.setSpacingAfter(-5);
+				  remarkPara.setLeading(0, 0.83f);
+				  
+//				  chunkGradeList.append(marksGradeList);
+//				  Font fontRemarkList = FontFactory.getFont("TIMES_ROMAN");
+//				  fontRemarkList.setStyle(Font.UNDEFINED);
+//				  fontRemarkList.setSize(12);
+//				  chunkGradeList.setFont(fontRemarkList);
+//				  optionalRemarkPara.setLeading(10);
+//				  optionalRemarkPara.add(chunkGradeList);
+				  
+			      PdfPCell cell19 = new PdfPCell ();
+			      cell19.addElement(remarkPara);
+//			      cell19.addElement(optionalRemarkPara);
+			      cell19.setColspan (2);
+			      cell19.setHorizontalAlignment (Element.ALIGN_CENTER);
+			      cell19.setPaddingLeft(10f);
+			      table.addCell(cell19);
 			      
 			      PdfPCell cell59 = new PdfPCell (new Paragraph ("          Total", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
 			      cell59.setColspan (6);

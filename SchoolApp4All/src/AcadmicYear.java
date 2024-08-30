@@ -18,7 +18,7 @@ public class AcadmicYear {
 				academicYear = (Integer.parseInt(year)-1) +"-"+ (Integer.parseInt(year.substring(2)));
 			}
     	}catch(Exception e){
-    		System.out.println("Academic Year Exception == "+e);
+    		// System.out.println("Academic Year Exception == "+e);
     	}
 	}
 

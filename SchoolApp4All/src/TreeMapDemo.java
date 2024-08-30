@@ -20,13 +20,13 @@ public class TreeMapDemo {
       while(i.hasNext()) {
          Map.Entry me = (Map.Entry)i.next();
          System.out.print(me.getKey() + ": ");
-         System.out.println(me.getValue());
+         // System.out.println(me.getValue());
       }
-      System.out.println();
+      // System.out.println();
       // Deposit 1000 into Zara's account
       double balance = ((Double)tm.get("Zara")).doubleValue();
       tm.put("Zara", new Double(balance + 1000));
-      System.out.println("Zara's new balance: " +
+       System.out.println("Zara's new balance: " +
       tm.get("Zara"));
    }
 }

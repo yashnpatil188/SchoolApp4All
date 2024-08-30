@@ -14,7 +14,7 @@ public class ReadFileDemo {
 			br = new BufferedReader(new FileReader("C:\\testing.txt"));
  
 			while ((sCurrentLine = br.readLine()) != null) {
-				System.out.println(sCurrentLine);
+				// System.out.println(sCurrentLine);
 			}
  
 		} catch (IOException e) {

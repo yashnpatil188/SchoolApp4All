@@ -29,7 +29,7 @@ public class dateToWord {
 
     public static String dateToWords(int day, int month, int year) {
 
-        System.out.println(day + "/" + month + "/" + year);
+        // System.out.println(day + "/" + month + "/" + year);
 //        Common cm = new Common();
         String date2word =
             convert(day,"day") + " " + getMonth(month) + " " + convert(year,"year");
@@ -185,7 +185,7 @@ public class dateToWord {
 
     public static String dateToWords(int day, int month, int year) {
 
-        System.out.println(day + "/" + month + "/" + year);
+        // System.out.println(day + "/" + month + "/" + year);
 //        Common cm = new Common();
         String date2word =
             convert(day) + " " + getMonth(month) + " " + convert(year);
@@ -298,7 +298,7 @@ public class dateToWord {
 		// TODO Auto-generated method stub
 		
 //		Common cm = new Common();
-		System.out.println(dateToWords(23, 01, 1998));
+		// System.out.println(dateToWords(23, 01, 1998));
 
 	}
 }

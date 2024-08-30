@@ -45,7 +45,7 @@ public class Excel2DB {
                 statement = connection.createStatement();
     			statement.executeUpdate(sql);
 //                PreparedStatement pstm = (PreparedStatement)connection.prepareStatement(sql);
-                System.out.println("Import rows "+i);
+                // System.out.println("Import rows "+i);
             }
             /*while(rows.hasNext()) {        
                 HSSFRow row = (HSSFRow) rows.next(); 
@@ -68,9 +68,9 @@ public class Excel2DB {
             connection.commit();
             connection.close();
             input.close();
-            System.out.println("Success import excel to mysql table");
+            // System.out.println("Success import excel to mysql table");
 		} catch (Exception e) {
-			System.out.println("Exception :: " + e);
+			// System.out.println("Exception :: " + e);
 		}
 	}
 }

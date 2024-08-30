@@ -17,7 +17,7 @@ public class SchemaDetailsTest {
      ResultSet resultSet = conn.getMetaData().getCatalogs();
      ResultSet resultSetColumn = conn.getMetaData().getCatalogs();
      /*while (resultSet.next()) {
-       System.out.println("Schema Name = " + resultSet.getString("TABLE_CAT"));
+       // System.out.println("Schema Name = " + resultSet.getString("TABLE_CAT"));
      }
      resultSet.close();*/
      
@@ -27,13 +27,13 @@ public class SchemaDetailsTest {
      String tableName = "";
      while (resultSet.next()) {
        tableName = resultSet.getString(3);
-       System.out.println("Table Name = " + tableName);
+       // System.out.println("Table Name = " + tableName);
        
     // --- LISTING DATABASE COLUMN NAMES ---
        DatabaseMetaData meta = conn.getMetaData();
        resultSetColumn = meta.getColumns(databaseName, null, tableName, "%");
        while (resultSetColumn.next()) {
-      	 System.out.println("Column Name of table " + tableName + " = " + resultSetColumn.getString(4));
+      	 // System.out.println("Column Name of table " + tableName + " = " + resultSetColumn.getString(4));
        }
      }
      resultSet.close();
@@ -42,7 +42,7 @@ public class SchemaDetailsTest {
      DatabaseMetaData meta = conn.getMetaData();
      resultSet = meta.getColumns(databaseName, null, tableName, "%");
      while (resultSet.next()) {
-    	 System.out.println("Column Name of table " + tableName + " = " + resultSet.getString(4));
+    	 // System.out.println("Column Name of table " + tableName + " = " + resultSet.getString(4));
      }*/
    }
 }

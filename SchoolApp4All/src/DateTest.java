@@ -15,12 +15,12 @@ public class DateTest {
 		try {
 
 			Date dateF = formatter.parse(dateFrom);
-			System.out.println(dateF);
-			System.out.println(formatter.format(dateF));
+			// System.out.println(dateF);
+			// System.out.println(formatter.format(dateF));
 			
 			Date dateT = formatter.parse(dateTo);
-			System.out.println(dateT);
-			System.out.println(formatter.format(dateT));
+			// System.out.println(dateT);
+			// System.out.println(formatter.format(dateT));
 			
 			int numberOfDays = 0;
 	    	try {
@@ -29,7 +29,7 @@ public class DateTest {
 				Date a1 = formatter.parse(formatter.format(dateF));
 				Date a2 = formatter.parse(formatter.format(dateT));
 				numberOfDays = (int) ((a2.getTime()-a1.getTime()) / (60*60*24*1000) );
-				System.out.println("numberOfDays :: "+numberOfDays);
+				// System.out.println("numberOfDays :: "+numberOfDays);
 				
 				for(int i = 0 ; i <= numberOfDays ; i++){
 					Calendar cal = Calendar.getInstance();
@@ -37,7 +37,7 @@ public class DateTest {
 					if(i != 0){
 						cal.add( Calendar.DATE, 1 );
 					}
-					System.out.println(formatter.format(cal.getTime()).toString());
+					// System.out.println(formatter.format(cal.getTime()).toString());
 					dateFrom = formatter.format(cal.getTime());
 				}
 			} catch (ParseException e) {

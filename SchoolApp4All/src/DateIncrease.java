@@ -15,7 +15,7 @@ public class DateIncrease {
 			c.setTime(sdf.parse(date));
 			int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
 			maxDay = 7;
-			System.out.println("maxDay :: " + maxDay);
+			// System.out.println("maxDay :: " + maxDay);
 			for (int co = 0; co < maxDay; co++) {
 				if (co == 0) {
 					incDate = sdf.format(c.getTime());
@@ -23,7 +23,7 @@ public class DateIncrease {
 					c.add(Calendar.DATE, 1);
 					incDate = sdf.format(c.getTime());
 				}
-				System.out.println(incDate);
+				// System.out.println(incDate);
 			}
 
 		} catch (ParseException e) {

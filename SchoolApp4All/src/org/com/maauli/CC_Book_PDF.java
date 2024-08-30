@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.util.SystemOutLogger;
 import org.com.accesser.DBValidate;
 import org.com.accesser.SessionData;
 import com.itextpdf.text.Chunk;
@@ -68,6 +69,7 @@ public class CC_Book_PDF {
 		String[] filterFieldsList = filterFields.split(",");
 		LinkedHashMap<String, String> filterFieldsMap = new LinkedHashMap<String, String>(); 
 		boolean cc_report_project_row_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("CC_REPORT_PROJECT_ROW_FLAG"));
+		boolean marks_flag_std = false, result_sem_std_flag = false;
 		
 		try {
 			f = new JFrame("CC Book downlaod in progress. Don't Close");
@@ -77,6 +79,9 @@ public class CC_Book_PDF {
 		    f.setVisible(true);
 		    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		    
+		    marks_flag_std = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_MARKS_"+std.replaceAll(" ", "_")));
+			result_sem_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem+"_"+std.replaceAll(" ", "_")));
+			
 			int filterTableCount = 0;
 			for(int j = 0; j < filterFieldsList.length; j++){
 				filterFieldsMap.put(filterFieldsList[j], "");
@@ -96,6 +101,7 @@ public class CC_Book_PDF {
 				semInitial = "S";
 				examHeader = "Second Term  "+academic;
 			}
+			
 			path = commonObj.createTodayFolder(commonObj.getDriveName() + 
 					sessionData.getConfigMap().get("REPORT_PDF_PATH_" + sessionData.getDBName()), true)+ "/";
 			remarkImagePath = commonObj.createFolder(commonObj.getDriveName()+"/"+sessionData.getDBName()+"_app/Remark_Images/");
@@ -137,6 +143,9 @@ public class CC_Book_PDF {
 				grMap = (LinkedHashMap) me.getValue();
 				name = grMap.get("name").toString();
 				rollNo = grMap.get("rollNo").toString();
+//				if(rollNo.equalsIgnoreCase("34")) {
+//					// System.out.println(rollNo +" : "+ me.getKey());
+//				}
 				
 				if(studentOptSubAllotMap.get(me.getKey()) != null){
 					optionalSubject = studentOptSubAllotMap.get(me.getKey()).get("optionalSubject");
@@ -515,6 +524,7 @@ public class CC_Book_PDF {
 					Map.Entry meSubject = (Map.Entry) n.next();
 					subject = meSubject.getKey().toString();
 					subMaxMarks = maxSubMarks.get(subject);
+//					// System.out.println(subject);
 					
 					if(optSubMap.containsKey((subject+"_NO"))){
 						continue;
@@ -546,7 +556,7 @@ public class CC_Book_PDF {
 					cell329.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell329);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_dobs")) == 0){
+					if(subMaxMarks.get(sem+"_dobs") == null || Double.parseDouble(subMaxMarks.get(sem+"_dobs")) == 0){
 						mdob = "-";
 					}
 					else{
@@ -559,7 +569,7 @@ public class CC_Book_PDF {
 					cell330.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell330);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_oral")) == 0){
+					if(subMaxMarks.get(sem+"_oral") == null || Double.parseDouble(subMaxMarks.get(sem+"_oral")) == 0){
 						mora = "-";
 					}
 					else{
@@ -572,7 +582,7 @@ public class CC_Book_PDF {
 					cell331.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell331);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_pract")) == 0){
+					if(subMaxMarks.get(sem+"_pract") == null || Double.parseDouble(subMaxMarks.get(sem+"_pract")) == 0){
 						mpra = "-";
 					}
 					else{
@@ -585,7 +595,7 @@ public class CC_Book_PDF {
 					cell332.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell332);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_activity")) == 0){
+					if(subMaxMarks.get(sem+"_activity") == null || Double.parseDouble(subMaxMarks.get(sem+"_activity")) == 0){
 						mact = "-";
 					}
 					else{
@@ -598,7 +608,7 @@ public class CC_Book_PDF {
 					cell333.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell333);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_project")) == 0){
+					if(subMaxMarks.get(sem+"_project") == null || Double.parseDouble(subMaxMarks.get(sem+"_project")) == 0){
 						mpro = "-";
 					}
 					else{
@@ -611,7 +621,7 @@ public class CC_Book_PDF {
 					cell334.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell334);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_obt")) == 0){
+					if(subMaxMarks.get(sem+"_obt") == null || Double.parseDouble(subMaxMarks.get(sem+"_obt")) == 0){
 						mobt = "-";
 					}
 					else{
@@ -624,7 +634,7 @@ public class CC_Book_PDF {
 					cell335.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell335);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_assign")) == 0){
+					if(subMaxMarks.get(sem+"_assign") == null || Double.parseDouble(subMaxMarks.get(sem+"_assign")) == 0){
 						mass = "-";
 					}
 					else{
@@ -637,7 +647,7 @@ public class CC_Book_PDF {
 					cell336.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell336);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_other")) == 0){
+					if(subMaxMarks.get(sem+"_other") == null || Double.parseDouble(subMaxMarks.get(sem+"_other")) == 0){
 						moth = "-";
 					}
 					else{
@@ -656,7 +666,7 @@ public class CC_Book_PDF {
 					cell338.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell338);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_oral1")) == 0){
+					if(subMaxMarks.get(sem+"_oral1") == null || Double.parseDouble(subMaxMarks.get(sem+"_oral1")) == 0){
 						mora1 = "-";
 					}
 					else{
@@ -669,7 +679,7 @@ public class CC_Book_PDF {
 					cell339.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell339);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_pract1")) == 0){
+					if(subMaxMarks.get(sem+"_pract1") == null || Double.parseDouble(subMaxMarks.get(sem+"_pract1")) == 0){
 						mpra1 = "-";
 					}
 					else{
@@ -682,7 +692,7 @@ public class CC_Book_PDF {
 					cell340.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table2.addCell(cell340);
 
-					if(Double.parseDouble(subMaxMarks.get(sem+"_write1")) == 0){
+					if(subMaxMarks.get(sem+"_write1") == null || Double.parseDouble(subMaxMarks.get(sem+"_write1")) == 0){
 						mwri1 = "-";
 					}
 					else{
@@ -752,7 +762,10 @@ public class CC_Book_PDF {
 					if(mpra.equalsIgnoreCase("-")){
 						pra = "-";
 					} else{
-						pra = grMap.get(subject+"_"+semInitial+"PRA").toString();
+						pra = grMap.get(subject+"_"+semInitial+"PRA")+"";
+						if(pra.equalsIgnoreCase("null")) {
+							pra = "-";
+						}
 						if(!pra.equalsIgnoreCase("AB") && !pra.equalsIgnoreCase("MG") && !pra.equalsIgnoreCase("") && !pra.equalsIgnoreCase("-"))
 						totalA = totalA + Double.parseDouble(pra);
 					}
@@ -765,7 +778,10 @@ public class CC_Book_PDF {
 					if(mact.equalsIgnoreCase("-")){
 						act = "-";
 					} else{
-						act = grMap.get(subject+"_"+semInitial+"ACT").toString();
+						act = grMap.get(subject+"_"+semInitial+"ACT")+"";
+						if(act.equalsIgnoreCase("null")) {
+							act = "-";
+						}
 						if(!act.equalsIgnoreCase("AB") && !act.equalsIgnoreCase("MG") && !act.equalsIgnoreCase("") && !act.equalsIgnoreCase("-"))
 						totalA = totalA + Double.parseDouble(act);
 					}
@@ -778,7 +794,10 @@ public class CC_Book_PDF {
 					if(mpro.equalsIgnoreCase("-")){
 						pro = "-";
 					} else{
-						pro = grMap.get(subject+"_"+semInitial+"PRO").toString();
+						pro = grMap.get(subject+"_"+semInitial+"PRO")+"";
+						if(pro.equalsIgnoreCase("null")) {
+							pro = "-";
+						}
 						if(!pro.equalsIgnoreCase("AB") && !pro.equalsIgnoreCase("MG") && !pro.equalsIgnoreCase("") && !pro.equalsIgnoreCase("-"))
 						totalA = totalA + Double.parseDouble(pro);
 					}
@@ -792,7 +811,10 @@ public class CC_Book_PDF {
 						obt = "-";
 					}
 					else{
-						obt = grMap.get(subject+"_"+semInitial+"OBT").toString();
+						obt = grMap.get(subject+"_"+semInitial+"OBT")+"";
+						if(obt.equalsIgnoreCase("null")) {
+							obt = "-";
+						}
 						if(!obt.equalsIgnoreCase("AB") && !obt.equalsIgnoreCase("MG") && !obt.equalsIgnoreCase("") && !obt.equalsIgnoreCase("-"))
 						totalA = totalA + Double.parseDouble(obt);
 					}
@@ -806,7 +828,10 @@ public class CC_Book_PDF {
 						ass = "-";
 					}
 					else{
-						ass = grMap.get(subject+"_"+semInitial+"ASS").toString();
+						ass = grMap.get(subject+"_"+semInitial+"ASS")+"";
+						if(ass.equalsIgnoreCase("null")) {
+							ass = "-";
+						}
 						if(!ass.equalsIgnoreCase("AB") && !ass.equalsIgnoreCase("MG") && !ass.equalsIgnoreCase("") && !ass.equalsIgnoreCase("-"))
 						totalA = totalA + Double.parseDouble(ass);
 					}
@@ -820,7 +845,10 @@ public class CC_Book_PDF {
 						oth = "-";
 					}
 					else{
-						oth = grMap.get(subject+"_"+semInitial+"OTH").toString();
+						oth = grMap.get(subject+"_"+semInitial+"OTH")+"";
+						if(oth.equalsIgnoreCase("null")) {
+							oth = "-";
+						}
 						if(!oth.equalsIgnoreCase("AB") && !oth.equalsIgnoreCase("MG") && !oth.equalsIgnoreCase("") && !oth.equalsIgnoreCase("-"))
 						totalA = totalA + Double.parseDouble(oth);
 					}
@@ -840,7 +868,10 @@ public class CC_Book_PDF {
 						ora1 = "-";
 					}
 					else{
-						ora1 = grMap.get(subject+"_"+semInitial+"ORA1").toString();
+						ora1 = grMap.get(subject+"_"+semInitial+"ORA1")+"";
+						if(ora1.equalsIgnoreCase("null")) {
+							ora1 = "-";
+						}
 						if(!ora1.equalsIgnoreCase("AB") && !ora1.equalsIgnoreCase("MG") && !ora1.equalsIgnoreCase("") && !ora1.equalsIgnoreCase("-"))
 						totalB = Double.parseDouble(ora1);
 					}
@@ -854,7 +885,10 @@ public class CC_Book_PDF {
 						pra1 = "-";
 					}
 					else{
-						pra1 = grMap.get(subject+"_"+semInitial+"PRA1").toString();
+						pra1 = grMap.get(subject+"_"+semInitial+"PRA1")+"";
+						if(pra1.equalsIgnoreCase("null")) {
+							pra1 = "-";
+						}
 						if(!pra1.equalsIgnoreCase("AB") && !pra1.equalsIgnoreCase("MG") && !pra1.equalsIgnoreCase("") && !pra1.equalsIgnoreCase("-"))
 						totalB =  totalB + Double.parseDouble(pra1);
 					}
@@ -868,7 +902,10 @@ public class CC_Book_PDF {
 						wri1 = "-";
 					}
 					else{
-						wri1 = grMap.get(subject+"_"+semInitial+"WRI1").toString();
+						wri1 = grMap.get(subject+"_"+semInitial+"WRI1")+"";
+						if(wri1.equalsIgnoreCase("null")) {
+							wri1 = "-";
+						}
 						if(!wri1.equalsIgnoreCase("AB") && !wri1.equalsIgnoreCase("MG") && !wri1.equalsIgnoreCase("") && !wri1.equalsIgnoreCase("-"))
 						totalB =  totalB + Double.parseDouble(wri1);
 					}

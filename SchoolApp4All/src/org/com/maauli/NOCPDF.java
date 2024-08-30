@@ -448,7 +448,7 @@ public class NOCPDF {
 							document.add(paraBirthPlace);
 							
 							String gr_pen = "G. R. Number : "+grDb;
-							if(pen_db != null && !pen_db.equalsIgnoreCase("null") && !pen_db.equalsIgnoreCase("")) {
+							if(pen_db != null && !pen_db.equalsIgnoreCase("null") && !pen_db.trim().equalsIgnoreCase("")) {
 								gr_pen += "           "
 										+ "                    PEN No.: "+pen_db;
 							}

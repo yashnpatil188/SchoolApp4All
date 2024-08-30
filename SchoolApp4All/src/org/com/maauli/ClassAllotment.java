@@ -589,11 +589,11 @@ public class ClassAllotment extends JFrame {
 		remarkButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-            	frame.setVisible(false);
-                List markList = new ArrayList();
-                RemarksEntry remarksEntryObject = RemarksEntry.getInstance();
-                remarksEntryObject.getRemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
-                    "", "", section, user_name, user_role, "", "", "");
+            	List findLCList = new ArrayList();
+				frame.setVisible(false);
+				panelHome.removeAll();///to remve entire panel
+				new RemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
+	                    "", "", section, user_name, user_role, "", "", "");
             }
         });
 		
@@ -852,14 +852,14 @@ public class ClassAllotment extends JFrame {
 	    		!stdClass.equalsIgnoreCase("") && findStudentDB.connectDatabase(sessionData)){
 			
 			logger.info("Time before getting getDistinctDiv data :: "+commonObj.getCurrentTimeStamp());
-			System.out.println("Time before getting getDistinctDiv data :: "+commonObj.getCurrentTimeStamp());
+			// System.out.println("Time before getting getDistinctDiv data :: "+commonObj.getCurrentTimeStamp());
 			
 			admittedDiv_combo.removeAllItems();
 			String divAvailabe = findStudentDB.getDistinctDiv(sessionData, stdClass, section, 
 					"PRESENT_DIV", "PRESENT_STD", "class_allotment",academicYearClass);
 			
 			logger.info("Time after getting getDistinctDiv data :: "+commonObj.getCurrentTimeStamp());
-			System.out.println("Time after getting getDistinctDiv data :: "+commonObj.getCurrentTimeStamp());
+			// System.out.println("Time after getting getDistinctDiv data :: "+commonObj.getCurrentTimeStamp());
 			
 			for (String retval: divAvailabe.split(",")) {
 				admittedDiv_combo.addItem(retval);
@@ -1651,7 +1651,7 @@ public class ClassAllotment extends JFrame {
 													String rollNo1 = ((LinkedHashMap) foundStudentMap.get(l.get(i))).get("rollNo").toString();
 													String gr1 = ((LinkedHashMap) foundStudentMap.get(l.get(i))).get("gr").toString();
 													if(gr1.equalsIgnoreCase("0009037")) {
-														System.out.println("");
+														// System.out.println("");
 													}
 													String name1 = ((LinkedHashMap) foundStudentMap.get(l.get(i))).get("name").toString();
 													String presentStd1 = ((LinkedHashMap) foundStudentMap.get(l.get(i))).get("presentStd").toString();

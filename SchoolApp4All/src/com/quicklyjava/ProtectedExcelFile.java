@@ -43,7 +43,7 @@ public class ProtectedExcelFile {
 
         } catch (Exception ex) {
 
-            System.out.println(ex.getMessage());      
+            // System.out.println(ex.getMessage());      
 
         } finally {         
 
@@ -53,7 +53,7 @@ public class ProtectedExcelFile {
 
               } catch (IOException ex) {
 
-                  System.out.println(ex.getMessage());     
+                  // System.out.println(ex.getMessage());     
 
               }    
 
@@ -63,7 +63,7 @@ public class ProtectedExcelFile {
 
               } catch (IOException ex) {
 
-                  System.out.println(ex.getMessage());     
+                  // System.out.println(ex.getMessage());     
 
               } 
         }       

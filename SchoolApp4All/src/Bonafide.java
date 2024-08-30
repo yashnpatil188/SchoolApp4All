@@ -194,11 +194,11 @@ public class Bonafide {
 								process.waitFor();
 							}
 						} else {
-							System.out.println("File not found");
+							// System.out.println("File not found");
 						}
-						System.out.println("Done");
+						// System.out.println("Done");
 					} catch (Exception e) {
-						System.out.println(":: -----Exception---- ::\n"+e);
+						// System.out.println(":: -----Exception---- ::\n"+e);
 					}
 		
 			

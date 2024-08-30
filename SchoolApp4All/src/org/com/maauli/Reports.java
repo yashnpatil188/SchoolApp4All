@@ -141,7 +141,7 @@ public class Reports extends JFrame {
 
 	static String examClass = "Select";
 
-	static String examDisplay = "";
+	static String examDisplay = "", sem = "";
 
 	static String app_header_0_fontName = "";
 	static int app_header_0_fontSize = 0;
@@ -159,7 +159,8 @@ public class Reports extends JFrame {
 
 	static ResourceBundle bundle = ResourceBundle.getBundle("org.com.accesser.school");
 	static boolean marks_flag_std = false;
-
+	static boolean result_sem_std = false;
+	
 	static Logger logger = Logger.getLogger(Reports.class.getName());
 
 	public Reports(SessionData sessionData1, String retStd, String retDiv, String academicYear, String sec,
@@ -224,16 +225,20 @@ public class Reports extends JFrame {
 		}
 		if (examClass.equalsIgnoreCase("Semester 1")) {
 			examDisplay = "Sem 1";
+			sem = "SEM1";
 		}
 		if (examClass.equalsIgnoreCase("Semester 2")) {
 			examDisplay = "Sem 2";
+			sem = "SEM2";
 		}
 		if (examClass.equalsIgnoreCase("Final")) {
 			examDisplay = "Final";
+			sem = "FINAL";
 		}
 
 		if (!retExam.equalsIgnoreCase("")) {
 			marks_flag_std = Boolean.parseBoolean(sessionData1.getConfigMap().get("RESULT_MARKS_"+stdClass.replaceAll(" ", "_")));
+			result_sem_std = Boolean.parseBoolean(sessionData1.getConfigMap().get("RESULT_"+sem+"_"+stdClass.replaceAll(" ", "_")));
 		}
 		
 		String todayDate = commonObj.getCurrentDate();
@@ -600,11 +605,11 @@ public class Reports extends JFrame {
 		remarkButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				List findLCList = new ArrayList();
 				frame.setVisible(false);
-				List markList = new ArrayList();
-				RemarksEntry remarksEntryObject = RemarksEntry.getInstance();
-				remarksEntryObject.getRemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "", "", "",
-						section, user_name, user_role, "", "", "");
+				panelHome.removeAll();///to remve entire panel
+				new RemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
+	                    "", "", section, user_name, user_role, "", "", "");
 			}
 		});
 
@@ -876,6 +881,7 @@ public class Reports extends JFrame {
 				try {
 					String stdSel = (String) std_combo.getSelectedItem();
 					String acadSel = (String) academicYear_combo.getSelectedItem();
+					
 					if (!stdSel.equalsIgnoreCase("All") && !stdSel.equalsIgnoreCase("Select")
 							&& dbValidate.connectDatabase(sessionData)) {
 						div_combo.removeAllItems();
@@ -908,7 +914,11 @@ public class Reports extends JFrame {
 									subject_combo.addItem(subjectmap.get("subject_title"));
 								}
 							}
+							
 							if (stdSel.equalsIgnoreCase("X") || stdSel.equalsIgnoreCase("XII")) {
+								exam_combo.addItem("Final");
+							}
+							else if (true) {
 								exam_combo.addItem("Final");
 							} else {
 								exam_combo.removeItem("Final");
@@ -923,14 +933,23 @@ public class Reports extends JFrame {
 							commonObj.logException(e2);
 						}
 					}
-					if (!stdSel.equalsIgnoreCase("IX") && !stdSel.equalsIgnoreCase("X")
-							&& !stdSel.equalsIgnoreCase("XI") && !stdSel.equalsIgnoreCase("XII")) {
-						exam_combo.removeItem("Final");
-						;
+					
+					marks_flag_std = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_MARKS_"+stdSel.replaceAll(" ", "_")));
+					result_sem_std = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem+"_"+stdSel.replaceAll(" ", "_")));
+					
+//					if (!stdSel.equalsIgnoreCase("IX") && !stdSel.equalsIgnoreCase("X")
+//							&& !stdSel.equalsIgnoreCase("XI") && !stdSel.equalsIgnoreCase("XII")) {
+					if (!marks_flag_std) {
+						if (result_sem_std) {
+							exam_combo.addItem("Final");
+						}
+						else {
+							exam_combo.removeItem("Final");
+						}
 					} else if (model.getIndexOf("Final") == -1) {
 						exam_combo.addItem("Final");
-						;
 					}
+					
 				} catch (Exception e1) {
 					logger.info("Exception insertFormData ===>>>" + e1);
 				} finally {
@@ -940,6 +959,7 @@ public class Reports extends JFrame {
 		});
 
 		final JButton submitButton = new JButton("Submit");
+		
 		cat_combo.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -954,6 +974,7 @@ public class Reports extends JFrame {
 					findPanel.remove(gender_combo);
 					subject_combo.setEnabled(true);
 					submitButton.setText("Submit");
+					exam_combo.addItem("Final");
 					findPanel.revalidate();
 					findPanel.repaint();
 				} else if (((String) cat_combo.getSelectedItem()).equalsIgnoreCase("Marksheet Subjectwise")) {
@@ -963,6 +984,7 @@ public class Reports extends JFrame {
 					findPanel.remove(gender_label);
 					findPanel.remove(gender_combo);
 					subject_combo.setEnabled(true);
+					exam_combo.addItem("Final");
 					submitButton.setText("Open in PDF");
 					findPanel.revalidate();
 					findPanel.repaint();
@@ -973,6 +995,7 @@ public class Reports extends JFrame {
 					findPanel.remove(form_combo);
 					findPanel.remove(gender_label);
 					findPanel.remove(gender_combo);
+					exam_combo.removeItem("Final");
 					subject_combo.setSelectedIndex(0);
 					subject_combo.setEnabled(false);
 					submitButton.setText("Open in PDF");
@@ -985,6 +1008,7 @@ public class Reports extends JFrame {
 					findPanel.remove(form_combo);
 					findPanel.remove(gender_label);
 					findPanel.remove(gender_combo);
+					exam_combo.addItem("Final");
 					// submitButton.setText("Submit");
 					submitButton.setText("Open in PDF");
 					findPanel.revalidate();
@@ -1036,6 +1060,16 @@ public class Reports extends JFrame {
 				subjectTitle = (String) subject_combo.getSelectedItem() == null ? ""
 						: (String) subject_combo.getSelectedItem();
 
+				if (exam.equalsIgnoreCase("Semester 1")) {
+					sem = "SEM1";
+				}
+				else if (exam.equalsIgnoreCase("Semester 2")) {
+					sem = "SEM2";
+				}
+				else if (exam.equalsIgnoreCase("Final")) {
+					sem = "FINAL";
+				}
+				
 				if (std.equalsIgnoreCase("Select")) {
 					commonObj.showMessageDialog("Please select std");
 					validateFields = false;
@@ -1087,6 +1121,8 @@ public class Reports extends JFrame {
 							LinkedHashMap<String, LinkedHashMap<String, String>> maxSubMarks = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 							LinkedHashMap<String, LinkedHashMap<String, String>> grStudentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
+							boolean result_marks = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_MARKS_"+std.replaceAll(" ", "_")));
+							boolean result_sem_std = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem+"_"+std.replaceAll(" ", "_")));
 							// if(exam.equalsIgnoreCase("Final")){
 							// maxSubMarks = dbValidate.getMaxMarksReportForAllSubjects(sessionData, std,
 							// academicSel, exam);
@@ -1192,11 +1228,19 @@ public class Reports extends JFrame {
 								marksSemDataMap = dbValidate.getMarksheetGradewise(sessionData, std, div, academicSel,
 										section, exam, findSubMap, maxSubMarks, studentOptSubAllotMap, grStudentMap);
 								listSize = marksSemDataMap.size();
-								if (stdInt > 0 && stdInt < 9) {
+								
+//								if (stdInt > 0 && stdInt < 9 && !result_marks) {
+								if (!result_sem_std) {
 									new MarksGradeSheet_PDF(sessionData, exam, subjectTitle, std, div, academicSel,
 											marksSemDataMap, studentOptSubAllotMap, maxSubMarks, grStudentMap,
 											null);//leftDataMap set as null as IV all students created LC
-								} else if(stdInt >= 9){
+								} 
+								else if (!result_sem_std && exam.equalsIgnoreCase("Semester 1")) {
+									new MarksGradeSheet_PDF(sessionData, exam, subjectTitle, std, div, academicSel,
+											marksSemDataMap, studentOptSubAllotMap, maxSubMarks, grStudentMap,
+											null);//leftDataMap set as null as IV all students created LC
+//									} else if(stdInt >= 9){
+								} else if(result_sem_std){
 									new MarksSheet_IX_PDF(sessionData, exam, subjectTitle, std, div, academicSel,
 											marksSemDataMap, studentOptSubAllotMap, maxSubMarks, grStudentMap,
 											null);//leftDataMap set as null as IV all students created LC
@@ -1514,7 +1558,7 @@ public class Reports extends JFrame {
 				temp0_labels[i].setBounds(width, j, 80, 50);
 				dataPanel.add(temp0_labels[i]);
 
-				width = width + 40;
+				width = width + 50;
 				stdpipe_labels[i] = new JLabel("|");
 				stdpipe_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 				stdpipe_labels[i].setBounds(width, j, 120, 50);
@@ -1524,10 +1568,10 @@ public class Reports extends JFrame {
 				width = width + 10;
 				tempstd_labels[i] = new JLabel(std + " " + div);
 				tempstd_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-				tempstd_labels[i].setBounds(width, j, 80, 50);
+				tempstd_labels[i].setBounds(width, j, 120, 50);
 				dataPanel.add(tempstd_labels[i]);
 
-				width = width + 60;
+				width = width + 130;
 				pipe_labels1[i] = new JLabel("|");
 				pipe_labels1[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 				pipe_labels1[i].setBounds(width, j, 120, 50);
@@ -1540,7 +1584,7 @@ public class Reports extends JFrame {
 				temp1_labels[i].setBounds(width, j, 80, 50);
 				dataPanel.add(temp1_labels[i]);
 
-				width = width + 60;
+				width = width + 70;
 				pipe_labels2[i] = new JLabel("|");
 				pipe_labels2[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 				pipe_labels2[i].setBounds(width, j, 120, 50);
@@ -1550,11 +1594,11 @@ public class Reports extends JFrame {
 				width = width + 20;
 				temp2_labels[i] = new JLabel(grNo);
 				temp2_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-				temp2_labels[i].setBounds(width, j, 60, 50);
+				temp2_labels[i].setBounds(width, j, 80, 50);
 				temp2_labels[i].setToolTipText(grNo);
 				dataPanel.add(temp2_labels[i]);
 
-				width = width + 60;
+				width = width + 90;
 				pipe_labels3[i] = new JLabel("|");
 				pipe_labels3[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 				pipe_labels3[i].setBounds(width, j, 120, 50);
@@ -1606,7 +1650,7 @@ public class Reports extends JFrame {
 
 				line_labels[i] = new JLabel(line1);
 				line_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-				line_labels[i].setBounds(40, j + 10, 1100, 50);
+				line_labels[i].setBounds(40, j + 10, screenWidth - 30, 50);
 				dataPanel.add(line_labels[i]);
 
 				i++;

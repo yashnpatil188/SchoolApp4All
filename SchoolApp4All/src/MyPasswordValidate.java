@@ -17,9 +17,9 @@ private static Pattern pswNamePtrn =
     }
      
     public static void main(String a[]){
-        System.out.println("Is 'java2novice' a valid password? "+validatePassword("asdfghjkl1"));
-        System.out.println("Is 'gabbarsingh' a valid password? "+validatePassword("gabbarsingh"));
-        System.out.println("Is 'Java2NOVICE$' a valid password? "+validatePassword("Java2NOVICE$"));
-        System.out.println("Is '234aBc#' a valid password? "+validatePassword("234aBc#"));
+        // System.out.println("Is 'java2novice' a valid password? "+validatePassword("asdfghjkl1"));
+        // System.out.println("Is 'gabbarsingh' a valid password? "+validatePassword("gabbarsingh"));
+        // System.out.println("Is 'Java2NOVICE$' a valid password? "+validatePassword("Java2NOVICE$"));
+        // System.out.println("Is '234aBc#' a valid password? "+validatePassword("234aBc#"));
     }
 }
