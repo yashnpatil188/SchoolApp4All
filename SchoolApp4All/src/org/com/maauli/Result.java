@@ -178,12 +178,14 @@ public class Result extends JFrame {
     static int app_header_widthSpace = 0;
     static int app_header_heightSpace = 0;
     static String app_header_2 = "";
-    static String app_header_2_fontName = "";
+    static String app_header_2_fontName = "", sem = "";
     static int app_header_2_fontSize = 0;
     static int app_header_2_widthSpace = 0;
     static int app_header_2_heightSpace = 0;
     static boolean marks_flag_std = false;
-    static boolean result_final_sem2_std_flag = false;
+    static boolean result_sem_std_flag = false;
+    static boolean result_final_pdf_std_flag = false;
+    static boolean result_update_flag = false;
 
 	@SuppressWarnings("unchecked")
 	public Result(SessionData sessionData1, String retGr_no, String retStd, String retDiv, String retLastName,
@@ -265,11 +267,23 @@ public class Result extends JFrame {
     	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
     	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
 
+//    	result_update_flag = Boolean.parseBoolean(sessionData.getConfigMap().get(selectStd+"_SEM1_DISABLE_"+yearClass));
+    	
 		if (!retExam.equalsIgnoreCase("")) {
 			examClass = retExam;
 			marks_flag_std = Boolean.parseBoolean(sessionData1.getConfigMap().get("RESULT_MARKS_"+stdClass.replaceAll(" ", "_")));
-			result_final_sem2_std_flag = Boolean.parseBoolean(sessionData1.getConfigMap().get("RESULT_FINAL_SEM2_"+stdClass.replaceAll(" ", "_")));
+			result_sem_std_flag = Boolean.parseBoolean(sessionData1.getConfigMap().get("RESULT_"+sem+"_"+stdClass.replaceAll(" ", "_")));
+			result_final_pdf_std_flag = Boolean.parseBoolean(sessionData1.getConfigMap().get("RESULT_FINAL_PDF_"+stdClass.replaceAll(" ", "_")));
 		}
+		
+		if(examClass.equalsIgnoreCase("Semester 1")) {
+			sem = "SEM1";
+		} else if(examClass.equalsIgnoreCase("Semester 2")) {
+			sem = "SEM2";
+		} else if(examClass.equalsIgnoreCase("Final")) {
+			sem = "FINAL";
+		}
+		
 		/*else{
 			examClass = "Select";
 		}*/
@@ -652,11 +666,11 @@ public class Result extends JFrame {
 		remarkButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-            	frame.setVisible(false);
-                List markList = new ArrayList();
-                RemarksEntry remarksEntryObject = RemarksEntry.getInstance();
-                remarksEntryObject.getRemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
-                    "", "", section, user_name, user_role, "", "", "");
+            	List findLCList = new ArrayList();
+				frame.setVisible(false);
+				panelHome.removeAll();///to remve entire panel
+				new RemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
+	                    "", "", section, user_name, user_role, "", "", "");
             }
         });
 		
@@ -924,7 +938,8 @@ public class Result extends JFrame {
 //		else{
 //			updateResultButton.setEnabled(true);
 //		}
-		if(examClass.equalsIgnoreCase("FUT") || examClass.equalsIgnoreCase("SUT") || examClass.equalsIgnoreCase("SELECT")) {
+		if(examClass.equalsIgnoreCase("FUT") || examClass.equalsIgnoreCase("SUT") || examClass.equalsIgnoreCase("SELECT") || 
+				result_update_flag) {
 			updateResultButton.setEnabled(false);
 		}
 		else{
@@ -996,9 +1011,10 @@ public class Result extends JFrame {
 				
 				if(initialYearFromAcadSel <= initialYearFromAcademic && updateCheck.isSelected() && reply == JOptionPane.YES_OPTION){
 					updateResultButton.setEnabled(true);
+					updateCheck.setSelected(true);
 				}
 				else if(initialYearFromAcadSel < initialYearFromAcademic || reply == JOptionPane.NO_OPTION){
-//					updateResultButton.setEnabled(false);
+					updateResultButton.setEnabled(false);
 					updateCheck.setSelected(false);
 				}
 			}
@@ -1020,8 +1036,16 @@ public class Result extends JFrame {
 					String firstName = "";
 					String lastName = "";
 					String fatherName = "";
-					String exam = "";
+					String exam = "", sem = "";
 
+					if(exam.equalsIgnoreCase("Semester 1")) {
+						sem = "SEM1";
+					} else if(exam.equalsIgnoreCase("Semester 2")) {
+						sem = "SEM2";
+					} else if(exam.equalsIgnoreCase("Final")) {
+						sem = "FINAL";
+					}
+					
 					academicSel = (String) academicYear_combo.getSelectedItem() == null ? "" : (String) academicYear_combo.getSelectedItem();
 					std = (String) Std_combo.getSelectedItem() == null ? "" : (String) Std_combo.getSelectedItem();
 					div = (String) presentDiv_combo.getSelectedItem() == null ? "" : (String) presentDiv_combo.getSelectedItem();
@@ -1031,8 +1055,9 @@ public class Result extends JFrame {
 					lastName = lastName_text.getText() == null ? "" : lastName_text.getText();
 					fatherName = fatherName_text.getText() == null ? "" : fatherName_text.getText();
 					exam = (String) exam_combo.getSelectedItem() == null ? "" : (String) exam_combo.getSelectedItem();
-					result_final_sem2_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_FINAL_SEM2_"+std.replaceAll(" ", "_")));
-
+					result_sem_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem+"_"+std.replaceAll(" ", "_")));
+					result_final_pdf_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_FINAL_PDF_"+stdClass.replaceAll(" ", "_")));
+					
 					if (academicSel.equalsIgnoreCase("Year")) {
 						validateFields = false;
 						JOptionPane.showMessageDialog(null, "Please select Academic year.");
@@ -1209,6 +1234,11 @@ public class Result extends JFrame {
 //					else if(model.getIndexOf("Final") == -1 ){
 //						exam_combo.addItem("Final");;
 //					}
+					
+//					boolean result_update_flag = Boolean.parseBoolean(sessionData.getConfigMap().get(stdSel+"_SEM1_DISABLE_"+acadSel));
+//					if(result_update_flag) {
+//						updateResultButton.setEnabled(false);
+//					}
 				} catch (Exception e1) {
 					commonObj.logException(e1);
 				} finally {
@@ -1336,6 +1366,16 @@ public class Result extends JFrame {
 					findPanel.repaint();
 				}
 				
+//				if(examSel.equalsIgnoreCase("Semester 1")) {
+//					boolean result_update_flag = Boolean.parseBoolean(sessionData.getConfigMap().get(std+"_SEM1_DISABLE_"+academicYearClass));
+//					if(result_update_flag) {
+//						updateResultButton.setEnabled(false);
+//					}
+//					else{
+//						updateResultButton.setEnabled(true);
+//					}
+//				}
+				
 				String acadSel = (String) academicYear_combo.getSelectedItem();
 				int initialYearFromAcadSel = Integer.parseInt(acadSel.substring(0, acadSel.indexOf("-")));
 				String todayDate = commonObj.getCurrentDate();
@@ -1394,8 +1434,9 @@ public class Result extends JFrame {
 				String firstName = "";
 				String lastName = "";
 				String fatherName = "";
-				String exam = "";
+				String exam = "", sem = "";
 				String subject = "";
+				int reply = 0;
 
 				academicSel = (String) academicYear_combo.getSelectedItem() == null ? "" : (String) academicYear_combo.getSelectedItem();
 				std = (String) Std_combo.getSelectedItem() == null ? "" : (String) Std_combo.getSelectedItem();
@@ -1406,8 +1447,16 @@ public class Result extends JFrame {
 				lastName = lastName_text.getText() == null ? "" : lastName_text.getText();
 				fatherName = fatherName_text.getText() == null ? "" : fatherName_text.getText();
 				exam = (String) exam_combo.getSelectedItem() == null ? "" : (String) exam_combo.getSelectedItem();
-				result_final_sem2_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_FINAL_SEM2_"+std.replaceAll(" ", "_")));
-
+				if(exam.equalsIgnoreCase("Semester 1")) {
+					sem = "SEM1";
+				} else if(exam.equalsIgnoreCase("Semester 2")) {
+					sem = "SEM2";
+				} else if(exam.equalsIgnoreCase("Final")) {
+					sem = "FINAL";
+				}
+				result_sem_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem+"_"+std.replaceAll(" ", "_")));
+				result_final_pdf_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_FINAL_PDF_"+stdClass.replaceAll(" ", "_")));
+				
 				if (academicSel.equalsIgnoreCase("Year")) {
 					validateFields = false;
 					JOptionPane.showMessageDialog(null, "Please select Academic year.");
@@ -1443,6 +1492,23 @@ public class Result extends JFrame {
 					try {
 						if (dbValidate.connectDatabase(sessionData)) {
 							boolean changedFlag = dbValidate.marksEntryChanged(sessionData, std, div, academicSel);
+							
+//							if(exam.equalsIgnoreCase("Semester 1")) {
+//								boolean result_update_flag = Boolean.parseBoolean(sessionData.getConfigMap().get(std+"_SEM1_DISABLE_"+academicSel));
+//								if(!result_update_flag) {
+//									reply = JOptionPane.showConfirmDialog(null, "Do you want to lock Semester 1 update and proceed for Std "+std+"?", "Confirm to lock", JOptionPane.YES_NO_OPTION);
+//									
+//									if(reply == JOptionPane.YES_OPTION){
+//										updateResultButton.setEnabled(false);
+//										boolean updateFlag = false;
+//										if (dbValidate.connectDatabase(sessionData)) {
+//											updateFlag = dbValidate.updateConfigInDb(sessionData, std+"_SEM1_DISABLE_"+academicYearClass, "true", true);
+//										}
+////										changedFlag = false;
+//									}
+//								}
+//							}
+							
 							if(!changedFlag){
 								if (exam.equalsIgnoreCase("Semester 1")) {
 									studentResultSem1Map = dbValidate.findResultList(sessionData, academicSel, std, div, exam, "", "", section, lastName, firstName, fatherName);
@@ -1454,12 +1520,13 @@ public class Result extends JFrame {
 									studentResultMap.clear();
 									studentResultMap = studentResultSem2Map;
 									logger.info("studentResultSem2Map size : " + studentResultSem2Map.size());
-								} else if (exam.equalsIgnoreCase("FINAL") && (std.equalsIgnoreCase("IX") || std.equalsIgnoreCase("X") || std.equalsIgnoreCase("XI") || std.equalsIgnoreCase("XII"))) {
+//								} else if (exam.equalsIgnoreCase("FINAL") && (std.equalsIgnoreCase("IX") || std.equalsIgnoreCase("X") || std.equalsIgnoreCase("XI") || std.equalsIgnoreCase("XII"))) {
+								} else if (exam.equalsIgnoreCase("FINAL") && result_final_pdf_std_flag) {
 									studentResultFinalMap = dbValidate.findResultList(sessionData, academicSel, std, div, exam, "", "", section, lastName, firstName, fatherName);
 									studentResultMap.clear();
 									studentResultMap = studentResultFinalMap;
 									logger.info("studentResultFinalMap size : " + studentResultFinalMap.size());
-								} else if (exam.equalsIgnoreCase("FINAL") && result_final_sem2_std_flag) {
+								} else if (exam.equalsIgnoreCase("FINAL") && result_sem_std_flag) {
 									studentResultSem2Map = dbValidate.findResultList(sessionData, academicSel, std, div, exam, "", "", section, lastName, firstName, fatherName);
 									studentResultMap.clear();
 									studentResultMap.addAll(studentResultSem2Map);
@@ -1644,7 +1711,7 @@ public class Result extends JFrame {
 
 			JLabel pipe_label6 = new JLabel("|");
 			pipe_label6.setFont(new Font("Book Antiqua", Font.BOLD, 16));
-			pipe_label6.setBounds(730, 00, 120, 50);
+			pipe_label6.setBounds(740, 00, 120, 50);
 			dataPanel.add(pipe_label6);
 
 			JLabel total_label = new JLabel("Total");
@@ -1678,10 +1745,10 @@ public class Result extends JFrame {
 
 				pipe_labels[i] = new JLabel("|");
 				pipe_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-				pipe_labels[i].setBounds(k + 50, 00, 120, 50);
+				pipe_labels[i].setBounds(k + 80, 00, 120, 50);
 				dataPanel.add(pipe_labels[i]);
 
-				k = k + 60;
+				k = k + 80;
 				t = 10;
 
 			}
@@ -1738,6 +1805,15 @@ public class Result extends JFrame {
 				String[] temp;
 				String delimiter = ",";
 				String str;
+				
+				LinkedHashMap<String, LinkedHashMap<String, String>> maxSubMarks = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+		    	try {
+		    		maxSubMarks = dbValidate.getMaxMarksReportForAllSubjects(sessionData, stdClass,
+							academicYearClass, examClass);
+				} catch (Exception e1) {
+					commonObj.logException(e1);
+					commonObj.showMessageDialog("failed to get max marks for subjects.");
+				}
 
 				for (int i = 0; i < listSize; i++) {
 					j = j + 30;
@@ -1745,7 +1821,7 @@ public class Result extends JFrame {
 
 //					if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && 
 //							!stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII")){
-					if(examClass.equalsIgnoreCase("Final") && !marks_flag_std){
+					if(examClass.equalsIgnoreCase("Final") && !result_final_pdf_std_flag){
 						
 						//As numbering starts from Zero
 						if(i % 2 == 0){
@@ -1777,6 +1853,10 @@ public class Result extends JFrame {
 					sr_radio[i].setSelected(setSelected);
 //					dataPanel.add(sr_radio[i]);
 
+//					System.out.println(grNo);
+//					if(grNo.equalsIgnoreCase("0022494")) {
+//						 System.out.println("");
+//					}
 					gr_labels[i] = new JLabel(grNo);
 					gr_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 //					allGrList.add(grNo);
@@ -1811,7 +1891,7 @@ public class Result extends JFrame {
 					
 //					if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && 
 //							!stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII")){
-					if(examClass.equalsIgnoreCase("Final") && !marks_flag_std){
+					if(examClass.equalsIgnoreCase("Final") && !result_final_pdf_std_flag){
 						//As numbering starts from Zero
 						if(i % 2 == 0){
 							dataPanel.add(sr_radio[i]);
@@ -1875,12 +1955,12 @@ public class Result extends JFrame {
 					
 					percent_labels[i] = new JLabel(percent);
 					percent_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-					percent_labels[i].setBounds(610, j + 2, 50, 50);
+					percent_labels[i].setBounds(605, j + 2, 50, 50);
 //					percent_labels[i].setToolTipText(percent);
 					dataPanel.add(percent_labels[i]);
 					toolTip_percent_labels[i] = new JLabel();
 					toolTip_percent_labels[i].setToolTipText("%");
-					toolTip_percent_labels[i].setBounds(610, j + 2, 50, 40);
+					toolTip_percent_labels[i].setBounds(605, j + 2, 50, 40);
 					dataPanel.add(toolTip_percent_labels[i]);
 
 					JLabel pipe_label9 = new JLabel("|");
@@ -1900,7 +1980,7 @@ public class Result extends JFrame {
 
 					JLabel pipe_label10 = new JLabel("|");
 					pipe_label10.setFont(new Font("Book Antiqua", Font.BOLD, 16));
-					pipe_label10.setBounds(730, j, 120, 50);
+					pipe_label10.setBounds(740, j, 120, 50);
 					dataPanel.add(pipe_label10);
 					
 					total_labels[i] = new JLabel(total);
@@ -1933,7 +2013,7 @@ public class Result extends JFrame {
 					String dispAbsentMarks = "";
 					for (int n = 0; n < subjectTitleList.size(); n++) {
 						dispResult = temp[p];
-						
+//						 System.out.println(dispResult);
 //						if(!stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XI")
 //								&& !stdClass.equalsIgnoreCase("XII") && !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
 						if(!marks_flag_std) {
@@ -1942,20 +2022,37 @@ public class Result extends JFrame {
 							}
 							if(dispResult.contains("AB") || dispResult.contains("MG")){
 								if(!examClass.equalsIgnoreCase("FINAL")){
-									dispMarks = dispResult.substring(0, dispResult.lastIndexOf("+"));
+									if(dispResult.contains("+")) {
+										dispMarks = dispResult.substring(0, dispResult.lastIndexOf("+"));
+									}
+									else if(dispResult.contains("(")) {
+										dispMarks = dispResult.substring(0, dispResult.lastIndexOf("("));
+									}
 								}
 								else if(examClass.equalsIgnoreCase("FINAL")){
-									dispMarks = dispResult.substring(0, dispResult.lastIndexOf("+"));
+									if(dispResult.contains("+")) {
+										dispMarks = dispResult.substring(0, dispResult.lastIndexOf("+"));
+									}
+									else if(dispResult.contains("(")) {
+										dispMarks = dispResult.substring(0, dispResult.lastIndexOf("("));
+									}
 								}
 								if(dispResult.contains("(")){
 									dispMarks = dispResult + ")";
 								}
 							}
 							else if(dispResult.contains("(") && dispResult.contains("+")){
-								dispMarks = dispResult.substring(0, dispResult.indexOf("+")) + " " +dispResult.substring(dispResult.indexOf("("));
+//								dispMarks = dispResult.substring(0, dispResult.indexOf("+")) + " " +dispResult.substring(dispResult.indexOf("("));
+								dispMarks = dispResult.substring(0, dispResult.indexOf("("));
+								if(dispMarks.contains("(") && !dispMarks.contains("+")){
+									dispMarks = dispMarks.substring(0, dispMarks.indexOf("("));
+								}
 							}
 							else if(dispResult.contains("(F)")){
 								dispMarks = dispResult.substring(0, dispResult.indexOf("+")) + " " +dispResult.substring(dispResult.indexOf("("));
+							}
+							else if(dispResult.contains("(") && !dispResult.contains("+")){
+								dispMarks = dispResult.substring(0, dispResult.indexOf("("));
 							}
 							else{
 								dispMarks = dispResult;
@@ -1978,7 +2075,16 @@ public class Result extends JFrame {
 								if(dispReason.equalsIgnoreCase("MG")){
 									dispMarks = dispMarks + "(MG)";
 								}
-								else if(dispPassStatus.equalsIgnoreCase("F")){
+								else if(dispReason.equalsIgnoreCase("AB") && !dispAbsentMarks.equalsIgnoreCase("NA") && !sem.equalsIgnoreCase("FINAL") && 
+										Double.parseDouble(dispAbsentMarks) == Double.parseDouble(maxSubMarks.get(subjectTitleList.get(n)).get(sem+"_"+subjectTitleList.get(n)+"_total"))){
+									dispMarks = "AB";
+								}
+								else if(dispReason.equalsIgnoreCase("AB") && !dispAbsentMarks.equalsIgnoreCase("NA") && 
+										sem.equalsIgnoreCase("FINAL") && !dispMarks.equalsIgnoreCase("AB") && !dispMarks.contains("+") && Double.parseDouble(dispMarks) == 0 && 
+										Double.parseDouble(dispAbsentMarks) == Double.parseDouble(maxSubMarks.get(subjectTitleList.get(n)).get(sem+"_"+subjectTitleList.get(n)+"_total"))){
+									dispMarks = "AB";
+								}
+								else if(dispPassStatus.contains("F")){
 									dispMarks = dispMarks + "(F)";
 								}
 							}
@@ -1987,15 +2093,30 @@ public class Result extends JFrame {
 							}
 						}
 						//don't display AB
-						/*if(dispMarks.contains("AB")){
-							dispMarks = dispMarks.replace("+AB", "");
-						}*/
+						if(dispMarks.equalsIgnoreCase("AB(F)")){
+							dispMarks = "AB";
+						}
+						
+//						System.out.println(dispMarks);
+						if(commonObj.validateNumber(dispMarks)) {
+							dispMarks = ((int)(Double.parseDouble(dispMarks)))+"";
+						} else if(dispMarks.contains("+")) {
+							if(commonObj.validateNumber(dispMarks.substring(0, dispMarks.indexOf("+"))) && 
+									commonObj.validateNumber(dispMarks.substring(dispMarks.indexOf("+")+1))) {
+								dispMarks = ((int)(Double.parseDouble(dispMarks.substring(0, dispMarks.indexOf("+"))))) + 
+										"+" + ((int)(Double.parseDouble(dispMarks.substring(dispMarks.indexOf("+")+1))));
+							}
+						} else if(dispMarks.contains("(F)") && commonObj.validateNumber(dispMarks.substring(0, dispMarks.indexOf("(")))) {
+							dispMarks = (int)(Double.parseDouble(dispMarks.substring(0, dispMarks.indexOf("("))))+"";
+							dispMarks = dispMarks+"(F)";
+						}
+						
 						sub_labels[n] = new JLabel(dispMarks);
 						sub_labels[n].setFont(new Font("Book Antiqua", Font.BOLD, 12));
 						int q = 0;
 						if((temp[p].contains("+") && temp[p].contains("(F)")) || temp[p].contains("MG") || 
 								temp[p].contains("AB")){
-							q = 0;
+							q = -10;
 						}
 						else{
 							q = -10;
@@ -2010,11 +2131,11 @@ public class Result extends JFrame {
 
 						pipe_labels[n] = new JLabel("|");
 						pipe_labels[n].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-						pipe_labels[n].setBounds(m + 50, j, 120, 50);
+						pipe_labels[n].setBounds(m + 80, j, 120, 50);
 						dataPanel.add(pipe_labels[n]);
 
 						p = p + 1;
-						m = m + 60;
+						m = m + 80;
 
 					}
 
@@ -2029,7 +2150,7 @@ public class Result extends JFrame {
 //					if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && 
 //							!stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XI") && 
 //							!stdClass.equalsIgnoreCase("XII")){
-					if(examClass.equalsIgnoreCase("Final") && !marks_flag_std){
+					if(examClass.equalsIgnoreCase("Final") && !result_final_pdf_std_flag){
 						r = sem1Index;
 					}
 					
@@ -2047,7 +2168,7 @@ public class Result extends JFrame {
 //									if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X")
 //											&& !stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII")
 //											&& !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
-									if(examClass.equalsIgnoreCase("Final") && !marks_flag_std){
+									if(examClass.equalsIgnoreCase("Final") && !result_final_pdf_std_flag){
 										q = q + q;
 									}
 		
@@ -2244,7 +2365,7 @@ public class Result extends JFrame {
 						try {
 							if(dbValidate.connectDatabase(sessionData)){
 								
-								if(marks_flag_std){
+								if(result_final_pdf_std_flag){
 									grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicYearClass, stdClass, divClass, examClass, 
 											section, lastNameClass, firstNameClass, fatherNameClass, leftDataMap, marks_flag_std);
 								}
@@ -2286,9 +2407,18 @@ public class Result extends JFrame {
 									ResultPPRMarksPDF resultPPRMarksPDF = new ResultPPRMarksPDF(sessionData, section, academicYearClass, grStudentSelectedMap, 
 											subjectTitleList, examClass, stdClass, divClass, note, maxMarksMapOrder, gradeMarksMapOrder);
 								}
-								else if(marks_flag_std){
+								else if(!marks_flag_std && result_sem_std_flag){
+									ResultMarksRemarkPDF resultMarksRemarkPDF = new ResultMarksRemarkPDF(sessionData, section, academicYearClass, grStudentSelectedMap, 
+											subjectTitleList,examClass, stdClass, divClass, note, maxMarksMapOrder, gradeMarksMapOrder);
+								}
+								else if(result_sem_std_flag){
 									ResultMarksPDF resultMarksPDF = new ResultMarksPDF(sessionData, section, academicYearClass, grStudentSelectedMap, 
 											subjectTitleList,examClass, stdClass, divClass, note, maxMarksMapOrder, gradeMarksMapOrder);
+								}
+								else if(!marks_flag_std && 
+										(examClass.equalsIgnoreCase("Semester 1") || examClass.equalsIgnoreCase("Semester 2"))) {
+									ResultGradePDF resultGradePDF = new ResultGradePDF(sessionData, section, academicYearClass, grStudentSelectedMap, 
+											subjectTitleList,examClass, stdClass, divClass, note);
 								}
 								else{
 									ResultGradePDF resultGradePDF = new ResultGradePDF(sessionData, section, academicYearClass, grStudentSelectedMap, 

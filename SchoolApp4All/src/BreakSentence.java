@@ -14,12 +14,12 @@ public class BreakSentence {
 		while (regexMatcher.find()) {
 		  matchList.add(regexMatcher.group());
 		}
-		System.out.println("Match List "+matchList);
-		System.out.println(matchList.size());
-		System.out.println(matchList.get(0));
-		System.out.println(matchList.get(1));
-		System.out.println(matchList.get(2));
-		System.out.println(matchList.get(3));
+		// System.out.println("Match List "+matchList);
+		// System.out.println(matchList.size());
+		// System.out.println(matchList.get(0));
+		// System.out.println(matchList.get(1));
+		// System.out.println(matchList.get(2));
+		// System.out.println(matchList.get(3));
 	}
 
 }

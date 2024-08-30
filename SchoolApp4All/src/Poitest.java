@@ -36,14 +36,14 @@ public class Poitest {
 			HSSFSheet sheet = workbook.getSheetAt(0);
 			sheet.protectSheet("abc");
 			int rows = sheet.getLastRowNum();
-			System.out.println("rows:"+rows);
+			// System.out.println("rows:"+rows);
 			
 			for (int i = 0; i <= rows; i++) {
 				HSSFRow row = sheet.getRow(i);
 				if (row == null)
 					continue;
 				int cols = row.getLastCellNum();
-				System.out.println("cols:"+cols);
+				// System.out.println("cols:"+cols);
 
 				for (int j = 0; j <= cols; j++) {
 					HSSFCell cell = row.getCell((int) j);
@@ -55,11 +55,11 @@ public class Poitest {
 						continue;
 					if (cell.getCellType() == HSSFCell.CELL_TYPE_STRING) {
 						HSSFRichTextString val = cell.getRichStringCellValue();
-						System.out.println(val);
+						// System.out.println(val);
 					}
 					if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
 						double val = cell.getNumericCellValue();
-						System.out.println(val);
+						// System.out.println(val);
 					}
 				}
 			}
@@ -80,7 +80,7 @@ public class Poitest {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("done");
+		// System.out.println("done");
 
 	}
 }

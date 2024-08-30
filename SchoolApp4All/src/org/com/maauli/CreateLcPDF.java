@@ -1566,7 +1566,7 @@ public class CreateLcPDF {
 							}
 						}
 						payremark = commonLc.FirstWordCap(payremark);
-						payremark = payremark.replace("****", stdStar);
+						payremark = payremark.replace("xxxx", stdStar);
 						Chunk chunkRemark = new Chunk("                                                                     :       "+  payremark);
 						/*Font fontRemark = new Font(Font.TIMES_ROMAN);
 						fontRemark.setStyle(Font.BOLD);
@@ -1583,7 +1583,7 @@ public class CreateLcPDF {
 						
 						logger.info("remarkDb===="+remarkDb);
 						remarkLc = commonLc.FirstWordCap(remarkLc);
-						remarkLc = remarkLc.replace("****", stdStar);
+						remarkLc = remarkLc.replace("xxxx", stdStar);
 						Chunk chunkRemark1 = new Chunk("                                                                             "+  remarkLc);
 						/*Font fontRemark1 = new Font(Font.TIMES_ROMAN);
 						fontRemark1.setStyle(Font.BOLD);

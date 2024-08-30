@@ -181,7 +181,7 @@ public class HelpPageWithoutScroll {
 				}
             }
         });
-        
+		
         height = height + 45;
 		JButton updateFeesReportButton = new JButton("Update Fees Report");
 		updateFeesReportButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
@@ -247,6 +247,38 @@ public class HelpPageWithoutScroll {
 		} catch (Exception e2) {
 			commonObj.logException(e2);
 		}
+        
+		height = height + 45;
+		JButton missingNamesButton = new JButton("Fees Missing Names");
+		missingNamesButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
+		missingNamesButton.setBounds(width, height, 200, 35);
+        panel.add(missingNamesButton);
+        
+        JLabel missingNamesLabel = new JLabel("Update missing names in Fees report");
+        missingNamesLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
+        missingNamesLabel.setBounds(260, height, 900, 40);
+		panel.add(missingNamesLabel);
+
+		missingNamesButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+				
+            	try {
+            		if (dbValidate.connectDatabase(sessionData)) {
+    	            	boolean isSuccess = dbValidate.updateMissingNamesInFeesReport(sessionData);
+    	            	if(isSuccess) {
+    	            		JOptionPane.showMessageDialog(null, "Fees data updated successfully.");
+    	            	}
+    	            	else {
+    	            		JOptionPane.showMessageDialog(null, "Fees data updation failed");
+    	            	}
+    				}
+            	}
+            	catch(Exception e1) {
+            		commonObj.logException(e1);
+            	}
+            }
+        });
         
         height = height + 45;
 		JButton attendanceButton = new JButton("Periodly Attendance");

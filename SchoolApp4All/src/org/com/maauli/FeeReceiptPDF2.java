@@ -30,9 +30,9 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.PageSize;
 
-public class FeeReceiptPDF {
+public class FeeReceiptPDF2 {
 
-	private static FeeReceiptPDF feeReceiptPDF = new FeeReceiptPDF();
+	private static FeeReceiptPDF2 feeReceiptPDF = new FeeReceiptPDF2();
 	private static Common commonObj = new Common();
 	private static String path = "";
 	private static String fee_header_0 = "";
@@ -41,16 +41,16 @@ public class FeeReceiptPDF {
 	private static int fee_row_count = 0;
 	private static String fileName,fileAddress = "";
 	static ResourceBundle bundle = ResourceBundle.getBundle("org.com.accesser.school"); 
-    static Logger logger = Logger.getLogger(FeeReceiptPDF.class.getName());
+    static Logger logger = Logger.getLogger(FeeReceiptPDF2.class.getName());
     
 	/*
 	 * A private Constructor prevents any other class from instantiating.
 	 */
-	private FeeReceiptPDF() {
+	private FeeReceiptPDF2() {
 	}
 
 	/* Static 'instance' method */
-	public static FeeReceiptPDF getInstance() {
+	public static FeeReceiptPDF2 getInstance() {
 		return feeReceiptPDF;
 	}
 
@@ -69,23 +69,12 @@ public class FeeReceiptPDF {
 		LinkedHashMap<String, String> displayFeesMap = new LinkedHashMap<String, String>();
 		LinkedHashMap<String, LinkedHashMap<String, String>> receiptHeaderMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		boolean fileOpenFlag = false, showBalance = false;
-		boolean generatedBy_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("GENERATED_BY_FLAG"));
-		
 		int spacingBefore = 5;
-		float tableSpacingBefore = -205.0f, tableWidthPercentage = 30.0f;
+		float tableSpacingBefore = -205.0f;
 		String concession = "", penalty = "", total = "", remark2 = "", fee_receipt_copy= "", copyText = " ", academicText=" ",
 				feesForText = " ", nameText = " ", stdText = " ", divText = " ", rollText = " ", AmountWordText = " ", balance = "",
-				balanceMessage = "", collegeStream = "", fee_header_1_space = "", fee_header_2_space = "";
+				balanceMessage = "", collegeStream = "";
 		String[] fee_receipt_copy_array;
-		
-		float fee_image_pdf_scalepercent = 0.0f;
-		float fee_imageAbsolutePosition_x =  0.0f;
-		float fee_imageAbsolutePosition_x2 =  0.0f;
-		float fee_imageAbsolutePosition_x3 =  0.0f;
-		float fee_imageAbsolutePosition_y =  0.0f;
-		float fee_imageScaleAbsolute_x =  0.0f;
-		float fee_imageScaleAbsolute_y =  0.0f;
-		
 		try {
 			if(feesHeadMap != null) {
 				spacingBefore = 25;
@@ -105,45 +94,22 @@ public class FeeReceiptPDF {
 	        fee_receipt_copy = sessionData.getConfigMap().get("FEE_RECEIPT_COPY");
 	        fee_receipt_copy_array = fee_receipt_copy.split(",");
 	        
-	        //image variables
-	        PdfPTable tableOffice = new PdfPTable(4);
-	        
-	        String img_path = sessionData.getConfigMap().get("IMAGE_PATH");
-	        String fee_pdf_main_header_flag = "false";
-	        String fee_pdf_header_img_flag = "false";
-	        String fee_pdf_header_logo_img_path = "false";
-	        
-	        if(sessionData.getConfigMap().get("FEE_PDF_MAIN_HEADER_FLAG_"+sessionData.getAppType()) != null)
-	        	fee_pdf_main_header_flag = sessionData.getConfigMap().get("FEE_PDF_MAIN_HEADER_FLAG_"+sessionData.getAppType());//"true";
-	        if(sessionData.getConfigMap().get("FEE_PDF_HEADER_IMG_FLAG_"+sessionData.getAppType()) != null)
-	        	fee_pdf_header_img_flag = sessionData.getConfigMap().get("FEE_PDF_HEADER_IMG_FLAG_"+sessionData.getAppType());//"true";//sessionData.getConfigMap().get("FEE_PDF_HEADER_IMAGE_FLAG");
-	        if(sessionData.getConfigMap().get("FEE_PDF_HEADER_LOGO_IMG_PATH_"+sessionData.getAppType()) != null)
-	        	fee_pdf_header_logo_img_path = sessionData.getConfigMap().get("FEE_PDF_HEADER_LOGO_IMG_PATH_"+sessionData.getAppType());//"subhedar_eng_wada_logo.png";//sessionData.getConfigMap().get("FEE_IMAGE_PDF_HEADER_"+sessionData.getAppType());
-			if(sessionData.getConfigMap().get("FEE_IMAGE_PDF_SCALEPERCENT_"+sessionData.getAppType()) != null)
-				fee_image_pdf_scalepercent = Float.parseFloat(sessionData.getConfigMap().get("FEE_IMAGE_PDF_SCALEPERCENT_"+sessionData.getAppType()));//40.0f;
-			if(sessionData.getConfigMap().get("FEE_IMAGEABSOLUTEPOSITION_X_"+sessionData.getAppType()) != null)
-				fee_imageAbsolutePosition_x = Float.parseFloat(sessionData.getConfigMap().get("FEE_IMAGEABSOLUTEPOSITION_X_"+sessionData.getAppType()));//40.0f;
-			if(sessionData.getConfigMap().get("FEE_IMAGEABSOLUTEPOSITION_X2_"+sessionData.getAppType()) != null)
-				fee_imageAbsolutePosition_x2 = Float.parseFloat(sessionData.getConfigMap().get("FEE_IMAGEABSOLUTEPOSITION_X2_"+sessionData.getAppType()));//410.0f;
-			if(sessionData.getConfigMap().get("FEE_IMAGEABSOLUTEPOSITION_X3_"+sessionData.getAppType()) != null)
-				fee_imageAbsolutePosition_x3 = Float.parseFloat(sessionData.getConfigMap().get("FEE_IMAGEABSOLUTEPOSITION_X3_"+sessionData.getAppType()));//410.0f;
-			if(sessionData.getConfigMap().get("FEE_IMAGEABSOLUTEPOSITION_Y_"+sessionData.getAppType()) != null)
-				fee_imageAbsolutePosition_y = Float.parseFloat(sessionData.getConfigMap().get("FEE_IMAGEABSOLUTEPOSITION_Y_"+sessionData.getAppType()));//510.0f;
-			if(sessionData.getConfigMap().get("FEE_IMAGESCALEABSOLUTE_X_"+sessionData.getAppType()) != null)
-				fee_imageScaleAbsolute_x = Float.parseFloat(sessionData.getConfigMap().get("FEE_IMAGESCALEABSOLUTE_X_"+sessionData.getAppType()));//60.0f;
-			if(sessionData.getConfigMap().get("FEE_IMAGESCALEABSOLUTE_Y_"+sessionData.getAppType()) != null)
-				fee_imageScaleAbsolute_y = Float.parseFloat(sessionData.getConfigMap().get("FEE_IMAGESCALEABSOLUTE_Y_"+sessionData.getAppType()));//60.0f;
-			fee_header_1_space = sessionData.getConfigMap().get("FEE_HEADER_1_SPACE_"+sessionData.getAppType());
-			if(fee_header_1_space == null)
-				fee_header_1_space = "";
-			fee_header_2_space = sessionData.getConfigMap().get("FEE_HEADER_2_SPACE_"+sessionData.getAppType());
-			if(fee_header_2_space == null)
-				fee_header_2_space = "";
-			
 	        if(sessionData.getAppType().equalsIgnoreCase("College")) {
 	        	collegeStream = " ("+sessionData.getSectionName()+")";
 	        }
-	       
+	        if(fee_receipt_copy_array.length == 3) {
+	        	academicText ="                       Acedamic Year : "+academic
+						+ "                                                         Acedamic Year : "+academic 
+						+ "                                                         Acedamic Year : "+academic;
+			}
+	        else if(fee_receipt_copy_array.length == 2) {
+				academicText ="                       Acedamic Year : "+academic
+						+ "                                                         Acedamic Year : "+academic;
+			}
+	        else if(fee_receipt_copy_array.length == 1) {
+				academicText ="                       Acedamic Year : "+academic;
+			}
+	        
 	        if(displayDate.equalsIgnoreCase("")) {
 				displayDate = commonObj.dateToDDMMYYYY(currentDate);
 			}
@@ -151,7 +117,7 @@ public class FeeReceiptPDF {
 	        	fee_header_1 = "\u0020 \u0020 \u0020 \u0020 \u0020 Dnyanjyot Samaj Prabhodan Mandal";
 		        fee_header_2 = "\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 Anjur. Tal. Bhiwandi - 421302";
 	        }
-	        
+			
 	        try {
 	        	int space = 0;
 	        	DBValidate dbValidate = new DBValidate();
@@ -160,9 +126,7 @@ public class FeeReceiptPDF {
 					if(receiptHeaderMap.get(shortName) != null) {
 						receiptHeaderDetails = (LinkedHashMap<String, String>) receiptHeaderMap.get(shortName);
 					}
-					
-					if(fee_pdf_main_header_flag.equalsIgnoreCase("true") && receiptHeaderDetails.get("mainHead") != null && 
-							!receiptHeaderDetails.get("mainHead").equalsIgnoreCase("")) {
+					if(receiptHeaderDetails.get("mainHead") != null && !receiptHeaderDetails.get("mainHead").equalsIgnoreCase("")) {
 						fee_header_1 = commonObj.revertCommaApostrophy(receiptHeaderDetails.get("mainHead"));
 						if(fee_header_1.length() < 40) {
 							space = (40 - fee_header_1.length());
@@ -185,26 +149,6 @@ public class FeeReceiptPDF {
 						}
 						for(int i = 0; i < space; i++) {
 							fee_header_0 = " " + fee_header_0;
-						}
-					}
-					else if(fee_pdf_main_header_flag.equalsIgnoreCase("false")){
-						fee_header_1 = "";
-						fee_header_2 = "";
-					}
-					else {
-						if(fee_receipt_copy_array.length == 3) {
-				        	fee_header_1_space ="";
-				        	fee_header_2_space ="";
-						}
-				        else if(fee_receipt_copy_array.length == 2) {
-				        	fee_header_1_space ="                        ";
-				        	fee_header_2_space ="                        ";
-				        	tableWidthPercentage = 47.0f;
-						}
-				        else if(fee_receipt_copy_array.length == 1) {
-				        	fee_header_1_space ="                        ";
-				        	fee_header_2_space ="                        ";
-				        	tableWidthPercentage = 100.0f;
 						}
 					}
 				}
@@ -236,45 +180,6 @@ public class FeeReceiptPDF {
 				optionalList = new String[1];
 				if(studentOptMap.get(meGr.getKey()) != null) {
 					optionalList = ((LinkedHashMap<?, ?>) studentOptMap.get(meGr.getKey())).get("optional_fee").toString().split("\\|");
-				}
-				
-				if(fee_pdf_header_img_flag.equalsIgnoreCase("true") && fee_receipt_copy_array.length == 1){
-					Image img = Image.getInstance(img_path+fee_pdf_header_logo_img_path);
-					img.scalePercent(fee_image_pdf_scalepercent);
-					img.setAbsolutePosition(fee_imageAbsolutePosition_x, fee_imageAbsolutePosition_y);
-					img.scaleAbsolute(fee_imageScaleAbsolute_x, fee_imageScaleAbsolute_y);
-				    document.add(img);
-				}
-				else if(fee_pdf_header_img_flag.equalsIgnoreCase("true") && fee_receipt_copy_array.length == 2){
-					Image img = Image.getInstance(img_path+fee_pdf_header_logo_img_path);
-					img.scalePercent(fee_image_pdf_scalepercent);
-					img.setAbsolutePosition(fee_imageAbsolutePosition_x, fee_imageAbsolutePosition_y);
-					img.scaleAbsolute(fee_imageScaleAbsolute_x, fee_imageScaleAbsolute_y);
-				    document.add(img);
-				    
-//					Image img = Image.getInstance(img_path+fee_pdf_header_logo_img_path);
-					img.scalePercent(fee_image_pdf_scalepercent);
-					img.setAbsolutePosition(fee_imageAbsolutePosition_x+fee_imageAbsolutePosition_x2, fee_imageAbsolutePosition_y);
-					img.scaleAbsolute(fee_imageScaleAbsolute_x, fee_imageScaleAbsolute_y);
-				    document.add(img);
-				}
-				else if(fee_pdf_header_img_flag.equalsIgnoreCase("true") && fee_receipt_copy_array.length == 3){
-					Image img = Image.getInstance(img_path+fee_pdf_header_logo_img_path);
-					img.scalePercent(fee_image_pdf_scalepercent);
-					img.setAbsolutePosition(fee_imageAbsolutePosition_x, fee_imageAbsolutePosition_y);
-					img.scaleAbsolute(fee_imageScaleAbsolute_x, fee_imageScaleAbsolute_y);
-				    document.add(img);
-				    
-//					Image img = Image.getInstance(img_path+fee_pdf_header_logo_img_path);
-					img.scalePercent(fee_image_pdf_scalepercent);
-					img.setAbsolutePosition(fee_imageAbsolutePosition_x+fee_imageAbsolutePosition_x2, fee_imageAbsolutePosition_y);
-					img.scaleAbsolute(fee_imageScaleAbsolute_x, fee_imageScaleAbsolute_y);
-				    document.add(img);
-				    
-				    img.scalePercent(fee_image_pdf_scalepercent);
-					img.setAbsolutePosition(fee_imageAbsolutePosition_x+fee_imageAbsolutePosition_x3, fee_imageAbsolutePosition_y);
-					img.scaleAbsolute(fee_imageScaleAbsolute_x, fee_imageScaleAbsolute_y);
-				    document.add(img);
 				}
 				
 				Chunk chunkHeader = new Chunk(fee_header_0);
@@ -314,7 +219,7 @@ public class FeeReceiptPDF {
 				paragrapha.setAlignment(Element.ALIGN_LEFT);
 				paragrapha.setSpacingBefore(-16);
 
-				Chunk chunk2 = new Chunk(fee_header_1_space +""+ fee_header_1);
+				Chunk chunk2 = new Chunk(fee_header_1);
 				Font font2 = FontFactory.getFont("TIMES_ROMAN");
 				font2.setStyle(Font.NORMAL);
 				font2.setSize(10);
@@ -335,7 +240,7 @@ public class FeeReceiptPDF {
 						paragraph2.setSpacingBefore(-33);
 				}
 
-				Chunk chunkb = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + "                                                                                             "
+				Chunk chunkb = new Chunk("                                                                                             "
 						+ "   "+fee_header_1);
 				Font fontb = FontFactory.getFont("TIMES_ROMAN");
 				fontb.setStyle(Font.NORMAL);
@@ -357,7 +262,7 @@ public class FeeReceiptPDF {
 				paragraphc.setAlignment(Element.ALIGN_LEFT);
 				paragraphc.setSpacingBefore(-16);
 
-				Chunk chunkheader2 = new Chunk(fee_header_2_space +""+ fee_header_2);
+				Chunk chunkheader2 = new Chunk(fee_header_2);
 				Font fontheader2 = FontFactory.getFont("TIMES_ROMAN");
 				fontheader2.setStyle(Font.NORMAL);
 				fontheader2.setSize(10);
@@ -366,7 +271,7 @@ public class FeeReceiptPDF {
 				paragraphHeader2.add(chunkheader2);
 				paragraphHeader2.setAlignment(Element.ALIGN_LEFT);
 
-				Chunk chunkOfficeheader2 = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + "                                                                                                   "+fee_header_2);
+				Chunk chunkOfficeheader2 = new Chunk("                                                                                                   "+fee_header_2);
 				Font fontOheader2 = FontFactory.getFont("TIMES_ROMAN");
 				fontOheader2.setStyle(Font.NORMAL);
 				fontOheader2.setSize(10);
@@ -387,7 +292,7 @@ public class FeeReceiptPDF {
 				paraTechHeader2.setSpacingBefore(-16);
 				
 				if(fee_receipt_copy_array.length >= 1) {
-					copyText = fee_header_2_space +""+ fee_receipt_copy_array[0]+" Copy";
+					copyText = fee_receipt_copy_array[0]+" Copy";
 				}
 				Chunk chunkr = new Chunk("																															"
 						+ "	"+copyText);
@@ -401,8 +306,7 @@ public class FeeReceiptPDF {
 
 				copyText = " ";
 				if(fee_receipt_copy_array.length >= 2) {
-					copyText = fee_header_1_space + fee_header_1_space + fee_header_1_space + fee_header_1_space + 
-							fee_header_1_space + fee_header_1_space + fee_receipt_copy_array[1]+" Copy";
+					copyText = fee_receipt_copy_array[1]+" Copy";
 				}
 				Chunk chunks = new Chunk(copyText);
 				Font fonts = FontFactory.getFont("TIMES_ROMAN");
@@ -439,7 +343,7 @@ public class FeeReceiptPDF {
 				paragraphAcademic.setAlignment(Element.ALIGN_LEFT);
 				paragraphAcademic.setSpacingAfter(10);
 				
-				Chunk chunk3 = new Chunk(fee_header_2_space + fee_header_2_space + "																																																																																										"
+				Chunk chunk3 = new Chunk("																																																																																										"
 						+ "	Date: "+displayDate);
 				Font font3 = FontFactory.getFont("TIMES_ROMAN");
 				font3.setStyle(Font.NORMAL);
@@ -462,8 +366,7 @@ public class FeeReceiptPDF {
 				paragraph3a.setSpacingBefore(-16);
 				paragraph3a.setSpacingAfter(0);
 
-				Chunk chunkd = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + fee_header_1_space + fee_header_1_space + 
-						"																																																																																																																																																																																																																																		"
+				Chunk chunkd = new Chunk("																																																																																																																																																																																																																																		"
 						+ "	Date: "+displayDate);
 				Font fontd = FontFactory.getFont("TIMES_ROMAN");
 				fontd.setStyle(Font.NORMAL);
@@ -474,7 +377,7 @@ public class FeeReceiptPDF {
 				paragraphd.setAlignment(Element.ALIGN_LEFT);
 				paragraphd.setSpacingBefore(-16);
 
-				Chunk chunke = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + "																																																																																																																																									"
+				Chunk chunke = new Chunk("																																																																																																																																									"
 						+ "	Fee Receipt No. :  "+grDetailMap.get("receiptNo"));
 				Font fonte = FontFactory.getFont("TIMES_ROMAN");
 				fonte.setStyle(Font.NORMAL);
@@ -524,7 +427,7 @@ public class FeeReceiptPDF {
 
 				feesForText = " ";
 				if(fee_receipt_copy_array.length >= 2) {
-					feesForText = fee_header_1_space + fee_header_1_space + fee_header_1_space + "Fees for : "+feesForMonths;
+					feesForText = "Fees for : "+feesForMonths;
 				}
 				Chunk chunkh = new Chunk("																																																																																																																																									"
 						+ "	"+feesForText);
@@ -567,7 +470,7 @@ public class FeeReceiptPDF {
 
 				nameText = " ";
 				if(fee_receipt_copy_array.length >= 2) {
-					nameText = fee_header_1_space + fee_header_1_space + fee_header_1_space + "Name : "+commonObj.FirstWordCap(grDetailMap.get("name"));
+					nameText = "Name : "+commonObj.FirstWordCap(grDetailMap.get("name"));
 				}
 				Chunk chunkj = new Chunk("																																																																																																																																								"
 						+ "		"+nameText);
@@ -611,7 +514,7 @@ public class FeeReceiptPDF {
 
 				stdText = " ";
 				if(fee_receipt_copy_array.length >= 2) {
-					stdText = fee_header_1_space + fee_header_1_space + fee_header_1_space + "Std.: "+grDetailMap.get("std") + collegeStream;
+					stdText = "Std.: "+grDetailMap.get("std") + collegeStream;
 				}
 				Chunk chunkl = new Chunk("																																																																																																																																									"
 						+ "	"+stdText);
@@ -658,8 +561,7 @@ public class FeeReceiptPDF {
 
 				divText = " ";
 				if(fee_receipt_copy_array.length >= 2) {
-					divText = fee_header_1_space + fee_header_1_space + fee_header_1_space + fee_header_1_space + fee_header_1_space + fee_header_1_space + 
-							"Div. : "+grDetailMap.get("div");
+					divText = "Div. : "+grDetailMap.get("div");
 				}
 				Chunk chunkn = new Chunk(divText);
 				Font fontn = FontFactory.getFont("TIMES_ROMAN");
@@ -705,8 +607,7 @@ public class FeeReceiptPDF {
 
 				rollText = " ";
 				if(fee_receipt_copy_array.length >= 2) {
-					rollText = fee_header_1_space + fee_header_1_space + fee_header_1_space + 
-							"Roll No. : "+grDetailMap.get("rollNo");
+					rollText = "Roll No. : "+grDetailMap.get("rollNo");
 				}
 				Chunk chunkp = new Chunk("																																																																																																																																																																																																																																					"
 						+ "	"+rollText);
@@ -739,7 +640,7 @@ public class FeeReceiptPDF {
 				/////start tableStudent///////////////////
 				PdfPTable tableStudent = new PdfPTable(4);
 
-				tableStudent.setWidthPercentage(tableWidthPercentage);//for 1 copy - 100,  2 copies - 50, 3 copies - 30
+				tableStudent.setWidthPercentage(30);
 				tableStudent.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 				PdfPCell cell301 = new PdfPCell(new Paragraph("Sr. No.", FontFactory.getFont(FontFactory.TIMES, 8)));
@@ -900,20 +801,13 @@ public class FeeReceiptPDF {
 				cellConcessionSr.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				tableStudent.addCell(cellConcessionSr);
 
-				String  concessionStr = "CONCESSION";
-				concession = "  "+String.format("%.2f", concessionAmount);
-				if(concessionAmount == 0) {
-					concessionStr = "";
-					concession = "  ";
-				}
-
-				PdfPCell cellConcession = new PdfPCell(new Paragraph(concessionStr, FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
+				PdfPCell cellConcession = new PdfPCell(new Paragraph("CONCESSION", FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
 				cellConcession.setColspan(2);
 				cellConcession.setHorizontalAlignment(Element.ALIGN_RIGHT);
 				cellConcession.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				tableStudent.addCell(cellConcession);
 
-				
+				concession = "  "+String.format("%.2f", concessionAmount);
 				PdfPCell cellConcessionAmt = new PdfPCell(new Paragraph(concession, FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
 				cellConcessionAmt.setColspan(9);
 				cellConcessionAmt.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -926,19 +820,13 @@ public class FeeReceiptPDF {
 				cellPenaltySr.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				tableStudent.addCell(cellPenaltySr);
 
-				String  penaltyStr = "PENALTY";
-				penalty = "+ "+String.format("%.2f", Double.parseDouble(penaltyAmount));
-				if(penaltyAmount.equalsIgnoreCase("0.0") || penaltyAmount.equalsIgnoreCase("0")) {
-					penaltyStr = "";
-					penalty = " ";
-				}
-				
-				PdfPCell cellPenalty = new PdfPCell(new Paragraph(penaltyStr, FontFactory.getFont(FontFactory.TIMES, 8)));
+				PdfPCell cellPenalty = new PdfPCell(new Paragraph("PENALTY", FontFactory.getFont(FontFactory.TIMES, 8)));
 				cellPenalty.setColspan(2);
 				cellPenalty.setHorizontalAlignment(Element.ALIGN_RIGHT);
 				cellPenalty.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				tableStudent.addCell(cellPenalty);
 
+				penalty = "+ "+String.format("%.2f", Double.parseDouble(penaltyAmount));
 				PdfPCell cellPenaltyAmt = new PdfPCell(new Paragraph(penalty, FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
 				cellPenaltyAmt.setColspan(9);
 				cellPenaltyAmt.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1025,10 +913,10 @@ public class FeeReceiptPDF {
 				/////end tableStudent///////////////////
 
 				/////start tableOffice///////////////////
-//				PdfPTable tableOffice = new PdfPTable(4);
+				PdfPTable tableOffice = new PdfPTable(4);
 
 				if(fee_receipt_copy_array.length >= 2) {
-					tableOffice.setWidthPercentage(tableWidthPercentage);
+					tableOffice.setWidthPercentage(30);
 					tableOffice.setHorizontalAlignment(Element.ALIGN_CENTER);
 
 					PdfPCell cell331 = new PdfPCell(new Paragraph("Sr. No.", FontFactory.getFont(FontFactory.TIMES, 8)));
@@ -1152,7 +1040,7 @@ public class FeeReceiptPDF {
 					cellPenaltySrOffice.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					tableOffice.addCell(cellPenaltySrOffice);
 					
-					PdfPCell cellPenaltyOffice = new PdfPCell(new Paragraph(penaltyStr, FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
+					PdfPCell cellPenaltyOffice = new PdfPCell(new Paragraph("PENALTY", FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
 					cellPenaltyOffice.setColspan(2);
 					cellPenaltyOffice.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cellPenaltyOffice.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1300,7 +1188,7 @@ public class FeeReceiptPDF {
 					cellConcessionSrTeach.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					tableTeach.addCell(cellConcessionSrTeach);
 					
-					PdfPCell cellConcessionTeach = new PdfPCell(new Paragraph(concessionStr, FontFactory.getFont(FontFactory.TIMES, 8)));
+					PdfPCell cellConcessionTeach = new PdfPCell(new Paragraph("CONCESSION", FontFactory.getFont(FontFactory.TIMES, 8)));
 					cellConcessionTeach.setColspan(2);
 					cellConcessionTeach.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cellConcessionTeach.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1318,7 +1206,7 @@ public class FeeReceiptPDF {
 					cellPenaltySrTeach.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					tableTeach.addCell(cellPenaltySrTeach);
 					
-					PdfPCell cellPenaltyTeach = new PdfPCell(new Paragraph(penaltyStr, FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
+					PdfPCell cellPenaltyTeach = new PdfPCell(new Paragraph("PENALTY", FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
 					cellPenaltyTeach.setColspan(2);
 					cellPenaltyTeach.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cellPenaltyTeach.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1416,7 +1304,7 @@ public class FeeReceiptPDF {
 					wordSpacingBefore = -27;
 				}
 
-				Chunk chunk43 = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space +"																																																																																																																																									"
+				Chunk chunk43 = new Chunk("																																																																																																																																									"
 						+ "	Amount in Words: Rs. "+words1);
 				Font font43 = FontFactory.getFont("TIMES_ROMAN");
 				font43.setStyle(Font.NORMAL);
@@ -1488,7 +1376,7 @@ public class FeeReceiptPDF {
 				paragraph50.setAlignment(Element.ALIGN_JUSTIFIED);
 				paragraph50.setSpacingBefore(5);
 
-				Chunk chunk51 = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + "																																																																																																																																									"
+				Chunk chunk51 = new Chunk("																																																																																																																																									"
 						+ "	"+chequeNo);
 				Font font51 = FontFactory.getFont("TIMES_ROMAN");
 				font51.setStyle(Font.NORMAL);
@@ -1573,7 +1461,7 @@ public class FeeReceiptPDF {
 				paragraphRemark2.setAlignment(Element.ALIGN_JUSTIFIED);
 				paragraphRemark2.setSpacingBefore(-5);
 				
-				Chunk chunkOfficeRemark = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + "																																																																																																																																									"
+				Chunk chunkOfficeRemark = new Chunk("																																																																																																																																									"
 						+ "	Remark: "+remark);
 				chunkOfficeRemark.setFont(font43);
 				Paragraph paragraphOfficeRemark = new Paragraph();
@@ -1581,7 +1469,7 @@ public class FeeReceiptPDF {
 				paragraphOfficeRemark.setAlignment(Element.ALIGN_JUSTIFIED);
 				paragraphOfficeRemark.setSpacingBefore(remarkSpacingBefore);
 				
-				Chunk chunkOfficeRemark2 = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + "			         																																																																																																																																				 "
+				Chunk chunkOfficeRemark2 = new Chunk("			         																																																																																																																																				 "
 						+ "        "+remark2);
 				chunkOfficeRemark2.setFont(font43);
 				Paragraph paragraphOfficeRemark2 = new Paragraph();
@@ -1605,7 +1493,7 @@ public class FeeReceiptPDF {
 				paragraphTeachRemark2.setAlignment(Element.ALIGN_JUSTIFIED);
 				paragraphTeachRemark2.setSpacingBefore(-5);
 				
-				Chunk chunk47 = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + "																																																																																									"
+				Chunk chunk47 = new Chunk("																																																																																									"
 						+ "		Signature");
 				Font font47 = FontFactory.getFont("TIMES_ROMAN");
 				font47.setStyle(Font.NORMAL);
@@ -1615,19 +1503,8 @@ public class FeeReceiptPDF {
 				paragraph47.add(chunk47);
 				paragraph47.setAlignment(Element.ALIGN_LEFT);
 				paragraph47.setSpacingBefore(45);
-				
-				Chunk chunk47_generatedBy = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + ""
-						+ "		Generated By: "+sessionData.getUserName());
-				Paragraph paragraph47_generatedBy = new Paragraph();
-				if(generatedBy_flag) {
-					chunk47_generatedBy.setFont(font47);
-					paragraph47_generatedBy.add(chunk47_generatedBy);
-					paragraph47_generatedBy.setAlignment(Element.ALIGN_LEFT);
-					paragraph47_generatedBy.setSpacingBefore(10);
-				}
-				
-				Chunk chunk48 = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + 
-						fee_header_1_space + fee_header_1_space + fee_header_1_space + "																																																																																																																																																																																																																																		"
+
+				Chunk chunk48 = new Chunk("																																																																																																																																																																																																																																		"
 						+ "	Signature");
 				Font font48 = FontFactory.getFont("TIMES_ROMAN");
 				font48.setStyle(Font.NORMAL);
@@ -1636,24 +1513,8 @@ public class FeeReceiptPDF {
 				Paragraph paragraph48 = new Paragraph();
 				paragraph48.add(chunk48);
 				paragraph48.setAlignment(Element.ALIGN_LEFT);
-				if(!generatedBy_flag) {
-					paragraph48.setSpacingBefore(-16);//-16
-				}
-				else {
-					paragraph48.setSpacingBefore(-42);//-16
-				}
-				
-				Chunk chunk48_generatedBy = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + 
-						fee_header_1_space + fee_header_1_space + fee_header_1_space + "																																																																																																																																											"
-						+ "	Generated By: "+sessionData.getUserName());
-				Paragraph paragraph48_generatedBy = new Paragraph();
-				if(generatedBy_flag) {
-					chunk48_generatedBy.setFont(font48);
-					paragraph48_generatedBy.add(chunk48_generatedBy);
-					paragraph48_generatedBy.setAlignment(Element.ALIGN_LEFT);
-					paragraph48_generatedBy.setSpacingBefore(10);
-				}
-				
+				paragraph48.setSpacingBefore(-16);
+
 				Chunk chunk49 = new Chunk("Signature");
 				Font font49 = FontFactory.getFont("TIMES_ROMAN");
 				font49.setStyle(Font.NORMAL);
@@ -1662,23 +1523,7 @@ public class FeeReceiptPDF {
 				Paragraph paragraph49 = new Paragraph();
 				paragraph49.add(chunk49);
 				paragraph49.setAlignment(Element.ALIGN_RIGHT);
-				if(!generatedBy_flag) {
-					paragraph49.setSpacingBefore(-16);//-16
-				}
-				else {
-					paragraph49.setSpacingBefore(-42);//-16
-				}
-				
-				Chunk chunk49_generatedBy = new Chunk(fee_header_1_space + fee_header_1_space + fee_header_1_space + 
-						fee_header_1_space + fee_header_1_space + fee_header_1_space + "																																																																																																																																																																																																																																																																																												"
-						+ "	Generated By: "+sessionData.getUserName());
-				Paragraph paragraph49_generatedBy = new Paragraph();
-				if(generatedBy_flag) {
-					chunk49_generatedBy.setFont(font49);
-					paragraph49_generatedBy.add(chunk49_generatedBy);
-					paragraph49_generatedBy.setAlignment(Element.ALIGN_LEFT);
-					paragraph49_generatedBy.setSpacingBefore(10);
-				}
+				paragraph49.setSpacingBefore(-16);
 				
 				if(status.equalsIgnoreCase("C")) {
 					// add watermark
@@ -1692,11 +1537,7 @@ public class FeeReceiptPDF {
 				}
 
 				// for column width size
-				float[] columnWidths = new float[] { 4f, 16f, 3f, 4f };
-//				if(fee_receipt_copy_array.length <= 2) {
-//					columnWidths = new float[] { 10f, 10f, 3f, 4f };
-//				}
-				
+				float[] columnWidths = new float[] { 4f, 10f, 3f, 4f };
 				tableStudent.setWidths(columnWidths);
 				if(fee_receipt_copy_array.length >= 2) {
 					tableOffice.setWidths(columnWidths);
@@ -1776,9 +1617,6 @@ public class FeeReceiptPDF {
 				document.add(paragraphq);
 				document.add(tableStudent);
 				if(fee_receipt_copy_array.length >= 2) {
-					if(fee_receipt_copy_array.length == 2) {
-			        	tableOffice.setHorizontalAlignment(Element.ALIGN_RIGHT);
-					}
 					document.add(tableOffice);
 				}
 				if(fee_receipt_copy_array.length >= 3) {
@@ -1838,21 +1676,11 @@ public class FeeReceiptPDF {
 					document.add(paragraph55);
 				}
 				document.add(paragraph47);
-				if(generatedBy_flag) {
-					document.add(paragraph47_generatedBy);
-				}
-				
 				if(fee_receipt_copy_array.length >= 2) {
 					document.add(paragraph48);
-					if(generatedBy_flag) {
-						document.add(paragraph48_generatedBy);
-					}
 				}
 				if(fee_receipt_copy_array.length >= 3) {
 					document.add(paragraph49);
-					if(generatedBy_flag) {
-						document.add(paragraph49_generatedBy);
-					}
 				}
 
 				s = s+1;

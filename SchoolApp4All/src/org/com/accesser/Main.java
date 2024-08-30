@@ -18,7 +18,7 @@ public class Main {
 		BufferedReader reader = new BufferedReader(inputReader);
 		String line = null;
 		while((line = reader.readLine()) != null){
-			System.out.println(line);
+			// System.out.println(line);
 		}
 		reader.close();
 

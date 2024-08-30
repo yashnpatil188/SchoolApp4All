@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.util.SystemOutLogger;
 import org.com.accesser.SessionData;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -454,8 +455,8 @@ public class MarksSheet_PPR_PDF {
 								subjectMarks = Double.parseDouble(grDetail.get(subTitle + "_MARKS") == null ? "0" : grDetail.get(subTitle + "_MARKS"));
 							}
 							else {
-								subjectMarksDisp = grResultMap.get(subTitle+"_SEM1");
-								if(!subjectMarksDisp.equalsIgnoreCase("NA")){
+								subjectMarksDisp = grResultMap.get(subTitle+"_"+sem.toUpperCase());
+								if(!subjectMarksDisp.equalsIgnoreCase("NA") && subjectMarksDisp.contains("(")){
 									subjectMarksDisp = subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("("));
 									subjectMarksDisp = subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"));
 								}

@@ -284,7 +284,7 @@ public class ChangeForgotPassword {
 
             public void paintComponent(Graphics g) {
 
-                System.out.println("img_path + img_home" + img_path + img_home);
+                // System.out.println("img_path + img_home" + img_path + img_home);
                 Image img = new ImageIcon(img_path + img_home).getImage();
                 Dimension size = new Dimension(60, 60);
                 setPreferredSize(size);

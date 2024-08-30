@@ -20,10 +20,10 @@ public class ReadProperties {
 			Set<Object> keys = prop1.keySet();
 			for (Object k : keys) {
 				String key = (String) k;
-				System.out.println(key + ": " + prop1.getProperty(key));
+				// System.out.println(key + ": " + prop1.getProperty(key));
 			}
 
-			System.out.println(prop1.getProperty("STD_SINCE_SANSKARANJURCOLLEGE_SCI"));
+			// System.out.println(prop1.getProperty("STD_SINCE_SANSKARANJURCOLLEGE_SCI"));
 
 		} catch (IOException io) {
 			io.printStackTrace();

@@ -224,10 +224,12 @@ public class FindLeavingCert extends JFrame {
 		logger.info("secName :: " + secName);
 		lcTypeList = sessionData1.getConfigMap().get("LC_TYPE_LIST");
 		reasonStr = sessionData1.getConfigMap().get("REASON_LIST_"+sessionData1.getAppType());
+		reasonStr = commonObj.revertCommaApostrophy(reasonStr);
 		progressStr = sessionData1.getConfigMap().get("LC_PROGRESS_LIST");
 		mediumStr = sessionData1.getConfigMap().get("LC_MEDIUM_LIST");
 		mediumStrEnable = sessionData1.getConfigMap().get("LC_MEDIUM_ENABLE_"+sessionData1.getAppType()) == null ? "False" : sessionData1.getConfigMap().get("LC_MEDIUM_ENABLE_"+sessionData1.getAppType());
 		remarkStr = sessionData1.getConfigMap().get("REMARK_LIST_"+sessionData1.getAppType());
+		remarkStr = commonObj.revertCommaApostrophy(remarkStr);
 		img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
 		logger.info("img_path :: " + img_path);
 		img_home = sessionData1.getConfigMap().get("IMAGE_HOME");
@@ -282,10 +284,10 @@ public class FindLeavingCert extends JFrame {
         
 		try {
 			if (dbValidate.connectDatabase(sessionData)) {
-				String userActive = dbValidate.checkFormData(sessionData, user_name, "LEAVING CERTIFICATE", user_role, section);
-				if (userActive.equalsIgnoreCase("") || userActive.equalsIgnoreCase(null)) {
-					dbValidate.insertFormData(user_name, "LEAVING CERTIFICATE", user_role, section);
-				}
+				Boolean userActive = dbValidate.checkFormData(sessionData, user_name, "LEAVING CERTIFICATE", user_role, section);
+//				if (userActive.equalsIgnoreCase("") || userActive.equalsIgnoreCase(null)) {
+//					dbValidate.insertFormData(user_name, "LEAVING CERTIFICATE", user_role, section);
+//				}
 			}
 		} catch (Exception e1) {
 			commonObj.logException(e1);
@@ -2412,24 +2414,23 @@ public class FindLeavingCert extends JFrame {
 
 					public void actionPerformed(ActionEvent e) {
 
-						String userActive = "";
+						Boolean userActive = false;
 						try {
 							if(dbValidate.connectDatabase(sessionData)){
 								userActive = dbValidate.checkFormData(sessionData, user_name, "LEAVING CERTIFICATE", user_role, section);
-								if (userActive.equalsIgnoreCase(user_name) || userActive.equalsIgnoreCase("")
-										|| userActive.equalsIgnoreCase(null)) {
+								if (userActive) {
 									boolean radio_selected = enableSave_radio.isSelected();
 									
-									try {
-										userActive = dbValidate.checkFormData(sessionData, user_name, "LEAVING CERTIFICATE", user_role, section);
-										if (userActive.equalsIgnoreCase("") || userActive.equalsIgnoreCase(null)) {
-											dbValidate.insertFormData(user_name, "LEAVING CERTIFICATE", user_role, section);
-										}
-									} catch (Exception e1) {
-										commonObj.logException(e1);
-									} finally {
-										dbValidate.closeDatabase(sessionData);
-									}
+//									try {
+//										userActive = dbValidate.checkFormData(sessionData, user_name, "LEAVING CERTIFICATE", user_role, section);
+//										if (userActive.equalsIgnoreCase("") || userActive.equalsIgnoreCase(null)) {
+//											dbValidate.insertFormData(user_name, "LEAVING CERTIFICATE", user_role, section);
+//										}
+//									} catch (Exception e1) {
+//										commonObj.logException(e1);
+//									} finally {
+//										dbValidate.closeDatabase(sessionData);
+//									}
 									
 									if (radio_selected) {
 										
@@ -2451,7 +2452,7 @@ public class FindLeavingCert extends JFrame {
 										savePrintButton.setEnabled(false);
 										enableSave_radio.setSelected(false);
 									}
-								} else if (!userActive.equalsIgnoreCase(user_name)) {
+								} else {
 									enableSave_radio.setSelected(false);
 									JOptionPane.showMessageDialog(null, "To generate LC User " + userActive + " should move away from LC tab.");
 								}

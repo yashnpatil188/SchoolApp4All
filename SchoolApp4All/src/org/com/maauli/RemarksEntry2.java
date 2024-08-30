@@ -59,9 +59,9 @@ import org.jdatepicker.impl.UtilDateModel;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.BaseFont;
 
-public class RemarksEntry extends JFrame {
+public class RemarksEntry2 extends JFrame {
 
-//private static RemarksEntry marksEntry = new RemarksEntry();
+	private static RemarksEntry2 marksEntry = new RemarksEntry2();
 	
 	static int screenWidth;
 
@@ -161,7 +161,7 @@ public class RemarksEntry extends JFrame {
 
 	static ResourceBundle bundle = ResourceBundle.getBundle("org.com.accesser.school");
 
-	static Logger logger = Logger.getLogger(RemarksEntry.class.getName());
+	static Logger logger = Logger.getLogger(RemarksEntry2.class.getName());
 	
 	static TreeMap<String, String> studentLCMap = new TreeMap<String, String>();
 	
@@ -173,29 +173,37 @@ public class RemarksEntry extends JFrame {
     static int app_header_fontSize = 0;
     static int app_header_widthSpace = 0;
     static int app_header_heightSpace = 0;
-    static String app_header_2 = "", maxMarksFromMapClass = "", retRemarkListClass = "";
-    static String app_header_2_fontName = "", isCreateClass = "", retStdClass = "", retGrNoClass = "";
+    static String app_header_2 = "";
+    static String app_header_2_fontName = "";
     static int app_header_2_fontSize = 0;
     static int app_header_2_widthSpace = 0;
     static int app_header_2_heightSpace = 0;
-    static String[] remList = null;
 
-	@SuppressWarnings("unchecked")
-	public RemarksEntry(SessionData sessionData1, String retStd, String academicYear, boolean retEditable, String retDiv, 
+    /*
+	 * A private Constructor prevents any other class from instantiating.
+	 */
+	private RemarksEntry2() {
+	}
+
+	/* Static 'instance' method */
+	public static RemarksEntry2 getInstance() {
+		return marksEntry;
+	}
+	
+	/* Other methods protected by singleton-ness */
+	protected static void getRemarksEntry(SessionData sessionData1, String retStd, String academicYear, boolean retEditable, String retDiv, 
 			String retFrom, String retTo, String retLast, String retFirst, String retFather, String retExam, String retSub, String retType, String sec, 
 			String retUserName, String retUserRole, String retDate, final String retGrNo, String isCreate) {
 
 		logger.info("===========Inside remarks Entry========");
 		System.gc();
-		String sem = "", max = "";
+		String sem = "", max = "", retRemarkList = "";
+		String[] remList = null;
 		maxSubMarks = new LinkedHashMap<String,LinkedHashMap<String, String>>();
 		LinkedHashMap<String,String> marksDetailsMap = new LinkedHashMap<String,String>();
 		studentLCMap.clear();
 		fromDateClass = retDate;
 		sessionData = sessionData1;
-		isCreateClass = isCreate;
-		retStdClass = retStd;
-		retGrNoClass = retGrNo;
 		user_name = retUserName;
 		user_role = retUserRole;
 		section = sec;
@@ -312,7 +320,7 @@ public class RemarksEntry extends JFrame {
 					}
 				}
 				else {
-					retRemarkListClass = sessionData.getConfigMap().get("REMARK_LIST_"+stdClass+"_"+subjectClass);
+					retRemarkList = sessionData.getConfigMap().get("REMARK_LIST_"+stdClass+"_"+subjectClass);
 				}
 			}
 		} catch (Exception e1) {
@@ -321,7 +329,7 @@ public class RemarksEntry extends JFrame {
         	dbValidate.closeDatabase(sessionData);
         }
 
-		final String maxMarksFromMapClass = max;
+		final String maxMarksFromMap = max;
 		
 //		academicYearClass = commonObj.getAcademicYear(sessionData1,commonObj.getCurrentDate());;
 //		logger.info(stdClass + "::" + academicYearClass);
@@ -333,16 +341,16 @@ public class RemarksEntry extends JFrame {
 			scrollHeight = (studentRemarkMap.size() - 6) * 30; // to adjust the perfect
 			// scroll height
 		}
-		else if(retRemarkListClass != null && retRemarkListClass.length()>10){
-			scrollHeight = (retRemarkListClass.length()); // to adjust the perfect
+		else if(retRemarkList != null && retRemarkList.length()>10){
+			scrollHeight = (retRemarkList.length()); // to adjust the perfect
 			// scroll height
 		}
 		if (scrollHeight < 0)
 			scrollHeight = 0;
-		
-		setVisible(false);
-		dispose();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+//		setVisible(false);
+//		dispose();
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame = new JFrame("Welcome to "+sessionData1.getAppName());
 		final Common commonObj = new Common();
@@ -354,21 +362,14 @@ public class RemarksEntry extends JFrame {
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		JPanel panel = new JPanel();
-        
-       	// Added for MAC ---> Function to set visible status of JFrame.
-        if((System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0)) {
-        	setVisible(true);
-        }
+		final JPanel panelHome = new JPanel();
 
-		frame.add(panel);
-		placeComponents(panel);
+		frame.add(panelHome);
+//		placeComponents(panel);
 
-		frame.setVisible(true);
-	}
 
-	private static void placeComponents(JPanel panelHome) {
 
+		panelHome.removeAll();///to remve entire panel
 		panelHome.setLayout(new BorderLayout());
 		// ///////////top panel////////////////////////////////////////
 		JPanel titlePanel = new JPanel() {
@@ -459,7 +460,7 @@ public class RemarksEntry extends JFrame {
 
         panelHome.add(titlePanel, BorderLayout.NORTH);
 
-     // ///////////left Band panel////////////////////////////////////////
+        // ///////////left Band panel////////////////////////////////////////
         JPanel leftPanel = new JPanel() {
 
             private static final long serialVersionUID = 1L;
@@ -668,12 +669,11 @@ public class RemarksEntry extends JFrame {
 		remarkButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-            	
-            	List findLCList = new ArrayList();
-				frame.setVisible(false);
-				panelHome.removeAll();///to remve entire panel
-				new RemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
-	                    "", "", section, user_name, user_role, "", "", "");
+            	frame.setVisible(false);
+                List markList = new ArrayList();
+                RemarksEntry2 remarksEntryObject = RemarksEntry2.getInstance();
+                remarksEntryObject.getRemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
+                    "", "", section, user_name, user_role, "", "", "");
             }
         });
 		
@@ -777,7 +777,7 @@ public class RemarksEntry extends JFrame {
 			dbValidate.closeDatabase(sessionData);
 		}
 		
-		yearList = commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate()) + "," + yearList;
+		yearList = commonObj.getAcademicYear(sessionData1,commonObj.getCurrentDate()) + "," + yearList;
 
 		String academicYearList[] = yearList.split(",");
 		final JComboBox academicYear_combo = new JComboBox(academicYearList);
@@ -822,7 +822,7 @@ public class RemarksEntry extends JFrame {
 
 		final JRadioButton create_radio = new JRadioButton();
 		create_radio.setBounds(700, 14, 20, 20);
-		if(!isCreateClass.equalsIgnoreCase("")) {
+		if(!isCreate.equalsIgnoreCase("")) {
 			create_radio.setSelected(true);
 		}
 		findPanel.add(create_radio);
@@ -938,10 +938,10 @@ public class RemarksEntry extends JFrame {
 		// ////////update subject list//////////////////////////
 
 		if (!stdClass.equalsIgnoreCase("")
-				&& !stdClass.equalsIgnoreCase("Select") && dbValidate.connectDatabase(sessionData)) {
+				&& !stdClass.equalsIgnoreCase("Select") && dbValidate.connectDatabase(sessionData1)) {
 			// presentDiv_combo.setEnabled(true);
 			try {
-				findSubList = dbValidate.findSubjectTitleList(sessionData, retStdClass, "", academicYearClass);
+				findSubList = dbValidate.findSubjectTitleList(sessionData1, retStd, "", academicYear);
 				findSubList.remove("SELECT SUBJECT TITLE");
 				findSubList.remove("CREATE NEW TITLE");
 				String[] subjectArr = findSubList.toArray(new String[findSubList.size()]);
@@ -1018,7 +1018,7 @@ public class RemarksEntry extends JFrame {
 				presentDiv_combo.removeAllItems();
 				if (!stdSel.equalsIgnoreCase("") && !stdSel.equalsIgnoreCase("Select") && dbValidate.connectDatabase(sessionData)) {
 					try {
-						findSubList = dbValidate.findSubjectTitleList(sessionData, stdSel, "", academicYearSel);
+						findSubList = dbValidate.findSubjectTitleList(sessionData1, stdSel, "", academicYearSel);
 						findSubList.remove("SELECT SUBJECT TITLE");
 						findSubList.remove("CREATE NEW TITLE");
 						String[] subjectArr = findSubList.toArray(new String[findSubList.size()]);
@@ -1305,13 +1305,12 @@ public class RemarksEntry extends JFrame {
 
 						if(type.equalsIgnoreCase("Remark")){
 							dbValidate.addRemarkColumn(sessionData, subject);
-							
-							List findLCList = new ArrayList();
 							frame.setVisible(false);
 							panelHome.removeAll();///to remve entire panel
-							new RemarksEntry(sessionData, std, academicSel, false, div, from, to, lastName, firstName, 
-			                		fatherName, exam, subject, type, section, user_name, user_role, "", grNo, createType);
 							
+							RemarksEntry2 remarksEntryObject = RemarksEntry2.getInstance();
+							remarksEntryObject.getRemarksEntry(sessionData, std, academicSel, false, div, from, to, lastName, firstName, 
+			                		fatherName, exam, subject, type, section, user_name, user_role, "", grNo, createType);
 						}
 					} catch (Exception e1) {
 						commonObj.logException(e1);
@@ -1334,12 +1333,12 @@ public class RemarksEntry extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				logger.info("CliCked Reset in Marks Entry");
-                
-                List findLCList = new ArrayList();
+				List findLCList = new ArrayList();
 				frame.setVisible(false);
 				panelHome.removeAll();///to remve entire panel
-				new RemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
-	                    "", "", section, user_name, user_role, "", retGrNoClass, "");
+				RemarksEntry2 marksEntryObject = RemarksEntry2.getInstance();
+                marksEntryObject.getRemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
+	                    "", "", section, user_name, user_role, "", retGrNo, "");
 			}
 		});
 		
@@ -1403,7 +1402,7 @@ public class RemarksEntry extends JFrame {
 							    f.setVisible(true);
 							    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 							    
-						    	dbValidate.obtainedRemarksForAllExcel(sessionData, std, div,academicSel,section,"print",exam,subject,type, retGrNoClass);
+						    	dbValidate.obtainedRemarksForAllExcel(sessionData, std, div,academicSel,section,"print",exam,subject,type, retGrNo);
 								f.setVisible(false);
 							}
 						}
@@ -1455,7 +1454,7 @@ public class RemarksEntry extends JFrame {
 					} 
 					
 					if(validate){
-						String default_path = commonObj.getDriveName() + sessionData.getConfigMap().get("TEMPLATE_PATH_"+sessionData.getDBName());
+						String default_path = commonObj.getDriveName() + sessionData1.getConfigMap().get("TEMPLATE_PATH_"+sessionData.getDBName());
 						JFileChooser fileChooser = new JFileChooser(default_path);
 						int returnValue = fileChooser.showOpenDialog(null);
 						if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -1495,8 +1494,9 @@ public class RemarksEntry extends JFrame {
 		// ////////////////find panel ends/////////////////////////////////
 
 		// //////////scrollArea panel/////////////////////////////////////
-//		JPanel scrollAreaPanel = new JPanel(new BorderLayout());
-//		scrollAreaPanel.setPreferredSize(new Dimension(screenWidth - 150, screenHeight - 337));
+		JPanel scrollAreaPanel = new JPanel(new BorderLayout());
+		scrollAreaPanel.setPreferredSize(new Dimension(screenWidth - 150,
+				screenHeight - 337));
 
 		// ///////////Data Panel/////////////
 		final JPanel dataPanel = new JPanel() {
@@ -1522,7 +1522,7 @@ public class RemarksEntry extends JFrame {
 			}
 		};
 		dataPanel.setLayout(null);
-		
+
 		if (studentRemarkMap.size() > 0) {
 			String fontType = "English";
 			final JRadioButton all_radio = new JRadioButton();
@@ -1531,12 +1531,6 @@ public class RemarksEntry extends JFrame {
 			if(remark_list == null || remark_list.equalsIgnoreCase("null")) {
 				remark_list = "";
 				JOptionPane.showMessageDialog(null,"Remarks not found for subject "+subjectClass);
-				
-				List findLCList = new ArrayList();
-				frame.setVisible(false);
-				panelHome.removeAll();///to remve entire panel
-				new RemarksEntry(sessionData, stdClass, academicYearClass, false, divClass, "", "", "", "", "", 
-						examClass, subjectClass, "", section, user_name, user_role, "", "", "");
 			}
 			
 			String[] remarkList = ("Select|"+remark_list).split("\\|");
@@ -1681,7 +1675,7 @@ public class RemarksEntry extends JFrame {
 					subMarks_text[i].setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 					dataPanel.add(subMarks_text[i]);
 					
-					maxMarks_label[i] = new JLabel(" / " + maxMarksFromMapClass);
+					maxMarks_label[i] = new JLabel(" / " + maxMarksFromMap);
 					maxMarks_label[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 					maxMarks_label[i].setToolTipText(studentName);
 					maxMarks_label[i].setBounds(600, j + 12, 60, 20);
@@ -1747,8 +1741,8 @@ public class RemarksEntry extends JFrame {
 											
 						            		if(!marksTyped.equalsIgnoreCase("AB") && !marksTyped.equalsIgnoreCase("MG")){
 						            			if(!std.equalsIgnoreCase("X") && !std.equalsIgnoreCase("XII") && !examClass.equalsIgnoreCase("Final")){
-								            		if(marksEntered > (Double.parseDouble(maxMarksFromMapClass))){
-								            			JOptionPane.showMessageDialog(null,"Please enter marks less than Max marks "+maxMarksFromMapClass);
+								            		if(marksEntered > (Double.parseDouble(maxMarksFromMap))){
+								            			JOptionPane.showMessageDialog(null,"Please enter marks less than Max marks "+maxMarksFromMap);
 								            			updateFlag = false;
 								            		} else{
 								            			updateFlag = true;
@@ -1769,9 +1763,9 @@ public class RemarksEntry extends JFrame {
 						              	} // end of enter key
 						            	else if(!marksTyped.equalsIgnoreCase("AB") && !marksTyped.equalsIgnoreCase("MG")){
 						            		if(!std.equalsIgnoreCase("X") && !std.equalsIgnoreCase("XII") && !examClass.equalsIgnoreCase("Final")){
-								            	if(marksEntered > Double.parseDouble(maxMarksFromMapClass)){
+								            	if(marksEntered > Double.parseDouble(maxMarksFromMap)){
 		//					            			subMarks_text[m-1].requestFocus();
-							            			JOptionPane.showMessageDialog(null,"Please enter marks less than Max marks "+maxMarksFromMapClass);
+							            			JOptionPane.showMessageDialog(null,"Please enter marks less than Max marks "+maxMarksFromMap);
 							            			updateFlag = false;
 							            		} else{
 							            			updateFlag = true;
@@ -1852,8 +1846,8 @@ public class RemarksEntry extends JFrame {
 			EditButton.setFont(new Font("Book Antiqua", Font.BOLD, 16));
 			EditButton.setBounds(580, 12, 90, 25);
 			if((!std.equalsIgnoreCase("X") && !std.equalsIgnoreCase("XII") && !examClass.equalsIgnoreCase("Final")) && 
-					(maxMarksFromMapClass.equalsIgnoreCase("0") || maxMarksFromMapClass.equalsIgnoreCase("") || 
-							maxMarksFromMapClass.equalsIgnoreCase("NA") || maxMarksFromMapClass.equalsIgnoreCase("null")) && 
+					(maxMarksFromMap.equalsIgnoreCase("0") || maxMarksFromMap.equalsIgnoreCase("") || 
+					maxMarksFromMap.equalsIgnoreCase("NA") || maxMarksFromMap.equalsIgnoreCase("null")) && 
 					!typeClassDisp.equalsIgnoreCase("Remark")){
 				EditButton.setEnabled(false);
 			}
@@ -1888,7 +1882,7 @@ public class RemarksEntry extends JFrame {
 								}
 								i++;
 							}
-							dbValidate.updateRemarkResultMap(sessionData, academicYearClass, stdClass, divClass, examType, subjectTitleMap, studentRemarkMap);
+							dbValidate.updateRemarkResultMap(sessionData1, academicYearClass, stdClass, divClass, examType, subjectTitleMap, studentRemarkMap);
 							JOptionPane.showMessageDialog(null, "Remarks updated successfully");
 						}
 					} catch (Exception e1) {
@@ -1907,14 +1901,15 @@ public class RemarksEntry extends JFrame {
 						boolean validateMarksList = true;
 						if (validateMarksList) {
 
-			                List findLCList = new ArrayList();
 							frame.setVisible(false);
 							panelHome.removeAll();///to remve entire panel
-							new RemarksEntry(sessionData, stdClass, academicYearClass,
+							List subMarksList = new ArrayList();
+							RemarksEntry2 marksEntryObject = RemarksEntry2.getInstance();
+			                marksEntryObject.getRemarksEntry(sessionData, stdClass, academicYearClass,
 									true, divClass, fromClass,
 									toClass, lastClass, firstClass, fatherClass,
 									examClass, subjectClass, typeClassDisp,
-									section, user_name, user_role, "", retGrNoClass, "");
+									section, user_name, user_role, "", retGrNo, "");
 						}
 						logger.info("updateMarks = " + updateMarks);
 
@@ -1931,20 +1926,20 @@ public class RemarksEntry extends JFrame {
 			sep1_label.setBounds(40, l + 95, 1600, 50);
 			dataPanel.add(sep1_label);
 		} 
-		else if(!stdClass.equalsIgnoreCase("") && !stdClass.equalsIgnoreCase(null) && !isCreateClass.equalsIgnoreCase("")) {
+		else if(!stdClass.equalsIgnoreCase("") && !stdClass.equalsIgnoreCase(null) && !isCreate.equalsIgnoreCase("")) {
 			
 			String fontType = "English";
 			boolean validateField = false;
 			String remark = "", remarkUpdate = "";
-			if(isCreateClass.equalsIgnoreCase("create")) {
+			if(isCreate.equalsIgnoreCase("create")) {
 				remark = JOptionPane.showInputDialog("Please Enter Remark");
 			}
 			
-			if(retRemarkListClass == null) {
-				retRemarkListClass = "";
+			if(retRemarkList == null) {
+				retRemarkList = "";
 			}
-			String[] remNewList = retRemarkListClass.split("\\|");
-			remList = retRemarkListClass.split("\\|");
+			String[] remNewList = retRemarkList.split("\\|");
+			remList = retRemarkList.split("\\|");
 			
 			if(remark != null && remark.length()<=100) {
 //				String[] remAdded = remark.split("\\|");
@@ -1987,10 +1982,10 @@ public class RemarksEntry extends JFrame {
 			if(!stdClass.equalsIgnoreCase("All") && validateField && !remarkUpdate.equalsIgnoreCase("")) {
 				boolean updateFlag = dbValidate.updateConfigField(sessionData, false, "REMARK_LIST_"+stdClass+"_"+subjectClass, commonObj.replaceCommaApostrophy(remarkUpdate.trim()));
 				if(updateFlag) {
-					JOptionPane.showMessageDialog(null, "Remark "+remark+" "+isCreateClass+" successfully");
+					JOptionPane.showMessageDialog(null, "Remark "+remark+" "+isCreate+" successfully");
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "Remark "+remark+" "+isCreateClass+" Failed");
+					JOptionPane.showMessageDialog(null, "Remark "+remark+" "+isCreate+" Failed");
 				}
 			}
 			
@@ -2094,13 +2089,12 @@ public class RemarksEntry extends JFrame {
 	        							dbValidate.updateConfigField(sessionData, false, "REMARK_LIST_"+stdClass+"_"+subjectClass, remark.trim());
 	        							
 	        						}
-        							
-        							List findLCList = new ArrayList();
         							frame.setVisible(false);
         							panelHome.removeAll();///to remve entire panel
-        							new RemarksEntry(sessionData, stdClass, academicYearClass, false, divClass, "", "", "", "", 
-        			                		"", examClass, subjectClass, type, section, user_name, user_role, "", retGrNoClass, "delete");
         							
+        							RemarksEntry2 remarksEntryObject = RemarksEntry2.getInstance();
+        							remarksEntryObject.getRemarksEntry(sessionData, stdClass, academicYearClass, false, divClass, "", "", "", "", 
+        			                		"", examClass, subjectClass, type, section, user_name, user_role, "", retGrNo, "delete");
 	                    		}
 	                		}
 						} catch (Exception e1) {
@@ -2114,21 +2108,19 @@ public class RemarksEntry extends JFrame {
 		else if(!stdClass.equalsIgnoreCase("") && !stdClass.equalsIgnoreCase(null)){
 			commonObj.showMessageDialog("No data found.");
 		}
+
 		// ////////////////data panel ends/////////////////////////////////
 
-		// dataPanel.setBackground(Color.green);
-
-		JScrollPane scrollPane = new JScrollPane(dataPanel);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setBounds(5, 0, screenWidth - 154, screenHeight - 337);
-        JPanel contentPane = new JPanel(null);
-        contentPane.setPreferredSize(new Dimension(500, screenHeight - 337));
-        contentPane.add(scrollPane);
-		bottombandPanel.add(contentPane, BorderLayout.SOUTH);
+		JScrollPane jsp;
+		jsp = new JScrollPane(dataPanel);
+		jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollAreaPanel.add(jsp, BorderLayout.EAST);
+		bottombandPanel.add(scrollAreaPanel, BorderLayout.SOUTH);
 		mainPanel.add(bottombandPanel, BorderLayout.SOUTH);
 		// ////////////////////////////////
 		panelHome.add(mainPanel, BorderLayout.EAST);
 		panelHome.setSize(screenWidth, screenHeight);
+	
+		frame.setVisible(true);
 	}
 }

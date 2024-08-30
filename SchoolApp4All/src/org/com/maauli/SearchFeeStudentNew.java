@@ -1511,6 +1511,7 @@ public class SearchFeeStudentNew extends JFrame {
 	        final JLabel[] contactNo1_labels = new JLabel[searchStudentMap.size()];
 	        final JLabel[] contactNo2_labels = new JLabel[searchStudentMap.size()];
 	        final JButton[] pay_buttons = new JButton[searchStudentMap.size()];
+	        final JButton[] defaulter_buttons = new JButton[searchStudentMap.size()];
 	        final JComboBox[] mode_combo = new JComboBox[searchStudentMap.size()];
 	        final JLabel[] concession_labels = new JLabel[searchStudentMap.size()];
 	        final JTextField[] bank_text = new JTextField[searchStudentMap.size()];
@@ -1536,7 +1537,7 @@ public class SearchFeeStudentNew extends JFrame {
 	        String grStr = "", previousAcademic = "";
 	        LinkedHashMap<String, LinkedHashMap<String, String>> feesHeadMapPrevYear = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 	        
-	        previousAcademic = commonObj.getPreviousYear(sessionData,academicYearClass);
+	        previousAcademic = commonObj.getPreviousYearFromSelected(sessionData,academicYearClass);
 	        List<String> defaulterList = new ArrayList<String>();
 	        List<String> mapIndexes = new ArrayList<String>(searchStudentMap.keySet()); 
 	        for(int i = 0; i < mapIndexes.size(); i++) {
@@ -1665,11 +1666,18 @@ public class SearchFeeStudentNew extends JFrame {
 	            
 	            itemWidth = itemWidth + 100;
 	            
+	            defaulter_buttons[k] = new JButton("Defaulter");
 	            if(defaulterList.contains(grNoMap)) {
-	            	defaulter_label[k] = new JLabel("Defaulter");
-	            	defaulter_label[k].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-	            	defaulter_label[k].setForeground(Color.red);
-	            	defaulter_label[k].setBounds(itemWidth, j, 200, 25);
+	            	defaulter_buttons[k] = new JButton("Defaulter");
+	            	defaulter_buttons[k].setFont(new Font("Book Antiqua", Font.BOLD, 16));
+	            	defaulter_buttons[k].setBounds(itemWidth, j, 150, 25);
+	            	defaulter_buttons[k].setBackground(Color.RED);
+	            	dataPanel.add(defaulter_buttons[k]);
+	            	
+//	            	defaulter_label[k] = new JLabel("Defaulter");
+//	            	defaulter_label[k].setFont(new Font("Book Antiqua", Font.BOLD, 16));
+//	            	defaulter_label[k].setForeground(Color.red);
+//	            	defaulter_label[k].setBounds(itemWidth, j, 200, 25);
 //	            	dataPanel.add(defaulter_label[k]);
 	            }
 	    		
@@ -1750,7 +1758,22 @@ public class SearchFeeStudentNew extends JFrame {
 						String contact1Sel = contactNo1_labels[m].getText();
 						String contact2Sel = contactNo2_labels[m].getText();
 
-						payAction(rollNoSel, grNoSel, nameSel, stdSel, divSel, contact1Sel, contact2Sel, oldAcademicClass, oldStdClass);
+						payAction(rollNoSel, grNoSel, nameSel, stdSel, divSel, contact1Sel, contact2Sel, oldAcademicClass, oldStdClass, false);
+					}
+				});
+	            
+	            defaulter_buttons[k].addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						String rollNoSel = rollNo_labels[m].getText();
+						String grNoSel = grNo_labels[m].getText();
+						String nameSel = name_labels[m].getText();
+						String stdSel = std_labels[m].getText();
+						String divSel = div_labels[m].getText();
+						String contact1Sel = contactNo1_labels[m].getText();
+						String contact2Sel = contactNo2_labels[m].getText();
+
+						payAction(rollNoSel, grNoSel, nameSel, stdSel, divSel, contact1Sel, contact2Sel, oldAcademicClass, oldStdClass, true);
 					}
 				});
 	            
@@ -2005,7 +2028,7 @@ public class SearchFeeStudentNew extends JFrame {
 						String contact1Sel = contactNo1_labels[m].getText();
 						String contact2Sel = contactNo2_labels[m].getText();
 
-						payAction(rollNoSel, grNoSel, nameSel, stdSel, divSel, contact1Sel, contact2Sel, oldAcademicClass, oldStdClass);
+						payAction(rollNoSel, grNoSel, nameSel, stdSel, divSel, contact1Sel, contact2Sel, oldAcademicClass, oldStdClass, false);
 	                  }
 	                }
 	            });
@@ -2357,13 +2380,18 @@ public class SearchFeeStudentNew extends JFrame {
 	}
     
     private static void payAction(String rollNoSel, String grNoSel, String nameSel, String stdSel, String divSel, 
-    		String contact1, String contact2, String oldAcademic, String oldStd){
+    		String contact1, String contact2, String oldAcademic, String oldStd, boolean isDefaulter){
     	try {
     		int reply = 0;
+    		String academicYearPay = academicYearClass;
 			LinkedHashMap<String, LinkedHashMap<String, String>> feesHeadMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 			
+			if(isDefaulter) {
+				academicYearPay = commonObj.getPreviousYearFromSelected(sessionData, academicYearPay);
+			}
+			
 			if(dbValidate.connectDatabase(sessionData)){
-				feesHeadMap = dbValidate.getFeesHeadData(sessionData, academicYearClass, stdSel, section, categoryClass);
+				feesHeadMap = dbValidate.getFeesHeadData(sessionData, academicYearPay, stdSel, section, categoryClass);
 			}
 			
 			if(!feesHeadMap.isEmpty()){
@@ -2385,13 +2413,13 @@ public class SearchFeeStudentNew extends JFrame {
 				LinkedHashMap<String,LinkedHashMap<String, String>> studentMap = new LinkedHashMap<String,LinkedHashMap<String, String>>();
 				if(!oldAcademicClass.equalsIgnoreCase("")){
 					studentMap = dbValidate.findFeeStudent(sessionData, grNoSel, stdSel, divSel, "", "", "", 
-							section, academicYearClass, "", "");
+							section, academicYearPay, "", "");
 				}
 				if(!oldAcademicClass.equalsIgnoreCase("") && studentMap.get(grNoSel) == null){
 					reply = JOptionPane.showConfirmDialog(null, "Do you really want to promote this student to next year & pay fees?", "Confirm validate", JOptionPane.YES_NO_OPTION);
 					if(reply == JOptionPane.YES_OPTION){
 						frame.setVisible(false);
-						new FeesView(sessionData, grNoSel, stdSel, divSel, nameSel, rollNoSel, searchStudentMap, section, academicYearClass, 
+						new FeesView(sessionData, grNoSel, stdSel, divSel, nameSel, rollNoSel, searchStudentMap, section, academicYearPay, 
 								categoryClass, feesHeadMap, maxFrequency, frequencyClass, subFrequencyClass, contact1, contact2, 
 								oldAcademicClass, oldStdClass, headerRadioClass);
 					}
@@ -2401,12 +2429,12 @@ public class SearchFeeStudentNew extends JFrame {
 				}
 				else{
 					frame.setVisible(false);
-					new FeesView(sessionData, grNoSel, stdSel, divSel, nameSel, rollNoSel, searchStudentMap, section, academicYearClass, 
+					new FeesView(sessionData, grNoSel, stdSel, divSel, nameSel, rollNoSel, searchStudentMap, section, academicYearPay, 
 							categoryClass, feesHeadMap, maxFrequency, frequencyClass, subFrequencyClass, contact1, contact2, "", "", headerRadioClass);
 				}
 			}
 			else{
-				JOptionPane.showMessageDialog(null, "Fees Head with category "+categoryClass+" for Std "+stdSel+" does not exist for "+academicYearClass);
+				JOptionPane.showMessageDialog(null, "Fees Head with category "+categoryClass+" for Std "+stdSel+" does not exist for "+academicYearPay);
 			}
 		} catch (Exception e1) {
 			logger.info("Exception insert fee name ==>>>" + e1);

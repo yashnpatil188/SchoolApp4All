@@ -749,7 +749,7 @@ public class BonafidePDF {
 						}
 						
 						String udise_pen = "Student Udise ID : "+suid_db;
-						if(pen_db != null && !pen_db.equalsIgnoreCase("null") && !pen_db.equalsIgnoreCase("")) {
+						if(pen_db != null && !pen_db.equalsIgnoreCase("null") && !pen_db.trim().equalsIgnoreCase("")) {
 							udise_pen += "           "
 									+ "                    PEN No.: "+pen_db;
 						}
@@ -762,7 +762,7 @@ public class BonafidePDF {
 							paraSuid.add(chunkSuid);
 							paraSuid.setAlignment(Element.ALIGN_LEFT);
 							document.add(paraSuid);
-						}else {
+						}else if(pen_db != null && !pen_db.equalsIgnoreCase("null") && !pen_db.trim().equalsIgnoreCase("")){
 							udise_pen = "PEN No.: "+pen_db;
 							chunkSuid = new Chunk(udise_pen);
 							chunkSuid.setFont(fontClass1);
@@ -789,7 +789,7 @@ public class BonafidePDF {
 							else{
 								paraName.setSpacingBefore(10);
 							}
-							paraName.setSpacingAfter(20);
+//							paraName.setSpacingAfter(20);
 							paraName.add(chunkPrincipal);
 							paraName.setAlignment(Element.ALIGN_RIGHT);
 							document.add(paraName);
@@ -890,7 +890,7 @@ public class BonafidePDF {
 								paragraphDateOffice.setSpacingBefore(-25);
 							}
 							else if(bonafide_header_3.equalsIgnoreCase("")) {
-//								paragraphDateOffice.setSpacingBefore(15);
+								paragraphDateOffice.setSpacingBefore(15);
 							}
 							else {
 //								paragraphDateOffice.setSpacingBefore(0);
@@ -1026,7 +1026,7 @@ public class BonafidePDF {
 								paraSuidOffice.add(chunkSuid);
 								paraSuidOffice.setAlignment(Element.ALIGN_LEFT);
 								document.add(paraSuidOffice);
-							}else {
+							}else if(pen_db != null && !pen_db.equalsIgnoreCase("null") && !pen_db.trim().equalsIgnoreCase("")){
 								udise_pen = "PEN No.: "+pen_db;
 								chunkSuid = new Chunk(udise_pen);
 								chunkSuid.setFont(fontClass1);

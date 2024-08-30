@@ -24,10 +24,10 @@ public class CreatePasswordProtectedZipExample
         	File dir = new File(dirPath);
         	String[] files = dir.list();
         	if (files.length == 0) {
-        	    System.out.println("The directory is empty");
+        	    // System.out.println("The directory is empty");
         	} else {
         	    for (String aFile : files) {
-        	        System.out.println(aFile);
+        	        // System.out.println(aFile);
         	        filesToAdd.add(new File("D:\\school_app\\BACKUP\\28_Mar_2016\\"+aFile));
         	    }
         	}

@@ -42,7 +42,7 @@ public class MotherBoardSerialNumber {
 
   public static void main(String[] args){
     String cpuId = MotherBoardSerialNumber.getMotherboardSN();
-    System.out.println("cpuId :: "+cpuId);
+    // System.out.println("cpuId :: "+cpuId);
     javax.swing.JOptionPane.showConfirmDialog((java.awt.Component)
          null, cpuId, "Motherboard serial number",
          javax.swing.JOptionPane.DEFAULT_OPTION);

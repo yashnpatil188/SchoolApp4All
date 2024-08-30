@@ -926,6 +926,9 @@ public class MarksheetSubjectwise_IX_PDF {
 				LinkedHashMap grMap = new LinkedHashMap();
 				grMap = (LinkedHashMap) me.getValue();
 				grNo = grMap.get("grNo").toString();
+				if(grNo.equalsIgnoreCase("0021688")) {
+					// System.out.println(grNo);
+				}
 				optionalSubject = studentOptSubAllotMap.get(grNo) == null ? "" :studentOptSubAllotMap.get(grNo).get("optionalSubject");
 				optionList = optionalSubject.split("\\|");
 				if(optional.equalsIgnoreCase("YES") && optionalSubject.trim().length() > 0){

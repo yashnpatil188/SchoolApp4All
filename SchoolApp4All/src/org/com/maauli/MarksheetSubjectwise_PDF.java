@@ -48,12 +48,14 @@ public class MarksheetSubjectwise_PDF {
 		String dispTotalA = "", dispTotalB = "", dispTotalAB = "", ctStr = "", gradeMarks = "";
 		double totalA = 0, totalB = 0, total = 0,subTotalA = 0, subTotalB = 0, subTotal = 0, pageNumber = 0, addRow = 0, 
 				pageCount = 0, academicStart = 0, stdInt = 0;
-		boolean isDoubleLine = false;
+		boolean isDoubleLine = false, marks_flag_std = false, result_sem_std_flag = false;
 		LinkedHashMap<String, String> subMaxMarks = new LinkedHashMap<String, String>();
 
 		try {
 			String bonafide_header = sessionData.getConfigMap().get("BONAFIDE_HEADER_" + sessionData.getAppType());
 			String bonafide_header_0 = sessionData.getConfigMap().get("BONAFIDE_HEADER_0_" + sessionData.getAppType());
+			marks_flag_std = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_MARKS_"+std.replaceAll(" ", "_")));
+			
 			if(!bonafide_header_0.trim().equalsIgnoreCase("")){
 				bonafide_header_0 = bonafide_header_0 + " \n";
 				displayRows = 45;
@@ -77,7 +79,12 @@ public class MarksheetSubjectwise_PDF {
 				sem = "sem2";
 				semInitial = "S";
 				examHeader = "SECOND SEMESTER";
+			} else if (exam.equalsIgnoreCase("Final") && !marks_flag_std) {
+				sem = "sem2";
+				semInitial = "S";
+				examHeader = "ANNUAL";
 			}
+			result_sem_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem.toUpperCase()+"_"+std.replaceAll(" ", "_")));
 			
 			// for column width size
 			float[] columnWidths = new float[] { 1.2f, 2.5f, 12.0f, 1.1f, 1.1f, 1.1f, 1.1f, 1.1f, 1.1f, 1.1f, 1.1f, 1.3f, 1.1f, 1.1f, 1.1f,
@@ -806,10 +813,15 @@ public class MarksheetSubjectwise_PDF {
 				if(leftDataMap != null && leftDataMap.get(grMap.get("grNo").toString()) != null){
 					grade = "-";
 				}
+				
 				gradeMarks = subMaxMarks.get("marks_grade");
-				if(gradeMarks.equalsIgnoreCase("MARKS") && stdInt < 0) {
+				if(gradeMarks.equalsIgnoreCase("MARKS") && !result_sem_std_flag) {
+//					grade = "-";
+				}
+				else if(gradeMarks.equalsIgnoreCase("MARKS") ) {
 					grade = "-";
 				}
+				
 				PdfPCell cell344 = new PdfPCell(new Paragraph(grade, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize)));
 				cell344.setColspan(1);
 				cell344.setHorizontalAlignment(Element.ALIGN_CENTER);

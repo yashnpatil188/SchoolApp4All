@@ -47,7 +47,7 @@ public class TextToImage {
 			int yShift = 60;
 		    g2d.dispose();
 		    
-//		    System.out.println(text + " : " + width+" : "+height);
+//		    // System.out.println(text + " : " + width+" : "+height);
 
 		    img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		    g2d = img.createGraphics();

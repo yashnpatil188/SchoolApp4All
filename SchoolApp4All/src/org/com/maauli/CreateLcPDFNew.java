@@ -1641,7 +1641,7 @@ public class CreateLcPDFNew {
 							}
 						}
 						payremark = payremark;
-						payremark = payremark.replace("****", stdStar.substring(0,stdStar.length()-2));
+						payremark = payremark.replace("xxxx", stdStar.substring(0,stdStar.length()-2));
 						Chunk chunkRemark = new Chunk("                                                                :   "+  payremark);
 						/*Font fontRemark = new Font(Font.TIMES_ROMAN);
 						fontRemark.setStyle(Font.BOLD);
@@ -1658,7 +1658,7 @@ public class CreateLcPDFNew {
 						
 						logger.info("remarkDb===="+remarkDb);
 						remarkLc = remarkLc;
-						remarkLc = remarkLc.replace("****", stdStar);
+						remarkLc = remarkLc.replace("xxxx", stdStar);
 						Chunk chunkRemark1 = new Chunk("                                                                    "+  remarkLc);
 						/*Font fontRemark1 = new Font(Font.TIMES_ROMAN);
 						fontRemark1.setStyle(Font.BOLD);

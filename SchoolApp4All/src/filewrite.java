@@ -6,7 +6,7 @@ public class filewrite
     public static void main(String[] args) throws IOException
     {
     	//Common cm = new Common();
-    	//System.out.println("User==>"+cm.fileWriter("Yashpal"));
+    	//// System.out.println("User==>"+cm.fileWriter("Yashpal"));
 try{
     	File f = new File("/yash.txt");
         FileWriter fw = new FileWriter(f,false);
@@ -17,8 +17,11 @@ try{
            fw.write(str);
            fw.flush();
            fw.close();
-           System.out.println("File write procedure completed..."); 
+            System.out.println("File write procedure completed..."); 
         } 
-}catch(Exception e){System.out.println("Exception "+e);}
-    }
-}
+	}catch(Exception e){
+		 System.out.println("Exception "+e);
+		 
+	}
+	}
+	}

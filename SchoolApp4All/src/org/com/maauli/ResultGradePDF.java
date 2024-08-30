@@ -523,6 +523,10 @@ public class ResultGradePDF {
 				if(semImprove.equalsIgnoreCase("NA")){
 					semImprove = "-";
 				}
+				if(semImprove.trim().startsWith("~")) {
+					semImprove = semImprove.substring(semImprove.indexOf("~")+1);
+				}
+				semImprove = semImprove.replace("~", ", ");
 				Chunk chunk14 = new Chunk("\n\n"+commonLc.FirstWordCap(semImprove.replace("*", ", ")));
 				Font font14 = FontFactory.getFont("TIMES_ROMAN");
 				font14.setStyle(Font.ITALIC);
@@ -549,6 +553,7 @@ public class ResultGradePDF {
 							firstGrade = studentData.get(item+"_SEM1").toString().equalsIgnoreCase("NA") ? "" : studentData.get(item+"_SEM1").toString();
 						}
 						else if(exam.equalsIgnoreCase("Semester 2")){
+							firstGrade = studentData.get(item+"_SEM1").toString().equalsIgnoreCase("NA") ? "" : studentData.get(item+"_SEM1").toString();
 							secondGrade = studentData.get(item+"_SEM2").toString().equalsIgnoreCase("NA") ? "" : studentData.get(item+"_SEM2").toString();
 						}
 						else if(exam.equalsIgnoreCase("Final")){
@@ -608,34 +613,34 @@ public class ResultGradePDF {
 								}
 							}
 						}
-						else if(exam.equalsIgnoreCase("Semester 2")){
-							secondGrade = studentData.get(item+"_SEM2").toString();
-							secondGrade = studentData.get(item+"_SEM2").toString().equalsIgnoreCase("NA") ? "" : studentData.get(item+"_SEM2").toString();
-							if(secondGrade.contains("MG")){
-								if(!exam.equalsIgnoreCase("FINAL")){
-									secondGrade = secondGrade.substring(0, secondGrade.lastIndexOf("+"));
-								}
-								if(secondGrade.contains("(")){
-									secondGrade = secondGrade + ")";
-								}
-							}
-							else if(secondGrade.contains("AB")){
-								if(!exam.equalsIgnoreCase("FINAL")){
-									secondGrade = secondGrade.substring(0, secondGrade.indexOf("+"));
-								}
-								if(secondGrade.contains("(")){
-									secondGrade = secondGrade + ")";
-								}
-							}
-							else if(secondGrade.contains("RTE")){
-								if(!exam.equalsIgnoreCase("FINAL")){
-									secondGrade = "RTE";
-								}
-								if(secondGrade.contains("(")){
-									secondGrade = secondGrade + ")";
-								}
-							}
-						}
+//						else if(exam.equalsIgnoreCase("Semester 2")){
+//							secondGrade = studentData.get(item+"_SEM2").toString();
+//							secondGrade = studentData.get(item+"_SEM2").toString().equalsIgnoreCase("NA") ? "" : studentData.get(item+"_SEM2").toString();
+//							if(secondGrade.contains("MG")){
+//								if(!exam.equalsIgnoreCase("FINAL")){
+//									secondGrade = secondGrade.substring(0, secondGrade.lastIndexOf("+"));
+//								}
+//								if(secondGrade.contains("(")){
+//									secondGrade = secondGrade + ")";
+//								}
+//							}
+//							else if(secondGrade.contains("AB")){
+//								if(!exam.equalsIgnoreCase("FINAL")){
+//									secondGrade = secondGrade.substring(0, secondGrade.indexOf("+"));
+//								}
+//								if(secondGrade.contains("(")){
+//									secondGrade = secondGrade + ")";
+//								}
+//							}
+//							else if(secondGrade.contains("RTE")){
+//								if(!exam.equalsIgnoreCase("FINAL")){
+//									secondGrade = "RTE";
+//								}
+//								if(secondGrade.contains("(")){
+//									secondGrade = secondGrade + ")";
+//								}
+//							}
+//						}
 						else{
 							firstGrade = studentData.get(item+"_SEM1").toString().equalsIgnoreCase("NA") ? "" : studentData.get(item+"_SEM1").toString();
 							if(firstGrade.contains("MG")){
@@ -671,6 +676,14 @@ public class ResultGradePDF {
 									firstGrade = firstGrade + ")";
 								}
 							}
+							
+							if(firstGrade.contains("(")) {
+								firstGrade = firstGrade.substring(0, firstGrade.indexOf("("));
+								if(firstGrade.contains("+")) {
+									firstGrade = firstGrade.substring(0, firstGrade.indexOf("+"));
+								}
+							}
+							
 							secondGrade = studentData.get(item+"_SEM2").toString().equalsIgnoreCase("NA") ? "" : studentData.get(item+"_SEM2").toString();
 							if(secondGrade.contains("MG")){
 								if(!exam.equalsIgnoreCase("FINAL")){
@@ -703,6 +716,13 @@ public class ResultGradePDF {
 								}
 								if(secondGrade.contains("(")){
 									secondGrade = secondGrade + ")";
+								}
+							}
+							
+							if(secondGrade.contains("(")) {
+								secondGrade = secondGrade.substring(0, secondGrade.indexOf("("));
+								if(secondGrade.contains("+")) {
+									secondGrade = secondGrade.substring(0, secondGrade.indexOf("+"));
 								}
 							}
 							/*if(firstGrade.equalsIgnoreCase("-") || secondGrade.equalsIgnoreCase("-")){

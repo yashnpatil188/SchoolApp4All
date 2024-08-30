@@ -253,7 +253,7 @@ public class SchoolForAllLoginView {
 				configMap = dbValidate.getConfigMap(sessionData, sessionData.getDBName(), "config_data",
 						initialConfigMap.get("SCHOOL_LIST"));
 				configMap.put("SchoolApp_IP", sessionData.getSchoolApp_ip());
-				System.out.println();
+				// System.out.println();
 			} catch (Exception e1) {
 				commonObj.logException(e1);
 			} finally {

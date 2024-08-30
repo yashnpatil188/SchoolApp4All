@@ -687,11 +687,17 @@ public class MarksEntry extends JFrame {
 				remarkButton.addActionListener(new ActionListener() {
 
 		            public void actionPerformed(ActionEvent e) {
-		            	frame.setVisible(false);
-		                List markList = new ArrayList();
-		                RemarksEntry remarksEntryObject = RemarksEntry.getInstance();
-		                remarksEntryObject.getRemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
-		                    "", "", section, user_name, user_role, "", "", "");
+//		            	frame.setVisible(false);
+//		                List markList = new ArrayList();
+//		                RemarksEntry remarksEntryObject = RemarksEntry.getInstance();
+//		                remarksEntryObject.getRemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
+//		                    "", "", section, user_name, user_role, "", "", "");
+		                
+		            	List findLCList = new ArrayList();
+						frame.setVisible(false);
+						panelHome.removeAll();///to remve entire panel
+						new RemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
+			                    "", "", section, user_name, user_role, "", "", "");
 		            }
 		        });
 				

@@ -53,13 +53,13 @@ public class CreateExcel {
     
     static ResourceBundle bundle = ResourceBundle.getBundle("org.com.accesser.school");
 
-	/*String driver = bundle.getString("DBDRIVER");
+	/*String driver = sessionData1.getConfigMap().get("DBDRIVER");
 
-	String url = bundle.getString("DBURL");
+	String url = sessionData1.getConfigMap().get("DBURL");
 
-	String user = bundle.getString("DBUSER");
+	String user = sessionData1.getConfigMap().get("DBUSER");
 
-	String pwd = bundle.getString("DBPASSWD");*/
+	String pwd = sessionData1.getConfigMap().get("DBPASSWD");*/
 
 	Connection connection = null;
 
@@ -115,7 +115,7 @@ public class CreateExcel {
 			Statement st = null;
 			ResultSet rs = null;
 			dbValidate.connectDatabase(sessionData);
-			path = ce.createTodayFolder(bundle.getString("EXCEL_PATH_"+sessionData.getDBName()),true)+"/";
+			path = ce.createTodayFolder(sessionData.getConfigMap().get("EXCEL_PATH_"+sessionData.getDBName()),true)+"/";
 			
 			if(printList.size() <= 0){
 				st = connection.createStatement();
@@ -228,7 +228,7 @@ public class CreateExcel {
 			FileOutputStream fileOut = new FileOutputStream(filePath);
 			wb.write(fileOut);
 			fileOut.close();
-			System.out.println("Data is saved in excel file.");
+			// System.out.println("Data is saved in excel file.");
 			if(rs != null){
 				rs.close();
 			}
@@ -254,7 +254,7 @@ public class CreateExcel {
 				logger.info(":: -----Exception---- ::\n"+e);
 			}
 		} catch (Exception e) {
-			System.out.println("Exception :: " + e);
+			// System.out.println("Exception :: " + e);
 		}finally {
 			dbValidate.closeDatabase(sessionData);
         }
