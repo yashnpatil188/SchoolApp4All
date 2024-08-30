@@ -1386,173 +1386,183 @@ public class FeesView extends JFrame {
 				String chequeDD_date = "NA";
 				String backDate = dobDD_text.getText().trim() + "/" + dobMM_text.getText().trim() + "/"
 						+ dobYYYY_text.getText().trim();
-				boolean isBackDate = backDateCheckBox.isSelected();
+				boolean isBackDate = backDateCheckBox.isSelected(), userActive = false;
 				String remark = remark_text.getText().equalsIgnoreCase("") ? " " : remark_text.getText();
 				
-				boolean validateField = true;
-				if(modeSel.equalsIgnoreCase("Cash")){
-					paymentMode = "Cash";
-				}
-				else if(modeSel.equalsIgnoreCase("Cheque")){
-					paymentMode = "Cheque";
-					bank = bank_text.getText();
-					cheque_dd_no = cheque_dd_no_text.getText();
-					chequeDD_date = dateDD_text.getText().trim() + "/" + dateMM_text.getText().trim() + "/"
-							+ dateYYYY_text.getText().trim();
-					validateField = validate(penaltyAmount, bank, cheque_dd_no, chequeDD_date, modeSel);
-				}
-				else if(modeSel.equalsIgnoreCase("DD")){
-					paymentMode = "DD";
-					bank = bank_text.getText();
-					cheque_dd_no = cheque_dd_no_text.getText();
-					chequeDD_date = dateDD_text.getText().trim() + "/" + dateMM_text.getText().trim() + "/"
-							+ dateYYYY_text.getText().trim();
-					validateField = validate(penaltyAmount, bank, cheque_dd_no, chequeDD_date, modeSel);
-				}
-				else if(modeSel.equalsIgnoreCase("UPI")){
-					paymentMode = "UPI";
-					bank = bank_text.getText();
-					cheque_dd_no = cheque_dd_no_text.getText();
-					chequeDD_date = dateDD_text.getText().trim() + "/" + dateMM_text.getText().trim() + "/"
-							+ dateYYYY_text.getText().trim();
-					validateField = validate(penaltyAmount, bank, cheque_dd_no, chequeDD_date, modeSel);
+				try {
+					if (dbValidate.connectDatabase(sessionData)) {
+						userActive = dbValidate.checkFormData(sessionData, user_name, "FEES PAYMENT", user_role, section);
+					}
+				} catch (Exception e1) {
+					commonObj.logException(e1);
 				}
 				
-				String optionSms = "";
-				if(sessionData.getConfigMap().get("SMS_FEE_FLAG").equalsIgnoreCase("true") && sessionData.getConfigMap().get("STAFF_FEE_SMS").equalsIgnoreCase("true")) {
-					optionSms = JOptionPane.showInputDialog("=== SMS will be sent to Parents and Staff === \n Please Enter option \n 1 : Proceed "
-							+ " \n 2 : Cancel Fee Payment");
-				} else if(sessionData.getConfigMap().get("SMS_FEE_FLAG").equalsIgnoreCase("true")) {
-					optionSms = JOptionPane.showInputDialog("=== SMS will be sent to Parents === \n Please Enter option \n 1 : Proceed "
-							+ " \n 2 : Cancel Fee Payment");
-				} else if(sessionData.getConfigMap().get("STAFF_FEE_SMS").equalsIgnoreCase("true")) {
-					optionSms = JOptionPane.showInputDialog("=== SMS will be sent to Staff === \n Please Enter option \n 1 : Proceed "
-							+ " \n 2 : Cancel Fee Payment");
-				}
-				
-				if(optionSms == null || optionSms.trim().equalsIgnoreCase("null") || optionSms.equalsIgnoreCase("2")){
-					validateField = false;
-					JOptionPane.showMessageDialog(null, "Fee Payment cancelled");
-				}
-				
-				if(validateField) {
-					if(!commonObj.charExceeded("Bank Name", bank, 100).equalsIgnoreCase("")){
-						JOptionPane.showMessageDialog(null, commonObj.charExceeded("Bank Name", bank, 100));
-						validateField = false;
-					} else if(commonObj.checkComma(bank)){
-						validateField = false;
-						JOptionPane.showMessageDialog(null, "Bank Name cannot contain characters ;',-:|");
+				if (userActive) {
+					boolean validateField = true;
+					if(modeSel.equalsIgnoreCase("Cash")){
+						paymentMode = "Cash";
+					}
+					else if(modeSel.equalsIgnoreCase("Cheque")){
+						paymentMode = "Cheque";
+						bank = bank_text.getText();
+						cheque_dd_no = cheque_dd_no_text.getText();
+						chequeDD_date = dateDD_text.getText().trim() + "/" + dateMM_text.getText().trim() + "/"
+								+ dateYYYY_text.getText().trim();
+						validateField = validate(penaltyAmount, bank, cheque_dd_no, chequeDD_date, modeSel);
+					}
+					else if(modeSel.equalsIgnoreCase("DD")){
+						paymentMode = "DD";
+						bank = bank_text.getText();
+						cheque_dd_no = cheque_dd_no_text.getText();
+						chequeDD_date = dateDD_text.getText().trim() + "/" + dateMM_text.getText().trim() + "/"
+								+ dateYYYY_text.getText().trim();
+						validateField = validate(penaltyAmount, bank, cheque_dd_no, chequeDD_date, modeSel);
+					}
+					else if(modeSel.equalsIgnoreCase("UPI")){
+						paymentMode = "UPI";
+						bank = bank_text.getText();
+						cheque_dd_no = cheque_dd_no_text.getText();
+						chequeDD_date = dateDD_text.getText().trim() + "/" + dateMM_text.getText().trim() + "/"
+								+ dateYYYY_text.getText().trim();
+						validateField = validate(penaltyAmount, bank, cheque_dd_no, chequeDD_date, modeSel);
 					}
 					
-					if (isBackDate && (!commonObj.validateDate(backDate))) {
-						validateField = false;
-						JOptionPane.showMessageDialog(null, "Please enter valid fee receipt date");
-					}
-					else if(!isBackDate){
-						backDate = commonObj.getCurrentDate();
-					}
-					
-					if(!commonObj.charExceeded("Remark", remark, 90).equalsIgnoreCase("")){
-						JOptionPane.showMessageDialog(null, commonObj.charExceeded("Remark", remark, 90));
-						validateField = false;
-					} else if(commonObj.checkComma(remark) || remark.contains("!")){
-						validateField = false;
-						JOptionPane.showMessageDialog(null, "Remark cannot contain characters ;',-:|!");
+					String optionSms = "";
+					if(sessionData.getConfigMap().get("SMS_FEE_FLAG").equalsIgnoreCase("true") && sessionData.getConfigMap().get("STAFF_FEE_SMS").equalsIgnoreCase("true")) {
+						optionSms = JOptionPane.showInputDialog("=== SMS will be sent to Parents and Staff === \n Please Enter option \n 1 : Proceed "
+								+ " \n 2 : Cancel Fee Payment");
+					} else if(sessionData.getConfigMap().get("SMS_FEE_FLAG").equalsIgnoreCase("true")) {
+						optionSms = JOptionPane.showInputDialog("=== SMS will be sent to Parents === \n Please Enter option \n 1 : Proceed "
+								+ " \n 2 : Cancel Fee Payment");
+					} else if(sessionData.getConfigMap().get("STAFF_FEE_SMS").equalsIgnoreCase("true")) {
+						optionSms = JOptionPane.showInputDialog("=== SMS will be sent to Staff === \n Please Enter option \n 1 : Proceed "
+								+ " \n 2 : Cancel Fee Payment");
 					}
 					
-					if(feesPaymentMap.isEmpty() && validateField){
-						JOptionPane.showMessageDialog(null, "Please select atleast one checkbox.");
+					if(optionSms == null || optionSms.trim().equalsIgnoreCase("null") || optionSms.equalsIgnoreCase("2")){
 						validateField = false;
+						JOptionPane.showMessageDialog(null, "Fee Payment cancelled");
 					}
 					
-					totalAmount = Double.parseDouble(String.format("%.2f", totalAmount));
-					balanceAmount = commonObj.checkBalanceAmount(totalAmount, totalAmountPaid, totalBalanceFromDB);
-					balanceAmount = Double.parseDouble(String.format("%.2f", balanceAmount));
-					reply = JOptionPane.showConfirmDialog(null, commonObj.balanceAmountMessage(balanceAmount)+"\n Do you want to proceed with generating payment receipt ?", "Confirm Payment", JOptionPane.YES_NO_OPTION);
-				}
-				
-				if(validateField && reply == JOptionPane.YES_OPTION){
-					int count = 0;
-					String feesForMonths = "";
-					String lastMonthSel = "";
-					String promoteText = "";
-					if(!oldAcademicClass.equalsIgnoreCase("")){
-						promoteText = "\n Also this student will be promoted to next year";
-					}
-					reply = JOptionPane.showConfirmDialog(null, "Please confirm to update Fee Payment by "+paymentMode+" "+promoteText+" dated : "+backDate+"?", "Confirm validate", JOptionPane.YES_NO_OPTION);
-					if(reply == JOptionPane.YES_OPTION){
-						try
-						{
-							if(!isBackDate){
-								backDate = "";
-							}
-							
-							Collections.sort(feesForMonthsList);
-							feesForMonths = commonObj.intgerToMonth(feesForMonthsList.get(0).toString());
-							lastMonthSel = commonObj.intgerToMonth(feesForMonthsList.get(feesForMonthsList.size() - 1).toString());
-							if(lastMonth.equalsIgnoreCase("")){
-								if(!feesForMonths.equalsIgnoreCase(lastMonthSel)){
-									feesForMonths = feesForMonths + " - " + lastMonthSel;
-								}
-							}
-							else{
-								feesForMonths = feesForMonths + " - " + lastMonth;
-							}
-							
-							count = dbValidate.updateCountData(sessionData, academicYearClass, sessionData.getSectionName(), "FEE_RECEIPT", "");
-							
-							String[] nameSplit = nameClass.split(" ");
-							String last = nameSplit[0];
-							String first = nameSplit[1];
-							String father = nameSplit[2];
-							
-							boolean updateFlag = dbValidate.updateFeeData(sessionData, feesPaymentMap, penaltyAmount, 
-									bank, cheque_dd_no, paymentMode, grNoClass, stdClass, divClass, academicYearClass, 
-									"Pending", totalAmount, !studentFeesMap.isEmpty(), chequeDD_date, concessionMap, 
-									concessionAmount, categoryClass, count, feesForMonths, contact1Class, contact2Class, 
-									nameClass, rollNoClass, backDate, remark, studentFeesMap, balanceAmount, totalBalanceFromDB, first, last, father);
-							
-							if(updateFlag){
-								if(!oldAcademicClass.equalsIgnoreCase("")){
-									LinkedHashMap<String, String> studentMap = new LinkedHashMap<String, String>();
-									studentMap.put(grNoClass, nameClass + "|" + grNoClass + "|" +rollNoClass+ "|" + stdClass + "|" + divClass + "|" + last + "|" + first + "|" + father);
-									dbValidate.promoteClass(sessionData, studentMap, section, academicYearClass, oldStdClass, divClass);
-								}
-								///print receipt in PDF
-								JOptionPane.showMessageDialog(null, "Payment updated successfully");
-								LinkedHashMap<String, LinkedHashMap<String, String>> selectedStudentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
-								LinkedHashMap<String, String> grDetailMap = new LinkedHashMap<String, String>();
-								grDetailMap.put("grNo", grNoClass);
-								grDetailMap.put("rollNo", rollNoClass);
-								grDetailMap.put("name", nameClass);
-								grDetailMap.put("std", stdClass);
-								grDetailMap.put("div", divClass);
-								grDetailMap.put("feeStatus", "Pending");
-								grDetailMap.put("paymentMode", paymentMode);
-								if(!paymentMode.equalsIgnoreCase("Cash")){
-									grDetailMap.put("bank", bank);
-									grDetailMap.put("chequeDDNo", cheque_dd_no);
-									grDetailMap.put("chequeDDDate", chequeDD_date);
-								}
-								grDetailMap.put("receiptNo", count+"");
-								selectedStudentMap.put(grNoClass, grDetailMap);
-								
-								FeeReceiptPDF.getFeeReceiptPDF(sessionData, feesPaymentMap, penaltyAmount, bank, cheque_dd_no, paymentMode, grNoClass, 
-										nameClass, stdClass, divClass, academicYearClass, "Pending", totalAmount, chequeDD_date, concessionMap, 
-										concessionAmount, categoryClass, count, rollNoClass, feesForMonths, selectedStudentMap, headerRadioClass, 
-										studentOptMap, receiptShortName, null, frequencyClass, backDate, remark, "", balanceAmount, totalBalanceFromDB);
-//								searchStudentMap.remove(grNoClass);
-								frame.setVisible(false);
-								new FeesView(sessionData, grNoClass, stdClass, divClass, nameClass, rollNoClass, searchStudentMap, section, academicYearClass, 
-										categoryClass, feesHeadMap, maxFrequencyClass+"", frequencyClass, subFrequencyClass, contact1Class, contact2Class, 
-										oldAcademicClass, oldStdClass, headerRadioClass);
-							}
-						} catch (Exception ex) {
-							logger.error("updateCountData Exception= " + ex);
+					if(validateField) {
+						if(!commonObj.charExceeded("Bank Name", bank, 100).equalsIgnoreCase("")){
+							JOptionPane.showMessageDialog(null, commonObj.charExceeded("Bank Name", bank, 100));
+							validateField = false;
+						} else if(commonObj.checkComma(bank)){
+							validateField = false;
+							JOptionPane.showMessageDialog(null, "Bank Name cannot contain characters ;',-:|");
 						}
+						
+						if (isBackDate && (!commonObj.validateDate(backDate))) {
+							validateField = false;
+							JOptionPane.showMessageDialog(null, "Please enter valid fee receipt date");
+						}
+						else if(!isBackDate){
+							backDate = commonObj.getCurrentDate();
+						}
+						
+						if(!commonObj.charExceeded("Remark", remark, 90).equalsIgnoreCase("")){
+							JOptionPane.showMessageDialog(null, commonObj.charExceeded("Remark", remark, 90));
+							validateField = false;
+						} else if(commonObj.checkComma(remark) || remark.contains("!")){
+							validateField = false;
+							JOptionPane.showMessageDialog(null, "Remark cannot contain characters ;',-:|!");
+						}
+						
+						if(feesPaymentMap.isEmpty() && validateField){
+							JOptionPane.showMessageDialog(null, "Please select atleast one checkbox.");
+							validateField = false;
+						}
+						
+						totalAmount = Double.parseDouble(String.format("%.2f", totalAmount));
+						balanceAmount = commonObj.checkBalanceAmount(totalAmount, totalAmountPaid, totalBalanceFromDB);
+						balanceAmount = Double.parseDouble(String.format("%.2f", balanceAmount));
+						reply = JOptionPane.showConfirmDialog(null, commonObj.balanceAmountMessage(balanceAmount)+"\n Do you want to proceed with generating payment receipt ?", "Confirm Payment", JOptionPane.YES_NO_OPTION);
 					}
-					else{
-						JOptionPane.showMessageDialog(null, "Make the required changes before payment.");
+					
+					if(validateField && reply == JOptionPane.YES_OPTION){
+						int count = 0;
+						String feesForMonths = "";
+						String lastMonthSel = "";
+						String promoteText = "";
+						if(!oldAcademicClass.equalsIgnoreCase("")){
+							promoteText = "\n Also this student will be promoted to next year";
+						}
+						reply = JOptionPane.showConfirmDialog(null, "Please confirm to update Fee Payment by "+paymentMode+" "+promoteText+" dated : "+backDate+"?", "Confirm validate", JOptionPane.YES_NO_OPTION);
+						if(reply == JOptionPane.YES_OPTION){
+							try
+							{
+								if(!isBackDate){
+									backDate = "";
+								}
+								
+								Collections.sort(feesForMonthsList);
+								feesForMonths = commonObj.intgerToMonth(feesForMonthsList.get(0).toString());
+								lastMonthSel = commonObj.intgerToMonth(feesForMonthsList.get(feesForMonthsList.size() - 1).toString());
+								if(lastMonth.equalsIgnoreCase("")){
+									if(!feesForMonths.equalsIgnoreCase(lastMonthSel)){
+										feesForMonths = feesForMonths + " - " + lastMonthSel;
+									}
+								}
+								else{
+									feesForMonths = feesForMonths + " - " + lastMonth;
+								}
+								
+								count = dbValidate.updateCountData(sessionData, academicYearClass, sessionData.getSectionName(), "FEE_RECEIPT", "");
+								
+								String[] nameSplit = nameClass.split(" ");
+								String last = nameSplit[0];
+								String first = nameSplit[1];
+								String father = nameSplit[2];
+								
+								boolean updateFlag = dbValidate.updateFeeData(sessionData, feesPaymentMap, penaltyAmount, 
+										bank, cheque_dd_no, paymentMode, grNoClass, stdClass, divClass, academicYearClass, 
+										"Pending", totalAmount, !studentFeesMap.isEmpty(), chequeDD_date, concessionMap, 
+										concessionAmount, categoryClass, count, feesForMonths, contact1Class, contact2Class, 
+										nameClass, rollNoClass, backDate, remark, studentFeesMap, balanceAmount, totalBalanceFromDB, first, last, father);
+								
+								if(updateFlag){
+									if(!oldAcademicClass.equalsIgnoreCase("")){
+										LinkedHashMap<String, String> studentMap = new LinkedHashMap<String, String>();
+										studentMap.put(grNoClass, nameClass + "|" + grNoClass + "|" +rollNoClass+ "|" + stdClass + "|" + divClass + "|" + last + "|" + first + "|" + father);
+										dbValidate.promoteClass(sessionData, studentMap, section, academicYearClass, oldStdClass, divClass);
+									}
+									///print receipt in PDF
+									JOptionPane.showMessageDialog(null, "Payment updated successfully");
+									LinkedHashMap<String, LinkedHashMap<String, String>> selectedStudentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+									LinkedHashMap<String, String> grDetailMap = new LinkedHashMap<String, String>();
+									grDetailMap.put("grNo", grNoClass);
+									grDetailMap.put("rollNo", rollNoClass);
+									grDetailMap.put("name", nameClass);
+									grDetailMap.put("std", stdClass);
+									grDetailMap.put("div", divClass);
+									grDetailMap.put("feeStatus", "Pending");
+									grDetailMap.put("paymentMode", paymentMode);
+									if(!paymentMode.equalsIgnoreCase("Cash")){
+										grDetailMap.put("bank", bank);
+										grDetailMap.put("chequeDDNo", cheque_dd_no);
+										grDetailMap.put("chequeDDDate", chequeDD_date);
+									}
+									grDetailMap.put("receiptNo", count+"");
+									selectedStudentMap.put(grNoClass, grDetailMap);
+									
+									FeeReceiptPDF.getFeeReceiptPDF(sessionData, feesPaymentMap, penaltyAmount, bank, cheque_dd_no, paymentMode, grNoClass, 
+											nameClass, stdClass, divClass, academicYearClass, "Pending", totalAmount, chequeDD_date, concessionMap, 
+											concessionAmount, categoryClass, count, rollNoClass, feesForMonths, selectedStudentMap, headerRadioClass, 
+											studentOptMap, receiptShortName, null, frequencyClass, backDate, remark, "", balanceAmount, totalBalanceFromDB);
+//									searchStudentMap.remove(grNoClass);
+									frame.setVisible(false);
+									new FeesView(sessionData, grNoClass, stdClass, divClass, nameClass, rollNoClass, searchStudentMap, section, academicYearClass, 
+											categoryClass, feesHeadMap, maxFrequencyClass+"", frequencyClass, subFrequencyClass, contact1Class, contact2Class, 
+											oldAcademicClass, oldStdClass, headerRadioClass);
+								}
+							} catch (Exception ex) {
+								logger.error("updateCountData Exception= " + ex);
+							}
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Make the required changes before payment.");
+						}
 					}
 				}
 			}
@@ -2344,7 +2354,7 @@ public class FeesView extends JFrame {
     
     private static void rePrintReceipt(String receiptSel) {
     	String feeType = "", feeTypeWithMonth = "", feeMonth = "", feeAmount = "", paidDate = "", freqFromMap = "", paymentMode = "", 
-    			bank = "", cheque_dd_no = "", chequeDD_date = "", feesForMonths = "", remark = "", status = "";
+    			bank = "", cheque_dd_no = "", chequeDD_date = "", feesForMonths = "", remark = "", status = "", generatedBy = "";
     	Double totalAmount = 0.0, concession = 0.0, penalty = 0.0, balanceAmount = 0.0, prevBalanceAmount = 0.0;
     	int freqDivisor = 0;
     	LinkedHashMap<String, LinkedHashMap<String, String>> feesPaymentReceiptMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
@@ -2407,7 +2417,9 @@ public class FeesView extends JFrame {
 					if(bankDetails.length > 11) {
 						prevBalanceAmount = Double.parseDouble(bankDetails[11].toString().trim());
 					}
-					
+					if(bankDetails.length > 12) {
+						generatedBy = bankDetails[12].toString().trim();
+					}
 				}
 				totalAmount = totalAmount + Double.parseDouble(feeAmount);
 				concession = concession + Double.parseDouble(bankDetails[5].toString());

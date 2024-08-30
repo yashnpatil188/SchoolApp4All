@@ -1586,7 +1586,7 @@ public class Common {
 		}
 	}
 
-	// ////////Get promote year/////////////////
+	// ////////Get previous year/////////////////
 	public static String getPreviousYear(SessionData sessionData, String currAcademicYear) {
 
 		String retPreviousYear = "";
@@ -1599,6 +1599,22 @@ public class Common {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			previousYearDate = sdf.format(cal.getTime());
 			retPreviousYear = getAcademicYear(sessionData,previousYearDate);
+			return retPreviousYear;
+		} catch (Exception e) {
+			logger.error(e);
+			return retPreviousYear;
+		}
+	}
+	
+	// ////////Get previous year/////////////////
+	public static String getPreviousYearFromSelected(SessionData sessionData, String selAcademicYear) {
+
+		String retPreviousYear = "";
+		try {
+
+			String previousYear = (Integer.parseInt(selAcademicYear.substring(0, selAcademicYear.indexOf("-")))-1) + "";
+			retPreviousYear = previousYear + "-" + selAcademicYear.substring(2, 4);
+
 			return retPreviousYear;
 		} catch (Exception e) {
 			logger.error(e);
@@ -1828,7 +1844,9 @@ public class Common {
 
 		if (!std.equalsIgnoreCase("IX") && !std.equalsIgnoreCase("X") && !std.equalsIgnoreCase("XI")
 				&& !std.equalsIgnoreCase("XII")) {
-			if (percentageObtained >= 91) {
+			if (percentageObtained > 100) {
+				retGrade = "% greater than 100";
+			} else if (percentageObtained >= 91) {
 				retGrade = "A-1";
 			} else if (percentageObtained >= 81 && percentageObtained < 91) {
 				retGrade = "A-2";
@@ -2501,6 +2519,14 @@ public class Common {
 			retText = retText.replace("&", "$38$");
 		}
 		
+		if (retText.contains("\n")) {
+			retText = retText.replace("\n", "$39$");
+		}
+		
+		if (retText.contains("xxxx")) {
+			retText = retText.replace("xxxx", "$40$");
+		}
+		
 		if (retText.contains("'")) {
 			retText = retText.replace("'", "~");
 		}
@@ -2524,7 +2550,6 @@ public class Common {
 		if (retText.contains("/")) {
 			retText = retText.replace("/", "$47$");
 		}
-		
 		return retText;
 	}
 
@@ -2540,6 +2565,14 @@ public class Common {
 		
 		if (retText.contains("$38$")) {
 			retText = retText.replace("$38$", "&");
+		}
+		
+		if (retText.contains("$39$")) {
+			retText = retText.replace("$39$", "\n");
+		}
+		
+		if (retText.contains("$40$")) {
+			retText = retText.replace("$40$", "xxxx");
 		}
 		
 		if (retText.contains("$47$")) {
@@ -2613,12 +2646,13 @@ public class Common {
 
 		try {
 			subjectConvertMarks = (LinkedHashMap) subjectConvertMap.get(subjectName);
+			
 		if (subjectTypeMarks != null && !subjectTypeMarks.equalsIgnoreCase("null") && !subjectTypeMarks.trim().equalsIgnoreCase("") && 
 				!subjectTypeMarks.equalsIgnoreCase("AB") && !subjectTypeMarks.equalsIgnoreCase("MG")) {
-				if (!maxMarksforSubjectType.trim().equalsIgnoreCase("0")) {
+				if (Double.parseDouble(maxMarksforSubjectType) > 0) {
 					convertMarksTo = Double.parseDouble((String) subjectConvertMarks
 							.get(semester.toLowerCase() + "_" + examType.toLowerCase() + "_ct"));
-					if (convertMarksTo >= 0.0) {// removed - && stdInt > 8
+					if (convertMarksTo >= 0.0 && Double.parseDouble(maxMarksforSubjectType) > 0) {// removed - && stdInt > 8
 						convertRatio = convertMarksTo / Double.parseDouble(maxMarksforSubjectType);
 						convertedMarksDouble = Double.parseDouble(subjectTypeMarks) * convertRatio;
 						convertedMarks = convertedMarksDouble;
@@ -2631,7 +2665,8 @@ public class Common {
 			convertedMarks = Double.parseDouble(subjectTypeMarks);
 		}
 
-		return roundUp(convertedMarks);
+//		return roundUp(convertedMarks); removed as roundup is adding one extra marks in result
+		return convertedMarks;
 	}
 
 	public String getDriveSerialNumber() {
@@ -4374,6 +4409,10 @@ public class Common {
 	
 	public static String roundUpString(String strNumber) {
 		
+		if(!validateNumber(strNumber)) {
+			return strNumber;
+		}
+		
 		double d = Double.parseDouble(strNumber);
 		long retDouble = 0;
 		if(d > 0 && d <= 1){
@@ -4573,10 +4612,17 @@ public class Common {
 //					marksFromDb.equalsIgnoreCase("MG")) && leftDataMap.get(grNo) != null){
 //				return "-";
 //			}
-		if((marksFromDb.equalsIgnoreCase("0") || marksFromDb.equalsIgnoreCase("AB") || 
+		if(marksFromMap == null || marksFromMap.equalsIgnoreCase("null")) {
+//			return "-";
+		}
+		else if(!marksFromMap.equalsIgnoreCase("0") && (marksFromDb.equalsIgnoreCase("0") || marksFromDb.equalsIgnoreCase("AB") || 
+				marksFromDb.equalsIgnoreCase("MG"))){
+//			return "-"; //added after result flag
+		} else if((marksFromDb.equalsIgnoreCase("0") || marksFromDb.equalsIgnoreCase("AB") || 
 				marksFromDb.equalsIgnoreCase("MG"))){
 			return "-";
 		}
+		
 		if(marksFromMap != null){
 			if(validateNumber(marksFromDb) && validateNumber(marksFromMap)){
 				retMarks =  (Double.parseDouble(marksFromDb)+Double.parseDouble(marksFromMap))+"";

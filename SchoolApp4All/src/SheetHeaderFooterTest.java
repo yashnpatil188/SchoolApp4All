@@ -109,7 +109,7 @@ public class SheetHeaderFooterTest {
     //Close and free allocated memory 
     workbook.close(); 
     
-    System.out.println("Header Footer write completed in excel.");
+    // System.out.println("Header Footer write completed in excel.");
   }
 
 }

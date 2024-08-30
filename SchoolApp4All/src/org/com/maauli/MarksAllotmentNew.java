@@ -559,11 +559,11 @@ public class MarksAllotmentNew extends JFrame {
 		remarkButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				List findLCList = new ArrayList();
 				frame.setVisible(false);
-				List markList = new ArrayList();
-				RemarksEntry remarksEntryObject = RemarksEntry.getInstance();
-				remarksEntryObject.getRemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "", "", "",
-						section, user_name, user_role, "", "", "");
+				panelHome.removeAll();///to remve entire panel
+				new RemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
+	                    "", "", section, user_name, user_role, "", "", "");
 			}
 		});
 
@@ -1914,7 +1914,7 @@ public class MarksAllotmentNew extends JFrame {
 						startWidthField = startWidthField + 60;
 						sem1IntTotal_text[i].setEditable(false);
 						sem1IntTotal_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-						sem1IntTotal_text[i].setBounds(startWidthField, j + 12, 40, 20);
+						sem1IntTotal_text[i].setBounds(startWidthField, j + 12, 50, 20);
 
 						// startWidthField = startWidthField + 60;
 						// sem1Assign_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
@@ -1948,7 +1948,7 @@ public class MarksAllotmentNew extends JFrame {
 						startWidthField = startWidthField + 60;
 						sem1GTotal_text[i].setEditable(false);
 						sem1GTotal_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-						sem1GTotal_text[i].setBounds(startWidthField, j + 12, 40, 20);
+						sem1GTotal_text[i].setBounds(startWidthField, j + 12, 50, 20);
 
 						// sem1Oral1_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 						// sem1Oral1_text[i].setBounds(startWidthField, j + 12, 40, 20);
@@ -2041,7 +2041,7 @@ public class MarksAllotmentNew extends JFrame {
 						startWidthField = startWidthField + 60;
 						sem2GTotal_text[i].setEditable(false);
 						sem2GTotal_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-						sem2GTotal_text[i].setBounds(startWidthField, j + 12, 40, 20);
+						sem2GTotal_text[i].setBounds(startWidthField, j + 12, 50, 20);
 
 						// sem2Oral1_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 						// sem2Oral1_text[i].setBounds(startWidthField, j + 12, 40, 20);
@@ -2287,7 +2287,7 @@ public class MarksAllotmentNew extends JFrame {
 						startWidthField = startWidthField + 60;
 						 sem1IntTotalCt_text[i].setEditable(false);
 						sem1IntTotalCt_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-						sem1IntTotalCt_text[i].setBounds(startWidthField, j + 12, 40, 20);
+						sem1IntTotalCt_text[i].setBounds(startWidthField, j + 12, 50, 20);
 
 						// sem1PresCt_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 						// sem1PresCt_text[i].setBounds(startWidthField, j + 12, 40, 20);
@@ -2314,7 +2314,7 @@ public class MarksAllotmentNew extends JFrame {
 						startWidthField = startWidthField + 60;
 						sem1GTotalCt_text[i].setEditable(false);
 						sem1GTotalCt_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-						sem1GTotalCt_text[i].setBounds(startWidthField, j + 12, 40, 20);
+						sem1GTotalCt_text[i].setBounds(startWidthField, j + 12, 50, 20);
 
 						// sem1Oral1Ct_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 						// sem1Oral1Ct_text[i].setBounds(startWidthField, j + 12, 40, 20);
@@ -2407,7 +2407,7 @@ public class MarksAllotmentNew extends JFrame {
 						startWidthField = startWidthField + 60;
 						sem2GTotalCt_text[i].setEditable(false);
 						sem2GTotalCt_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-						sem2GTotalCt_text[i].setBounds(startWidthField, j + 12, 40, 20);
+						sem2GTotalCt_text[i].setBounds(startWidthField, j + 12, 50, 20);
 
 						// sem2Oral1Ct_text[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 						// sem2Oral1Ct_text[i].setBounds(startWidthField, j + 12, 40, 20);

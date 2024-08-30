@@ -70,7 +70,7 @@ public class LoginDetails {
 				dbValidate.addBalanceFeeColumn(sessionData1);
 				dbValidate.update_max_allowed_packet(sessionData1);
 				tm = dbValidate.getAuthenticationDetails(sessionData, sessionData.getSchoolName());
-				if(!tm.get("valid_sn").toString().contains(commonObj.getDriveSerialNumber())){
+				if(tm.size() < 1 || !tm.get("valid_sn").toString().contains(commonObj.getDriveSerialNumber())){
 					f.setVisible(false);
 					validateAuthentication = false;
 					commonObj.showMessageDialog("This machine is not registered with Maauli Software Solutions.");

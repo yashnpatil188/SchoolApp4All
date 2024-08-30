@@ -16,7 +16,7 @@ public class ListFilesUtil {
         //get all the files from a directory
         File[] fList = directory.listFiles();
         for (File file : fList){
-            System.out.println(file.getName());
+            // System.out.println(file.getName());
         }
     }
     /**
@@ -29,7 +29,7 @@ public class ListFilesUtil {
         File[] fList = directory.listFiles();
         for (File file : fList){
             if (file.isFile()){
-                System.out.println(file.getName());
+                // System.out.println(file.getName());
             }
         }
     }
@@ -43,7 +43,7 @@ public class ListFilesUtil {
         File[] fList = directory.listFiles();
         for (File file : fList){
             if (file.isDirectory()){
-                System.out.println(file.getName());
+                // System.out.println(file.getName());
             }
         }
     }
@@ -57,7 +57,7 @@ public class ListFilesUtil {
         File[] fList = directory.listFiles();
         for (File file : fList){
             if (file.isFile()){
-                System.out.println(file.getAbsolutePath());
+                // System.out.println(file.getAbsolutePath());
             } else if (file.isDirectory()){
                 listFilesAndFilesSubDirectories(file.getAbsolutePath());
             }
@@ -73,10 +73,10 @@ public class ListFilesUtil {
     	File dir = new File(dirPath);
     	String[] files = dir.list();
     	if (files.length == 0) {
-    	    System.out.println("The directory is empty");
+    	    // System.out.println("The directory is empty");
     	} else {
     	    for (String aFile : files) {
-    	        System.out.println(aFile);
+    	        // System.out.println(aFile);
     	    }
     	}
     }

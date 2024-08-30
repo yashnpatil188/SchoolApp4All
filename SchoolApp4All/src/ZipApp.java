@@ -37,11 +37,11 @@ public class ZipApp
     	FileOutputStream fos = new FileOutputStream(zipFile);
     	ZipOutputStream zos = new ZipOutputStream(fos);
     		
-    	System.out.println("Output to Zip : " + zipFile);
+    	// System.out.println("Output to Zip : " + zipFile);
     		
     	for(String file : this.fileList){
     			
-    		System.out.println("File Added : " + file);
+    		// System.out.println("File Added : " + file);
     		ZipEntry ze= new ZipEntry(file);
         	zos.putNextEntry(ze);
                
@@ -60,7 +60,7 @@ public class ZipApp
     	//remember close it
     	zos.close();
           
-    	System.out.println("Done");
+    	// System.out.println("Done");
     }catch(IOException ex){
        ex.printStackTrace();   
     }

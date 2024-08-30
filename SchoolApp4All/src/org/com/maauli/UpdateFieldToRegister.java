@@ -420,7 +420,7 @@ public class UpdateFieldToRegister {
 				        	field_value = "'"+field_value+"'";
 				            break;
 			         default :
-			            System.out.println("Invalid value");
+			            // System.out.println("Invalid value");
 			      }
 					
 					/*if(field_name_From_Excel.equalsIgnoreCase("Hobbies")){
@@ -499,11 +499,11 @@ public class UpdateFieldToRegister {
 						//====hs_general_register=========//
 						String sql = "UPDATE hs_general_register SET "+field_name+" = "+field_value+" "
 								+ "where GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-						System.out.println("sql::" + sql);
+						// System.out.println("sql::" + sql);
 		
 						pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(sql);
 						pstm.execute();
-						System.out.println("Import rows " + i+" for hs_general_register");
+						// System.out.println("Import rows " + i+" for hs_general_register");
 					}
 					if(field_name.equalsIgnoreCase("Academic_Year")){
 						String updateAcademicToPrevious = "";
@@ -514,7 +514,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -526,7 +526,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -538,7 +538,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -550,7 +550,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -562,7 +562,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -574,7 +574,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -586,7 +586,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -598,7 +598,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -610,7 +610,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -622,7 +622,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -634,7 +634,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -646,7 +646,7 @@ public class UpdateFieldToRegister {
 							pstm.execute();
 						}
 						catch (Exception e) {
-							System.out.println("Exception "+e);
+							// System.out.println("Exception "+e);
 							errors = " with some errors in file";
 							commonObj.writeToText(currentDirectory, fileName, GR_NO + " => academic year : " +e);
 						}
@@ -654,7 +654,7 @@ public class UpdateFieldToRegister {
 					
 //					sessionData.getConnection().commit();
 				} catch (Exception e) {
-					System.out.println("Exception "+e);
+					// System.out.println("Exception "+e);
 					errors = " with some errors in file";
 					commonObj.writeToText(currentDirectory, fileName, gr_no_class + " => " +e);
 				}
@@ -662,7 +662,7 @@ public class UpdateFieldToRegister {
 			pstm.close();
 			sessionData.getConnection().close();
 			input.close();
-			System.out.println("Success import excel to mysql table");
+			// System.out.println("Success import excel to mysql table");
 			JOptionPane.showMessageDialog(null, "Excel inserted successfully.."+errors);
 			try {
 				String fileAddress = currentDirectory+"\\"+fileName;
@@ -675,22 +675,22 @@ public class UpdateFieldToRegister {
 						process.waitFor();
 					}
 				} else {
-					System.out.println("File not found");
+					// System.out.println("File not found");
 				}
-				System.out.println("Done");
+				// System.out.println("Done");
 			} catch (Exception e) {
-				System.out.println(":: -----Exception---- ::\n"+e);
+				// System.out.println(":: -----Exception---- ::\n"+e);
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("Exception "+e);
+			// System.out.println("Exception "+e);
 			commonObj.writeToText(currentDirectory, fileName, gr_no_class + " => " +e);
 			JOptionPane.showMessageDialog(null, "D drive DATA.xls (The system cannot find the file specified)");
 		} catch (SQLException e) {
-			System.out.println("Exception "+e);
+			// System.out.println("Exception "+e);
 			commonObj.writeToText(currentDirectory, fileName, gr_no_class + " => " +e);
 			JOptionPane.showMessageDialog(null, "Error in import :: "+e);
 		} catch (Exception e) {
-			System.out.println("Exception "+e);
+			// System.out.println("Exception "+e);
 			commonObj.writeToText(currentDirectory, fileName, gr_no_class + " => " +e);
 			JOptionPane.showMessageDialog(null, "Error in import :: "+e);
 		}

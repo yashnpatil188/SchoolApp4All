@@ -47,7 +47,7 @@ public class AdmissionRegisterPDF {
 	/* Other methods protected by singleton-ness */
 	protected static void getAdmissionRegisterPDF(SessionData sessionData, List<String> passGrList) {
 
-		String fileName = "", fileAddress = "", schoolName = "", school1 = "", school2 = "", schoolTaluka = "", schoolDistrict = "";
+		String fileName = "", fileAddress = "", schoolName = "", school1 = "", school2 = "", schoolTaluka = "", schoolDistrict = "", footer = "";
 		Common cm = new Common();
 		LinkedHashMap<String, LinkedHashMap<String, String>> studentDetailsMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		LinkedHashMap<String, String> grDetailMap = new LinkedHashMap<String, String>();
@@ -62,6 +62,7 @@ public class AdmissionRegisterPDF {
 			schoolName = sessionData.getConfigMap().get("BONAFIDE_HEADER_"+sessionData.getAppType());
 			schoolTaluka = sessionData.getConfigMap().get(sessionData.getAppType()+"_TALUKA");
 			schoolDistrict = sessionData.getConfigMap().get(sessionData.getAppType()+"_DISTRICT");
+			footer = sessionData.getConfigMap().get("FOOTER_"+sessionData.getAppType());
 			
 			List schoolList = cm.breakSentence(schoolName, 35);
 			if(schoolList != null){
@@ -466,7 +467,7 @@ public class AdmissionRegisterPDF {
 				paragraph8.setAlignment(Element.ALIGN_LEFT);
 				paragraph8.setSpacingBefore(-16);
 
-				Chunk chunk9 = new Chunk("Head Master");
+				Chunk chunk9 = new Chunk(footer);
 				Font font9 = FontFactory.getFont("TIMES_ROMAN");
 				font9.setStyle(Font.BOLD);
 				font9.setSize(12);

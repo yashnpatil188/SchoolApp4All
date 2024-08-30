@@ -448,11 +448,16 @@ public class Academic
 		remarkButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+//            	frame.setVisible(false);
+//                List markList = new ArrayList();
+//                RemarksEntry remarksEntryObject = RemarksEntry.getInstance();
+//                remarksEntryObject.getRemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
+//                    "", "", section, user_name, user_role, "", "", "");
+                
             	frame.setVisible(false);
                 List markList = new ArrayList();
-                RemarksEntry remarksEntryObject = RemarksEntry.getInstance();
-                remarksEntryObject.getRemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
-                    "", "", section, user_name, user_role, "", "", "");
+                new RemarksEntry(sessionData, "", "", false, "", "", "", "", "", "", "",
+	                    "", "", section, user_name, user_role, "", "", "");
             }
         });
 		

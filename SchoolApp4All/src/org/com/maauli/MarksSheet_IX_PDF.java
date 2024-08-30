@@ -44,14 +44,16 @@ public class MarksSheet_IX_PDF {
 
 		System.gc();
 		fileOpenFlag = true;
-		boolean isMg = false, isDoubleLine = false, lastPage = true;
+		boolean isMg = false, isDoubleLine = false, lastPage = true, marks_flag_std = false, result_sem_std_flag = false;
 		int displayRows= 25;
-		String examHeader = "", sem = "", subMarks = "", subjectMarksDisp = "", obtainedStr = "", gradeMarks = "";
+		String examHeader = "", sem = "", semOutofMarks = "", subMarks = "", subjectMarksDisp = "", obtainedStr = "", gradeMarks = "";
 		double total = 0, totalObtained = 0, subjectMarks = 0, subjectTotal = 0, percent = 0;
 		int subjectHeadCount = maxSubMarks.size(), addRow = 0;
 		String subTitle = "", grNo = "", subGrade = "", totalGrade = "", outOfMarks = "", finalSubMarks = "0";
 		String bonafide_header = sessionData.getConfigMap().get("BONAFIDE_HEADER_" + sessionData.getAppType());
 		String bonafide_header_0 = sessionData.getConfigMap().get("BONAFIDE_HEADER_0_" + sessionData.getAppType());
+//		boolean result_final_sem2 = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_FINAL_SEM2_"+std.replaceAll(" ", "_")));
+		
 		if(!bonafide_header_0.trim().equalsIgnoreCase("")){
 			bonafide_header_0 = bonafide_header_0 + " \n";
 //			displayRows = 25;
@@ -59,15 +61,23 @@ public class MarksSheet_IX_PDF {
 
 		try {
 			if (exam.equalsIgnoreCase("Semester 1")) {
-				sem = "sem1";
+				sem = semOutofMarks = "sem1";
 				examHeader = "FIRST SEMESTER";
 			} else if (exam.equalsIgnoreCase("Semester 2")) {
-				sem = "sem2";
+				sem = semOutofMarks = "sem2";
 				examHeader = "SECOND SEMESTER";
 			} else if (exam.equalsIgnoreCase("Final")) {
-				sem = "final";
+				sem = semOutofMarks = "final";
 				examHeader = "FINAL EXAM";
 			}
+			
+			marks_flag_std = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_MARKS_"+std.replaceAll(" ", "_")));
+			result_sem_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem.toUpperCase()+"_"+std.replaceAll(" ", "_")));
+			
+//			if(!marks_flag_std && result_sem_std_flag) {
+//				semOutofMarks = "sem2";
+//			}
+			
 			path = commonObj.createTodayFolder(
 					commonObj.getDriveName() + sessionData.getConfigMap().get("REPORT_PDF_PATH_" + sessionData.getDBName()), true)
 					+ "/";
@@ -236,6 +246,7 @@ public class MarksSheet_IX_PDF {
 				subTitle = subTitle.replaceFirst("_", " ");
 				subTitle = subTitle.replace("_", " ");
 				subTitle = subTitle.replace("AND", "&");
+				
 				PdfPCell cell305 = new PdfPCell(
 						new Paragraph(subTitle, FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 				cell305.setColspan(1);
@@ -316,9 +327,13 @@ public class MarksSheet_IX_PDF {
 				LinkedHashMap<String, String> subjectMax = new LinkedHashMap<String, String>();
 				subTitle = me.getKey().toString();
 				subjectMax = (LinkedHashMap<String, String>) me.getValue();
-				gradeMarks = subjectMax.get("grade_marks");
-				outOfMarks = subjectMax.get(sem+"_"+subTitle+"_total");
-				if(outOfMarks.contains(".") && Double.parseDouble(outOfMarks) > 0){
+				gradeMarks = subjectMax.get("marks_grade");
+				outOfMarks = subjectMax.get(semOutofMarks.toUpperCase()+"_"+subTitle+"_total");
+				
+				if(gradeMarks.equalsIgnoreCase("GRADE") && !marks_flag_std && result_sem_std_flag) {
+					outOfMarks = " ";
+				}
+				else if(outOfMarks.contains(".") && Double.parseDouble(outOfMarks) > 0){
 					outOfMarks = outOfMarks.substring(0, outOfMarks.indexOf("."));
 				} else if(Double.parseDouble(outOfMarks) == 0){
 					outOfMarks = "-";
@@ -375,8 +390,13 @@ public class MarksSheet_IX_PDF {
 				lastPage = true;
 				LinkedHashMap<String, String> grDetail = new LinkedHashMap<String, String>();
 				LinkedHashMap<String, String> grResultMap = new LinkedHashMap<String, String>();
+				String marksStr = "";
 				Map.Entry me = (Map.Entry) m.next();
 				grNo = me.getKey().toString();
+				System.out.println(grNo);
+				if(grNo.equalsIgnoreCase("0022494")) {
+					System.out.println(grNo);
+				}
 				grDetail = (LinkedHashMap<String, String>) me.getValue();
 				grResultMap = (LinkedHashMap<String, String>) resultMap.get(grNo);
 				optionalSubject = studentOptSubAllotMap.get(grNo) == null ? "" :studentOptSubAllotMap.get(grNo).get("optionalSubject");
@@ -434,14 +454,169 @@ public class MarksSheet_IX_PDF {
 						isMg = false;
 						Map.Entry meSubject = (Map.Entry) p.next();
 						subTitle = meSubject.getKey().toString();
-						
+						System.out.println(subTitle);
+						gradeMarks = maxSubMarks.get(subTitle).get("marks_grade");
+								
 						if(!optionalSubject.contains(subTitle+"_YES") || optionalSubject.equalsIgnoreCase("")){
 							subjectCount = subjectCount + 1.0;
 						}
 						
-						if(!sem.equalsIgnoreCase("final")){
-							subjectMarks = Double.parseDouble(grDetail.get(subTitle + "_MARKS") == null ? "0" : grDetail.get(subTitle + "_MARKS"));
-						} else{
+						if(!sem.equalsIgnoreCase("final") && gradeMarks.equalsIgnoreCase("MARKS")){
+//							subjectMarks = Double.parseDouble(grDetail.get(subTitle + "_MARKS") == null ? "0" : grDetail.get(subTitle + "_MARKS"));
+							finalSubMarks = grResultMap.get(subTitle + "_"+sem.toUpperCase()) == null ? "0" : grResultMap.get(subTitle + "_"+sem.toUpperCase());
+							
+							System.out.println(finalSubMarks);
+//							if(!stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XI")
+//									&& !stdClass.equalsIgnoreCase("XII") && !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
+							if(!marks_flag_std) {
+								if(finalSubMarks.contains("~")){
+									subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.indexOf("~"));
+								}
+								if(finalSubMarks.contains("AB") || finalSubMarks.contains("MG")){
+									if(!sem.equalsIgnoreCase("FINAL")){
+										if(finalSubMarks.contains("+")) {
+											subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.lastIndexOf("+"));
+										}
+										else if(finalSubMarks.contains("(")) {
+											subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.lastIndexOf("("));
+										}
+									}
+									else if(sem.equalsIgnoreCase("FINAL")){
+										if(finalSubMarks.contains("+")) {
+											subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.lastIndexOf("+"));
+										}
+										else if(finalSubMarks.contains("(")) {
+											subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.lastIndexOf("("));
+										}
+									}
+									if(finalSubMarks.contains("(")){
+										subjectMarksDisp = finalSubMarks + ")";
+									}
+								}
+								else if(finalSubMarks.contains("(") && finalSubMarks.contains("+")){
+//									subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.indexOf("+")) + " " +finalSubMarks.substring(finalSubMarks.indexOf("("));
+									subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.indexOf("("));
+									if(subjectMarksDisp.contains("(") && !subjectMarksDisp.contains("+")){
+										subjectMarksDisp = subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("("));
+									}
+								}
+								else if(finalSubMarks.contains("(F)")){
+									subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.indexOf("+")) + " " +finalSubMarks.substring(finalSubMarks.indexOf("("));
+								}
+								else if(finalSubMarks.contains("(") && !finalSubMarks.contains("+")){
+									subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.indexOf("("));
+								}
+								else{
+									subjectMarksDisp = finalSubMarks;
+								}
+							}
+							else
+							{
+								if(!finalSubMarks.equalsIgnoreCase("NA") && !commonObj.validateNumber(finalSubMarks) && 
+										finalSubMarks.contains("(")){
+									subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.indexOf("("));
+									if(subjectMarksDisp.contains("+") && !sem.equalsIgnoreCase("Final")){
+										subjectMarksDisp = subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"));
+									} 
+//									else if(subjectMarksDisp.contains("+") && sem.equalsIgnoreCase("Final") && result_final_sem2_std_flag){
+//										subjectMarksDisp = subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"));
+//									}
+									String dispPassStatus = finalSubMarks.substring(finalSubMarks.indexOf("(")+1, finalSubMarks.indexOf("#"));
+									String dispReason = finalSubMarks.substring(finalSubMarks.indexOf("#")+1, finalSubMarks.indexOf("@"));
+									String dispAbsentMarks = finalSubMarks.substring(finalSubMarks.indexOf("@")+1, finalSubMarks.indexOf(")"));
+									if(dispReason.equalsIgnoreCase("MG")){
+										subjectMarksDisp = subjectMarksDisp + "(MG)";
+									}
+									else if(dispReason.equalsIgnoreCase("AB") && !dispAbsentMarks.equalsIgnoreCase("NA") && !sem.equalsIgnoreCase("FINAL") && 
+											Double.parseDouble(dispAbsentMarks) == Double.parseDouble(maxSubMarks.get(subTitle).get(sem.toUpperCase() + "_" +subTitle + "_total"))){
+										subjectMarksDisp = "AB";
+									}
+									else if(dispReason.equalsIgnoreCase("AB") && !dispAbsentMarks.equalsIgnoreCase("NA") && 
+											sem.equalsIgnoreCase("FINAL") && !subjectMarksDisp.contains("+") && Double.parseDouble(subjectMarksDisp) == 0 && 
+											Double.parseDouble(dispAbsentMarks) == Double.parseDouble(maxSubMarks.get(subTitle).get(sem.toUpperCase() + "_" + subTitle + "_total"))){
+										subjectMarksDisp = "AB";
+									}
+									else if(dispPassStatus.contains("F")){
+										subjectMarksDisp = subjectMarksDisp + "(F)";
+									}
+								}
+								else{
+									subjectMarksDisp = finalSubMarks;
+								}
+							}
+							//don't display AB
+							if(subjectMarksDisp.equalsIgnoreCase("AB(F)")){
+								subjectMarksDisp = "AB";
+							}
+							
+//							System.out.println(subjectMarksDisp);
+							if(commonObj.validateNumber(subjectMarksDisp)) {
+								subjectMarksDisp = ((int)(Double.parseDouble(subjectMarksDisp)))+"";
+							} else if(subjectMarksDisp.contains("+")) {
+								if(commonObj.validateNumber(subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"))) && 
+										commonObj.validateNumber(subjectMarksDisp.substring(subjectMarksDisp.indexOf("+")+1))) {
+									subjectMarksDisp = ((int)(Double.parseDouble(subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"))))) + 
+											"+" + ((int)(Double.parseDouble(subjectMarksDisp.substring(subjectMarksDisp.indexOf("+")+1))));
+								}
+							} else if(subjectMarksDisp.contains("(F)") && commonObj.validateNumber(subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("(")))) {
+								subjectMarksDisp = (int)(Double.parseDouble(subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("("))))+"";
+								subjectMarksDisp = subjectMarksDisp+"(F)";
+							}
+						} 
+						else if(!sem.equalsIgnoreCase("final") && gradeMarks.equalsIgnoreCase("GRADE")){
+							finalSubMarks = grResultMap.get(subTitle + "_"+sem.toUpperCase()) == null ? "0" : grResultMap.get(subTitle + "_"+sem.toUpperCase());
+							if(finalSubMarks.contains("MG")){
+								isMg = true;
+								if(!isDoubleLine){
+									addRow = addRow + 1;
+								}
+							}
+							if(!finalSubMarks.equalsIgnoreCase("NA") && finalSubMarks.contains("(")){
+								finalSubMarks = finalSubMarks.substring(0, finalSubMarks.indexOf("("));
+							}
+							if(finalSubMarks.contains("+")) {
+								finalSubMarks = finalSubMarks.substring(0, finalSubMarks.indexOf("+"));
+							}
+							if(commonObj.validateNumber(finalSubMarks)){
+								subjectMarks = Double.parseDouble(finalSubMarks);
+							}
+						}
+						else if(sem.equalsIgnoreCase("final") && gradeMarks.equalsIgnoreCase("MARKS") && !marks_flag_std && result_sem_std_flag){
+							marksStr = grResultMap.get(subTitle + "_"+semOutofMarks.toUpperCase()) == null ? "0" : grResultMap.get(subTitle + "_"+semOutofMarks.toUpperCase());
+							if(marksStr.contains("(")) {
+								if(marksStr.contains("+")) {
+									subjectMarks = Double.parseDouble(marksStr.substring(0, marksStr.indexOf("+")));
+								}
+								else if(!marksStr.startsWith("AB")) {
+									subjectMarks = Double.parseDouble(marksStr.substring(0, marksStr.indexOf("(")));
+								}
+//								else {
+//									subjectMarks = Double.parseDouble(marksStr.substring(0,  marksStr.indexOf("("));
+//								}
+							}
+							else {
+								subjectMarks = Double.parseDouble(grResultMap.get(subTitle + "_"+semOutofMarks) == null ? "0" : grResultMap.get(subTitle + "_"+semOutofMarks.toUpperCase()));
+							}
+						}
+						else if(sem.equalsIgnoreCase("final") && gradeMarks.equalsIgnoreCase("GRADE") && !marks_flag_std && result_sem_std_flag){
+							finalSubMarks = grResultMap.get(subTitle + "_"+sem.toUpperCase()) == null ? "0" : grResultMap.get(subTitle + "_"+sem.toUpperCase());
+							if(finalSubMarks.contains("MG")){
+								isMg = true;
+								if(!isDoubleLine){
+									addRow = addRow + 1;
+								}
+							}
+							if(!finalSubMarks.equalsIgnoreCase("NA") && finalSubMarks.contains("(")){
+								finalSubMarks = finalSubMarks.substring(0, finalSubMarks.indexOf("("));
+							}
+							if(finalSubMarks.contains("+")) {
+								finalSubMarks = finalSubMarks.substring(0, finalSubMarks.indexOf("+"));
+							}
+							if(commonObj.validateNumber(finalSubMarks)){
+								subjectMarks = Double.parseDouble(finalSubMarks);
+							}
+						}
+						else{
 							finalSubMarks = grResultMap.get(subTitle + "_FINAL") == null ? "0" : grResultMap.get(subTitle + "_FINAL");
 							if(finalSubMarks.contains("MG")){
 								isMg = true;
@@ -449,29 +624,91 @@ public class MarksSheet_IX_PDF {
 									addRow = addRow + 1;
 								}
 							}
-							if(!finalSubMarks.equalsIgnoreCase("NA")){
-								finalSubMarks = finalSubMarks.substring(0, finalSubMarks.indexOf("("));
+							
+							if(!finalSubMarks.equalsIgnoreCase("NA") && !commonObj.validateNumber(finalSubMarks) && 
+									finalSubMarks.contains("(")){
+								subjectMarksDisp = finalSubMarks.substring(0, finalSubMarks.indexOf("("));
+								if(subjectMarksDisp.contains("+") && !sem.equalsIgnoreCase("Final")){
+									subjectMarksDisp = subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"));
+								} 
+//								else if(subjectMarksDisp.contains("+") && sem.equalsIgnoreCase("Final") && result_final_sem2_std_flag){
+//									subjectMarksDisp = subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"));
+//								}
+								String dispPassStatus = finalSubMarks.substring(finalSubMarks.indexOf("(")+1, finalSubMarks.indexOf("#"));
+								String dispReason = finalSubMarks.substring(finalSubMarks.indexOf("#")+1, finalSubMarks.indexOf("@"));
+								String dispAbsentMarks = finalSubMarks.substring(finalSubMarks.indexOf("@")+1, finalSubMarks.indexOf(")"));
+								if(dispReason.equalsIgnoreCase("MG")){
+									subjectMarksDisp = subjectMarksDisp + "(MG)";
+								}
+								else if(dispReason.equalsIgnoreCase("AB") && !dispAbsentMarks.equalsIgnoreCase("NA") && !sem.equalsIgnoreCase("FINAL") && 
+										Double.parseDouble(dispAbsentMarks) == Double.parseDouble(maxSubMarks.get(subTitle).get(sem.toUpperCase() + "_" +subTitle + "_total"))){
+									subjectMarksDisp = "AB";
+								}
+								else if(dispReason.equalsIgnoreCase("AB") && !dispAbsentMarks.equalsIgnoreCase("NA") && 
+										sem.equalsIgnoreCase("FINAL") && !subjectMarksDisp.equalsIgnoreCase("AB") && !subjectMarksDisp.contains("+") && Double.parseDouble(subjectMarksDisp) == 0 && 
+										Double.parseDouble(dispAbsentMarks) == Double.parseDouble(maxSubMarks.get(subTitle).get(sem.toUpperCase() + "_" + subTitle + "_total"))){
+									subjectMarksDisp = "AB";
+								}
+								else if(dispPassStatus.contains("F")){
+									subjectMarksDisp = subjectMarksDisp + "(F)";
+								}
 							}
-							if(commonObj.validateNumber(finalSubMarks)){
-								subjectMarks = Double.parseDouble(finalSubMarks);
+							
+							//don't display AB
+							if(subjectMarksDisp.equalsIgnoreCase("AB(F)")){
+								subjectMarksDisp = "AB";
+							}
+							
+//							System.out.println(subjectMarksDisp);
+							if(commonObj.validateNumber(subjectMarksDisp)) {
+								subjectMarksDisp = ((int)(Double.parseDouble(subjectMarksDisp)))+"";
+							} else if(subjectMarksDisp.contains("+")) {
+								if(commonObj.validateNumber(subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"))) && 
+										commonObj.validateNumber(subjectMarksDisp.substring(subjectMarksDisp.indexOf("+")+1))) {
+									subjectMarksDisp = ((int)(Double.parseDouble(subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"))))) + 
+											"+" + ((int)(Double.parseDouble(subjectMarksDisp.substring(subjectMarksDisp.indexOf("+")+1))));
+								}
+							} else if(subjectMarksDisp.contains("(F)") && commonObj.validateNumber(subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("(")))) {
+								subjectMarksDisp = (int)(Double.parseDouble(subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("("))))+"";
+								subjectMarksDisp = subjectMarksDisp+"(F)";
+							}
+							
+//							if(!finalSubMarks.equalsIgnoreCase("NA") && finalSubMarks.contains("(")){
+//								finalSubMarks = finalSubMarks.substring(0, finalSubMarks.indexOf("("));
+//							}
+							if(commonObj.validateNumber(subjectMarksDisp)){
+								subjectMarks = Double.parseDouble(subjectMarksDisp);
 							}
 						}
-						subjectTotal = Double.parseDouble(grDetail.get(subTitle + "_TOTAL") == null ? "0" : grDetail.get(subTitle + "_TOTAL"));
-						total = total + subjectTotal;
-						totalObtained = totalObtained + subjectMarks;
-						subGrade = commonObj.getGradeFromMarks(subjectTotal, subTitle, subjectMarks, std);
+						
+						if(gradeMarks.equalsIgnoreCase("MARKS")) {
+							subjectTotal = Double.parseDouble(grDetail.get(subTitle + "_TOTAL") == null ? "0" : grDetail.get(subTitle + "_TOTAL"));
+							total = total + subjectTotal;
+							totalObtained = totalObtained + subjectMarks;
+							subGrade = commonObj.getGradeFromMarks(subjectTotal, subTitle, subjectMarks, std);
+						}
+						else {
+							subGrade = finalSubMarks;
+						}
 
 						if(grDetail.get(subTitle + "_MARKS") == null && finalSubMarks.equalsIgnoreCase("0")){
 							subjectMarksDisp = "-";
 							subGrade = "-";
 						}
 						else{
-							if(commonObj.validateNumber(subjectMarks+"") && commonObj.validateNumber(finalSubMarks)){
-								subjectMarksDisp = String.format("%.0f", subjectMarks);
-							} else {
-								subjectMarksDisp = finalSubMarks;
+							if(gradeMarks.equalsIgnoreCase("MARKS")) {
+								if(commonObj.validateNumber(subjectMarks+"") && commonObj.validateNumber(finalSubMarks)){
+									subjectMarksDisp = String.format("%.0f", subjectMarks);
+								} 
+//								else {
+//									subjectMarksDisp = finalSubMarks;
+//								}
+							}
+							else {
+								subjectMarksDisp = subGrade+"";
 							}
 						}
+						
 						if(subjectMarksDisp.contains("+")){
 //							subjectMarksDisp = subjectMarksDisp.substring(0,  subjectMarksDisp.indexOf("+"));
 							if(!isDoubleLine && !subTitle.contains("_")){
@@ -479,6 +716,7 @@ public class MarksSheet_IX_PDF {
 								isDoubleLine = true;
 							}
 						}
+						
 						if(subjectMarksDisp.equalsIgnoreCase("NA")){
 							subjectMarksDisp = "-";
 						}
@@ -487,6 +725,23 @@ public class MarksSheet_IX_PDF {
 						if(isMg){
 							subjectMarksDisp = subjectMarksDisp+" MG";
 						}
+						else if(subjectMarksDisp.contains("(")) {
+							subjectMarksDisp = subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("("));
+//							if(subjectMarksDisp.contains("+")) {
+//								subjectMarksDisp = subjectMarksDisp;
+//							}
+						}
+						
+						if(commonObj.validateNumber(subjectMarksDisp)) {
+							subjectMarksDisp = ((int)(Double.parseDouble(subjectMarksDisp)))+"";
+						} else if(subjectMarksDisp.contains("+")) {
+							if(commonObj.validateNumber(subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"))) && 
+									commonObj.validateNumber(subjectMarksDisp.substring(subjectMarksDisp.indexOf("+")+1))) {
+								subjectMarksDisp = ((int)(Double.parseDouble(subjectMarksDisp.substring(0, subjectMarksDisp.indexOf("+"))))) + 
+										"+" + ((int)(Double.parseDouble(subjectMarksDisp.substring(subjectMarksDisp.indexOf("+")+1))));
+							}
+						}
+						
 						cell346 = new PdfPCell(new Paragraph(subjectMarksDisp,
 								FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 						cell346.setColspan(1);
