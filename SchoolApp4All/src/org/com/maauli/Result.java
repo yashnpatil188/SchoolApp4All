@@ -182,6 +182,8 @@ public class Result extends JFrame {
     static int app_header_2_fontSize = 0;
     static int app_header_2_widthSpace = 0;
     static int app_header_2_heightSpace = 0;
+    static boolean marks_flag_std = false;
+    static boolean result_final_sem2_std_flag = false;
 
 	@SuppressWarnings("unchecked")
 	public Result(SessionData sessionData1, String retGr_no, String retStd, String retDiv, String retLastName,
@@ -229,42 +231,44 @@ public class Result extends JFrame {
 
 		section = sec;
 		logger.info("section :: " + section);
-		std = bundle.getString(section.toUpperCase() + "_STD");
+		std = sessionData1.getConfigMap().get(section.toUpperCase() + "_STD");
 		logger.info("std :: " + std);
-		div = bundle.getString(section.toUpperCase() + "_DIV");
+		div = sessionData1.getConfigMap().get(section.toUpperCase() + "_DIV");
 		logger.info("div :: " + div);
-		secName = bundle.getString(section.toUpperCase() + "_SEC");
+		secName = sessionData1.getConfigMap().get(section.toUpperCase() + "_SEC");
 		logger.info("secName :: " + secName);
-		examCategory = bundle.getString("EXAM_CATEGORY_RESULT");
+		examCategory = sessionData1.getConfigMap().get("EXAM_CATEGORY_RESULT");
 		logger.info("examCategory :: " + examCategory);
-		img_path = bundle.getString("IMAGE_PATH");
+		img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
 		logger.info("img_path :: " + img_path);
-		img_home = bundle.getString("IMAGE_HOME");
-		img_logo = bundle.getString("IMAGE_LOGO");
-		img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-		img_logout = bundle.getString("IMAGE_LOGOUT");
-		img_titleband = bundle.getString("IMAGE_TITLEBAND");
-		img_leftband = bundle.getString("IMAGE_LEFTBAND");
-		img_menuband = bundle.getString("IMAGE_MENUBAND");
-		img_mainband = bundle.getString("IMAGE_MAINBAND");
-		app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+		img_home = sessionData1.getConfigMap().get("IMAGE_HOME");
+		img_logo = sessionData1.getConfigMap().get("IMAGE_LOGO");
+		img_myaccount = sessionData1.getConfigMap().get("IMAGE_MYACCOUNT");
+		img_logout = sessionData1.getConfigMap().get("IMAGE_LOGOUT");
+		img_titleband = sessionData1.getConfigMap().get("IMAGE_TITLEBAND");
+		img_leftband = sessionData1.getConfigMap().get("IMAGE_LEFTBAND");
+		img_menuband = sessionData1.getConfigMap().get("IMAGE_MENUBAND");
+		img_mainband = sessionData1.getConfigMap().get("IMAGE_MAINBAND");
+		app_header = sessionData1.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData1.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData1.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData1.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData1.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData1.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
 
 		if (!retExam.equalsIgnoreCase("")) {
 			examClass = retExam;
+			marks_flag_std = Boolean.parseBoolean(sessionData1.getConfigMap().get("RESULT_MARKS_"+stdClass.replaceAll(" ", "_")));
+			result_final_sem2_std_flag = Boolean.parseBoolean(sessionData1.getConfigMap().get("RESULT_FINAL_SEM2_"+stdClass.replaceAll(" ", "_")));
 		}
 		/*else{
 			examClass = "Select";
@@ -281,7 +285,7 @@ public class Result extends JFrame {
 		logger.info("examClass :: " + examClass);
 
 		String todayDate = commonObj.getCurrentDate();
-		academicYearClass = commonObj.getAcademicYear(todayDate);
+		academicYearClass = commonObj.getAcademicYear(sessionData1,todayDate);
 		if (!academicYear.equalsIgnoreCase("")) {
 			academicYearClass = academicYear;
 		}
@@ -439,7 +443,7 @@ public class Result extends JFrame {
 
 						frame.setVisible(false);
 						String[] arguments = new String[] {""};
-		                LoginView.main(arguments);
+		                SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					commonObj.logException(e1);
@@ -912,7 +916,7 @@ public class Result extends JFrame {
 		
 		int initialYearFromAcadSel = Integer.parseInt(academicYearClass.substring(0, academicYearClass.indexOf("-")));
 		String todayDate = commonObj.getCurrentDate();
-		String academic = commonObj.getAcademicYear(todayDate);
+		String academic = commonObj.getAcademicYear(sessionData,todayDate);
 		int initialYearFromAcademic = Integer.parseInt(academic.substring(0, academic.indexOf("-")));
 //		if(initialYearFromAcadSel < initialYearFromAcademic){
 //			updateResultButton.setEnabled(false);
@@ -983,7 +987,7 @@ public class Result extends JFrame {
 				String acadSel = (String) academicYear_combo.getSelectedItem();
 				int initialYearFromAcadSel = Integer.parseInt(acadSel.substring(0, acadSel.indexOf("-")));
 				String todayDate = commonObj.getCurrentDate();
-				String academic = commonObj.getAcademicYear(todayDate);
+				String academic = commonObj.getAcademicYear(sessionData,todayDate);
 				int initialYearFromAcademic = Integer.parseInt(academic.substring(0, academic.indexOf("-")));
 				int reply = 0;
 				if(updateCheck.isSelected()) {
@@ -1027,6 +1031,7 @@ public class Result extends JFrame {
 					lastName = lastName_text.getText() == null ? "" : lastName_text.getText();
 					fatherName = fatherName_text.getText() == null ? "" : fatherName_text.getText();
 					exam = (String) exam_combo.getSelectedItem() == null ? "" : (String) exam_combo.getSelectedItem();
+					result_final_sem2_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_FINAL_SEM2_"+std.replaceAll(" ", "_")));
 
 					if (academicSel.equalsIgnoreCase("Year")) {
 						validateFields = false;
@@ -1166,7 +1171,7 @@ public class Result extends JFrame {
 				String acadSel = (String) academicYear_combo.getSelectedItem();
 				int initialYearFromAcadSel = Integer.parseInt(acadSel.substring(0, acadSel.indexOf("-")));
 				String todayDate = commonObj.getCurrentDate();
-				String academic = commonObj.getAcademicYear(todayDate);
+				String academic = commonObj.getAcademicYear(sessionData,todayDate);
 				int initialYearFromAcademic = Integer.parseInt(academic.substring(0, academic.indexOf("-")));
 				if(initialYearFromAcadSel < initialYearFromAcademic){
 //					updateResultButton.setEnabled(false);
@@ -1334,7 +1339,7 @@ public class Result extends JFrame {
 				String acadSel = (String) academicYear_combo.getSelectedItem();
 				int initialYearFromAcadSel = Integer.parseInt(acadSel.substring(0, acadSel.indexOf("-")));
 				String todayDate = commonObj.getCurrentDate();
-				String academic = commonObj.getAcademicYear(todayDate);
+				String academic = commonObj.getAcademicYear(sessionData,todayDate);
 				int initialYearFromAcademic = Integer.parseInt(academic.substring(0, academic.indexOf("-")));
 				if(initialYearFromAcadSel < initialYearFromAcademic){
 //					updateResultButton.setEnabled(false);
@@ -1401,6 +1406,7 @@ public class Result extends JFrame {
 				lastName = lastName_text.getText() == null ? "" : lastName_text.getText();
 				fatherName = fatherName_text.getText() == null ? "" : fatherName_text.getText();
 				exam = (String) exam_combo.getSelectedItem() == null ? "" : (String) exam_combo.getSelectedItem();
+				result_final_sem2_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_FINAL_SEM2_"+std.replaceAll(" ", "_")));
 
 				if (academicSel.equalsIgnoreCase("Year")) {
 					validateFields = false;
@@ -1452,6 +1458,11 @@ public class Result extends JFrame {
 									studentResultFinalMap = dbValidate.findResultList(sessionData, academicSel, std, div, exam, "", "", section, lastName, firstName, fatherName);
 									studentResultMap.clear();
 									studentResultMap = studentResultFinalMap;
+									logger.info("studentResultFinalMap size : " + studentResultFinalMap.size());
+								} else if (exam.equalsIgnoreCase("FINAL") && result_final_sem2_std_flag) {
+									studentResultSem2Map = dbValidate.findResultList(sessionData, academicSel, std, div, exam, "", "", section, lastName, firstName, fatherName);
+									studentResultMap.clear();
+									studentResultMap.addAll(studentResultSem2Map);
 									logger.info("studentResultFinalMap size : " + studentResultFinalMap.size());
 								} else if (exam.equalsIgnoreCase("FINAL")) {
 									studentResultSem1Map = dbValidate.findResultList(sessionData, academicSel, std, div, "Semester 1", "", "", section, lastName, firstName, fatherName);
@@ -1608,7 +1619,7 @@ public class Result extends JFrame {
 			
 			JLabel result_label = new JLabel("Result");
 			result_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));
-			result_label.setBounds(540, 00, 120, 50);
+			result_label.setBounds(530, 00, 120, 50);
 			dataPanel.add(result_label);
 
 			JLabel pipe_label3 = new JLabel("|");
@@ -1628,7 +1639,7 @@ public class Result extends JFrame {
 			
 			JLabel marks_label = new JLabel("Marks");
 			marks_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));
-			marks_label.setBounds(680, 00, 120, 50);
+			marks_label.setBounds(670, 00, 120, 50);
 			dataPanel.add(marks_label);
 
 			JLabel pipe_label6 = new JLabel("|");
@@ -1733,9 +1744,9 @@ public class Result extends JFrame {
 					l = j + 50;
 
 //					if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && 
-//							!stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII") && !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
-					if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && 
-							!stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII")){
+//							!stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII")){
+					if(examClass.equalsIgnoreCase("Final") && !marks_flag_std){
+						
 						//As numbering starts from Zero
 						if(i % 2 == 0){
 							str = studentSem1Array[sem1Index].toString();
@@ -1799,9 +1810,8 @@ public class Result extends JFrame {
 					dataPanel.add(pipe_label11);
 					
 //					if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && 
-//							!stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII") && !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
-					if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && 
-							!stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII")){
+//							!stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII")){
+					if(examClass.equalsIgnoreCase("Final") && !marks_flag_std){
 						//As numbering starts from Zero
 						if(i % 2 == 0){
 							dataPanel.add(sr_radio[i]);
@@ -1880,12 +1890,12 @@ public class Result extends JFrame {
 					
 					marks_labels[i] = new JLabel(marks);
 					marks_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
-					marks_labels[i].setBounds(680, j + 2, 50, 50);
+					marks_labels[i].setBounds(670, j + 2, 100, 50);
 //					marks_labels[i].setToolTipText(marks);
 					dataPanel.add(marks_labels[i]);
 					toolTip_marks_labels[i] = new JLabel();
 					toolTip_marks_labels[i].setToolTipText("Marks");
-					toolTip_marks_labels[i].setBounds(680, j + 2, 50, 40);
+					toolTip_marks_labels[i].setBounds(670, j + 2, 100, 40);
 					dataPanel.add(toolTip_marks_labels[i]);
 
 					JLabel pipe_label10 = new JLabel("|");
@@ -1923,8 +1933,10 @@ public class Result extends JFrame {
 					String dispAbsentMarks = "";
 					for (int n = 0; n < subjectTitleList.size(); n++) {
 						dispResult = temp[p];
-						if(!stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XI")
-								&& !stdClass.equalsIgnoreCase("XII") && !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
+						
+//						if(!stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XI")
+//								&& !stdClass.equalsIgnoreCase("XII") && !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
+						if(!marks_flag_std) {
 							if(dispResult.contains("~")){
 								dispMarks = dispResult.substring(0, dispResult.indexOf("~"));
 							}
@@ -1956,7 +1968,10 @@ public class Result extends JFrame {
 								dispMarks = dispResult.substring(0, dispResult.indexOf("("));
 								if(dispMarks.contains("+") && !examClass.equalsIgnoreCase("Final")){
 									dispMarks = dispMarks.substring(0, dispMarks.indexOf("+"));
-								}
+								} 
+//								else if(dispMarks.contains("+") && examClass.equalsIgnoreCase("Final") && result_final_sem2_std_flag){
+//									dispMarks = dispMarks.substring(0, dispMarks.indexOf("+"));
+//								}
 								dispPassStatus = dispResult.substring(dispResult.indexOf("(")+1, dispResult.indexOf("#"));
 								dispReason = dispResult.substring(dispResult.indexOf("#")+1, dispResult.indexOf("@"));
 								dispAbsentMarks = dispResult.substring(dispResult.indexOf("@")+1, dispResult.indexOf(")"));
@@ -2010,9 +2025,11 @@ public class Result extends JFrame {
 
 					// //////sr radio action//////////////
 					int r = i;
-					if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && 
-							!stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XI") && 
-							!stdClass.equalsIgnoreCase("XII")){
+					
+//					if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && 
+//							!stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XI") && 
+//							!stdClass.equalsIgnoreCase("XII")){
+					if(examClass.equalsIgnoreCase("Final") && !marks_flag_std){
 						r = sem1Index;
 					}
 					
@@ -2027,9 +2044,10 @@ public class Result extends JFrame {
 									int q = s;
 									boolean radio_selected = false;
 									
-									if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X")
-											&& !stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII")
-											&& !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
+//									if(examClass.equalsIgnoreCase("Final") && !stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X")
+//											&& !stdClass.equalsIgnoreCase("XI") && !stdClass.equalsIgnoreCase("XII")
+//											&& !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
+									if(examClass.equalsIgnoreCase("Final") && !marks_flag_std){
 										q = q + q;
 									}
 		
@@ -2149,9 +2167,9 @@ public class Result extends JFrame {
 							    f.setVisible(true);
 							    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 							    
-								if(stdInt <= 0 || stdInt >= 9){
+								if(marks_flag_std){
 									grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicYearClass, stdClass, divClass, examClass, 
-											section, lastNameClass, firstNameClass, fatherNameClass, leftDataMap);
+											section, lastNameClass, firstNameClass, fatherNameClass, leftDataMap, marks_flag_std);
 									subjectTitleList = dbValidate.findSubjectTitleList(sessionData, stdClass, "", academicYearClass);
 									subjectTitleList.remove(0);
 									subjectTitleList.remove(0);
@@ -2170,7 +2188,7 @@ public class Result extends JFrame {
 									Map<String,String> maxMarksMapOrder = new LinkedHashMap<String, String>();
 									Map<String,String> gradeMarksMapOrder = new LinkedHashMap<String, String>();
 							    	try {
-										maxMarksMapOrder = dbValidate.getMaxMarksForAllSubjects(sessionData, stdClass, academicYearClass, examClass);
+										maxMarksMapOrder = dbValidate.getMaxMarksForAllSubjects(sessionData, stdClass, academicYearClass, examClass, marks_flag_std);
 										gradeMarksMapOrder = dbValidate.getGradeMarksForAllSubjects(sessionData, stdClass, academicYearClass, examClass);
 									} catch (Exception e1) {
 										f.setVisible(false);
@@ -2226,14 +2244,14 @@ public class Result extends JFrame {
 						try {
 							if(dbValidate.connectDatabase(sessionData)){
 								
-								if(stdInt >= 9){
+								if(marks_flag_std){
 									grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicYearClass, stdClass, divClass, examClass, 
-											section, lastNameClass, firstNameClass, fatherNameClass, leftDataMap);
+											section, lastNameClass, firstNameClass, fatherNameClass, leftDataMap, marks_flag_std);
 								}
-								else if(stdInt <= 0){
-									grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicYearClass, stdClass, divClass, examClass, 
-											section, lastNameClass, firstNameClass, fatherNameClass, leftDataMap);
-								}
+//								else if(stdInt <= 0){
+//									grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicYearClass, stdClass, divClass, examClass, 
+//											section, lastNameClass, firstNameClass, fatherNameClass, leftDataMap);
+//								}
 								else{
 									grStudentMap = dbValidate.printResultList(sessionData, academicYearClass, stdClass, divClass, examClass, 
 											section, lastNameClass, firstNameClass, fatherNameClass, leftDataMap);
@@ -2256,21 +2274,21 @@ public class Result extends JFrame {
 								Map<String,String> maxMarksMapOrder = new LinkedHashMap<String, String>();
 								Map<String,String> gradeMarksMapOrder = new LinkedHashMap<String, String>();
 						    	try {
-									maxMarksMapOrder = dbValidate.getMaxMarksForAllSubjects(sessionData, stdClass, academicYearClass, examClass);
+									maxMarksMapOrder = dbValidate.getMaxMarksForAllSubjects(sessionData, stdClass, academicYearClass, examClass, marks_flag_std);
 									gradeMarksMapOrder = dbValidate.getGradeMarksForAllSubjects(sessionData, stdClass, academicYearClass, examClass);
 								} catch (Exception e1) {
 									commonObj.logException(e1);
 									commonObj.showMessageDialog("failed to get max marks for subjects.");
 								}
 							    	
-								if(stdClass.equalsIgnoreCase("IX") || stdClass.equalsIgnoreCase("X") || stdClass.equalsIgnoreCase("XI")
-										|| stdClass.equalsIgnoreCase("XII")){
-									ResultMarksPDF resultMarksPDF = new ResultMarksPDF(sessionData, section, academicYearClass, grStudentSelectedMap, 
-											subjectTitleList,examClass, stdClass, divClass, note, maxMarksMapOrder, gradeMarksMapOrder);
-								}
-								else if(stdClass.equalsIgnoreCase("JR KG") || stdClass.equalsIgnoreCase("SR KG")){
+						    	
+								if(marks_flag_std && (stdClass.equalsIgnoreCase("JR KG") || stdClass.equalsIgnoreCase("SR KG"))){
 									ResultPPRMarksPDF resultPPRMarksPDF = new ResultPPRMarksPDF(sessionData, section, academicYearClass, grStudentSelectedMap, 
 											subjectTitleList, examClass, stdClass, divClass, note, maxMarksMapOrder, gradeMarksMapOrder);
+								}
+								else if(marks_flag_std){
+									ResultMarksPDF resultMarksPDF = new ResultMarksPDF(sessionData, section, academicYearClass, grStudentSelectedMap, 
+											subjectTitleList,examClass, stdClass, divClass, note, maxMarksMapOrder, gradeMarksMapOrder);
 								}
 								else{
 									ResultGradePDF resultGradePDF = new ResultGradePDF(sessionData, section, academicYearClass, grStudentSelectedMap, 

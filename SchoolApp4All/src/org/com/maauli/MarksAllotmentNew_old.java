@@ -159,40 +159,40 @@ public class MarksAllotmentNew_old extends JFrame {
 		selectStd = "Select";
 		section = sec;
 		logger.info("section :: " + section);
-		std = bundle.getString(section.toUpperCase() + "_STD");
+		std = sessionData.getConfigMap().get(section.toUpperCase() + "_STD");
 		logger.info("std :: " + std);
-		div = bundle.getString(section.toUpperCase() + "_DIV");
+		div = sessionData.getConfigMap().get(section.toUpperCase() + "_DIV");
 		logger.info("div :: " + div);
-		secName = bundle.getString(section.toUpperCase() + "_SEC");
+		secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		logger.info("secName :: " + secName);
-		img_path = bundle.getString("IMAGE_PATH");
+		img_path = sessionData.getConfigMap().get("IMAGE_PATH");
 		logger.info("img_path :: " + img_path);
-		img_home = bundle.getString("IMAGE_HOME");
-		img_logo = bundle.getString("IMAGE_LOGO");
-		img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-		img_logout = bundle.getString("IMAGE_LOGOUT");
-		img_titleband = bundle.getString("IMAGE_TITLEBAND");
-		img_leftband = bundle.getString("IMAGE_LEFTBAND");
-		img_menuband = bundle.getString("IMAGE_MENUBAND");
-		img_mainband = bundle.getString("IMAGE_MAINBAND");
-		app_header = bundle.getString("APP_HEADER_" + sessionData.getAppType());
-		app_header_0 = bundle.getString("APP_HEADER_0_" + sessionData.getAppType());
-		app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_" + sessionData.getAppType());
-		app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_" + sessionData.getAppType()));
-		app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_" + sessionData.getAppType()));
-		app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_" + sessionData.getAppType()));
-		app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_" + sessionData.getAppType());
-		app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_" + sessionData.getAppType()));
-		app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_" + sessionData.getAppType()));
-		app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_" + sessionData.getAppType()));
-		app_header_2 = bundle.getString("APP_HEADER_2_" + sessionData.getAppType());
-		app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_" + sessionData.getAppType());
-		app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_" + sessionData.getAppType()));
-		app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_" + sessionData.getAppType()));
-		app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_" + sessionData.getAppType()));
+		img_home = sessionData.getConfigMap().get("IMAGE_HOME");
+		img_logo = sessionData.getConfigMap().get("IMAGE_LOGO");
+		img_myaccount = sessionData.getConfigMap().get("IMAGE_MYACCOUNT");
+		img_logout = sessionData.getConfigMap().get("IMAGE_LOGOUT");
+		img_titleband = sessionData.getConfigMap().get("IMAGE_TITLEBAND");
+		img_leftband = sessionData.getConfigMap().get("IMAGE_LEFTBAND");
+		img_menuband = sessionData.getConfigMap().get("IMAGE_MENUBAND");
+		img_mainband = sessionData.getConfigMap().get("IMAGE_MAINBAND");
+		app_header = sessionData.getConfigMap().get("APP_HEADER_" + sessionData.getAppType());
+		app_header_0 = sessionData.getConfigMap().get("APP_HEADER_0_" + sessionData.getAppType());
+		app_header_0_fontName = sessionData.getConfigMap().get("APP_HEADER_0_FONTNAME_" + sessionData.getAppType());
+		app_header_0_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_FONTSIZE_" + sessionData.getAppType()));
+		app_header_0_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_" + sessionData.getAppType()));
+		app_header_0_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_" + sessionData.getAppType()));
+		app_header_fontName = sessionData.getConfigMap().get("APP_HEADER_FONTNAME_" + sessionData.getAppType());
+		app_header_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_FONTSIZE_" + sessionData.getAppType()));
+		app_header_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_WIDTHSPACE_" + sessionData.getAppType()));
+		app_header_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_HEIGHTSPACE_" + sessionData.getAppType()));
+		app_header_2 = sessionData.getConfigMap().get("APP_HEADER_2_" + sessionData.getAppType());
+		app_header_2_fontName = sessionData.getConfigMap().get("APP_HEADER_2_FONTNAME_" + sessionData.getAppType());
+		app_header_2_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_FONTSIZE_" + sessionData.getAppType()));
+		app_header_2_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_" + sessionData.getAppType()));
+		app_header_2_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_" + sessionData.getAppType()));
 
 		String todayDate = commonObj.getCurrentDate();
-		academicYearClass = commonObj.getAcademicYear(todayDate);
+		academicYearClass = commonObj.getAcademicYear(sessionData1,todayDate);
 		logger.info("academicYearClass ==" + academicYearClass);
 
 		if (!retStd.equalsIgnoreCase(""))
@@ -348,7 +348,7 @@ public class MarksAllotmentNew_old extends JFrame {
 
 						frame.setVisible(false);
 						String[] arguments = new String[] { "" };
-						LoginView.main(arguments);
+						SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					logger.info("Exception logoutButton ===>>>" + e1);
@@ -988,7 +988,7 @@ public class MarksAllotmentNew_old extends JFrame {
 
 						if (reply == JOptionPane.YES_OPTION) {
 							String templatePath = commonObj.getDriveName()
-									+ bundle.getString("TEMPLATE_PATH_" + sessionData.getDBName())
+									+ sessionData.getConfigMap().get("TEMPLATE_PATH_" + sessionData.getDBName())
 									+ commonObj.getCurrentDatein_dd_MMM_yyyy();
 							if (dbValidate.connectDatabase(sessionData)) {
 								JFrame f = new JFrame("Marks Allotment Template downlaod in progress. Don't Close");
@@ -1071,7 +1071,7 @@ public class MarksAllotmentNew_old extends JFrame {
 					}
 					
 					if(validate){
-						String default_path = commonObj.getDriveName() + bundle.getString("TEMPLATE_PATH_"+sessionData.getDBName());
+						String default_path = commonObj.getDriveName() + sessionData.getConfigMap().get("TEMPLATE_PATH_"+sessionData.getDBName());
 						JFileChooser fileChooser = new JFileChooser(default_path);
 						int returnValue = fileChooser.showOpenDialog(null);
 						if (returnValue == JFileChooser.APPROVE_OPTION) {

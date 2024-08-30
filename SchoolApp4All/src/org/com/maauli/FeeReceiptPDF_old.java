@@ -81,14 +81,14 @@ public class FeeReceiptPDF_old {
 			totalAmount = Double.parseDouble(String.format("%.2f", totalAmount));
 			
 			Date currentDate = new Date();
-			path = commonObj.createTodayFolder(commonObj.getDriveName() + bundle.getString("FEERECEIPT_PDF_PATH_"+sessionData.getDBName()),true)+"/";
+			path = commonObj.createTodayFolder(commonObj.getDriveName() + sessionData.getConfigMap().get("FEERECEIPT_PDF_PATH_"+sessionData.getDBName()),true)+"/";
 			fileName  = "FeeReceipt_"+grNo+"_"+commonObj.getCurrentDatein_dd_MMM_yyyy()+"_"+commonObj.timeInMillis()+".pdf";
 			logger.info("Pdf will be created for file.."+fileName);
 			fileAddress = path+fileName;
-			fee_header_0 = bundle.getString("FEES_HEADER_0_"+sessionData.getAppType());
-	        fee_header_1 = bundle.getString("FEES_HEADER_1_"+sessionData.getAppType());
-	        fee_header_2 = bundle.getString("FEES_HEADER_2_"+sessionData.getAppType());
-	        fee_row_count = Integer.parseInt(bundle.getString("FEE_ROW_COUNT"));
+			fee_header_0 = sessionData.getConfigMap().get("FEES_HEADER_0_"+sessionData.getAppType());
+	        fee_header_1 = sessionData.getConfigMap().get("FEES_HEADER_1_"+sessionData.getAppType());
+	        fee_header_2 = sessionData.getConfigMap().get("FEES_HEADER_2_"+sessionData.getAppType());
+	        fee_row_count = Integer.parseInt(sessionData.getConfigMap().get("FEE_ROW_COUNT"));
 	        
 	        if(displayDate.equalsIgnoreCase("")) {
 				displayDate = commonObj.dateToDDMMYYYY(currentDate);

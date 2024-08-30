@@ -64,9 +64,10 @@ public class CC_Book_PDF {
 		LinkedHashMap<String,LinkedHashMap<String, String>> studentRemarkMap = new LinkedHashMap<String,LinkedHashMap<String, String>>();
 		DBValidate dbValidate = new DBValidate();
 		List columnnList = new ArrayList();
-		String filterFields = bundle.getString("FILTER_FIELDS_"+sessionData.getAppType().toUpperCase());
+		String filterFields = sessionData.getConfigMap().get("FILTER_FIELDS_"+sessionData.getAppType().toUpperCase());
 		String[] filterFieldsList = filterFields.split(",");
 		LinkedHashMap<String, String> filterFieldsMap = new LinkedHashMap<String, String>(); 
+		boolean cc_report_project_row_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("CC_REPORT_PROJECT_ROW_FLAG"));
 		
 		try {
 			f = new JFrame("CC Book downlaod in progress. Don't Close");
@@ -84,7 +85,7 @@ public class CC_Book_PDF {
 				}
 			}
 			
-			String footer = bundle.getString("FOOTER_"+sessionData.getAppType());
+			String footer = sessionData.getConfigMap().get("FOOTER_"+sessionData.getAppType());
 			
 			if (exam.equalsIgnoreCase("Semester 1")) {
 				sem = "sem1";
@@ -96,7 +97,7 @@ public class CC_Book_PDF {
 				examHeader = "Second Term  "+academic;
 			}
 			path = commonObj.createTodayFolder(commonObj.getDriveName() + 
-					bundle.getString("REPORT_PDF_PATH_" + sessionData.getDBName()), true)+ "/";
+					sessionData.getConfigMap().get("REPORT_PDF_PATH_" + sessionData.getDBName()), true)+ "/";
 			remarkImagePath = commonObj.createFolder(commonObj.getDriveName()+"/"+sessionData.getDBName()+"_app/Remark_Images/");
 			fileName = "CC_Book_" + std + "_" + div +"_" + academic + "_" + commonObj.timeInMillis() + ".pdf";
 			fileAddress = path + fileName;
@@ -897,6 +898,36 @@ public class CC_Book_PDF {
 
 					totalA = 0; totalB = 0; maxTotalA = 0; maxTotalB = 0;
 					rowCount++;
+				}
+
+				if(cc_report_project_row_flag) {
+					PdfPCell cell364_a = new PdfPCell(new Paragraph("Project Subject:                                                "
+							+ "Project Name:", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+					cell364_a.setColspan(12);
+					cell364_a.setRowspan(2);
+					cell364_a.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell364_a.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					table2.addCell(cell364_a);
+					
+					PdfPCell cell364_b = new PdfPCell(new Paragraph("", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+					cell364_b.setColspan(2);
+					cell364_b.setRowspan(2);
+					table2.addCell(cell364_b);
+
+					PdfPCell cell364_c = new PdfPCell(new Paragraph("", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+					cell364_c.setColspan(1);
+					cell364_c.setRowspan(2);
+					table2.addCell(cell364_c);
+
+					PdfPCell cell364_d = new PdfPCell(new Paragraph("", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+					cell364_d.setColspan(2);
+					cell364_d.setRowspan(2);
+					table2.addCell(cell364_d);
+
+					PdfPCell cell364_e = new PdfPCell(new Paragraph("", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+					cell364_e.setColspan(1);
+					cell364_e.setRowspan(2);
+					table2.addCell(cell364_e);
 				}
 
 				table2.setSpacingAfter(80.0f);

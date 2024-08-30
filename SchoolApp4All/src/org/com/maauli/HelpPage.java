@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -49,7 +50,7 @@ public class HelpPage {
 	static int screenWidth;
     static int screenHeight;
     static int mainCentre;
-    static int scrollHeight = 900;
+    static int scrollHeight = 2000;
     static JFrame frame = null;
 	static String img_path			= "";
 	static String img_home 			= "";
@@ -59,11 +60,11 @@ public class HelpPage {
     static String user_role 		= "";
     static String first_name 		= "";
     static String appType   		= "";
-	static Logger logger 			= Logger.getLogger(LoginView.class.getName());
+	static Logger logger 			= Logger.getLogger(SchoolForAllLoginView.class.getName());
     static ResourceBundle bundle    = ResourceBundle.getBundle("org.com.accesser.school");
     static SessionData sessionData 	= new SessionData();
     static DBValidate dbValidate 	= new DBValidate();
-    
+    static LinkedHashMap<String, String> configMap = new LinkedHashMap<String, String>();
 
 
     public HelpPage(SessionData sessionData1)
@@ -83,10 +84,10 @@ public class HelpPage {
 		frame.setSize(screenWidth, screenHeight);
 		frame.setResizable(false);
 		
-		img_path	= bundle.getString("IMAGE_PATH");
+		img_path	= sessionData.getConfigMap().get("IMAGE_PATH");
     	logger.info("img_path :: "+img_path);
-    	img_home = bundle.getString("IMAGE_HOME");
-    	img_logout = bundle.getString("IMAGE_LOGOUT");
+    	img_home = sessionData.getConfigMap().get("IMAGE_HOME");
+    	img_logout = sessionData.getConfigMap().get("IMAGE_LOGOUT");
     	
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -148,7 +149,7 @@ public class HelpPage {
 
             public void actionPerformed(ActionEvent e) {
             	int reply = JOptionPane.showConfirmDialog(null, "Would You Like to update Final Class Allotment date ?", "Confirm update", JOptionPane.YES_NO_OPTION);
-            	String academicYear = commonObj.getAcademicYear(commonObj.getCurrentDate());
+            	String academicYear = commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate());
             	
 				if (reply == JOptionPane.YES_OPTION && dbValidate.connectDatabase(sessionData)) {
 					String fieldValue = JOptionPane.showInputDialog("Please Enter a Final Class Allotment date in dd/mm/yyyy format");
@@ -249,6 +250,102 @@ public class HelpPage {
             	}
             }
         });
+		
+		if(sessionData.getUserName().equalsIgnoreCase("prp")) {
+			height = height + 45;
+			JButton updateConfigButton = new JButton("Update Config");
+			updateConfigButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
+			updateConfigButton.setBounds(width, height, 200, 35);
+	        panel.add(updateConfigButton);
+	        
+	        try {
+	        	configMap = null;
+	    		if (dbValidate.connectDatabase(sessionData)) {
+	    			configMap = dbValidate.getSchoolConfigFromDb(sessionData);
+				}
+	    	}
+	    	catch(Exception e1) {
+	    		commonObj.logException(e1);
+	    	}
+	        
+	        String configStr = configMap.get("schoolConfigKeyStr")+",Add New Config";
+//	        if(sessionData.getUserName().equalsIgnoreCase("prp")) {
+//	        	fieldStr = fieldStr+",Import Backup Data";
+//	        }
+	        
+	        String[] configList = configStr.split(",");
+			final JComboBox config_combo = new JComboBox(configList);
+			config_combo.setFont(new Font("Book Antiqua", Font.BOLD, 16));
+			config_combo.setBounds(260, height+5, 600, 25);
+			panel.add(config_combo);
+			
+			config_combo.addActionListener(new ActionListener() {
+
+	            public void actionPerformed(ActionEvent e) {
+					
+	            	try {
+	            		String configSel = (String) config_combo.getSelectedItem();
+	            		if(!configSel.equalsIgnoreCase("Add New Config")) {
+	            			String configVal = configMap.get(configSel);
+		            		JOptionPane.showInputDialog("Current value for field : "+configSel, configVal);
+	            		}
+	            		else {
+	            			JOptionPane.showMessageDialog(null, "Click Updated field to add new field");
+	            		}
+	            	}
+	            	catch(Exception e1) {
+	            		commonObj.logException(e1);
+	            	}
+	            }
+	        });
+			
+			updateConfigButton.addActionListener(new ActionListener() {
+
+	            public void actionPerformed(ActionEvent e) {
+					
+	            	try {
+	            		boolean isUpdate = true;
+	            		String newConfigValue = "";
+	            		String configSel = (String) config_combo.getSelectedItem();
+	            		String configVal = configMap.get(configSel);
+//	            		JOptionPane.showInputDialog("Please copy value for field: "+configSel, configVal);
+	            		
+	            		if(!configSel.equalsIgnoreCase("Add New Config")) {
+	            			newConfigValue = JOptionPane.showInputDialog("Update value for field : "+configSel, configVal);
+	            		} else {
+	            			configSel = JOptionPane.showInputDialog("New field name", "");
+	            			newConfigValue = JOptionPane.showInputDialog("Update value for field : "+configSel, configVal);
+	            			isUpdate = false;
+	            		}
+	            		
+//	            		JOptionPane.showInputDialog("Please copy value for field: "+configSel, input);
+	            		
+	            		int reply = 0;
+	            		boolean updateFlag = false;
+						reply = JOptionPane.showConfirmDialog(null, "Would you like to change field "+configSel+"? \n<html><b>From : </b>"+configVal+"</html> \n<html><b>To : </b>"+newConfigValue+"</html>", "Confirm Update", JOptionPane.YES_NO_OPTION);
+						if(reply == JOptionPane.YES_OPTION) {
+							if (dbValidate.connectDatabase(sessionData)) {
+								updateFlag = dbValidate.updateConfigInDb(sessionData, configSel, newConfigValue, isUpdate);
+							}
+							if(updateFlag) {
+								configMap.put(configSel, newConfigValue);
+								sessionData.getConfigMap().put(configSel, newConfigValue);
+								JOptionPane.showMessageDialog(null, "Updated field "+configSel+" as : "+newConfigValue);
+							}
+							else {
+								JOptionPane.showMessageDialog(null, "Updated field "+configSel+" failed");
+							}
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "Update cancelled for field "+configSel);
+						}
+	            	}
+	            	catch(Exception e1) {
+	            		commonObj.logException(e1);
+	            	}
+	            }
+	        });
+		}
 		
 		height = height + 45;
 		JButton delDupSubAllotButton = new JButton("Duplicate Subject Allotment");
@@ -433,9 +530,9 @@ public class HelpPage {
             	}
             	
             	if(validate && dbValidate.connectDatabase(sessionData)) {
-            		boolean isSuccess = dbValidate.updateConfigField(sessionData, false, "ATT_"+semSelect+"_"+commonObj.getAcademicYear(commonObj.getCurrentDate()), startMonth+"_"+endMonth);
+            		boolean isSuccess = dbValidate.updateConfigField(sessionData, false, "ATT_"+semSelect+"_"+commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate()), startMonth+"_"+endMonth);
                 	if(isSuccess) {
-                		JOptionPane.showMessageDialog(null, "Attendance month for "+semSelect+" updated for "+commonObj.getAcademicYear(commonObj.getCurrentDate()));
+                		JOptionPane.showMessageDialog(null, "Attendance month for "+semSelect+" updated for "+commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate()));
                 	}
                 	else {
                 		JOptionPane.showMessageDialog(null, "Attendance month update failed");
@@ -459,7 +556,7 @@ public class HelpPage {
 
             public void actionPerformed(ActionEvent e) {
             	if(dbValidate.connectDatabase(sessionData)) {
-            		dbValidate.newStudents(sessionData, commonObj.getAcademicYear(commonObj.getCurrentDate()), "", "", 
+            		dbValidate.newStudents(sessionData, commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate()), "", "", 
                 			sessionData.getSectionName(), "ATTENDANCE_PERIOD");
             		JOptionPane.showMessageDialog(null, "Complete");
             	}
@@ -495,7 +592,7 @@ public class HelpPage {
 
         String fieldStr = "Select,Academic_Year,Adhaar_card,Admitted_Std,Admitted_Div,Bank_Name,Bank_Branch,Bank_Account,Bank_IFSC,Birth_Place,"
 				+ "Contact_1,Contact_2,Country,Date_of_Admission,Date_of_Birth,Date_of_Leaving,Hobbies,"
-				+ "Last_school,Mother_Tongue,Nationality,State,Student_Udise,Taluka,District,Replace_Gr_No,First_Name,Last_Name,Father_Name,Mother_Name";
+				+ "Last_school,Mother_Tongue,Nationality,State,Student_Udise,Taluka,District,Replace_Gr_No,First_Name,Last_Name,Father_Name,Mother_Name,PEN";
 //        if(sessionData.getUserName().equalsIgnoreCase("prp")) {
 //        	fieldStr = fieldStr+",Import Backup Data";
 //        }
@@ -704,7 +801,7 @@ public class HelpPage {
         panel.add(deleteSummativeButton);
 
         JLabel deleteSummativeLabel = new JLabel("Delete Summative marks entered on marks allotment for IX,X,XI,XII for "
-        		+ "academic year "+commonObj.getAcademicYear(commonObj.getCurrentDate()));
+        		+ "academic year "+commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate()));
         deleteSummativeLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
         deleteSummativeLabel.setBounds(260, height, 900, 40);
 		panel.add(deleteSummativeLabel);
@@ -714,7 +811,7 @@ public class HelpPage {
             public void actionPerformed(ActionEvent e) {
             	if(dbValidate.connectDatabase(sessionData)) {
             		try {
-						dbValidate.deleteSummativeMarksAlloted(sessionData, commonObj.getAcademicYear(commonObj.getCurrentDate()));
+						dbValidate.deleteSummativeMarksAlloted(sessionData, commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate()));
 					} catch (SQLException e1) {
 						JOptionPane.showMessageDialog(null, "Failed");
 					}
@@ -821,8 +918,8 @@ public class HelpPage {
         panel.add(feesReportIssueButton);
         
         String dateToday = commonObj.getCurrentDate();
-		String academicYear = commonObj.getAcademicYear(dateToday);
-		String nextYear = commonObj.getNextYear(academicYear);
+		String academicYear = commonObj.getAcademicYear(sessionData,dateToday);
+		String nextYear = commonObj.getNextYear(sessionData, academicYear);
 		
         String yearList[] = { academicYear, nextYear };
 		final JComboBox year_combo = new JComboBox(yearList);
@@ -874,7 +971,7 @@ public class HelpPage {
             public void actionPerformed(ActionEvent e) {
             	
             	int reply = JOptionPane.showConfirmDialog(null, "Would You Like to insert record into Fee "
-            			+ "\n for academic year "+commonObj.getAcademicYear(commonObj.getCurrentDate())+"?", 
+            			+ "\n for academic year "+commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate())+"?", 
             			"Confirm Insert", JOptionPane.YES_NO_OPTION);
             	
 				if (reply == JOptionPane.YES_OPTION && dbValidate.connectDatabase(sessionData)) {
@@ -897,7 +994,7 @@ public class HelpPage {
 		deleteDuplicateFeeButton.setBounds(width, height, 200, 35);
         panel.add(deleteDuplicateFeeButton);
         
-        String[] stdList = bundle.getString(sessionData.getSectionName().toUpperCase() + "_STD").split(",");
+        String[] stdList = sessionData.getConfigMap().get(sessionData.getSectionName().toUpperCase() + "_STD").split(",");
 		final JComboBox std_combo = new JComboBox(stdList);
 		std_combo.setFont(new Font("Book Antiqua", Font.BOLD, 16));
 		std_combo.setBounds(260, height+10, 100, 25);
@@ -914,7 +1011,7 @@ public class HelpPage {
             	
             	String stdSel = std_combo.getSelectedItem().toString();
             	int reply = JOptionPane.showConfirmDialog(null, "Would You Like to delete duplicate record from Fee "
-            			+ "std "+stdSel+" \n for academic year "+commonObj.getAcademicYear(commonObj.getCurrentDate())+"?", 
+            			+ "std "+stdSel+" \n for academic year "+commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate())+"?", 
             			"Confirm delete", JOptionPane.YES_NO_OPTION);
             	
 				if (reply == JOptionPane.YES_OPTION && dbValidate.connectDatabase(sessionData)) {
@@ -982,7 +1079,7 @@ public class HelpPage {
             	String stdSel = std1_combo.getSelectedItem().toString();
             	String tableName = table_combo.getSelectedItem().toString();
             	int reply = JOptionPane.showConfirmDialog(null, "Would You Like to delete duplicate record from "+tableName+" "
-            			+ "std "+stdSel+" \n for academic year "+commonObj.getAcademicYear(commonObj.getCurrentDate())+"?", 
+            			+ "std "+stdSel+" \n for academic year "+commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate())+"?", 
             			"Confirm delete", JOptionPane.YES_NO_OPTION);
             	
 				if (reply == JOptionPane.YES_OPTION && dbValidate.connectDatabase(sessionData)) {
@@ -991,7 +1088,7 @@ public class HelpPage {
 						JFrame f = new JFrame("Delete duplicate "+tableName+" data in progress. Please Don't Close");
 						commonObj.startProgressBar(f);
 						isSuccess = dbValidate.deleteDuplicateRecordInTable(sessionData, 
-								commonObj.getAcademicYear(commonObj.getCurrentDate()), tableName, stdSel, f);
+								commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate()), tableName, stdSel, f);
 						commonObj.closeProgressBar(f);
 						if(isSuccess) {
 		            		JOptionPane.showMessageDialog(null, "delete duplicate record completed");
@@ -1229,7 +1326,7 @@ public class HelpPage {
 		deleteBlankGrButton.setBounds(width, height, 200, 35);
         panel.add(deleteBlankGrButton);
         
-        String yearList1[] = { academicYear, Common.getPreviousYear(academicYear), nextYear };
+        String yearList1[] = { academicYear, Common.getPreviousYear(sessionData,academicYear), nextYear };
 		final JComboBox year_combo1 = new JComboBox(yearList1);
 		year_combo1.setFont(new Font("Book Antiqua", Font.BOLD, 16));
 		year_combo1.setBounds(260, height+05, 100, 25);
@@ -1306,7 +1403,7 @@ public class HelpPage {
 			try {
 				String feesReportYearList = "";
 				if (dbValidate.connectDatabase(sessionData)) {
-					feesReportYearList = dbValidate.getAcademicYearList(sessionData, "FEES_REPORT_MANDATORY", "ACADEMIC_YEAR").toString();
+					feesReportYearList = dbValidate.getAcademicYearList(sessionData, "FEES_DATA_MANDATORY", "ACADEMIC_YEAR").toString();
 				}
 				
 				String[] academicYearList = feesReportYearList.split(",");
@@ -1334,20 +1431,20 @@ public class HelpPage {
 		            		if (dbValidate.connectDatabase(sessionData)) {
 		            			boolean isTableDelete = Boolean.parseBoolean(deleteTable_combo.getSelectedItem().toString());
 		            			String academicSelected = (String) academicYear_combo.getSelectedItem();
-		            			String startDate = bundle.getString("ACADEMIC_YEAR_START_"+sessionData.getDBName());
+		            			String startDate = sessionData.getConfigMap().get("ACADEMIC_YEAR_START_"+sessionData.getDBName());
 		            			String startYear = academicSelected.substring(0, academicSelected.indexOf("-"));
 		            			String endYear = (Integer.parseInt(startYear)+1) + "";
 		    					startDate = commonObj.formatyyyymmddtoddmmyyyy(startYear + "-" + startDate);//yyyy-mm-dd
 		    					
-		    					String endDate = bundle.getString("ACADEMIC_YEAR_END_"+sessionData.getDBName());
+		    					String endDate = sessionData.getConfigMap().get("ACADEMIC_YEAR_END_"+sessionData.getDBName());
 		    					endDate = commonObj.formatyyyymmddtoddmmyyyy(endYear + "-" + endDate);//yyyy-mm-dd
 		            			boolean isSuccess = dbValidate.exportFeesDataToReport(sessionData, academicSelected, "All", "All", "Academic", startDate, endDate, isTableDelete);
 		            			deleteTable_combo.setSelectedItem("False");
 		            			if(isSuccess) {
-		    	            		JOptionPane.showMessageDialog(null, "Attendance Periodly table created successfully.");
+		    	            		JOptionPane.showMessageDialog(null, "Fees data updated successfully for "+academicSelected);
 		    	            	}
 		    	            	else {
-		    	            		JOptionPane.showMessageDialog(null, "Attendance Periodly table already created.");
+		    	            		JOptionPane.showMessageDialog(null, "Fees data updated failed for "+academicSelected);
 		    	            	}
 		    				}
 		            	}
@@ -1360,6 +1457,35 @@ public class HelpPage {
 				commonObj.logException(e2);
 			}
 		}
+
+		height = height + 45;
+		JButton insertExcelDataButton = new JButton("Excel Data");
+		insertExcelDataButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
+		insertExcelDataButton.setBounds(width, height, 200, 35);
+        panel.add(insertExcelDataButton);
+        
+        JLabel insertExcelDataLabel = new JLabel("Insert Excel Data for Fees Report Quarterly & Collection");
+        insertExcelDataLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
+        insertExcelDataLabel.setBounds(260, height, 900, 40);
+		panel.add(insertExcelDataLabel);
+		
+		insertExcelDataButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+            	
+            	boolean isSuccess;
+				try {
+					isSuccess = dbValidate.insertExcelData(sessionData);
+					if(isSuccess) {
+	            		JOptionPane.showMessageDialog(null, "Excel data for quarterly fees inserted successfully");
+	            	}
+	            	else {
+	            		JOptionPane.showMessageDialog(null, "Excel data for quarterly fees failed");
+	            	}
+				} catch (Exception e1) {
+				}
+            }
+        });
 		
 //		if(appType.equalsIgnoreCase("College")) {
 //			height = height + 45;
@@ -1423,7 +1549,7 @@ public class HelpPage {
 
 						frame.setVisible(false);
 						String[] arguments = new String[] {""};
-		                LoginView.main(arguments);
+		                SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					logger.info("Exception logoutButton ===>>>" + e1);
@@ -1500,7 +1626,7 @@ public class HelpPage {
 				            }
 				            frame.setVisible(false);
 			            	String[] arguments = new String[] {""};
-			                LoginView.main(arguments);
+			                SchoolForAllLoginView.main(arguments);
 						}
 					} catch (Exception e1) {
 						logger.info("update password failed Exception e1 ===>>>" + e1);

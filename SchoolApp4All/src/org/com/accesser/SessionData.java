@@ -34,8 +34,11 @@ public class SessionData {
 	private String secretAnswer2	= "";
 	private String secretAnswer3	= "";
 	private String sectionLabel		= "";
+	private String dbURL	 		= "";
+	private String schoolApp_ip	 	= "";
 	private int screenWidth			= 0;
 	private int screenHeight		= 0;
+	private int refreshInterval		= 0;
 	private Connection connection 	= null;
 	private ResourceBundle bundle;
 	private Properties properties;
@@ -271,5 +274,29 @@ public class SessionData {
 
 	public void setSectionLabel(String sectionLabel) {
 		this.sectionLabel = sectionLabel;
+	}
+	
+	public String getDbURL() {
+		return dbURL;
+	}
+
+	public void setDbURL(String dbURL) {
+		this.dbURL = dbURL;
+	}
+	
+	public int getRefreshInterval() {
+		return refreshInterval;
+	}
+
+	public void setRefreshInterval(int refreshInterval) {
+		this.refreshInterval = refreshInterval;
+	}
+
+	public String getSchoolApp_ip() {
+		return schoolApp_ip;
+	}
+
+	public void setSchoolApp_ip(String schoolApp_ip) {
+		this.schoolApp_ip = schoolApp_ip;
 	}
 }

@@ -471,6 +471,21 @@ public class Common {
 		return currentUser;
 	}
 
+	public String getCurrentTimeStamp() {
+	    return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+	}
+	
+	////////
+	public TreeMap<String, Double> updateTreeMap(TreeMap<String, Double> map, String keyStr, Double value){
+		DecimalFormat df = new DecimalFormat("####0.00");
+		if(map.get(keyStr) != null) {
+			
+			map.put(keyStr, Double.parseDouble(df.format((map.get(keyStr) + value))));
+		} else {
+			map.put(keyStr, value);
+		}
+		return map;
+	}
 	// ////////////////////////////////////////////////////////////////
 	public String formatdd_MM_yyyy(String dateReceived) {
 
@@ -716,51 +731,77 @@ public class Common {
 	public String RomanToWord(String RomanWord) {
 
 		String RomanInWord = "";
+		if(RomanWord.contains(" ")) {
+			RomanWord = RomanWord.replace(" ", "_");
+		}
 
 		if(RomanWord != null && !RomanWord.equalsIgnoreCase("") && !RomanWord.equalsIgnoreCase("-")) {
 			RomanStd word = RomanStd.valueOf(RomanWord.trim()); // surround with
 			switch (word) {
 				case I:
-				RomanInWord = "First";
-				break;
+					RomanInWord = "First";
+					break;
 				case II:
-				RomanInWord = "Second";
-				break;
+					RomanInWord = "Second";
+					break;
 				case III:
-				RomanInWord = "Third";
-				break;
+					RomanInWord = "Third";
+					break;
 				case IV:
-				RomanInWord = "Fourth";
-				break;
+					RomanInWord = "Fourth";
+					break;
 				case V:
-				RomanInWord = "Fifth";
-				break;
+					RomanInWord = "Fifth";
+					break;
 				case VI:
-				RomanInWord = "Sixth";
-				break;
+					RomanInWord = "Sixth";
+					break;
 				case VII:
-				RomanInWord = "Seventh";
-				break;
+					RomanInWord = "Seventh";
+					break;
 				case VIII:
-				RomanInWord = "eighth";
-				break;
+					RomanInWord = "eighth";
+					break;
 				case IX:
-				RomanInWord = "Ninth";
-				break;
+					RomanInWord = "Ninth";
+					break;
 				case X:
-				RomanInWord = "Tenth";
-				break;
+					RomanInWord = "Tenth";
+					break;
 				case XI:
-				RomanInWord = "Eleventh";
-				break;
+					RomanInWord = "Eleventh";
+					break;
 				case XII:
-				RomanInWord = "Twelfth";
-				break;
+					RomanInWord = "Twelfth";
+					break;
+				case XIII:
+					RomanInWord = "Thirteenth";
+					break;
+				case XIV:
+					RomanInWord = "Fourteenth";
+					break;
+				case XV:
+					RomanInWord = "Fifteenth";
+					break;
+				case NURSERY:
+					RomanInWord = "Nursery";
+					break;
+				case LOWER_KG:
+					RomanInWord = "Lower KG";
+					break;
+				case UPPER_KG:
+					RomanInWord = "Upper KG";
+					break;
+				case JR_KG:
+					RomanInWord = "JR KG";
+					break;
+				case SR_KG:
+					RomanInWord = "SR KG";
+					break;
 				default:
 				logger.info("Invalid Std.");
 			}
 		}
-
 		return RomanInWord;
 	}
 
@@ -768,11 +809,15 @@ public class Common {
 	public int RomanToInteger(String RomanWord) {
 
 		int RomanToInteger = 0;
-		RomanWord = RomanWord.replace(" ", "_");
+		RomanWord = RomanWord.toUpperCase().replace(" ", "_");
+		RomanWord = RomanWord.toUpperCase().replace(".", "_");
 
 		RomanStd word = RomanStd.valueOf(RomanWord.trim()); // surround with
 
 		switch (word) {
+		case NURSERY:
+			RomanToInteger = -3;
+			break;
 		case JR_KG:
 			RomanToInteger = -2;
 			break;
@@ -824,9 +869,9 @@ public class Common {
 		case XV:
 			RomanToInteger = 15;
 			break;
-		case NURSERY:
-			RomanToInteger = 16;
-			break;
+//		case NURSERY:
+//			RomanToInteger = 16;
+//			break;
 		case LOWER_KG:
 			RomanToInteger = 17;
 			break;
@@ -1503,10 +1548,10 @@ public class Common {
 	}
 	
 	// ////////Academic Year(24/12/2014)/////////////////
-	public static String getAcademicYear(String date) {
+	public static String getAcademicYear(SessionData sessionData, String date) {
 
 		String retAcademic = "", month = "", year = "";
-		int monthStart = Integer.parseInt(bundle.getString("ACADEMIC_START_MONTH"));
+		int monthStart = Integer.parseInt(sessionData.getConfigMap().get("ACADEMIC_START_MONTH"));
 		
 		try {
 			if (date.contains("-")) {
@@ -1542,7 +1587,7 @@ public class Common {
 	}
 
 	// ////////Get promote year/////////////////
-	public static String getPreviousYear(String currAcademicYear) {
+	public static String getPreviousYear(SessionData sessionData, String currAcademicYear) {
 
 		String retPreviousYear = "";
 		try {
@@ -1553,7 +1598,7 @@ public class Common {
 
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			previousYearDate = sdf.format(cal.getTime());
-			retPreviousYear = getAcademicYear(previousYearDate);
+			retPreviousYear = getAcademicYear(sessionData,previousYearDate);
 			return retPreviousYear;
 		} catch (Exception e) {
 			logger.error(e);
@@ -1640,7 +1685,7 @@ public class Common {
 	}
 
 	// ////////Get promote year/////////////////
-	public String getPromoteYear(String currAcademicYear) {
+	public String getPromoteYear(SessionData sessionData, String currAcademicYear) {
 
 		String retPromoteYear = "";
 		try {
@@ -1652,7 +1697,7 @@ public class Common {
 
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			previousYearDate = sdf.format(cal.getTime());
-			String previousAcademicYr = getAcademicYear(previousYearDate);
+			String previousAcademicYr = getAcademicYear(sessionData,previousYearDate);
 
 			retPromoteYear = previousAcademicYr + " to " + currAcademicYear;
 			return retPromoteYear;
@@ -1663,13 +1708,13 @@ public class Common {
 	}
 
 	// ////////Get Next year/////////////////
-	public String getNextYear(String currAcademicYear) {
+	public String getNextYear(SessionData sessionData, String currAcademicYear) {
 
 		try {
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.YEAR, 1);
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			return getAcademicYear(sdf.format(cal.getTime()));
+			return getAcademicYear(sessionData,sdf.format(cal.getTime()));
 		} catch (Exception e) {
 			logException(e);
 			return "";
@@ -2260,13 +2305,13 @@ public class Common {
 	}
 
 	////////// yearSince/////////////////
-	public String yearSince(String date) {
+	public String yearSince(SessionData sessionData, String date) {
 
 		String retyearSince = "";
 		String month = "";
 		String year = "";
 		boolean retFlag = false;
-		int monthStart = Integer.parseInt(bundle.getString("ACADEMIC_START_MONTH"));
+		int monthStart = Integer.parseInt(sessionData.getConfigMap().get("ACADEMIC_START_MONTH"));
 		
 		try {
 			if (date.contains("-")) {
@@ -2295,13 +2340,13 @@ public class Common {
 	}
 
 	/////////// getStudyingSince//////////////////////////////
-	public String getStudyingSince(String dateAdmitted, String academic) {
+	public String getStudyingSince(SessionData sessionData, String dateAdmitted, String academic) {
 
 		String studyingSince = "";
 		String admittedAcademicYear = "";
 		int monthAdmitted = 0;
 		try {
-			admittedAcademicYear = getAcademicYear(dateAdmitted);
+			admittedAcademicYear = getAcademicYear(sessionData,dateAdmitted);
 			monthAdmitted = Integer
 					.parseInt(dateAdmitted.substring(dateAdmitted.indexOf("-") + 1, dateAdmitted.lastIndexOf("-")));
 			if (admittedAcademicYear.equalsIgnoreCase(academic) && monthAdmitted >= 6) {
@@ -2317,12 +2362,12 @@ public class Common {
 		return studyingSince;
 	}
 
-	public void setPasswordToExcel(String fname, FileOutputStream fileOut) {
+	public void setPasswordToExcel(SessionData sessionData, String fname, FileOutputStream fileOut) {
 
 		FileInputStream input = null;
 		BufferedInputStream binput = null;
 		POIFSFileSystem poifs = null;
-		String excelPass = bundle.getString("EXCEL_SECURITY");
+		String excelPass = sessionData.getConfigMap().get("EXCEL_SECURITY");
 
 		try {
 			input = new FileInputStream(fname);
@@ -2370,9 +2415,9 @@ public class Common {
 		// f.setVisible(true);
 	}
 
-	public void CreatePasswordProtectedZip(String srcPath, String destPath) {
+	public void CreatePasswordProtectedZip(SessionData sessionData, String srcPath, String destPath) {
 		try {
-			String zipPass = bundle.getString("ZIP_SECURITY");
+			String zipPass = sessionData.getConfigMap().get("ZIP_SECURITY");
 			// This is name and path of zip file to be created
 			ZipFile zipFile = new ZipFile(srcPath + ".zip");
 
@@ -2506,7 +2551,7 @@ public class Common {
 		}
 
 		if (retText.contains("*")) {
-			retText = retText.replace("*", ", ");
+			retText = retText.replace("*", ",");
 		}
 
 		if (retText.contains("#")) {
@@ -3662,11 +3707,11 @@ public class Common {
 		try {
 			// Construct data
 			LinkedHashMap studenthmap = new LinkedHashMap();
-			String sms_url = bundle.getString("SMS_URL");
-			String sms_user = bundle.getString("SMS_"+sessionData.getAppType()+"_USER");
-			String sms_pass = bundle.getString("SMS_"+sessionData.getAppType()+"_PASS");
-			String sms_sender = bundle.getString("SMS_"+sessionData.getAppType()+"_SENDER");
-			String apiKey = bundle.getString(sessionData.getAppType()+"_APIKEY");
+			String sms_url = sessionData.getConfigMap().get("SMS_URL");
+			String sms_user = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_USER");
+			String sms_pass = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_PASS");
+			String sms_sender = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_SENDER");
+			String apiKey = sessionData.getConfigMap().get(sessionData.getAppType()+"_APIKEY");
 			
 			String phonenumbers = "";
 			String phonePassed = "";
@@ -3691,13 +3736,13 @@ public class Common {
 
 			if (smsType.equalsIgnoreCase("Schedule SMS") && sms_url.contains("bhashsms")) {
 				data += "&time=" + URLEncoder.encode(dateTime, "UTF-8");
-				sms_url = bundle.getString("SMS_SCHEDULE");
+				sms_url = sessionData.getConfigMap().get("SMS_SCHEDULE");
 			} else if (smsType.equalsIgnoreCase("Schedule SMS") && sms_url.contains("hspsms")) {
 				dateTime = dateTime.replace("-", "");
 				dateTime = dateTime.replace(" ", "");
 				dateTime = dateTime.replace(":", "");
 				data += "&scheduled=" + URLEncoder.encode(dateTime, "UTF-8");
-				sms_url = bundle.getString("SMS_SCHEDULE");
+				sms_url = sessionData.getConfigMap().get("SMS_SCHEDULE");
 			}
 
 			URL urlTest = new URL(sms_url);
@@ -3785,19 +3830,19 @@ public class Common {
 		try {
 			// Construct data
 			LinkedHashMap studenthmap = new LinkedHashMap();
-			String sms_url = bundle.getString("SMS_URL");
-			String sms_user = bundle.getString("SMS_"+sessionData.getAppType()+"_USER");
-			String sms_pass = bundle.getString("SMS_"+sessionData.getAppType()+"_PASS");
-			String sms_sender = bundle.getString("SMS_"+sessionData.getAppType()+"_SENDER");
-			String apiKey = bundle.getString(sessionData.getAppType()+"_APIKEY");
-			String sms_pe_id = bundle.getString("SMS_PE_ID");
-			String sms_maauli_flag = bundle.getString("SMS_MAAULI_FLAG");
+			String sms_url = sessionData.getConfigMap().get("SMS_URL");
+			String sms_user = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_USER");
+			String sms_pass = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_PASS");
+			String sms_sender = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_SENDER");
+			String apiKey = sessionData.getConfigMap().get(sessionData.getAppType()+"_APIKEY");
+			String sms_pe_id = sessionData.getConfigMap().get("SMS_PE_ID");
+			String sms_maauli_flag = sessionData.getConfigMap().get("SMS_MAAULI_FLAG");
 			
 			if(sessionData.getUserName().equalsIgnoreCase("prp") && sms_maauli_flag.equalsIgnoreCase("true")){
-				sms_user = bundle.getString("SMS_USER");
-				sms_pass = bundle.getString("SMS_PASS");
-				sms_sender = bundle.getString("SMS_SENDER");
-				apiKey = bundle.getString("SMS_APIKEY");
+				sms_user = sessionData.getConfigMap().get("SMS_USER");
+				sms_pass = sessionData.getConfigMap().get("SMS_PASS");
+				sms_sender = sessionData.getConfigMap().get("SMS_SENDER");
+				apiKey = sessionData.getConfigMap().get("SMS_APIKEY");
 			}
 			String phonenumbers = "";
 			String phonePassed = "";
@@ -3835,7 +3880,7 @@ public class Common {
 				dateTime = dateTime.replace(" ", "");
 				dateTime = dateTime.replace(":", "");
 				data += "&scheduled=" + URLEncoder.encode(dateTime, "UTF-8");
-				sms_url = bundle.getString("SMS_SCHEDULE");
+				sms_url = sessionData.getConfigMap().get("SMS_SCHEDULE");
 			}
 
 			URL urlTest = new URL(sms_url);
@@ -3947,19 +3992,19 @@ public class Common {
 		try {
 			// Construct data
 			LinkedHashMap studenthmap = new LinkedHashMap();
-			String sms_url = bundle.getString("SMS_URL");
-			String sms_user = bundle.getString("SMS_"+sessionData.getAppType()+"_USER");
-			String sms_pass = bundle.getString("SMS_"+sessionData.getAppType()+"_PASS");
-			String sms_sender = bundle.getString("SMS_"+sessionData.getAppType()+"_SENDER");
-			String apiKey = bundle.getString(sessionData.getAppType()+"_APIKEY");
-			String sms_pe_id = bundle.getString("SMS_PE_ID");
-			String sms_maauli_flag = bundle.getString("SMS_MAAULI_FLAG");
+			String sms_url = sessionData.getConfigMap().get("SMS_URL");
+			String sms_user = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_USER");
+			String sms_pass = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_PASS");
+			String sms_sender = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_SENDER");
+			String apiKey = sessionData.getConfigMap().get(sessionData.getAppType()+"_APIKEY");
+			String sms_pe_id = sessionData.getConfigMap().get("SMS_PE_ID");
+			String sms_maauli_flag = sessionData.getConfigMap().get("SMS_MAAULI_FLAG");
 			
 			if(sessionData.getUserName().equalsIgnoreCase("prp") && sms_maauli_flag.equalsIgnoreCase("true")){
-				sms_user = bundle.getString("SMS_USER");
-				sms_pass = bundle.getString("SMS_PASS");
-				sms_sender = bundle.getString("SMS_SENDER");
-				apiKey = bundle.getString("SMS_APIKEY");
+				sms_user = sessionData.getConfigMap().get("SMS_USER");
+				sms_pass = sessionData.getConfigMap().get("SMS_PASS");
+				sms_sender = sessionData.getConfigMap().get("SMS_SENDER");
+				apiKey = sessionData.getConfigMap().get("SMS_APIKEY");
 			}
 			String phonenumbers = "", staffName = "";
 			String phonePassed = "";
@@ -3996,7 +4041,7 @@ public class Common {
 						dateTime = dateTime.replace(" ", "");
 						dateTime = dateTime.replace(":", "");
 						data += "&scheduled=" + URLEncoder.encode(dateTime, "UTF-8");
-						sms_url = bundle.getString("SMS_SCHEDULE");
+						sms_url = sessionData.getConfigMap().get("SMS_SCHEDULE");
 					}
 
 					URL urlTest = new URL(sms_url);
@@ -4057,9 +4102,9 @@ public class Common {
 		try {
 			// Construct data
 			LinkedHashMap studenthmap = new LinkedHashMap();
-			String sms_url = bundle.getString("SMS_BALANCE");
-			String sms_user = bundle.getString("SMS_"+sessionData.getAppType()+"_USER");
-			String sms_pass = bundle.getString("SMS_"+sessionData.getAppType()+"_PASS");
+			String sms_url = sessionData.getConfigMap().get("SMS_BALANCE");
+			String sms_user = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_USER");
+			String sms_pass = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_PASS");
 
 			String data = "user=" + URLEncoder.encode(sms_user, "UTF-8");
 			data += "&pass=" + URLEncoder.encode(sms_pass, "UTF-8");
@@ -4102,16 +4147,16 @@ public class Common {
 		try {
 			// Construct data
 			LinkedHashMap studenthmap = new LinkedHashMap();
-			String sms_url = bundle.getString("SMS_BALANCE");
-			String sms_user = bundle.getString("SMS_"+sessionData.getAppType()+"_USER");
-			String sms_pass = bundle.getString("SMS_"+sessionData.getAppType()+"_PASS");
-			String apiKey = bundle.getString(sessionData.getAppType()+"_APIKEY");
-			String sms_maauli_flag = bundle.getString("SMS_MAAULI_FLAG");
+			String sms_url = sessionData.getConfigMap().get("SMS_BALANCE");
+			String sms_user = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_USER");
+			String sms_pass = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_PASS");
+			String apiKey = sessionData.getConfigMap().get(sessionData.getAppType()+"_APIKEY");
+			String sms_maauli_flag = sessionData.getConfigMap().get("SMS_MAAULI_FLAG");
 			
 			if(sessionData.getUserName().equalsIgnoreCase("prp") && sms_maauli_flag.equalsIgnoreCase("true")){
-				sms_user = bundle.getString("SMS_USER");
-				sms_pass = bundle.getString("SMS_PASS");
-				apiKey = bundle.getString("SMS_APIKEY");
+				sms_user = sessionData.getConfigMap().get("SMS_USER");
+				sms_pass = sessionData.getConfigMap().get("SMS_PASS");
+				apiKey = sessionData.getConfigMap().get("SMS_APIKEY");
 			}
 
 			String data = "username=" + sms_user;
@@ -4157,9 +4202,9 @@ public class Common {
 		try {
 			// Construct data
 			LinkedHashMap studenthmap = new LinkedHashMap();
-			String sms_url = bundle.getString("DELIVERY_STATUS");
-			String sms_user = bundle.getString("SMS_"+sessionData.getAppType()+"_USER");
-			String sms_pass = bundle.getString("SMS_"+sessionData.getAppType()+"_PASS");
+			String sms_url = sessionData.getConfigMap().get("DELIVERY_STATUS");
+			String sms_user = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_USER");
+			String sms_pass = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_PASS");
 
 			String data = "user=" + URLEncoder.encode(sms_user, "UTF-8");
 			data += "&msgid=" + URLEncoder.encode(msgId, "UTF-8");
@@ -4211,16 +4256,16 @@ public class Common {
 		try {
 			// Construct data
 			LinkedHashMap studenthmap = new LinkedHashMap();
-			String sms_url = bundle.getString("DELIVERY_STATUS");
-			String sms_user = bundle.getString("SMS_"+sessionData.getAppType()+"_USER");
-			String sms_pass = bundle.getString("SMS_"+sessionData.getAppType()+"_PASS");
-			String apiKey = bundle.getString(sessionData.getAppType()+"_APIKEY");
-			String sms_maauli_flag = bundle.getString("SMS_MAAULI_FLAG");
+			String sms_url = sessionData.getConfigMap().get("DELIVERY_STATUS");
+			String sms_user = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_USER");
+			String sms_pass = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_PASS");
+			String apiKey = sessionData.getConfigMap().get(sessionData.getAppType()+"_APIKEY");
+			String sms_maauli_flag = sessionData.getConfigMap().get("SMS_MAAULI_FLAG");
 			
 			if(sessionData.getUserName().equalsIgnoreCase("prp") && sms_maauli_flag.equalsIgnoreCase("true")){
-				sms_user = bundle.getString("SMS_USER");
-				sms_pass = bundle.getString("SMS_PASS");
-				apiKey = bundle.getString("SMS_APIKEY");
+				sms_user = sessionData.getConfigMap().get("SMS_USER");
+				sms_pass = sessionData.getConfigMap().get("SMS_PASS");
+				apiKey = sessionData.getConfigMap().get("SMS_APIKEY");
 			}
 
 			String data = "username=" + sms_user;
@@ -4569,9 +4614,9 @@ public class Common {
 	 */
 	public LinkedHashMap<String,String> getDateForADayInWeek(SessionData sessionData){
 		LinkedHashMap<String,String> dataMap = new LinkedHashMap<String,String>();
-		int firstDay = Integer.parseInt(bundle.getString("SMS_FIRST_DAY")+"");
-		int lastDay = Integer.parseInt(bundle.getString("SMS_LAST_DAY")+"");
-//		int startMonth = Integer.parseInt(bundle.getString("ACADEMIC_START_MONTH"));
+		int firstDay = Integer.parseInt(sessionData.getConfigMap().get("SMS_FIRST_DAY")+"");
+		int lastDay = Integer.parseInt(sessionData.getConfigMap().get("SMS_LAST_DAY")+"");
+//		int startMonth = Integer.parseInt(sessionData.getConfigMap().get("ACADEMIC_START_MONTH"));
 //		int endMonth = startMonth-1;
 		
 //      DateFormat df = new SimpleDateFormat("EEE dd/MM/yyyy"); //if you want to get day on that date
@@ -4588,11 +4633,13 @@ public class Common {
         c.add(Calendar.DATE, lastDay);
         dataMap.put("lastDay", df.format(c.getTime()));
         
-        c.set(Calendar.DAY_OF_MONTH, 1);
-        dataMap.put("firstDayOfMonth", df.format(c.getTime()));
+        // Get calendar set to current date and time
+        Calendar c1 = Calendar.getInstance();
+        c1.set(Calendar.DAY_OF_MONTH, 1);
+        dataMap.put("firstDayOfMonth", df.format(c1.getTime()));
         
-        c.set(Calendar.DATE, c.getActualMaximum(Calendar.DATE));
-        dataMap.put("lastDayOfMonth", df.format(c.getTime()));
+        c1.set(Calendar.DATE, c1.getActualMaximum(Calendar.DATE));
+        dataMap.put("lastDayOfMonth", df.format(c1.getTime()));
         
         return dataMap;
 	}
@@ -4627,8 +4674,10 @@ public class Common {
 		String[] data = null;
 		for(int k = 0; k < dataSplit.length; k++) {
 			data = dataSplit[k].split("\\^");
-			if(data[9].equalsIgnoreCase("A")) {
-				return data;
+			if(data.length > 9) {
+				if(data[9].equalsIgnoreCase("A")) {
+					return data;
+				}
 			}
 		}
 		return null;
@@ -4650,12 +4699,18 @@ public class Common {
 		byte b[] = null;
 		try {
 
+			logger.info("convertImage imgPath :: "+imgPath);
+			if((System.getProperty("os.name").toLowerCase().indexOf("mac") < 0)) {
+				imgPath = imgPath.replace("/","\\\\");
+			}
+			logger.info("convertImage imgPath 2 :: "+imgPath);
 			BufferedImage originalImage = ImageIO.read(new File(imgPath));
+//			BufferedImage originalImage = ImageIO.read(this.getClass().getResource(imgPath));
 			int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
 
 			BufferedImage resizeImageJpg = resizeImage(originalImage, type);
 			ImageIO.write(resizeImageJpg, "jpg", new File(tmpPath));
-
+			
 //			BufferedImage resizeImagePng = resizeImage(originalImage, type);
 //			ImageIO.write(resizeImagePng, "png", new File("d:\\image\\mkyong_png.jpg"));
 //
@@ -4671,7 +4726,7 @@ public class Common {
 			b = baos.toByteArray();
 			baos.close();
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logException(e);
 		}
 		return b;
@@ -4736,8 +4791,8 @@ public class Common {
 		try {
 			String dateToday = getCurrentDate();
 			String errors = "";
-			String academicYear = getAcademicYear(dateToday);
-			String previousYear = getPreviousYear(academicYear);
+			String academicYear = getAcademicYear(sessionData, dateToday);
+			String previousYear = getPreviousYear(sessionData, academicYear);
 			dbValidate.connectDatabase(sessionData);
 			long lDateTime = new Date().getTime();
 			fileName  = "errors_in_import_"+lDateTime+".txt";
@@ -5508,8 +5563,8 @@ public class Common {
 		try {
 			String dateToday = getCurrentDate();
 			String errors = "";
-			String academicYear = getAcademicYear(dateToday);
-			String previousYear = getPreviousYear(academicYear);
+			String academicYear = getAcademicYear(sessionData, dateToday);
+			String previousYear = getPreviousYear(sessionData,academicYear);
 			dbValidate.connectDatabase(sessionData);
 			long lDateTime = new Date().getTime();
 			fileName  = "errors_in_import_"+lDateTime+".txt";
@@ -5700,7 +5755,7 @@ public class Common {
 				userKeyDate = "", renewDate = "", userCode = "", userMonth = "";
 		
 		try {
-			String renewStr = bundle.getString("RENEW_CODE");
+			String renewStr = session.getConfigMap().get("RENEW_CODE");
 			Date currentDate = new Date();
 			
 			if(tm.get("renew_code") != null && !tm.get("renew_code").toString().equalsIgnoreCase("")) {

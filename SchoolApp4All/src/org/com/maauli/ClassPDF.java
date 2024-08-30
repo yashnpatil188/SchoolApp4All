@@ -63,8 +63,8 @@ public class ClassPDF {
 			fileOpenFlag	= true;
 			user_name = retUserName;
 			user_role = retUserRole;
-			app_header = bundle.getString("CLASS_ALLOT_HEADER_"+sessionData.getAppType());
-			records_per_page = bundle.getString("RECORDS_PER_PAGE_"+sessionData.getAppType());
+			app_header = sessionData.getConfigMap().get("CLASS_ALLOT_HEADER_"+sessionData.getAppType());
+			records_per_page = sessionData.getConfigMap().get("RECORDS_PER_PAGE_"+sessionData.getAppType());
 			int classSize = 0;
 			List<String> classDataList = new ArrayList();
 			classDataList = findStudentDB.findClassData(sessionData, studentMap, std, div, academic);
@@ -77,7 +77,7 @@ public class ClassPDF {
 			
 //			fileName = "Class" + std + div + academic + commonLc.timeInMillis()+ ".pdf";
 		    fileName = "Class" + std + div + academic + commonLc.timeInMillis()+".pdf";
-		    path = commonLc.createTodayFolder(commonLc.getDriveName() + bundle.getString("CLASS_PDF_PATH_"+sessionData.getDBName()),true)+"/";
+		    path = commonLc.createTodayFolder(commonLc.getDriveName() + sessionData.getConfigMap().get("CLASS_PDF_PATH_"+sessionData.getDBName()),true)+"/";
 //			path = commonLc.createTodayFolder("D:\\yash\\classPDF\\",false) + "\\";
 //		    path = "D:\\yash\\classPDF\\";
 			fileAddress = path + fileName;

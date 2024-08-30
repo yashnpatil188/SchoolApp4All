@@ -110,38 +110,38 @@ public class Section
             user_role = retRole;
             section = sec;
             logger.info("section :: " + section);
-            secName = bundle.getString(section.toUpperCase() + "_SEC");
+            secName = sessionData1.getConfigMap().get(section.toUpperCase() + "_SEC");
             logger.info("secName :: " + secName);
-            img_path = bundle.getString("IMAGE_PATH");
+            img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
             logger.info("img_path :: " + img_path);
-            img_home = bundle.getString("IMAGE_HOME");
-            img_logo = bundle.getString("IMAGE_LOGO");
-            img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-            img_logout = bundle.getString("IMAGE_LOGOUT");
-            img_titleband = bundle.getString("IMAGE_TITLEBAND");
-            img_leftband = bundle.getString("IMAGE_LEFTBAND");
-            img_menuband = bundle.getString("IMAGE_MENUBAND");
-            img_mainband = bundle.getString("IMAGE_MAINBAND");
-            app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-            app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-            app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-            app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-        	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-        	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-        	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-            app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-        	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-        	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-        	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-            app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-            app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-        	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-        	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
-        	sms_required = bundle.getString("SMS_REQUIRED");
-        	fee_required = bundle.getString("FEE_REQUIRED");
-        	fee_visible_master_only = bundle.getString("FEE_VISIBLE_MASTER_ONLY");
-        	account_required = bundle.getString("ACCOUNT_REQUIRED");
-        	staff_required = bundle.getString("STAFF_REQUIRED");
+            img_home = sessionData1.getConfigMap().get("IMAGE_HOME");
+            img_logo = sessionData1.getConfigMap().get("IMAGE_LOGO");
+            img_myaccount = sessionData1.getConfigMap().get("IMAGE_MYACCOUNT");
+            img_logout = sessionData1.getConfigMap().get("IMAGE_LOGOUT");
+            img_titleband = sessionData1.getConfigMap().get("IMAGE_TITLEBAND");
+            img_leftband = sessionData1.getConfigMap().get("IMAGE_LEFTBAND");
+            img_menuband = sessionData1.getConfigMap().get("IMAGE_MENUBAND");
+            img_mainband = sessionData1.getConfigMap().get("IMAGE_MAINBAND");
+            app_header = sessionData1.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+            app_header_0 = sessionData1.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+            app_header_0_fontName = sessionData1.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+            app_header_0_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+        	app_header_0_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+        	app_header_0_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+        	app_header_fontName = sessionData1.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+            app_header_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+        	app_header_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+        	app_header_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+        	app_header_2 = sessionData1.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+            app_header_2_fontName = sessionData1.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+            app_header_2_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+        	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+        	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+        	sms_required = sessionData1.getConfigMap().get("SMS_REQUIRED");
+        	fee_required = sessionData1.getConfigMap().get("FEE_REQUIRED");
+        	fee_visible_master_only = sessionData1.getConfigMap().get("FEE_VISIBLE_MASTER_ONLY");
+        	account_required = sessionData1.getConfigMap().get("ACCOUNT_REQUIRED");
+        	staff_required = sessionData1.getConfigMap().get("STAFF_REQUIRED");
 
             boolean deleteFlag = false;
             try {
@@ -273,7 +273,7 @@ public class Section
 
 						frame.setVisible(false);
 						String[] arguments = new String[] {""};
-		                LoginView.main(arguments);
+		                SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					logger.info("Exception logoutButton ===>>>" + e1);

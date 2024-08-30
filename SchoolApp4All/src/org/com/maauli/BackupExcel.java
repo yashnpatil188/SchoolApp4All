@@ -27,8 +27,6 @@ import org.com.security.EncryptDecryptStr;
 
 public class BackupExcel {
     
-	String driver = bundle.getString("DBDRIVER");
-
 	boolean validateUserFlag = false;
 
 	boolean admitFormFlag = false;
@@ -59,9 +57,11 @@ public class BackupExcel {
 	
 //	DBValidate dbValidate = new DBValidate();
 	
-	static String user = bundle.getString("DBUSER");
+	String driver = "";
+	
+	String user = "";
 
-	static String pwd = bundle.getString("DBPASSWD");
+	String pwd = "";
 	
 	/*public boolean connectDatabase() {
 
@@ -108,12 +108,18 @@ public class BackupExcel {
 		Statement st = null;
 		ResultSet rs = null;
 		
+		driver = sessionData.getConfigMap().get("DBDRIVER");
+		
+		user = sessionData.getConfigMap().get("DBUSER");
+
+		pwd = sessionData.getConfigMap().get("DBPASSWD");
+		
 //		f.setTitle("Backup completed " + percentProgress + " %");
 		
 		try {
 			connectDatabase(sessionData);
-			path = commonObj.createTodayFolder(commonObj.getDriveName() + bundle.getString("BACKUP_PATH_"+sessionData.getDBName()),true);
-			excel_readonly = bundle.getString("EXCEL_READONLY");
+			path = commonObj.createTodayFolder(commonObj.getDriveName() + sessionData.getConfigMap().get("BACKUP_PATH_"+sessionData.getDBName()),true);
+			excel_readonly = sessionData.getConfigMap().get("EXCEL_READONLY");
 			
 			if(printList.size() <= 0){
 				st = connection.createStatement();
@@ -235,7 +241,7 @@ public class BackupExcel {
 			FileOutputStream fileOut = new FileOutputStream(filePath);
 			wb.write(fileOut);
 //			commonObj.setPasswordToExcel(filePath, fileOut);
-//			commonObj.CreatePasswordProtectedZip(path,"");
+//			commonObj.CreatePasswordProtectedZip(sessionDatapath,"");
 //			fileOut.close();
 			logger.info("Data is saved in excel file.");
 		} catch (Exception e) {
@@ -337,14 +343,13 @@ public class BackupExcel {
 
     }
 
-    public boolean connectDatabase(SessionData sessionData1) {
+    public boolean connectDatabase(SessionData sessionData) {
 		boolean dbConnection = false;
-		sessionData 	= sessionData1;
 		String dbUser 	= "";
 		String dbPass 	= "";
 		
 		try {
-			String url = bundle.getString("DBURL_"+sessionData.getDBName());
+			String url = sessionData.getConfigMap().get("DBURL_"+sessionData.getDBName());
 			dbUser = sessionData.getDBUser();
 			dbPass = sessionData.getDBPass();
 			if(dbUser.equalsIgnoreCase(null) || dbUser.equalsIgnoreCase("")){

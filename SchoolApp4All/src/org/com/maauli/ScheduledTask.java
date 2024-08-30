@@ -38,7 +38,7 @@ public class ScheduledTask extends TimerTask {
 			updateUndeliveredSms();
 		}
 		else if(methodNameClass.equalsIgnoreCase("backupDatabase")){
-			backupDatabase();
+			backupDatabase(sessionDataClass);
 		}
 	}
 	
@@ -51,9 +51,9 @@ public class ScheduledTask extends TimerTask {
 		}
 	}
 	
-	public void backupDatabase(){
+	public void backupDatabase(SessionData sessionData){
 		try {
-			String bckPath = cm.getDriveName() + bundle.getString("BACKUP_PATH_"+sessionDataClass.getDBName())+cm.getCurrentDatein_dd_MMM_yyyy();
+			String bckPath = cm.getDriveName() + sessionDataClass.getConfigMap().get("BACKUP_PATH_"+sessionDataClass.getDBName())+cm.getCurrentDatein_dd_MMM_yyyy();
 			if(!(System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0)) {
 				if (dbValidateClass.connectDatabase(sessionDataClass)) {
 					
@@ -64,7 +64,7 @@ public class ScheduledTask extends TimerTask {
 				    cm.deleteFolder(bckPath);
 				    cm.deleteFile(bckPath+".zip");
 				    dbValidateClass.backupToSQLFile(sessionDataClass,bckPath, false);
-					cm.CreatePasswordProtectedZip(bckPath,"");
+					cm.CreatePasswordProtectedZip(sessionData, bckPath, "");
 					cm.deleteFolder(bckPath);
 				}
 			}

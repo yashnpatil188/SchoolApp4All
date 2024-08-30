@@ -175,7 +175,7 @@ public class FeesView extends JFrame {
     static LinkedHashMap concessionMap;
     static int scrollHeight = 0;
     static double totalBalanceFromDB = 0;
-    private static int startMonth = Integer.parseInt(bundle.getString("ACADEMIC_START_MONTH"));
+    private static int startMonth = 0;
     private static String oldAcademicClass = "";
     private static String oldStdClass = "";
     private static boolean headerRadioClass = false;
@@ -188,6 +188,8 @@ public class FeesView extends JFrame {
     		String subFrequency, String contact1, String contact2, String oldAcademic, String oldStd, boolean headerRadio) {
 
     	System.gc();
+    	sessionData = sessionData1;
+    	startMonth = Integer.parseInt(sessionData.getConfigMap().get("ACADEMIC_START_MONTH"));
     	totalBalanceFromDB = 0;
     	receiptShortName = "";
     	section = sec;
@@ -215,7 +217,6 @@ public class FeesView extends JFrame {
     	searchStudentMap = retStudentMap;
     	stdClass = retStd;
     	academicYearClass = academicYear;
-    	sessionData = sessionData1;
     	if (retStd.equalsIgnoreCase(""))
 			stdClass = "Select";
 		else
@@ -230,53 +231,53 @@ public class FeesView extends JFrame {
         setVisible(false);
         dispose();
         frame = new JFrame("Welcome to "+sessionData1.getAppName());
-        img_path = bundle.getString("IMAGE_PATH");
+        img_path = sessionData.getConfigMap().get("IMAGE_PATH");
         logger.info("img_path :: " + img_path);
-        img_home = bundle.getString("IMAGE_HOME");
-//        img_founder = bundle.getString("IMGAGE_FOUNDER");
-        img_logo = bundle.getString("IMAGE_LOGO");
-        img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-        img_logout = bundle.getString("IMAGE_LOGOUT");
-        img_titleband = bundle.getString("IMAGE_TITLEBAND");
-        img_leftband = bundle.getString("IMAGE_LEFTBAND");
-        img_menuband = bundle.getString("IMAGE_MENUBAND");
-        img_mainband = bundle.getString("IMAGE_MAINBAND");
-        img_databand = bundle.getString("IMAGE_DATABAND");
-        sms_required = bundle.getString("SMS_REQUIRED");
-        fee_required = bundle.getString("FEE_REQUIRED");
-        paymentModeList = bundle.getString("PAYMENT_MODE");
-        account_required = bundle.getString("ACCOUNT_REQUIRED");
-    	staff_required = bundle.getString("STAFF_REQUIRED");
-        url = bundle.getString("DBURL_"+sessionData1.getDBName());
-        secName = bundle.getString(section.toUpperCase() + "_SEC");
+        img_home = sessionData.getConfigMap().get("IMAGE_HOME");
+//        img_founder = sessionData.getConfigMap().get("IMGAGE_FOUNDER");
+        img_logo = sessionData.getConfigMap().get("IMAGE_LOGO");
+        img_myaccount = sessionData.getConfigMap().get("IMAGE_MYACCOUNT");
+        img_logout = sessionData.getConfigMap().get("IMAGE_LOGOUT");
+        img_titleband = sessionData.getConfigMap().get("IMAGE_TITLEBAND");
+        img_leftband = sessionData.getConfigMap().get("IMAGE_LEFTBAND");
+        img_menuband = sessionData.getConfigMap().get("IMAGE_MENUBAND");
+        img_mainband = sessionData.getConfigMap().get("IMAGE_MAINBAND");
+        img_databand = sessionData.getConfigMap().get("IMAGE_DATABAND");
+        sms_required = sessionData.getConfigMap().get("SMS_REQUIRED");
+        fee_required = sessionData.getConfigMap().get("FEE_REQUIRED");
+        paymentModeList = sessionData.getConfigMap().get("PAYMENT_MODE");
+        account_required = sessionData.getConfigMap().get("ACCOUNT_REQUIRED");
+    	staff_required = sessionData.getConfigMap().get("STAFF_REQUIRED");
+        url = sessionData.getConfigMap().get("DBURL_"+sessionData1.getDBName());
+        secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
         
-        app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+        app_header = sessionData.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
     	
-        jrc_required = bundle.getString("JRC_REQUIRED");
-        sch_required = bundle.getString("SCH_REQUIRED");
-        schigh_required = bundle.getString("SCHIGH_REQUIRED");
-        scpri_required = bundle.getString("SCPRI_REQUIRED");
-        scppr_required = bundle.getString("SCPPR_REQUIRED");
-        show_founder = bundle.getString("SHOW_FOUNDER");
-        show_donatedby = bundle.getString("SHOW_DONATEDBY");
+        jrc_required = sessionData.getConfigMap().get("JRC_REQUIRED");
+        sch_required = sessionData.getConfigMap().get("SCH_REQUIRED");
+        schigh_required = sessionData.getConfigMap().get("SCHIGH_REQUIRED");
+        scpri_required = sessionData.getConfigMap().get("SCPRI_REQUIRED");
+        scppr_required = sessionData.getConfigMap().get("SCPPR_REQUIRED");
+        show_founder = sessionData.getConfigMap().get("SHOW_FOUNDER");
+        show_donatedby = sessionData.getConfigMap().get("SHOW_DONATEDBY");
         
         if(academicYearClass.trim().equalsIgnoreCase("")){
         	String todayDate = commonObj.getCurrentDate();
-            academicYearClass = commonObj.getAcademicYear(todayDate);
+            academicYearClass = commonObj.getAcademicYear(sessionData1,todayDate);
         }
         
         try {
@@ -410,7 +411,7 @@ public class FeesView extends JFrame {
 
 						frame.setVisible(false);
 						String[] arguments = new String[] { "" };
-						LoginView.main(arguments);
+						SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					logger.info("Exception logoutButton ===>>>" + e1);
@@ -1418,13 +1419,13 @@ public class FeesView extends JFrame {
 				}
 				
 				String optionSms = "";
-				if(bundle.getString("SMS_FEE_FLAG").equalsIgnoreCase("true") && bundle.getString("STAFF_FEE_SMS").equalsIgnoreCase("true")) {
+				if(sessionData.getConfigMap().get("SMS_FEE_FLAG").equalsIgnoreCase("true") && sessionData.getConfigMap().get("STAFF_FEE_SMS").equalsIgnoreCase("true")) {
 					optionSms = JOptionPane.showInputDialog("=== SMS will be sent to Parents and Staff === \n Please Enter option \n 1 : Proceed "
 							+ " \n 2 : Cancel Fee Payment");
-				} else if(bundle.getString("SMS_FEE_FLAG").equalsIgnoreCase("true")) {
+				} else if(sessionData.getConfigMap().get("SMS_FEE_FLAG").equalsIgnoreCase("true")) {
 					optionSms = JOptionPane.showInputDialog("=== SMS will be sent to Parents === \n Please Enter option \n 1 : Proceed "
 							+ " \n 2 : Cancel Fee Payment");
-				} else if(bundle.getString("STAFF_FEE_SMS").equalsIgnoreCase("true")) {
+				} else if(sessionData.getConfigMap().get("STAFF_FEE_SMS").equalsIgnoreCase("true")) {
 					optionSms = JOptionPane.showInputDialog("=== SMS will be sent to Staff === \n Please Enter option \n 1 : Proceed "
 							+ " \n 2 : Cancel Fee Payment");
 				}

@@ -58,10 +58,10 @@ public class AdmissionRegisterPDF {
 		
 		try {
 			ResourceBundle bundle    		= ResourceBundle.getBundle("org.com.accesser.school"); 
-			String path = cm.createTodayFolder(cm.getDriveName() + bundle.getString("ADMISSION_REGISTER_PDF_PATH_"+sessionData.getDBName()),true)+"/";
-			schoolName = bundle.getString("BONAFIDE_HEADER_"+sessionData.getAppType());
-			schoolTaluka = bundle.getString(sessionData.getAppType()+"_TALUKA");
-			schoolDistrict = bundle.getString(sessionData.getAppType()+"_DISTRICT");
+			String path = cm.createTodayFolder(cm.getDriveName() + sessionData.getConfigMap().get("ADMISSION_REGISTER_PDF_PATH_"+sessionData.getDBName()),true)+"/";
+			schoolName = sessionData.getConfigMap().get("BONAFIDE_HEADER_"+sessionData.getAppType());
+			schoolTaluka = sessionData.getConfigMap().get(sessionData.getAppType()+"_TALUKA");
+			schoolDistrict = sessionData.getConfigMap().get(sessionData.getAppType()+"_DISTRICT");
 			
 			List schoolList = cm.breakSentence(schoolName, 35);
 			if(schoolList != null){

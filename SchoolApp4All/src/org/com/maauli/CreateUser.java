@@ -54,7 +54,7 @@ public class CreateUser {
 	static Common commonObj 		= new Common();
 	static String user_name 		= "";
     static String user_role 		= "";
-	static Logger logger 			= Logger.getLogger(LoginView.class.getName());
+	static Logger logger 			= Logger.getLogger(SchoolForAllLoginView.class.getName());
     static ResourceBundle bundle    = ResourceBundle.getBundle("org.com.accesser.school");
     static SessionData sessionData 	= new SessionData();
     static DBValidate dbValidate 	= new DBValidate();
@@ -74,15 +74,15 @@ public class CreateUser {
 		frame.setSize(screenWidth, screenHeight);
 		frame.setResizable(false);
 		
-		img_path	= bundle.getString("IMAGE_PATH");
+		img_path	= sessionData1.getConfigMap().get("IMAGE_PATH");
     	logger.info("img_path :: "+img_path);
-    	img_submit  = bundle.getString("IMAGE_SUBMIT");
-    	img_home = bundle.getString("IMAGE_HOME");
+    	img_submit  = sessionData1.getConfigMap().get("IMAGE_SUBMIT");
+    	img_home = sessionData1.getConfigMap().get("IMAGE_HOME");
     	
-    	secret_quest_1     = bundle.getString("SECRET_QUEST_1");
-    	secret_quest_2     = bundle.getString("SECRET_QUEST_2");
-    	secret_quest_3     = bundle.getString("SECRET_QUEST_3");
-    	create_user_role   = bundle.getString("CREATE_USER_ROLE");
+    	secret_quest_1     = sessionData1.getConfigMap().get("SECRET_QUEST_1");
+    	secret_quest_2     = sessionData1.getConfigMap().get("SECRET_QUEST_2");
+    	secret_quest_3     = sessionData1.getConfigMap().get("SECRET_QUEST_3");
+    	create_user_role   = sessionData1.getConfigMap().get("CREATE_USER_ROLE");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel panel = new JPanel() {

@@ -169,7 +169,7 @@ public class FeesReport extends JFrame {
     private static boolean isAllSelectedClass = false;
     private static String referenceNoClass = "";
     private static int scrollHeight = 0;
-    private static int startMonth = Integer.parseInt(bundle.getString("ACADEMIC_START_MONTH"));
+    private static int startMonth = 0;
     private static String fromDateClass = "";
     private static String toDateClass = "";
     private static String receiptShortName = "";
@@ -192,6 +192,8 @@ public class FeesReport extends JFrame {
 			String academicYear, String optional, String frequency, String subFrequency, boolean isAllSelected) {
 
     	System.gc();
+    	sessionData = sessionData1;
+    	startMonth = Integer.parseInt(sessionData.getConfigMap().get("ACADEMIC_START_MONTH"));
     	isAllSelectedClass = isAllSelected;
     	studentFeeDetailsMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
     	selectedStudentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
@@ -206,7 +208,6 @@ public class FeesReport extends JFrame {
     	stdClass = retStd;
     	optionalClass = optional;
     	academicYearClass = academicYear;
-    	sessionData = sessionData1;
 		stdClass = retStd;
 		divClass = retDiv;
         user_name = sessionData1.getUserName();
@@ -215,60 +216,60 @@ public class FeesReport extends JFrame {
 //        dispose();
         
         frame = new JFrame("Welcome to "+sessionData1.getAppName());
-        stdList = bundle.getString(section.toUpperCase() + "_STD");
-        div = bundle.getString(section.toUpperCase() + "_DIV");
-        payFrequency = bundle.getString("PAY_FREQUENCY");
-        img_path = bundle.getString("IMAGE_PATH");
+        stdList = sessionData.getConfigMap().get(section.toUpperCase() + "_STD");
+        div = sessionData.getConfigMap().get(section.toUpperCase() + "_DIV");
+        payFrequency = sessionData.getConfigMap().get("PAY_FREQUENCY");
+        img_path = sessionData.getConfigMap().get("IMAGE_PATH");
         logger.info("img_path :: " + img_path);
-        img_home = bundle.getString("IMAGE_HOME");
-        img_founder = bundle.getString("IMGAGE_FOUNDER");
-        img_logo = bundle.getString("IMAGE_LOGO");
-        img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-        img_logout = bundle.getString("IMAGE_LOGOUT");
-        img_titleband = bundle.getString("IMAGE_TITLEBAND");
-        img_leftband = bundle.getString("IMAGE_LEFTBAND");
-        img_menuband = bundle.getString("IMAGE_MENUBAND");
-        img_mainband = bundle.getString("IMAGE_MAINBAND");
-        img_databand = bundle.getString("IMAGE_DATABAND");
-        sms_required = bundle.getString("SMS_REQUIRED");
-        fee_required = bundle.getString("FEE_REQUIRED");
-        account_required = bundle.getString("ACCOUNT_REQUIRED");
-    	staff_required = bundle.getString("STAFF_REQUIRED");
-        url = bundle.getString("DBURL_"+sessionData1.getDBName());
-        secName = bundle.getString(section.toUpperCase() + "_SEC");
+        img_home = sessionData.getConfigMap().get("IMAGE_HOME");
+        img_founder = sessionData.getConfigMap().get("IMGAGE_FOUNDER");
+        img_logo = sessionData.getConfigMap().get("IMAGE_LOGO");
+        img_myaccount = sessionData.getConfigMap().get("IMAGE_MYACCOUNT");
+        img_logout = sessionData.getConfigMap().get("IMAGE_LOGOUT");
+        img_titleband = sessionData.getConfigMap().get("IMAGE_TITLEBAND");
+        img_leftband = sessionData.getConfigMap().get("IMAGE_LEFTBAND");
+        img_menuband = sessionData.getConfigMap().get("IMAGE_MENUBAND");
+        img_mainband = sessionData.getConfigMap().get("IMAGE_MAINBAND");
+        img_databand = sessionData.getConfigMap().get("IMAGE_DATABAND");
+        sms_required = sessionData.getConfigMap().get("SMS_REQUIRED");
+        fee_required = sessionData.getConfigMap().get("FEE_REQUIRED");
+        account_required = sessionData.getConfigMap().get("ACCOUNT_REQUIRED");
+    	staff_required = sessionData.getConfigMap().get("STAFF_REQUIRED");
+        url = sessionData.getConfigMap().get("DBURL_"+sessionData1.getDBName());
+        secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
         sessionData.setSectionFullName(secName);
-        paymentModeList = bundle.getString("PAYMENT_MODE");
+        paymentModeList = sessionData.getConfigMap().get("PAYMENT_MODE");
         
-        app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
-    	smsFooter = bundle.getString("SMS_"+sessionData.getAppType()+"_FOOTER");
-    	frequencyList =  bundle.getString("SEARCH_FREQUENCY");
-    	reportType = bundle.getString("FEE_REPORT_TYPE");
+        app_header = sessionData.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+    	smsFooter = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_FOOTER");
+    	frequencyList =  sessionData.getConfigMap().get("SEARCH_FREQUENCY");
+    	reportType = sessionData.getConfigMap().get("FEE_REPORT_TYPE");
     	
-        jrc_required = bundle.getString("JRC_REQUIRED");
-        sch_required = bundle.getString("SCH_REQUIRED");
-        schigh_required = bundle.getString("SCHIGH_REQUIRED");
-        scpri_required = bundle.getString("SCPRI_REQUIRED");
-        scppr_required = bundle.getString("SCPPR_REQUIRED");
-        show_founder = bundle.getString("SHOW_FOUNDER");
-        show_donatedby = bundle.getString("SHOW_DONATEDBY");
+        jrc_required = sessionData.getConfigMap().get("JRC_REQUIRED");
+        sch_required = sessionData.getConfigMap().get("SCH_REQUIRED");
+        schigh_required = sessionData.getConfigMap().get("SCHIGH_REQUIRED");
+        scpri_required = sessionData.getConfigMap().get("SCPRI_REQUIRED");
+        scppr_required = sessionData.getConfigMap().get("SCPPR_REQUIRED");
+        show_founder = sessionData.getConfigMap().get("SHOW_FOUNDER");
+        show_donatedby = sessionData.getConfigMap().get("SHOW_DONATEDBY");
         
         if(academicYearClass.trim().equalsIgnoreCase("")){
         	String todayDate = commonObj.getCurrentDate();
-            academicYearClass = commonObj.getAcademicYear(todayDate);
+            academicYearClass = commonObj.getAcademicYear(sessionData1,todayDate);
         }
         
         try {
@@ -393,7 +394,7 @@ public class FeesReport extends JFrame {
 
 						frame.setVisible(false);
 						String[] arguments = new String[] { "" };
-						LoginView.main(arguments);
+						SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					logger.info("Exception logoutButton ===>>>" + e1);
@@ -873,20 +874,20 @@ public class FeesReport extends JFrame {
  		bottombandPanel.add(submitButton);
  		
  		String smsbuttonName = "";
- 		if(bundle.getString("DAILY_ADMIN_SMS").equalsIgnoreCase("true") && 
- 				bundle.getString("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true")) {
+ 		if(sessionData.getConfigMap().get("DAILY_ADMIN_SMS").equalsIgnoreCase("true") && 
+ 				sessionData.getConfigMap().get("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true")) {
  			smsbuttonName = "Sms to Admin/Staff";
- 		} else if(bundle.getString("DAILY_ADMIN_SMS").equalsIgnoreCase("true")) {
+ 		} else if(sessionData.getConfigMap().get("DAILY_ADMIN_SMS").equalsIgnoreCase("true")) {
  			smsbuttonName = "Sms to Admin";
- 		} else if(bundle.getString("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true")) {
+ 		} else if(sessionData.getConfigMap().get("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true")) {
  			smsbuttonName = "Sms to Staff";
  		}
  		JButton smsAdminButton = new JButton(smsbuttonName);
  		smsAdminButton.setFont(new Font("Book Antiqua", Font.BOLD, 16));
  		smsAdminButton.setBounds(850, bottomBandItemHeight+15, 200, 25);
- 		if((bundle.getString("DAILY_ADMIN_SMS").equalsIgnoreCase("true") || 
- 				bundle.getString("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true")) && 
- 				bundle.getString("SMS_FEE_FLAG").equalsIgnoreCase("true")){
+ 		if((sessionData.getConfigMap().get("DAILY_ADMIN_SMS").equalsIgnoreCase("true") || 
+ 				sessionData.getConfigMap().get("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true")) && 
+ 				sessionData.getConfigMap().get("SMS_FEE_FLAG").equalsIgnoreCase("true")){
  			bottombandPanel.add(smsAdminButton);
  		}
  		
@@ -935,13 +936,13 @@ public class FeesReport extends JFrame {
 				boolean isValid = true;
 				String optionAdminStaff = "";
 				
-				if(bundle.getString("DAILY_ADMIN_SMS").equalsIgnoreCase("true") && 
-		 				bundle.getString("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true")) {
+				if(sessionData.getConfigMap().get("DAILY_ADMIN_SMS").equalsIgnoreCase("true") && 
+		 				sessionData.getConfigMap().get("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true")) {
 					optionAdminStaff = JOptionPane.showInputDialog("=== Send SMS === \n Please Enter option \n 1 : To Admin "
 							+ " \n 2 : To Staff");
-		 		} else if(bundle.getString("DAILY_ADMIN_SMS").equalsIgnoreCase("true")) {
+		 		} else if(sessionData.getConfigMap().get("DAILY_ADMIN_SMS").equalsIgnoreCase("true")) {
 		 			optionAdminStaff = "1";
-		 		} else if(bundle.getString("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true")) {
+		 		} else if(sessionData.getConfigMap().get("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true")) {
 		 			optionAdminStaff = "2";
 		 		}
 				
@@ -949,6 +950,8 @@ public class FeesReport extends JFrame {
 					if(optionAdminStaff.equalsIgnoreCase("1")){
 						optionSelect = JOptionPane.showInputDialog("===Send SMS to Admin=== \n Please Enter option \n 1 : Todays Collection "
 								+ " \n 2 : This Week Collection \n 3 : This Month Collection \n 4 : Selected Date Range");
+//						optionSelect = JOptionPane.showInputDialog("===Send SMS to Admin=== \n Please Enter option \n 1 : Todays Collection "
+//								+ " \n 2 : This Week Collection \n 3 : This Month Collection");
 						
 						if(optionSelect != null && !optionSelect.trim().equalsIgnoreCase("null")){
 							if(optionSelect.equalsIgnoreCase("1")){
@@ -976,7 +979,7 @@ public class FeesReport extends JFrame {
 							totalAmount = dbValidate.getFeesCollection(sessionData, optionSelect, fromDate, toDate, std, div, academic);
 							totalAmount = Math.round(totalAmount*100.0)/100.0;
 							smsText = "Fees Report\n"+period + " fees collection amount is Rs."+totalAmount+"\nBy "+smsFooter;
-							smsTemplateId = bundle.getString("SMS_FEE_COLLECTION_REPORT_TEMP_ID");
+							smsTemplateId = sessionData.getConfigMap().get("SMS_FEE_COLLECTION_REPORT_TEMP_ID");
 							if(isValid) {
 								String smsResponse = commonObj.sendHspSms(sessionData, passGrList, foundStudentMap, smsText, smsTemplateId, section, "", 
 										academicYearClass, "", "", "", smsType);
@@ -988,11 +991,13 @@ public class FeesReport extends JFrame {
 						}
 						
 					} else if(optionAdminStaff.equalsIgnoreCase("2")){
-						if(bundle.getString("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true") && 
-				 				bundle.getString("SMS_FEE_FLAG").equalsIgnoreCase("true")){
+						if(sessionData.getConfigMap().get("STAFF_FEE_REPORT_SMS").equalsIgnoreCase("true") && 
+				 				sessionData.getConfigMap().get("SMS_FEE_FLAG").equalsIgnoreCase("true")){
 							
 							optionSelect = JOptionPane.showInputDialog("===Send SMS to Staff=== \n Please Enter option \n 1 : Todays Collection "
 									+ " \n 2 : This Week Collection \n 3 : This Month Collection \n 4 : Selected Date Range");
+//							optionSelect = JOptionPane.showInputDialog("===Send SMS to Staff=== \n Please Enter option \n 1 : Todays Collection "
+//									+ " \n 2 : This Week Collection \n 3 : This Month Collection");
 								
 							if(optionSelect != null && !optionSelect.trim().equalsIgnoreCase("null")){
 								LinkedHashMap<String,String> dateMap = new LinkedHashMap<String,String>();
@@ -1027,7 +1032,7 @@ public class FeesReport extends JFrame {
 								dbValidate.connectDatabase(sessionData);
 								totalAmount = dbValidate.getFeesCollection(sessionData, optionSelect, fromDate, toDate, std, div, academic);
 								totalAmount = Math.round(totalAmount*100.0)/100.0;
-								String smsSchoolStr = bundle.getString("SMS_"+sessionData.getAppType());
+								String smsSchoolStr = sessionData.getConfigMap().get("SMS_"+sessionData.getAppType());
 								String smsCondition = "", totalStr = " total";
 								if(!std.equalsIgnoreCase("All") && !std.equalsIgnoreCase("")) {
 									smsCondition = " STD="+std+"";
@@ -1041,7 +1046,7 @@ public class FeesReport extends JFrame {
 								}
 								
 								smsText = "Fees Report\n" + smsSchoolStr + smsCondition + totalStr + " fees collection is Rs. "+totalAmount+ " from date "+fromDate+ " to "+toDate+"\nBy "+smsFooter;
-								smsTemplateId = bundle.getString("SMS_FEE_TOTAL_COLLECTION_TEMP_ID");
+								smsTemplateId = sessionData.getConfigMap().get("SMS_FEE_TOTAL_COLLECTION_TEMP_ID");
 								if(isValid) {
 									String smsResponse = commonObj.sendHspStaffFeeSms(sessionData, passGrList, foundStudentMap, smsText, smsTemplateId, section, "", 
 											academicYearClass, std, div, "", smsType);
@@ -2051,8 +2056,9 @@ public class FeesReport extends JFrame {
 			JOptionPane.showMessageDialog(null, "For Classwise report don't select All in std/div");
 			validateFields = false;
 		}
-    	else if(reportTypeSel.equalsIgnoreCase("Consolidate") && (!std.equalsIgnoreCase("All") || !div.equalsIgnoreCase("All"))){
-			JOptionPane.showMessageDialog(null, "For Consolidate report select All in std & div");
+    	else if((reportTypeSel.equalsIgnoreCase("Collection") || reportTypeSel.equalsIgnoreCase("Consolidate") || 
+    			reportTypeSel.equalsIgnoreCase("Quarterly")) && (!std.equalsIgnoreCase("All") || !div.equalsIgnoreCase("All"))){
+			JOptionPane.showMessageDialog(null, "For "+reportTypeSel+" report select All in std & div");
 			validateFields = false;
 		}
 		
@@ -2063,6 +2069,9 @@ public class FeesReport extends JFrame {
 					if(reportTypeSel.equalsIgnoreCase("Daily")){
 						dbValidate.getDailyFeesReport(sessionData, academic, std, div, category, fromDate, toDate);
 //						dbValidate.exportFeesDataToReport(sessionData, academic, std, div, category, fromDate, toDate);
+					}
+					else if(reportTypeSel.equalsIgnoreCase("Collection")){
+						dbValidate.getFeesCollectionReport(sessionData, academic, category, fromDate, toDate);
 					}
 					else if(reportTypeSel.equalsIgnoreCase("Classwise")){
 						LinkedHashMap<String, LinkedHashMap<String, String>> feesHeadMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
@@ -2092,7 +2101,7 @@ public class FeesReport extends JFrame {
 						for (String retStd: stdList.split(",")) {
 							feesHeadMap = dbValidate.getFeesHeadData(sessionData, academic, retStd, section, category);
 							if(!feesHeadMap.isEmpty()){
-								studentReportList.addAll(dbValidate.getDefaulterFeeReport(sessionData, academic, std, div, category, feesHeadMap, "Defaulter", ""));
+								studentReportList.addAll(dbValidate.getDefaulterFeeReport(sessionData, academic, retStd, div, category, feesHeadMap, "Defaulter", ""));
 							}
 							feesHeadMap.clear();
 			 			}
@@ -2105,6 +2114,9 @@ public class FeesReport extends JFrame {
 							JOptionPane.showMessageDialog(null, "No Data found..");
 						}
 						studentReportList.clear();
+					}
+					else if(reportTypeSel.equalsIgnoreCase("Quarterly")){
+						dbValidate.getFeesQuarterlyReport(sessionData, academic, std, div, category, fromDate, toDate);
 					}
 				}
 			} catch (Exception e1) {
@@ -2178,7 +2190,7 @@ public class FeesReport extends JFrame {
     }
     
     private static void getFeesPaymentMap(LinkedHashMap<String, LinkedHashMap<String, String>> feesHeadMap, String frequency, String subFrequency){
-		int startMonth = Integer.parseInt(bundle.getString("ACADEMIC_START_MONTH"));
+		int startMonth = Integer.parseInt(sessionData.getConfigMap().get("ACADEMIC_START_MONTH"));
 		String feeType = "";
 		String freqFromMap = "";
 		int freqDivisor = 0;

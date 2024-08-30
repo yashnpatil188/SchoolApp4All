@@ -28,7 +28,7 @@ public class UploadAttendanceFromExcel {
 			logger.info("===UploadAttendanceFromExcel====");
 			int screenWidth = commonObj.screeWidth();
 			int screenHeight = commonObj.screeHeight();
-			int academicStartMonth = Integer.parseInt(bundle.getString("ACADEMIC_START_MONTH"));
+			int academicStartMonth = Integer.parseInt(sessiosnData1.getConfigMap().get("ACADEMIC_START_MONTH"));
 			
 			String fileName = filepath;
 			String monthCol = "";

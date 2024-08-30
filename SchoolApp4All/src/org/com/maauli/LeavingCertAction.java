@@ -75,9 +75,9 @@ public class LeavingCertAction {
 			user_name = retUserName;
 			user_role = retUserRole;
 			section = sec;
-			std = bundle.getString(section.toUpperCase() + "_STD");
-			div = bundle.getString(section.toUpperCase() + "_DIV");
-			secName = bundle.getString(section.toUpperCase() + "_SEC");
+			std = sessionData.getConfigMap().get(section.toUpperCase() + "_STD");
+			div = sessionData.getConfigMap().get(section.toUpperCase() + "_DIV");
+			secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 			leavingDate = leavingDt;
 			issueDate = issueDt;
 			reason = reasonT;

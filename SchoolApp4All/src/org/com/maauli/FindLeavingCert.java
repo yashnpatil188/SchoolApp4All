@@ -216,45 +216,45 @@ public class FindLeavingCert extends JFrame {
 
 		section = sec;
 		logger.info("section :: " + section);
-		std = bundle.getString(section.toUpperCase() + "_STD");
+		std = sessionData1.getConfigMap().get(section.toUpperCase() + "_STD");
 		logger.info("std :: " + std);
-		div = bundle.getString(section.toUpperCase() + "_DIV");
+		div = sessionData1.getConfigMap().get(section.toUpperCase() + "_DIV");
 		logger.info("div :: " + div);
-		secName = bundle.getString(section.toUpperCase() + "_SEC");
+		secName = sessionData1.getConfigMap().get(section.toUpperCase() + "_SEC");
 		logger.info("secName :: " + secName);
-		lcTypeList = bundle.getString("LC_TYPE_LIST");
-		reasonStr = bundle.getString("REASON_LIST_"+sessionData1.getAppType());
-		progressStr = bundle.getString("LC_PROGRESS_LIST");
-		mediumStr = bundle.getString("LC_MEDIUM_LIST");
-		mediumStrEnable = bundle.getString("LC_MEDIUM_ENABLE_"+sessionData1.getAppType()) == null ? "False" : bundle.getString("LC_MEDIUM_ENABLE_"+sessionData1.getAppType());
-		remarkStr = bundle.getString("REMARK_LIST_"+sessionData1.getAppType());
-		img_path = bundle.getString("IMAGE_PATH");
+		lcTypeList = sessionData1.getConfigMap().get("LC_TYPE_LIST");
+		reasonStr = sessionData1.getConfigMap().get("REASON_LIST_"+sessionData1.getAppType());
+		progressStr = sessionData1.getConfigMap().get("LC_PROGRESS_LIST");
+		mediumStr = sessionData1.getConfigMap().get("LC_MEDIUM_LIST");
+		mediumStrEnable = sessionData1.getConfigMap().get("LC_MEDIUM_ENABLE_"+sessionData1.getAppType()) == null ? "False" : sessionData1.getConfigMap().get("LC_MEDIUM_ENABLE_"+sessionData1.getAppType());
+		remarkStr = sessionData1.getConfigMap().get("REMARK_LIST_"+sessionData1.getAppType());
+		img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
 		logger.info("img_path :: " + img_path);
-		img_home = bundle.getString("IMAGE_HOME");
-		img_logo = bundle.getString("IMAGE_LOGO");
-		img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-		img_logout = bundle.getString("IMAGE_LOGOUT");
-		img_titleband = bundle.getString("IMAGE_TITLEBAND");
-		img_leftband = bundle.getString("IMAGE_LEFTBAND");
-		img_menuband = bundle.getString("IMAGE_MENUBAND");
-		img_mainband = bundle.getString("IMAGE_MAINBAND");
-		lc_visible_master_only = bundle.getString("LC_VISIBLE_MASTER_ONLY");
-		app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
-        feeStatusList = bundle.getString("FEE_STATUS_LIST");
+		img_home = sessionData1.getConfigMap().get("IMAGE_HOME");
+		img_logo = sessionData1.getConfigMap().get("IMAGE_LOGO");
+		img_myaccount = sessionData1.getConfigMap().get("IMAGE_MYACCOUNT");
+		img_logout = sessionData1.getConfigMap().get("IMAGE_LOGOUT");
+		img_titleband = sessionData1.getConfigMap().get("IMAGE_TITLEBAND");
+		img_leftband = sessionData1.getConfigMap().get("IMAGE_LEFTBAND");
+		img_menuband = sessionData1.getConfigMap().get("IMAGE_MENUBAND");
+		img_mainband = sessionData1.getConfigMap().get("IMAGE_MAINBAND");
+		lc_visible_master_only = sessionData1.getConfigMap().get("LC_VISIBLE_MASTER_ONLY");
+		app_header = sessionData1.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData1.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData1.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData1.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData1.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData1.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+        feeStatusList = sessionData1.getConfigMap().get("FEE_STATUS_LIST");
         
         if(lc_visible_master_only.equalsIgnoreCase("true") && !sessionData.getConfigMap().get("SchoolApp_IP").contains("127.0.0.1")) {
     		lc_visible_flag = false;
@@ -265,7 +265,7 @@ public class FindLeavingCert extends JFrame {
         
 		////////////////try block added for chabildas ls issue showing 2016-17///////
 		try{
-			lcDiscrepancyFlag = Boolean.valueOf(bundle.getString("LC_DISCREPANCY_"+sessionData.getAppType()));
+			lcDiscrepancyFlag = Boolean.valueOf(sessionData1.getConfigMap().get("LC_DISCREPANCY_"+sessionData.getAppType()));
 		}
 		catch(MissingResourceException m){
 			logger.error("LC_DISCREPANCY flag missing");
@@ -420,7 +420,7 @@ public class FindLeavingCert extends JFrame {
 						if (deleteFlag) {
 							frame.setVisible(false);
 							String[] arguments = new String[] {""};
-			                LoginView.main(arguments);
+			                SchoolForAllLoginView.main(arguments);
 						} else {
 							logger.info("Exception while deleting form.");
 						}
@@ -1782,9 +1782,9 @@ public class FindLeavingCert extends JFrame {
 					if (!lcNo.equalsIgnoreCase("") && !lcNo.equalsIgnoreCase(" ") && !lcNo.equalsIgnoreCase(null)
 							&& !lcNo.equalsIgnoreCase("NA") && !lcNo.equalsIgnoreCase("0000")) {
 						origLcDate = commonObj.formatyyyymmddtoddmmyyyy(origLcDate);
-						showOrigAcad = "/" + commonObj.getAcademicYear(origLcDate);
+						showOrigAcad = "/" + commonObj.getAcademicYear(sessionData,origLcDate);
 						
-						if(lcDiscrepancyFlag && commonObj.getAcademicYear(origLcDate).equalsIgnoreCase("2016-17")){
+						if(lcDiscrepancyFlag && commonObj.getAcademicYear(sessionData,origLcDate).equalsIgnoreCase("2016-17")){
 							///this condition is added for chabildas lc issue showing 2016-17
 							showOrigAcad =  "/2017-18";
 						}
@@ -1803,7 +1803,7 @@ public class FindLeavingCert extends JFrame {
 					if (!dupLcNo.equalsIgnoreCase("") && !dupLcNo.equalsIgnoreCase(" ")
 							&& !dupLcNo.equalsIgnoreCase(null) && !dupLcNo.equalsIgnoreCase("NA")
 							&& !dupLcNo.equalsIgnoreCase("0000")) {
-						showDupAcad = "/" + commonObj.getAcademicYear(dupLcDate);
+						showDupAcad = "/" + commonObj.getAcademicYear(sessionData,dupLcDate);
 					}
 					dupLc_labels[i] = new JLabel(dupLcNo + showDupAcad);
 					dupLc_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
@@ -1819,7 +1819,7 @@ public class FindLeavingCert extends JFrame {
 					if (!tripLcNo.equalsIgnoreCase("") && !tripLcNo.equalsIgnoreCase(" ")
 							&& !tripLcNo.equalsIgnoreCase(null) && !tripLcNo.equalsIgnoreCase("NA")
 							&& !tripLcNo.equalsIgnoreCase("0000")) {
-						showTripAcad = "/" + commonObj.getAcademicYear(tripLcDate);
+						showTripAcad = "/" + commonObj.getAcademicYear(sessionData,tripLcDate);
 					}
 					tripLc_labels[i] = new JLabel(tripLcNo + showTripAcad);
 					tripLc_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
@@ -2473,7 +2473,7 @@ public class FindLeavingCert extends JFrame {
 						boolean flagLeaving = true;
 				        Date selectedLeavingDate = (Date) datePickerLeaving.getModel().getValue();
 				        String leavingDate = commonObj.dateToDDMMYYYY(selectedLeavingDate);
-				        String leavingAcademic = commonObj.getAcademicYear(leavingDate);
+				        String leavingAcademic = commonObj.getAcademicYear(sessionData,leavingDate);
 				        Date selectedIssueDate = (Date) datePickerIssue.getModel().getValue();
 				        String issueDate = commonObj.dateToDDMMYYYY(selectedIssueDate);
 				        if(!dateIssue_radio.isSelected()) {
@@ -2637,7 +2637,7 @@ public class FindLeavingCert extends JFrame {
 						Date today = new Date();
 				        Date selectedLeavingDate = (Date) datePickerLeaving.getModel().getValue();
 				        String leavingDate = commonObj.dateToDDMMYYYY(selectedLeavingDate);
-				        String leavingAcademic = commonObj.getAcademicYear(leavingDate);
+				        String leavingAcademic = commonObj.getAcademicYear(sessionData,leavingDate);
 				        Date selectedIssueDate = (Date) datePickerIssue.getModel().getValue();
 				        String issueDate = commonObj.dateToDDMMYYYY(selectedIssueDate);
 				        if(!dateIssue_radio.isSelected()) {

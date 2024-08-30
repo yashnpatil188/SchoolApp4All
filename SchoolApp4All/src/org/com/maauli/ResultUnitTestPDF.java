@@ -48,22 +48,22 @@ public class ResultUnitTestPDF {
 		
 		String semester = "", displaySection = "";
 		boolean fileOpenFlag = false;
-    	secName = bundle.getString(sec.toUpperCase()+"_SEC");
+    	secName = sessionData.getConfigMap().get(sec.toUpperCase()+"_SEC");
     	logger.info("secName :: "+secName);
-    	String headMaster = bundle.getString(sessionData.getDBName().toUpperCase()+"_PDF_FOOTER");
-    	String result_header_1 = bundle.getString("RESULT_HEADER_1");
-    	String result_header_2 = bundle.getString("RESULT_HEADER_2");
-    	String result_header_3 = bundle.getString("RESULT_HEADER_3");
-    	String result_header_4 = bundle.getString("RESULT_HEADER_4");
-    	String result_header_5 = bundle.getString("RESULT_HEADER_5");
-    	String result_header_6 = bundle.getString("CLASS_ALLOT_HEADER_SCHOOL");
-    	path = cm.createTodayFolder(cm.getDriveName() + bundle.getString("RESULT_PDF_PATH_"+sessionData.getDBName()),true)+"/";
-    	String img_path = bundle.getString("IMAGE_PATH");
-    	String pdf_header_img_path = bundle.getString("IMAGE_PDF_RESULT_HEADER_"+sessionData.getAppType());
-		int image_pdf_pos_x = Integer.parseInt(bundle.getString("IMAGE_PDF_RESULT_POS_X"));
-		int image_pdf_pos_y = Integer.parseInt(bundle.getString("IMAGE_PDF_RESULT_POS_Y"));
-		float image_pdf_scalepercent = Float.parseFloat(bundle.getString("IMAGE_PDF_RESULT_SCALEPERCENT"));
-		String pdf_header_img_flag = bundle.getString("PDF_HEADER_RESULT_IMAGE_FLAG");
+    	String headMaster = sessionData.getConfigMap().get(sessionData.getDBName().toUpperCase()+"_PDF_FOOTER");
+    	String result_header_1 = sessionData.getConfigMap().get("RESULT_HEADER_1");
+    	String result_header_2 = sessionData.getConfigMap().get("RESULT_HEADER_2");
+    	String result_header_3 = sessionData.getConfigMap().get("RESULT_HEADER_3");
+    	String result_header_4 = sessionData.getConfigMap().get("RESULT_HEADER_4");
+    	String result_header_5 = sessionData.getConfigMap().get("RESULT_HEADER_5");
+    	String result_header_6 = sessionData.getConfigMap().get("CLASS_ALLOT_HEADER_SCHOOL");
+    	path = cm.createTodayFolder(cm.getDriveName() + sessionData.getConfigMap().get("RESULT_PDF_PATH_"+sessionData.getDBName()),true)+"/";
+    	String img_path = sessionData.getConfigMap().get("IMAGE_PATH");
+    	String pdf_header_img_path = sessionData.getConfigMap().get("IMAGE_PDF_RESULT_HEADER_"+sessionData.getAppType());
+		int image_pdf_pos_x = Integer.parseInt(sessionData.getConfigMap().get("IMAGE_PDF_RESULT_POS_X"));
+		int image_pdf_pos_y = Integer.parseInt(sessionData.getConfigMap().get("IMAGE_PDF_RESULT_POS_Y"));
+		float image_pdf_scalepercent = Float.parseFloat(sessionData.getConfigMap().get("IMAGE_PDF_RESULT_SCALEPERCENT"));
+		String pdf_header_img_flag = sessionData.getConfigMap().get("PDF_HEADER_RESULT_IMAGE_FLAG");
 		
 		if(sessionData.getAppType().equalsIgnoreCase("College")){
 			displaySection = sec;

@@ -217,10 +217,10 @@ public class MarksEntryStudent extends JFrame {
 		user_role = retUserRole;
 		section = sec;
 		studMarkList.clear();
-		std = bundle.getString(section.toUpperCase() + "_STD");
-		div = bundle.getString(section.toUpperCase() + "_DIV");
-		secName = bundle.getString(section.toUpperCase() + "_SEC");
-		examCategory = bundle.getString("EXAM_CATEGORY");
+		std = sessionData1.getConfigMap().get(section.toUpperCase() + "_STD");
+		div = sessionData1.getConfigMap().get(section.toUpperCase() + "_DIV");
+		secName = sessionData1.getConfigMap().get(section.toUpperCase() + "_SEC");
+		examCategory = sessionData1.getConfigMap().get("EXAM_CATEGORY");
 		examCategory = examCategory.substring(0, examCategory.lastIndexOf(","));
 		
 		String examTypeList = "EXAM_TYPE_5";
@@ -238,32 +238,32 @@ public class MarksEntryStudent extends JFrame {
 		else if((retStd.equalsIgnoreCase("IX")) && retExam.equalsIgnoreCase("Semester 2")){
 			examTypeList = "EXAM_TYPE_4";
 		}
-		examType = bundle.getString(examTypeList);
+		examType = sessionData1.getConfigMap().get(examTypeList);
 		
-		img_path = bundle.getString("IMAGE_PATH");
-		img_home = bundle.getString("IMAGE_HOME");
-		img_logo = bundle.getString("IMAGE_LOGO");
-		img_myaccount = bundle.getString("IMAGE_MYACCOUNT");
-		img_logout = bundle.getString("IMAGE_LOGOUT");
-		img_titleband = bundle.getString("IMAGE_TITLEBAND");
-		img_leftband = bundle.getString("IMAGE_LEFTBAND");
-		img_menuband = bundle.getString("IMAGE_MENUBAND");
-		img_mainband = bundle.getString("IMAGE_MAINBAND");
-		app_header = bundle.getString("APP_HEADER_"+sessionData.getAppType());
-        app_header_0 = bundle.getString("APP_HEADER_0_"+sessionData.getAppType());
-        app_header_0_fontName = bundle.getString("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
-        app_header_0_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_0_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_0_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_fontName = bundle.getString("APP_HEADER_FONTNAME_"+sessionData.getAppType());
-        app_header_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
-    	app_header_2 = bundle.getString("APP_HEADER_2_"+sessionData.getAppType());
-        app_header_2_fontName = bundle.getString("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
-        app_header_2_fontSize = Integer.parseInt(bundle.getString("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
-    	app_header_2_widthSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
-    	app_header_2_heightSpace = Integer.parseInt(bundle.getString("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
+		img_path = sessionData1.getConfigMap().get("IMAGE_PATH");
+		img_home = sessionData1.getConfigMap().get("IMAGE_HOME");
+		img_logo = sessionData1.getConfigMap().get("IMAGE_LOGO");
+		img_myaccount = sessionData1.getConfigMap().get("IMAGE_MYACCOUNT");
+		img_logout = sessionData1.getConfigMap().get("IMAGE_LOGOUT");
+		img_titleband = sessionData1.getConfigMap().get("IMAGE_TITLEBAND");
+		img_leftband = sessionData1.getConfigMap().get("IMAGE_LEFTBAND");
+		img_menuband = sessionData1.getConfigMap().get("IMAGE_MENUBAND");
+		img_mainband = sessionData1.getConfigMap().get("IMAGE_MAINBAND");
+		app_header = sessionData1.getConfigMap().get("APP_HEADER_"+sessionData.getAppType());
+        app_header_0 = sessionData1.getConfigMap().get("APP_HEADER_0_"+sessionData.getAppType());
+        app_header_0_fontName = sessionData1.getConfigMap().get("APP_HEADER_0_FONTNAME_"+sessionData.getAppType());
+        app_header_0_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_0_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_0_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_0_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_fontName = sessionData1.getConfigMap().get("APP_HEADER_FONTNAME_"+sessionData.getAppType());
+        app_header_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_HEIGHTSPACE_"+sessionData.getAppType()));
+    	app_header_2 = sessionData1.getConfigMap().get("APP_HEADER_2_"+sessionData.getAppType());
+        app_header_2_fontName = sessionData1.getConfigMap().get("APP_HEADER_2_FONTNAME_"+sessionData.getAppType());
+        app_header_2_fontSize = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_FONTSIZE_"+sessionData.getAppType()));
+    	app_header_2_widthSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_WIDTHSPACE_"+sessionData.getAppType()));
+    	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
 
 		if (!retExam.equalsIgnoreCase("")) {
 			examClass = retExam;
@@ -366,7 +366,7 @@ public class MarksEntryStudent extends JFrame {
 
 		String maxMarksFromMap = max;
 		
-//		academicYearClass = commonObj.getAcademicYear(commonObj.getCurrentDate());;
+//		academicYearClass = commonObj.getAcademicYear(sessionData1,commonObj.getCurrentDate());;
 //		logger.info(stdClass + "::" + academicYearClass);
 
 		entrytCnt = 0;
@@ -476,7 +476,7 @@ public class MarksEntryStudent extends JFrame {
 						frame.setVisible(false);
 						panelHome.removeAll();///to remve entire panel
 						String[] arguments = new String[] {""};
-		                LoginView.main(arguments);
+		                SchoolForAllLoginView.main(arguments);
 					}
 				} catch (Exception e1) {
 					logger.info("Exception logoutButton ===>>>" + e1);
@@ -786,8 +786,8 @@ public class MarksEntryStudent extends JFrame {
 			dbValidate.closeDatabase(sessionData);
 		}
 		
-		if(!yearList.contains(commonObj.getAcademicYear(commonObj.getCurrentDate()))){
-			yearList = commonObj.getAcademicYear(commonObj.getCurrentDate()) + "," + yearList;
+		if(!yearList.contains(commonObj.getAcademicYear(sessionData1,commonObj.getCurrentDate()))){
+			yearList = commonObj.getAcademicYear(sessionData1,commonObj.getCurrentDate()) + "," + yearList;
 		}
 
 		String academicYearList[] = yearList.split(",");
@@ -1687,7 +1687,7 @@ public class MarksEntryStudent extends JFrame {
 						reply = JOptionPane.showConfirmDialog(null, "Would You Like to download template for Marks Entry "+exam+messageDisplay+" ?", "Confirm validate", JOptionPane.YES_NO_OPTION);
 						
 						if (reply == JOptionPane.YES_OPTION) {
-							String templatePath = commonObj.getDriveName() + bundle.getString("TEMPLATE_PATH_"+sessionData.getDBName())+commonObj.getCurrentDatein_dd_MMM_yyyy();
+							String templatePath = commonObj.getDriveName() + sessionData1.getConfigMap().get("TEMPLATE_PATH_"+sessionData.getDBName())+commonObj.getCurrentDatein_dd_MMM_yyyy();
 							if (dbValidate.connectDatabase(sessionData)) {
 								JFrame f = new JFrame("Marks Entry Template downlaod in progress. Don't Close");
 								f.setBounds(screenWidth/2 - 150, screenHeight/2, 90, 25);
@@ -1755,7 +1755,7 @@ public class MarksEntryStudent extends JFrame {
 					} 
 					
 					if(validate){
-						String default_path = commonObj.getDriveName() + bundle.getString("TEMPLATE_PATH_"+sessionData.getDBName());
+						String default_path = commonObj.getDriveName() + sessionData1.getConfigMap().get("TEMPLATE_PATH_"+sessionData.getDBName());
 						JFileChooser fileChooser = new JFileChooser(default_path);
 						int returnValue = fileChooser.showOpenDialog(null);
 						if (returnValue == JFileChooser.APPROVE_OPTION) {

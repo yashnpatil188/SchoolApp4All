@@ -54,8 +54,8 @@ public class MarksheetSubjectwise_IX_PDF {
 		LinkedHashMap<String, String> subMaxMarks = new LinkedHashMap<String, String>();
 
 		try {
-			String bonafide_header = bundle.getString("BONAFIDE_HEADER_" + sessionData.getAppType());
-			String bonafide_header_0 = bundle.getString("BONAFIDE_HEADER_0_" + sessionData.getAppType());
+			String bonafide_header = sessionData.getConfigMap().get("BONAFIDE_HEADER_" + sessionData.getAppType());
+			String bonafide_header_0 = sessionData.getConfigMap().get("BONAFIDE_HEADER_0_" + sessionData.getAppType());
 			if(!academic.equalsIgnoreCase("")) {
 				academicStart = Integer.parseInt(academic.substring(0, 4));
 			}
@@ -148,7 +148,7 @@ public class MarksheetSubjectwise_IX_PDF {
 			}
 						
 			path = commonObj.createTodayFolder(
-					commonObj.getDriveName() + bundle.getString("REPORT_PDF_PATH_" + sessionData.getDBName()), true)
+					commonObj.getDriveName() + sessionData.getConfigMap().get("REPORT_PDF_PATH_" + sessionData.getDBName()), true)
 					+ "/";
 			fileName = "Marksheet_Subjectwise_" + subject + "_" + std + "_" + div + "_" + commonObj.timeInMillis()
 					+ ".pdf";
