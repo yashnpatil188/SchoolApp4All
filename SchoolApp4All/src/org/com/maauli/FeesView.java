@@ -28,6 +28,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -1508,6 +1509,8 @@ public class FeesView extends JFrame {
 									feesForMonths = feesForMonths + " - " + lastMonth;
 								}
 								
+//								UUID uuid = UUID.nameUUIDFromBytes((grNoClass+System.currentTimeMillis()+feesPaymentMap.toString()+totalAmount).getBytes());
+//								System.out.println(uuid);
 								count = dbValidate.updateCountData(sessionData, academicYearClass, sessionData.getSectionName(), "FEE_RECEIPT", "");
 								
 								String[] nameSplit = nameClass.split(" ");
@@ -1549,7 +1552,7 @@ public class FeesView extends JFrame {
 									FeeReceiptPDF.getFeeReceiptPDF(sessionData, feesPaymentMap, penaltyAmount, bank, cheque_dd_no, paymentMode, grNoClass, 
 											nameClass, stdClass, divClass, academicYearClass, "Pending", totalAmount, chequeDD_date, concessionMap, 
 											concessionAmount, categoryClass, count, rollNoClass, feesForMonths, selectedStudentMap, headerRadioClass, 
-											studentOptMap, receiptShortName, null, frequencyClass, backDate, remark, "", balanceAmount, totalBalanceFromDB);
+											studentOptMap, receiptShortName, null, frequencyClass, backDate, remark, "", balanceAmount, totalBalanceFromDB, sessionData.getUserName());
 //									searchStudentMap.remove(grNoClass);
 									frame.setVisible(false);
 									new FeesView(sessionData, grNoClass, stdClass, divClass, nameClass, rollNoClass, searchStudentMap, section, academicYearClass, 
@@ -2460,7 +2463,7 @@ public class FeesView extends JFrame {
 			FeeReceiptPDF.getFeeReceiptPDF(sessionData, feesPaymentReceiptMap, penalty.toString(), bank, cheque_dd_no, paymentMode, grNoClass, 
 					nameClass, stdClass, divClass, academicYearClass, "Pending", totalAmount, chequeDD_date, concessionMap, 
 					concession, categoryClass, 0, rollNoClass, feesForMonths, selectedStudentMap, headerRadioClass, 
-					studentOptMap, receiptShortName, null, frequencyClass, paidDate, remark, status, balanceAmount, prevBalanceAmount);
+					studentOptMap, receiptShortName, null, frequencyClass, paidDate, remark, status, balanceAmount, prevBalanceAmount, generatedBy);
 		}
     }
     
@@ -2577,7 +2580,7 @@ public class FeesView extends JFrame {
 			penaltyTotal = Double.parseDouble((studentFeesMap.get("PENALTY_AMOUNT") == null ? "0" : studentFeesMap.get("PENALTY_AMOUNT").trim()));
 			penaltyTotal = penaltyTotal - penalty;
 			grandTotal = Double.parseDouble((studentFeesMap.get("TOTAL_AMOUNT") == null ? "0" : studentFeesMap.get("TOTAL_AMOUNT").trim()));
-			grandTotal = grandTotal - totalAmount + concession - penalty;
+			grandTotal = grandTotal - totalAmount + concession - penalty + balanceAmount;
 			
 			updateQuery = updateQuery + "CONCESSION_AMOUNT="+concessionTotal+",PENALTY_AMOUNT="+penaltyTotal+","
 					+ "TOTAL_AMOUNT="+grandTotal+",MODIFIED_DATE=SYSDATE(),MODIFIED_BY='"+sessionData.getUserName()+"',BALANCE_AMOUNT=BALANCE_AMOUNT-"+balanceAmount+"";

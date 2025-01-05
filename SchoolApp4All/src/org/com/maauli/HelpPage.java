@@ -591,8 +591,9 @@ public class HelpPage {
         panel.add(updateFieldButton);
 
         String fieldStr = "Select,Academic_Year,Adhaar_card,Admitted_Std,Admitted_Div,Bank_Name,Bank_Branch,Bank_Account,Bank_IFSC,Birth_Place,"
-				+ "Contact_1,Contact_2,Country,Date_of_Admission,Date_of_Birth,Date_of_Leaving,Hobbies,"
-				+ "Last_school,Mother_Tongue,Nationality,State,Student_Udise,Taluka,District,Replace_Gr_No,First_Name,Last_Name,Father_Name,Mother_Name,PEN";
+				+ "Contact_1,Contact_2,Country,Date_of_Admission,Date_of_Birth,Date_of_Leaving,Hobbies,Last_school,Mother_Tongue,Nationality,"
+				+ "State,Student_Udise,Taluka,District,Replace_Gr_No,First_Name,Last_Name,Father_Name,Mother_Name,PEN,Paying_Free,Permanent_Address,"
+				+ "Residential_Address,Gender,Email,Cast,Sub_Caste";
 //        if(sessionData.getUserName().equalsIgnoreCase("prp")) {
 //        	fieldStr = fieldStr+",Import Backup Data";
 //        }

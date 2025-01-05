@@ -1386,7 +1386,7 @@ public class SearchFeeStudentNew extends JFrame {
 										"", "", "", "", "", stdClass, divClass, academicYearClass, 
 										"Pending", totalAmount, "", emptyConcessionMap, 0, categoryClass, 0, "", feesForMonth, 
 										selectedStudentMap, headerRadioClass, studentOptMap, receiptShortName, feesHeadMapClass, 
-										frequencyClass, "", "", "", 0, 0);
+										frequencyClass, "", "", "", 0, 0, "");
 								
 								
 								frame.setVisible(false);

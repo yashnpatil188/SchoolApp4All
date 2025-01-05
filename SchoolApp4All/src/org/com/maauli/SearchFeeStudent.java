@@ -1374,7 +1374,7 @@ public class SearchFeeStudent extends JFrame {
 								FeeReceiptPDF.getFeeReceiptPDF(sessionData, feesPaymentMap, "0.00", 
 										"", "", "", "", "", stdClass, divClass, academicYearClass, 
 										"Pending", totalAmount, "", emptyConcessionMap, 0, optionalClass, 0, "", feesForMonth, 
-										selectedStudentMap, headerRadioClass, null, "", null, frequencyClass, "", "", "", 0, 0);
+										selectedStudentMap, headerRadioClass, null, "", null, frequencyClass, "", "", "", 0, 0, "");
 								
 								
 								frame.setVisible(false);

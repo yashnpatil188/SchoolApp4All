@@ -13,6 +13,7 @@ import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -63,7 +64,7 @@ import org.com.maauli.MarksEntryTemplateExcel;
 import org.com.maauli.ResultGradePDF;
 import org.com.maauli.ResultUnitTestPDF;
 import org.com.security.EncryptDecryptStr;
-import com.mysql.jdbc.PreparedStatement;
+//import com.mysql.jdbc.PreparedStatement;
 import java.util.Collections;
 import static java.util.stream.Collectors.*;
 import static java.util.Map.Entry.*;
@@ -202,7 +203,7 @@ public class DBValidate {
 				dbPass = sessionData.getDBPass();
 			}
 			
-			Class.forName(driver);
+//			Class.forName(driver);
 			connection = DriverManager.getConnection(sessionData.getDbURL(), dbUser, dbPass);
 			dbConnection = true;
 			sessionData.setConnection(connection);
@@ -4780,6 +4781,18 @@ public class DBValidate {
 				statement.executeUpdate(insertQuery);
 			} catch (Exception e) {
 				logger.info("failed to create column name for subect " + column_name + " in MARKS_ENTRY >>> " + e);
+			}
+			
+			try {
+				insertQuery = "SET SESSION innodb_strict_mode=OFF";
+				statement.executeUpdate(insertQuery);
+			} catch (Exception e) {
+			}
+			
+			try {
+				insertQuery = "ALTER TABLE " + sessionData.getDBName() + ".RESULT_DATA ROW_FORMAT=DYNAMIC";
+				statement.executeUpdate(insertQuery);
+			} catch (Exception e) {
 			}
 
 			try {
@@ -13539,7 +13552,8 @@ public class DBValidate {
 					+ academic + "' AND (SECTION_NM='" + sessionData.getSectionName() + "') "
 					+ "ORDER BY SUBJECT_TITLE ASC";
 
-			statement = connection.createStatement();
+//			statement = connection.createStatement();
+			statement = connection.createStatement (ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			resultSet = statement.executeQuery(subListQuery);
 			int rowCount = 0;
 			if (resultSet.last()) {// make cursor to point to the last row in the ResultSet object
@@ -20968,11 +20982,15 @@ public class DBValidate {
 			} else if (feeName.trim().contains("-")) {
 				feeName = feeName.trim().replace("-", "_");
 			}
+			
+			if (feeName.trim().equalsIgnoreCase("FUNCTION")) {
+				feeName = cm.replaceCommaApostrophy(feeName);
+			}
 
 			/// insert fee name column
-			insertFeeNameColumn(sessionData, feeName.trim().toUpperCase(), payFrequency.trim().toUpperCase(), optional);
+			boolean insertFeeNameColumnFlag = insertFeeNameColumn(sessionData, feeName.trim().toUpperCase(), payFrequency.trim().toUpperCase(), optional);
 
-			if (!isUpdate) {
+			if (!isUpdate && insertFeeNameColumnFlag) {
 				// ////////////////////////////////////////////////
 
 				String findFeesQuery = "SELECT DISTINCT FEES_NAME " + "FROM " + sessionData.getDBName() + "."
@@ -20991,7 +21009,7 @@ public class DBValidate {
 				logger.info("validateFeeName=" + validateFeeName);
 			}
 
-			if (!validateFeeName) {
+			if (!validateFeeName && insertFeeNameColumnFlag) {
 				if (isUpdate) {
 					addUpdate = "updated";
 					insertFeeName = "Update " + sessionData.getDBName() + "." + "FEES_HEAD set " + "FEES_NAME='"
@@ -21056,7 +21074,7 @@ public class DBValidate {
 						"Fee Name " + cm.revertCommaApostrophy(feeName.trim().replace("$$", ".")) + " " + addUpdate
 								+ " successfully for std " + std);
 				retFlag = true;
-			} else {
+			} else if (insertFeeNameColumnFlag) {
 				retFlag = false;
 				JOptionPane.showMessageDialog(null, "Fee Name " + feeName + " already exist for STD " + std);
 			}
@@ -21237,7 +21255,7 @@ public class DBValidate {
 		String findColumnListQuery = "";
 		LinkedHashMap<String, String> columnMap = new LinkedHashMap<>();
 		int startMonth = Integer.parseInt(sessionData.getConfigMap().get("ACADEMIC_START_MONTH"));
-		boolean retFlag = false;
+		boolean retFlag = true;
 
 		try {
 			alterDateColumn = "ALTER TABLE " + sessionData.getDBName() + "." + "FEES_DATA_MANDATORY ";
@@ -21268,6 +21286,16 @@ public class DBValidate {
 							"failed to modify column name " + alterDateColumn + " in FEES_DATA_MANDATORY >> " + e);
 				}
 			}
+			
+			try {
+				String alterModifyDateColumn = "Alter Table " + sessionData.getDBName() + "." + "FEES_REPORT_MANDATORY "
+						+ "ADD(`MODIFIED_DATE` DATETIME ON UPDATE CURRENT_TIMESTAMP);";
+				statement = connection.createStatement();
+				statement.executeUpdate(alterModifyDateColumn);
+			} catch (Exception e) {
+			}
+			
+			
 
 			try {
 				String getDataTypeQuery = "select column_name,data_type from information_schema.columns where "
@@ -21404,6 +21432,10 @@ public class DBValidate {
 				}
 				catch (Exception e) {
 					logger.warn("failed to create column name for subect " + fee_name + " in FEES_DATA_MANDATORY >> " + e);
+					if(e.getMessage().contains("You have an error in your SQL syntax")) {
+						retFlag = false;
+						JOptionPane.showMessageDialog(null, "Unable to add Fees Head. Please contact Admin");
+					}
 				}
 
 				try {
@@ -21415,6 +21447,10 @@ public class DBValidate {
 				}
 				catch (Exception e) {
 					logger.warn("failed to create column name for subect " + fee_name + " in FEES_REPORT_MANDATORY >> " + e);
+					if(e.getMessage().contains("You have an error in your SQL syntax")) {
+						retFlag = false;
+						JOptionPane.showMessageDialog(null, "Unable to add Fees Head. Please contact Admin");
+					}
 				}
 				
 			}
@@ -21444,7 +21480,7 @@ public class DBValidate {
 //			}
 
 			logger.info("column for fees name " + fee_name + " & " + payFrequency + " inserted successfully..");
-			retFlag = true;
+//			retFlag = true;
 		} catch (Exception e) {
 			logger.warn("failed to create column name for subect " + fee_name + " in FEES_DATA_MANDATORY >> " + e);
 		}
@@ -22016,7 +22052,7 @@ public class DBValidate {
 		LinkedHashMap monthMap = new LinkedHashMap();
 		String paymentDetails = ""; // paymentMode +"^"+ bank +"^"+ chequeDDNo +"^"+ chequeDDDate +"^"+
 									// penaltyAmount +"^"+ concessionAmount +"^"+ receiptNo +"^"+ feesForMonths
-									// +"^"+ remark +"^A" +"^"+ balanceAmount +"^"+ prevBalanceAmount;
+									// +"^"+ remark +"^A" +"^"+ balanceAmount +"^"+ prevBalanceAmount + "^" + sessionData.getUserName();
 		List<String> passGrList = new ArrayList();
 		LinkedHashMap foundStudentMap = new LinkedHashMap<>();
 		LinkedHashMap grMap = new LinkedHashMap<>();
@@ -22095,7 +22131,7 @@ public class DBValidate {
 
 				count = updateCountData(sessionData, academic, sessionData.getSectionName(), "FEE_RECEIPT", "");
 				paymentDetails = paymentMode + "^" + bank + "^" + chequeDDNo + "^" + chequeDDDate + "^0^0^" + count
-						+ "^" + feesForMonths + "^ ^A" + "^" + balanceAmount + "^" + prevBalanceAmount;
+						+ "^" + feesForMonths + "^ ^A" + "^" + balanceAmount + "^" + prevBalanceAmount + "^" + sessionData.getUserName();
 				studentDetailMap.put("receiptNo", count + "");
 
 				checkStudentQuery = "SELECT * from FEES_DATA_" + mandate_opt + " WHERE STD_1='" + std + "' AND DIV_1='"
@@ -22399,11 +22435,9 @@ public class DBValidate {
 				feeReportQuery = insertReportFields + ")" + insertReport + ")";
 			}
 
-			System.out.println("feeDataQuery query ==>" + feeDataQuery);
 			statement = connection.createStatement();
 			statement.executeUpdate(feeDataQuery);
 
-			System.out.println("feeReportQuery query ===>" + feeReportQuery);
 			statement = connection.createStatement();
 			statement.executeUpdate(feeReportQuery);
 
@@ -22500,7 +22534,7 @@ public class DBValidate {
 		LinkedHashMap feesTypeMonthMap = new LinkedHashMap();
 		String paymentDetails = paymentMode + "^" + bank + "^" + chequeDDNo + "^" + chequeDD_date + "^" + penaltyAmount
 				+ "^" + concessionAmount + "^" + receiptNo + "^" + feesForMonths + "^" + remark + "^A" + "^"
-				+ balanceAmount + "^" + prevBalanceAmount;
+				+ balanceAmount + "^" + prevBalanceAmount + "^" + sessionData.getUserName();
 		List<String> passGrList = new ArrayList();
 		LinkedHashMap foundStudentMap = new LinkedHashMap<>();
 		LinkedHashMap grMap = new LinkedHashMap<>();
@@ -22510,8 +22544,8 @@ public class DBValidate {
 		String currentDate_DMY = cm.dateToDDMMYYYY(new Date());
 		String mandate_opt = "MANDATORY";
 		String insertDate = "SYSDATE()";
-		String firstKey = "", smsPeId = "";
-
+		String firstKey = "", smsPeId = "", generatedBy = "";
+		
 		try {
 			smsTemplate = sessionData.getConfigMap().get("SMS_FEE") + "\nBy " + sessionData.getConfigMap().get("SMS_"+sessionData.getAppType()+"_FOOTER");
 			smsTemplateId = sessionData.getConfigMap().get("SMS_FEE_TEMP_ID");
@@ -22757,7 +22791,7 @@ public class DBValidate {
 
 					paymentDetails = paymentMode + "^" + bank + "^" + chequeDDNo + "^" + chequeDD_date + "^"
 							+ penaltyAmount + "^" + feeConcessionAmount + "^" + receiptNo + "^" + feesForMonths + "^"
-							+ remark + "^A" + "^" + balanceAmount + "^" + prevBalanceAmount;
+							+ remark + "^A" + "^" + balanceAmount + "^" + prevBalanceAmount + "^" + sessionData.getUserName();
 
 					if (studentFeesMap.get(feeHead + "_" + month + "_BANK") != null) {
 						paymentDetails = studentFeesMap.get(feeHead + "_" + month + "_BANK") + "!" + paymentDetails;
@@ -23005,6 +23039,7 @@ public class DBValidate {
 
 			statement = connection.createStatement();
 			statement.executeUpdate(countQuery);
+			count = getCountData(sessionData, academic, section, module);
 			flag = true;
 
 		} catch (Exception e) {
@@ -23305,7 +23340,7 @@ public class DBValidate {
 			String academic, String section, String category, LinkedHashMap<String, LinkedHashMap<String, Double>> quarterlyFeeMap) throws Exception {
 		logger.info("=========getQuarterlyFeesData Query============");
 		String sumQuery = "", std = "", frequency = "Quarterly";
-		boolean flag = false;
+		boolean flag = false, freqQuarterMatchFlag = false;
 		int startMonth = Integer.parseInt(sessionData.getConfigMap().get("ACADEMIC_START_MONTH"));
 		int count = 0;
 		LinkedHashMap<String, LinkedHashMap<String, Double>> stdDivQuarterlyFeeMap = new LinkedHashMap<String, LinkedHashMap<String, Double>>();
@@ -23344,6 +23379,7 @@ public class DBValidate {
 								((LinkedHashMap<?, ?>) feesHeadMap.get(feesHead)).get("frequency").toString());
 						
 						if (frequencyInt == 12) {
+							freqQuarterMatchFlag = true;
 							feesHeadColumn = feesHeadColumn + "SUM(IF(" + feesHead + "_"
 									+ cm.intgerToMonth((startMonth + cm.QuarterToIntger(subFrequency)) + "") + ">0, "
 									+ feesHead + "_"
@@ -23358,24 +23394,33 @@ public class DBValidate {
 									+ cm.intgerToMonth((startMonth + cm.QuarterToIntger(subFrequency) + 2) + "")
 									+ ", 0)) + ";
 						} else if (frequencyInt == 4) {
+							freqQuarterMatchFlag = true;
 							feesHeadColumn = feesHeadColumn + "SUM(IF(" + feesHead + "_"
 									+ cm.intgerToMonth((startMonth + cm.QuarterToIntger(subFrequency)) + "") + ">0, "
 									+ feesHead + "_"
 									+ cm.intgerToMonth((startMonth + cm.QuarterToIntger(subFrequency)) + "") + ", 0)) + ";
 						} else if (frequencyInt == 2
 								&& (subFrequency.equalsIgnoreCase("Q 1") || subFrequency.equalsIgnoreCase("Q 3"))) {
+							freqQuarterMatchFlag = true;
 							feesHeadColumn = feesHeadColumn + "SUM(IF(" + feesHead + "_"
 									+ cm.intgerToMonth((startMonth + cm.QuarterToIntger(subFrequency)) + "") + ">0, "
 									+ feesHead + "_"
 									+ cm.intgerToMonth((startMonth + cm.QuarterToIntger(subFrequency) + "")) + ", 0)) + ";
 						} else if (frequencyInt == 1 && subFrequency.equalsIgnoreCase("Q 1")) {
+							freqQuarterMatchFlag = true;
 							feesHeadColumn = feesHeadColumn + "SUM(IF(" + feesHead + "_"
 									+ cm.intgerToMonth((startMonth + cm.QuarterToIntger(subFrequency)) + "") + ">0, "
 									+ feesHead + "_"
 									+ cm.intgerToMonth((startMonth + cm.QuarterToIntger(subFrequency)) + "") + ", 0)) + ";
 						}
 					}
-					feesHeadColumn = feesHeadColumn.substring(0, feesHeadColumn.lastIndexOf("+")) + "AS "+subFrequency.replace(" ", "")+"_FEES_SUM,";
+					if(freqQuarterMatchFlag) {
+						feesHeadColumn = feesHeadColumn.substring(0, feesHeadColumn.lastIndexOf("+")) + "AS "+subFrequency.replace(" ", "")+"_FEES_SUM,";
+					}
+					else {
+						feesHeadColumn = feesHeadColumn + feesHeadColumn.substring(0, feesHeadColumn.lastIndexOf("+")) + "AS "+subFrequency.replace(" ", "")+"_FEES_SUM,";
+					}
+					freqQuarterMatchFlag = false;
 				}
 				
 				if (!feesHeadColumn.equalsIgnoreCase("")) {
@@ -23964,7 +24009,7 @@ public class DBValidate {
 			Iterator i = set.iterator();
 			while (i.hasNext()) {
 				Map.Entry me = (Map.Entry) i.next();
-				headerStr += me.getKey().toString().replace("$$", ".") + "|";
+				headerStr += cm.revertCommaApostrophy(me.getKey().toString().replace("$$", ".")) + "|";
 			}
 			headerStr += "PENALTY|CONCESSION|BALANCE|TOTAL|PAYMENT MODE|BANK|CHEQUE/DD NO|CHEQUE/DD DATE";
 			studentReportList.add(cm.revertCommaApostrophy(headerStr));
@@ -24199,6 +24244,7 @@ public class DBValidate {
 					+ whereCondition + " ORDER BY " + tableName + ".STD_1";
 			statement = connection.createStatement();
 			resultSetFeesData = statement.executeQuery(query);
+			System.out.println(query);
 
 			while (resultSetFeesData.next()) {
 				detailStr = "";
@@ -24392,7 +24438,7 @@ public class DBValidate {
 			Iterator i = set.iterator();
 			while (i.hasNext()) {
 				Map.Entry me = (Map.Entry) i.next();
-				headerStr += me.getKey().toString().replace("$$", ".") + "|";
+				headerStr += cm.revertCommaApostrophy(me.getKey().toString().replace("$$", ".")) + "|";
 			}
 			headerStr += "PENALTY|CONCESSION|BALANCE|TOTAL|PAYMENT MODE|BANK|CHEQUE/DD NO|CHEQUE/DD DATE";
 			studentReportList.add(cm.revertCommaApostrophy(headerStr));
@@ -25004,7 +25050,7 @@ public class DBValidate {
 			Iterator i = set.iterator();
 			while (i.hasNext()) {
 				Map.Entry me = (Map.Entry) i.next();
-				headerStr += me.getKey().toString().replace("$$", ".") + "|";
+				headerStr += cm.revertCommaApostrophy(me.getKey().toString().replace("$$", ".")) + "|";
 			}
 			headerStr += "PENALTY|CONCESSION|TOTAL";
 			studentReportList.add(cm.revertCommaApostrophy(headerStr));
@@ -25317,7 +25363,7 @@ public class DBValidate {
 					if (std.equalsIgnoreCase("")) {
 						std = "All";
 					}
-					ce.generateExcel(sessionData, "FEES", "QUARTERLY", "", catDataList, false,
+					ce.generateExcel(sessionData, "FEES", "QUARTERLY", "", catDataList, true,
 							secName + " Quarterly Fees Report  STD:" + std + "  DIV:" + div + " " + academicYear, 1);
 					return null;
 //				}
@@ -25407,7 +25453,7 @@ public class DBValidate {
 				feesHead = me.getKey().toString();
 				feesHeadTotalMap.put(feesHead, 0.0);
 				unpaidTotalMap.put(feesHead, 0.0);
-				feesHeadStr += "|" + feesHead.replace("$$", ".");
+				feesHeadStr += "|" + cm.revertCommaApostrophy(feesHead.replace("$$", "."));
 				paidStr += "|PAID";
 				dueStr += "|DUE";
 
@@ -25691,7 +25737,7 @@ public class DBValidate {
 				feesHead = me.getKey().toString();
 				feesHeadTotalMap.put(feesHead, 0.0);
 				unpaidTotalMap.put(feesHead, 0.0);
-				feesHeadStr += "|" + feesHead.replace("$$", ".");
+				feesHeadStr += "|" + cm.revertCommaApostrophy(feesHead.replace("$$", "."));
 				dueStr += "|DUE";
 
 				frequencyInt = cm.frequencyToInteger(
@@ -26333,8 +26379,10 @@ public class DBValidate {
 					receiptDetailMap.put("total",
 							(Double.parseDouble(receiptDetailMap.get("total")) - balanceAmount) + "");
 				} else {
+//					receiptDetailMap.put("total",
+//							(Double.parseDouble(receiptDetailMap.get("total")) - balanceAmount) + ""); // commented on 16112024
 					receiptDetailMap.put("total",
-							(Double.parseDouble(receiptDetailMap.get("total")) - balanceAmount) + "");
+							(Double.parseDouble(receiptDetailMap.get("total"))) + "");
 				}
 
 				if (receiptDetailMap.get("penalty") == null) {

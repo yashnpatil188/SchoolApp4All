@@ -69,6 +69,8 @@ public class MarksGradeSheet_PDF {
 				semInitial = "S";
 				examHeader = "SECOND SEMESTER";
 			}
+			sem = sem.toUpperCase(); //changed for SEM1 report was failing on 28112014
+			
 			path = commonObj.createTodayFolder(
 					commonObj.getDriveName() + sessionData.getConfigMap().get("REPORT_PDF_PATH_" + sessionData.getDBName()), true)
 					+ "/";
