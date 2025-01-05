@@ -84,6 +84,8 @@ public class MarksheetSubjectwise_PDF {
 				semInitial = "S";
 				examHeader = "ANNUAL";
 			}
+			sem = sem.toUpperCase(); //changed for SEM1 report was failing on 28112024
+			
 			result_sem_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem.toUpperCase()+"_"+std.replaceAll(" ", "_")));
 			
 			// for column width size

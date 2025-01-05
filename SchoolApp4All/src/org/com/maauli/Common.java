@@ -19,6 +19,7 @@ import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -60,7 +61,7 @@ import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Font.FontFamily;
-import com.mysql.jdbc.PreparedStatement;
+//import com.mysql.jdbc.PreparedStatement;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
@@ -2550,6 +2551,10 @@ public class Common {
 		if (retText.contains("/")) {
 			retText = retText.replace("/", "$47$");
 		}
+		
+		if (retText.equalsIgnoreCase("FUNCTION")) {
+			retText = retText+"_999";
+		}
 		return retText;
 	}
 
@@ -2593,6 +2598,10 @@ public class Common {
 
 		if (retText.contains("$")) {
 			retText = retText.replace("$", "\"");
+		}
+		
+		if (retText.equalsIgnoreCase("FUNCTION_999")) {
+			retText = retText.replace("_999", "");
 		}
 		
 		return retText;

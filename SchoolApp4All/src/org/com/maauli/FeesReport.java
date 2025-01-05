@@ -1289,7 +1289,7 @@ public class FeesReport extends JFrame {
 							FeeReceiptPDF.getFeeReceiptPDF(sessionData, feesPaymentMap, "0.00", "", "", "", "", "", stdClass, 
 									divClass, academicYearClass, "Pending", totalAmount, "", emptyConcessionMap, 0, 
 									optionalClass, 0, "", feesForMonth, selectedStudentMap, false, null, receiptShortName, null, 
-									frequencyClass, "", "", "", 0, 0);
+									frequencyClass, "", "", "", 0, 0, "");
 							
 							/*frame.setVisible(false);
 							new FeesView(sessionData, grNoClass, stdClass, divClass, nameClass, rollNoClass, searchStudentMap, section, academicYearClass, 

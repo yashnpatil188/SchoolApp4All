@@ -36,8 +36,8 @@ import org.com.accesser.DBValidate;
 import org.com.accesser.SessionData;
 import org.com.security.EncryptDecryptStr;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+//import com.mysql.jdbc.Connection;
+//import com.mysql.jdbc.PreparedStatement;
 
 public class BulkUploadSms {
 

@@ -64,7 +64,7 @@ public class SchoolForAllLoginView {
 			}
 			
 			sessionData.setDbURL("jdbc:mysql://" + sessionData.getSchoolApp_ip()
-					+ "/getschool?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=-05:30");
+					+ "/getschool?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=-05:30");
 	
 			configMap.put("DBUSER", "psUkfKpV6xHmdvuIMk05CQ==");
 			configMap.put("DBPASSWD", "gHgrdxTlGCUy0nEW4A1QPg==");
