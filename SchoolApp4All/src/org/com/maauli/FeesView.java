@@ -1390,13 +1390,14 @@ public class FeesView extends JFrame {
 				boolean isBackDate = backDateCheckBox.isSelected(), userActive = false;
 				String remark = remark_text.getText().equalsIgnoreCase("") ? " " : remark_text.getText();
 				
-				try {
-					if (dbValidate.connectDatabase(sessionData)) {
-						userActive = dbValidate.checkFormData(sessionData, user_name, "FEES PAYMENT", user_role, section);
-					}
-				} catch (Exception e1) {
-					commonObj.logException(e1);
-				}
+//				try {
+//					if (dbValidate.connectDatabase(sessionData)) {
+//						userActive = dbValidate.checkFormData(sessionData, user_name, "FEES PAYMENT", user_role, section);
+//					}
+//				} catch (Exception e1) {
+//					commonObj.logException(e1);
+//				}
+				userActive = true;
 				
 				if (userActive) {
 					boolean validateField = true;
@@ -1509,9 +1510,11 @@ public class FeesView extends JFrame {
 									feesForMonths = feesForMonths + " - " + lastMonth;
 								}
 								
-//								UUID uuid = UUID.nameUUIDFromBytes((grNoClass+System.currentTimeMillis()+feesPaymentMap.toString()+totalAmount).getBytes());
-//								System.out.println(uuid);
-								count = dbValidate.updateCountData(sessionData, academicYearClass, sessionData.getSectionName(), "FEE_RECEIPT", "");
+								UUID uuid = UUID.nameUUIDFromBytes((commonObj.getCurrentTimeStamp()+grNoClass+academicYearClass+section+feesPaymentMap.toString()+totalAmount).getBytes());
+								String uuidStr = uuid.toString().replaceAll("-", "");
+								count = dbValidate.createFeeReceiptNumber(sessionData, grNoClass, academicYearClass, section, uuidStr, "CREATE");
+								
+//								count = dbValidate.updateCountData(sessionData, academicYearClass, sessionData.getSectionName(), "FEE_RECEIPT", "");
 								
 								String[] nameSplit = nameClass.split(" ");
 								String last = nameSplit[0];

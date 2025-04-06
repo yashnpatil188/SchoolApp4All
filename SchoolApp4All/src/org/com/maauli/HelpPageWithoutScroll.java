@@ -182,6 +182,48 @@ public class HelpPageWithoutScroll {
             }
         });
 		
+		height = height + 45;
+		JButton deleteDuplicateFeeButton = new JButton("Delete Duplicate Fee Data");
+		deleteDuplicateFeeButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
+		deleteDuplicateFeeButton.setBounds(width, height, 200, 35);
+        panel.add(deleteDuplicateFeeButton);
+        
+        String[] stdList = sessionData.getConfigMap().get(sessionData.getSectionName().toUpperCase() + "_STD").split(",");
+		final JComboBox std_combo = new JComboBox(stdList);
+		std_combo.setFont(new Font("Book Antiqua", Font.BOLD, 16));
+		std_combo.setBounds(260, height+10, 100, 25);
+		panel.add(std_combo);
+		
+        JLabel deleteDuplicateFeeLabel = new JLabel("Delete Duplicate Record from Fee");
+        deleteDuplicateFeeLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
+        deleteDuplicateFeeLabel.setBounds(400, height, 900, 40);
+		panel.add(deleteDuplicateFeeLabel);
+		
+		deleteDuplicateFeeButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+            	
+            	String stdSel = std_combo.getSelectedItem().toString();
+            	int reply = JOptionPane.showConfirmDialog(null, "Please take backup before proceeding deleting data. \n"
+            			+ "Would you still like to delete duplicate record from Fee "
+            			+ "std "+stdSel+" \n for academic year "+commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate())+"?", 
+            			"Confirm delete", JOptionPane.YES_NO_OPTION);
+            	
+				if (reply == JOptionPane.YES_OPTION && dbValidate.connectDatabase(sessionData)) {
+					try {
+						JFrame f = new JFrame("Delete duplicate Fee data in progress. Please Don't Close");
+						commonObj.startProgressBar(f);
+						dbValidate.deleteDuplicateData(sessionData, academicYear, stdSel, "", "fees_data_mandatory", "STD_1", 
+								"DIV_1", f);
+						commonObj.closeProgressBar(f);
+						JOptionPane.showMessageDialog(null, "delete duplicate record completed");
+					} catch (Exception e1) {
+						commonObj.logException(e1);
+					}
+				}
+            }
+        });
+		
         height = height + 45;
 		JButton updateFeesReportButton = new JButton("Update Fees Report");
 		updateFeesReportButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
@@ -248,6 +290,29 @@ public class HelpPageWithoutScroll {
 			commonObj.logException(e2);
 		}
         
+		height = height + 45;
+		JButton updateFeeReceiptCountButton = new JButton("Update FEE RECEIPT COUNT");
+		updateFeeReceiptCountButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
+		updateFeeReceiptCountButton.setBounds(width, height, 200, 35);
+        panel.add(updateFeeReceiptCountButton);
+
+        JLabel updateFeeReceiptCountLabel = new JLabel("Update latest fee receipt count");
+        updateFeeReceiptCountLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
+        updateFeeReceiptCountLabel.setBounds(260, height, 900, 40);
+		panel.add(updateFeeReceiptCountLabel);
+		
+		updateFeeReceiptCountButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+            	if(dbValidate.connectDatabase(sessionData)) {
+            		try {
+						dbValidate.updateLatestCount(sessionData, "FEE_RECEIPT", academicYear, sessionData.getSectionName());
+					} catch (SQLException e1) {
+					}
+            	}
+            }
+        });
+		
 		height = height + 45;
 		JButton missingNamesButton = new JButton("Fees Missing Names");
 		missingNamesButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
@@ -1103,47 +1168,6 @@ public class HelpPageWithoutScroll {
         });
 		
 		height = height + 45;
-		JButton deleteDuplicateFeeButton = new JButton("Delete Duplicate Fee Data");
-		deleteDuplicateFeeButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
-		deleteDuplicateFeeButton.setBounds(width, height, 200, 35);
-        panel.add(deleteDuplicateFeeButton);
-        
-        String[] stdList = sessionData.getConfigMap().get(sessionData.getSectionName().toUpperCase() + "_STD").split(",");
-		final JComboBox std_combo = new JComboBox(stdList);
-		std_combo.setFont(new Font("Book Antiqua", Font.BOLD, 16));
-		std_combo.setBounds(260, height+10, 100, 25);
-		panel.add(std_combo);
-		
-        JLabel deleteDuplicateFeeLabel = new JLabel("Delete Duplicate Record from Fee");
-        deleteDuplicateFeeLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
-        deleteDuplicateFeeLabel.setBounds(400, height, 900, 40);
-		panel.add(deleteDuplicateFeeLabel);
-		
-		deleteDuplicateFeeButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-            	
-            	String stdSel = std_combo.getSelectedItem().toString();
-            	int reply = JOptionPane.showConfirmDialog(null, "Would You Like to delete duplicate record from Fee "
-            			+ "std "+stdSel+" \n for academic year "+commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate())+"?", 
-            			"Confirm delete", JOptionPane.YES_NO_OPTION);
-            	
-				if (reply == JOptionPane.YES_OPTION && dbValidate.connectDatabase(sessionData)) {
-					try {
-						JFrame f = new JFrame("Delete duplicate Fee data in progress. Please Don't Close");
-						commonObj.startProgressBar(f);
-						dbValidate.deleteDuplicateData(sessionData, academicYear, stdSel, "", "fees_data_mandatory", "STD_1", 
-								"DIV_1", f);
-						commonObj.closeProgressBar(f);
-						JOptionPane.showMessageDialog(null, "delete duplicate record completed");
-					} catch (Exception e1) {
-						commonObj.logException(e1);
-					}
-				}
-            }
-        });
-		
-		height = height + 45;
 		JButton updateNameInFeesButton = new JButton("Update Name in Fees Data");
 		updateNameInFeesButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
 		updateNameInFeesButton.setBounds(width, height, 200, 35);
@@ -1506,6 +1530,7 @@ public class HelpPageWithoutScroll {
 				}
             }
         });
+		
 
       ///home//////////////
         final ImageIcon iconhome = new ImageIcon(img_path + img_home);

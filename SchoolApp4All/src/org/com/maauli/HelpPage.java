@@ -1001,34 +1001,36 @@ public class HelpPage {
 		std_combo.setBounds(260, height+10, 100, 25);
 		panel.add(std_combo);
 		
-        JLabel deleteDuplicateFeeLabel = new JLabel("Delete Duplicate Record from Fee");
-        deleteDuplicateFeeLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
-        deleteDuplicateFeeLabel.setBounds(400, height, 900, 40);
-		panel.add(deleteDuplicateFeeLabel);
-		
-		deleteDuplicateFeeButton.addActionListener(new ActionListener() {
+		if(sessionData.getUserName().equalsIgnoreCase("PRP")) {
+			JLabel deleteDuplicateFeeLabel = new JLabel("Delete Duplicate Record from Fee");
+	        deleteDuplicateFeeLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
+	        deleteDuplicateFeeLabel.setBounds(400, height, 900, 40);
+			panel.add(deleteDuplicateFeeLabel);
+			
+			deleteDuplicateFeeButton.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent e) {
-            	
-            	String stdSel = std_combo.getSelectedItem().toString();
-            	int reply = JOptionPane.showConfirmDialog(null, "Would You Like to delete duplicate record from Fee "
-            			+ "std "+stdSel+" \n for academic year "+commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate())+"?", 
-            			"Confirm delete", JOptionPane.YES_NO_OPTION);
-            	
-				if (reply == JOptionPane.YES_OPTION && dbValidate.connectDatabase(sessionData)) {
-					try {
-						JFrame f = new JFrame("Delete duplicate Fee data in progress. Please Don't Close");
-						commonObj.startProgressBar(f);
-						dbValidate.deleteDuplicateData(sessionData, academicYear, stdSel, "", "fees_data_mandatory", "STD_1", 
-								"DIV_1", f);
-						commonObj.closeProgressBar(f);
-						JOptionPane.showMessageDialog(null, "delete duplicate record completed");
-					} catch (Exception e1) {
-						commonObj.logException(e1);
+	            public void actionPerformed(ActionEvent e) {
+	            	
+	            	String stdSel = std_combo.getSelectedItem().toString();
+	            	int reply = JOptionPane.showConfirmDialog(null, "Would You Like to delete duplicate record from Fee "
+	            			+ "std "+stdSel+" \n for academic year "+commonObj.getAcademicYear(sessionData,commonObj.getCurrentDate())+"?", 
+	            			"Confirm delete", JOptionPane.YES_NO_OPTION);
+	            	
+					if (reply == JOptionPane.YES_OPTION && dbValidate.connectDatabase(sessionData)) {
+						try {
+							JFrame f = new JFrame("Delete duplicate Fee data in progress. Please Don't Close");
+							commonObj.startProgressBar(f);
+							dbValidate.deleteDuplicateData(sessionData, academicYear, stdSel, "", "fees_data_mandatory", "STD_1", 
+									"DIV_1", f);
+							commonObj.closeProgressBar(f);
+							JOptionPane.showMessageDialog(null, "delete duplicate record completed");
+						} catch (Exception e1) {
+							commonObj.logException(e1);
+						}
 					}
-				}
-            }
-        });
+	            }
+	        });
+		}
 		
 		height = height + 45;
 		JButton updateNameInFeesButton = new JButton("Update Name in Fees Data");
@@ -1516,6 +1518,28 @@ public class HelpPage {
             	}
             	catch(Exception e1) {
             		commonObj.logException(e1);
+            	}
+            }
+        });
+		
+    	height = height + 45;
+		JButton updateSubjectInMarksEntryButton = new JButton("Alter Marks_Entry"); //method moved from Section.Java
+		updateSubjectInMarksEntryButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
+		updateSubjectInMarksEntryButton.setBounds(width, height, 200, 35);
+        panel.add(updateSubjectInMarksEntryButton);
+
+        JLabel updateFeeReceiptCountLabel = new JLabel("Execute if having issue in Marks_Entry backup");
+        updateFeeReceiptCountLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
+        updateFeeReceiptCountLabel.setBounds(260, height, 900, 40);
+		panel.add(updateFeeReceiptCountLabel);
+		
+		updateSubjectInMarksEntryButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+            	if(dbValidate.connectDatabase(sessionData)) {
+            		try {
+            			dbValidate.insertColumnForEvaluation(sessionData);
+					} catch (Exception e1) {}
             	}
             }
         });

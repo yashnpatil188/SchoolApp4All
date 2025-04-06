@@ -1583,7 +1583,17 @@ public class CreateLcPDFNew {
 						paraTitleReason.setAlignment(Element.ALIGN_LEFT);
 						document.add(paraTitleReason);
 						
-						Chunk chunkReason = new Chunk("                                                                :   "+  reasonDb);
+						String reason1 = "";
+						String reason2 = "";
+						List reasonList = commonLc.breakSentence(reasonDb, 45);
+						if(reasonList != null){
+							reason1 = reasonList.get(0).toString().trim();
+							if(reasonList.size() > 1){
+								reason2 = reasonList.get(1).toString().trim();
+							}
+						}
+						
+						Chunk chunkReason = new Chunk("                                                                :   "+  reason1);
 						/*Font fontReason = new Font(Font.TIMES_ROMAN);
 						fontReason.setStyle(Font.BOLD);
 						fontReason.setStyle(Font.ITALIC);
@@ -1596,6 +1606,17 @@ public class CreateLcPDFNew {
 						paraReason.add(chunkReason);
 						paraReason.setAlignment(Element.ALIGN_LEFT);
 						document.add(paraReason);
+						
+						if(!reason2.trim().equalsIgnoreCase("")) {
+							Chunk chunkReason2 = new Chunk("                                                                    "+  reason2);
+							chunkReason2.setFont(fontClass2);
+							
+							Paragraph paraReason2 = new Paragraph();	
+							paraReason2.setSpacingBefore(8);
+							paraReason2.add(chunkReason2);
+							paraReason2.setAlignment(Element.ALIGN_LEFT);
+							document.add(paraReason2);
+						}
 						
 						Chunk chunkTitleRemark = new Chunk(" 17.  Remark");
 						/*Font fontTitleRemark = new Font(Font.TIMES_ROMAN);
@@ -1640,7 +1661,6 @@ public class CreateLcPDFNew {
 								stdStar = romanStd+"th";
 							}
 						}
-						payremark = payremark;
 						payremark = payremark.replace("xxxx", stdStar.substring(0,stdStar.length()-2));
 						Chunk chunkRemark = new Chunk("                                                                :   "+  payremark);
 						/*Font fontRemark = new Font(Font.TIMES_ROMAN);
@@ -1657,7 +1677,6 @@ public class CreateLcPDFNew {
 						document.add(paraRemark);
 						
 						logger.info("remarkDb===="+remarkDb);
-						remarkLc = remarkLc;
 						remarkLc = remarkLc.replace("xxxx", stdStar);
 						Chunk chunkRemark1 = new Chunk("                                                                    "+  remarkLc);
 						/*Font fontRemark1 = new Font(Font.TIMES_ROMAN);

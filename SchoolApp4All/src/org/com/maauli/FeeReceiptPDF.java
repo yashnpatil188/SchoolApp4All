@@ -187,25 +187,26 @@ public class FeeReceiptPDF {
 							fee_header_0 = " " + fee_header_0;
 						}
 					}
-					else if(fee_pdf_main_header_flag.equalsIgnoreCase("false")){
-						fee_header_1 = "";
-						fee_header_2 = "";
-					}
 					else {
 						if(fee_receipt_copy_array.length == 3) {
 				        	fee_header_1_space ="";
 				        	fee_header_2_space ="";
 						}
-				        else if(fee_receipt_copy_array.length == 2) {
-				        	fee_header_1_space ="                        ";
-				        	fee_header_2_space ="                        ";
-				        	tableWidthPercentage = 47.0f;
-						}
-				        else if(fee_receipt_copy_array.length == 1) {
-				        	fee_header_1_space ="                        ";
-				        	fee_header_2_space ="                        ";
-				        	tableWidthPercentage = 100.0f;
-						}
+//				        else if(fee_receipt_copy_array.length == 2) {
+//				        	fee_header_1_space ="                        ";
+//				        	fee_header_2_space ="                        ";
+//				        	tableWidthPercentage = 47.0f;
+//						}
+//				        else if(fee_receipt_copy_array.length == 1) {
+//				        	fee_header_1_space ="                        ";
+//				        	fee_header_2_space ="                        ";
+//				        	tableWidthPercentage = 100.0f;
+//						}
+					}
+					
+					if(fee_pdf_main_header_flag.equalsIgnoreCase("false")){
+						fee_header_1 = "";
+						fee_header_2 = "";
 					}
 				}
 			} catch (Exception e) {
@@ -1776,9 +1777,9 @@ public class FeeReceiptPDF {
 				document.add(paragraphq);
 				document.add(tableStudent);
 				if(fee_receipt_copy_array.length >= 2) {
-					if(fee_receipt_copy_array.length == 2) {
-			        	tableOffice.setHorizontalAlignment(Element.ALIGN_RIGHT);
-					}
+//					if(fee_receipt_copy_array.length == 2) {
+//			        	tableOffice.setHorizontalAlignment(Element.ALIGN_RIGHT);
+//					}
 					document.add(tableOffice);
 				}
 				if(fee_receipt_copy_array.length >= 3) {

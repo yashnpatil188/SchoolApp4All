@@ -151,11 +151,15 @@ public class Section
             	else {
             		fee_visible_flag = true;
             	}
-            	
+        
             	if(dbValidate.connectDatabase(sessionData)){
-            		dbValidate.insertColumnForEvaluation(sessionData);
-            		dbValidate.UpdateDivLengthinTable(sessionData);
+//            		dbValidate.insertColumnForEvaluation(sessionData); //removed as the query was taking long time
+//            		dbValidate.UpdateDivLengthinTable(sessionData);
     	            deleteFlag = dbValidate.deleteFormData(sessionData, user_name, "LEAVING CERTIFICATE", user_role, section);
+    	            
+    	            //Create FEE_RECEIPT_COUNT if doesn't exists
+    	            dbValidate.createFeeReceiptCount(sessionData);
+    	            
     	            dbValidate.closeDatabase(sessionData);
             	}
             } catch (Exception e1) {

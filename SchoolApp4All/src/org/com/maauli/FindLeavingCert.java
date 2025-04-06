@@ -2510,9 +2510,9 @@ public class FindLeavingCert extends JFrame {
 						} else if (commonObj.checkComma(reason)) {
 							flagLeaving = false;
 							JOptionPane.showMessageDialog(null, "Reason cannot contain ;',-:|");
-						} else if (reason.length() > 60) {
+						} else if (reason.length() > 75) {
 							flagLeaving = false;
-							JOptionPane.showMessageDialog(null, "Reason cannot exceed 60 characters");
+							JOptionPane.showMessageDialog(null, "Reason cannot exceed 75 characters");
 						} /*else if (reason.length() <= 0 && (lcTypeClass.equalsIgnoreCase("Original") || lcTypeClass.equalsIgnoreCase("update"))) {
 							flagLeaving = false;
 							JOptionPane.showMessageDialog(null, "Please enter reason.");
@@ -2673,9 +2673,9 @@ public class FindLeavingCert extends JFrame {
 						} else if (commonObj.checkComma(reason)) {
 							flagLeaving = false;
 							JOptionPane.showMessageDialog(null, "Reason cannot contain ;',-:|");
-						} else if (reason.length() > 60) {
+						} else if (reason.length() > 75) {
 							flagLeaving = false;
-							JOptionPane.showMessageDialog(null, "Reason cannot exceed 60 characters");
+							JOptionPane.showMessageDialog(null, "Reason cannot exceed 75 characters");
 						} /*else if (reason.length() <= 0 && (lcTypeClass.equalsIgnoreCase("Original") || lcTypeClass.equalsIgnoreCase("update"))) {
 							flagLeaving = false;
 							JOptionPane.showMessageDialog(null, "Please enter reason.");

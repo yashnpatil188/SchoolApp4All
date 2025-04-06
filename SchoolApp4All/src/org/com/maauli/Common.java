@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
@@ -474,6 +475,11 @@ public class Common {
 
 	public String getCurrentTimeStamp() {
 	    return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+	}
+	
+	public String generateUUIDFromString(String inputStr) {
+	    UUID uuid = UUID.nameUUIDFromBytes(inputStr.getBytes());
+	    return uuid.toString();
 	}
 	
 	////////

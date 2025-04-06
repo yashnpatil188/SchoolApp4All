@@ -35,6 +35,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -8274,6 +8275,18 @@ public class DBValidate {
 			cm.logException(e);
 		} finally {
 			return deleteFlag;
+		}
+	}
+	
+	// /////////createFeeReceiptCount////////////////////////////
+	public void createFeeReceiptCount(SessionData sessionData) throws Exception {
+
+		logger.info("========createFeeReceiptCount==========");
+		try {
+			String queryfee_receipt_count = "CREATE TABLE FEE_RECEIPT_COUNT (FEE_RECEIPT_NUMBER int NOT NULL AUTO_INCREMENT,GR_NO varchar(10) NOT NULL,ACADEMIC_YEAR varchar(10),SECTION_NM varchar(10),UUID varchar(50),CREATED_BY varchar(200),CREATED_DATE TIMESTAMP,PRIMARY KEY (fee_receipt_number));";
+			statement.executeUpdate(queryfee_receipt_count);
+		} catch (Exception e) {
+//			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -22129,7 +22142,11 @@ public class DBValidate {
 							: ((LinkedHashMap<?, ?>) selectedStudentMap.get(me.getKey())).get("chequeDDDate")
 									.toString();
 
-				count = updateCountData(sessionData, academic, sessionData.getSectionName(), "FEE_RECEIPT", "");
+//				count = updateCountData(sessionData, academic, sessionData.getSectionName(), "FEE_RECEIPT", "");
+				UUID uuid = UUID.nameUUIDFromBytes((cm.getCurrentTimeStamp()+grNo+academic+sessionData.getSectionName()+feesPaymentMap.toString()+totalAmount).getBytes());
+				String uuidStr = uuid.toString().replaceAll("-", "");
+				count = createFeeReceiptNumber(sessionData, grNo, academic, sessionData.getSectionName(), uuidStr, "CREATE");
+				
 				paymentDetails = paymentMode + "^" + bank + "^" + chequeDDNo + "^" + chequeDDDate + "^0^0^" + count
 						+ "^" + feesForMonths + "^ ^A" + "^" + balanceAmount + "^" + prevBalanceAmount + "^" + sessionData.getUserName();
 				studentDetailMap.put("receiptNo", count + "");
@@ -22999,7 +23016,7 @@ public class DBValidate {
 
 		try {
 
-			findCountQuery = "SELECT COUNT FROM COUNT_DATA WHERE MODULE_NAME='" + module + "' AND ACADEMIC_YEAR='"
+			findCountQuery = "SELECT COUNT FROM " + sessionData.getDBName() + ".COUNT_DATA WHERE MODULE_NAME='" + module + "' AND ACADEMIC_YEAR='"
 					+ academic + "' " + "AND SECTION_NM='" + section + "'";
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(findCountQuery);
@@ -23030,10 +23047,10 @@ public class DBValidate {
 			count = getCountData(sessionData, academic, section, module);
 			count = count + 1;
 			if (count == 1 && !mode.equalsIgnoreCase("VALIDATE")) {
-				countQuery = "INSERT INTO COUNT_DATA (MODULE_NAME, ACADEMIC_YEAR,SECTION_NM,COUNT) VALUES('" + module
+				countQuery = "INSERT INTO " + sessionData.getDBName() + ".COUNT_DATA (MODULE_NAME, ACADEMIC_YEAR,SECTION_NM,COUNT) VALUES('" + module
 						+ "', '" + academic + "', '" + section + "'," + count + ")";
 			} else if (!mode.equalsIgnoreCase("VALIDATE")) {
-				countQuery = "UPDATE COUNT_DATA SET COUNT = IF(COUNT IS NULL, 0, COUNT) + 1 WHERE MODULE_NAME='"
+				countQuery = "UPDATE " + sessionData.getDBName() + ".COUNT_DATA SET COUNT = IF(COUNT IS NULL, 0, COUNT) + 1 WHERE MODULE_NAME='"
 						+ module + "' AND ACADEMIC_YEAR='" + academic + "' " + "AND SECTION_NM='" + section + "'";
 			}
 
@@ -23047,6 +23064,58 @@ public class DBValidate {
 			return count;
 		}
 		return count;
+	}
+	
+/////////// create fee_receipt_number////////////////////////////////////////
+	public int createFeeReceiptNumber(SessionData sessionData, String grNo, String academic, String section, String uuid, String mode)
+			throws Exception {
+		logger.info("=========createFeeReceiptNumber Query============");
+		String receiptQuery = "";
+		boolean flag = false;
+		int receiptNumber = 0;
+	
+		try {
+			if (!mode.equalsIgnoreCase("VALIDATE")) {
+				receiptQuery = "INSERT INTO " + sessionData.getDBName() + ".FEE_RECEIPT_COUNT (GR_NO, ACADEMIC_YEAR, SECTION_NM, "
+						+ "UUID, CREATED_BY, CREATED_DATE) "
+						+ "VALUES('" + grNo + "', '" + academic + "', '" + section + "','" + uuid + "', '"+sessionData.getUserName()+"', SYSDATE())";
+			} 
+	
+			statement = connection.createStatement();
+			statement.executeUpdate(receiptQuery);
+			receiptNumber = getFeeReceiptNumber(sessionData, grNo, academic, section, uuid);
+	
+		} catch (Exception e) {
+			cm.logException(e);
+			return receiptNumber;
+		}
+		return receiptNumber;
+	}
+	
+/////////// get fee_receipt_number////////////////////////////////////////
+	public int getFeeReceiptNumber(SessionData sessionData, String grNo, String academic, String section, String uuid)
+			throws Exception {
+		logger.info("=========getFeeReceiptNumber Query============");
+		String receiptQuery = "";
+		boolean flag = false;
+		int fee_receipt_number = 0;
+	
+		try {
+			ResultSet resultSetFeesData = null;
+			receiptQuery = "SELECT FEE_RECEIPT_NUMBER FROM " + sessionData.getDBName() + ".FEE_RECEIPT_COUNT WHERE GR_NO='"+grNo+"' AND ACADEMIC_YEAR='"+academic+"' "
+					+ "AND SECTION_NM='"+section+"' AND UUID='"+uuid+"'";
+	
+			statement = connection.createStatement();
+			resultSetFeesData = statement.executeQuery(receiptQuery);
+			while (resultSetFeesData.next()) {
+				fee_receipt_number = Integer.parseInt(resultSetFeesData.getString("FEE_RECEIPT_NUMBER"));
+			}
+	
+		} catch (Exception e) {
+			cm.logException(e);
+			return fee_receipt_number;
+		}
+		return fee_receipt_number;
 	}
 
 	/////////// get Fees Head Data with frequency
@@ -25415,7 +25484,7 @@ public class DBValidate {
 		LinkedHashMap<String, String> freePayingData;
 		LinkedHashMap<String, LinkedHashMap<String, String>> multiFeeHeadMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		boolean isOptional = false;
-		String optionalFee = "", optional = "", subFee = "", contact = "";
+		String optionalFee = "", optional = "", subFee = "", contact = "", optionFeeStr = "";
 
 		try {
 
@@ -25591,7 +25660,8 @@ public class DBValidate {
 
 					if (optionalList != null) {
 						for (int n = 0; n < optionalList.length; n++) {
-							if (optionalList[n].contains(feesHead + "^") && subFee.equalsIgnoreCase("")) {
+							optionFeeStr = cm.revertCommaApostrophy(feesHead);
+							if (optionalList[n].contains(optionFeeStr + "^") && subFee.equalsIgnoreCase("")) {
 								subFee = optionalList[n].substring(optionalList[n].indexOf("^") + 1);
 								isOptional = true;
 							}
@@ -25855,7 +25925,7 @@ public class DBValidate {
 				concessionTotal += concessionDb;
 				concessionMapStr = resultSet.getString("CONCESSION_PERCENT") == null ? "0"
 						: resultSet.getString("CONCESSION_PERCENT").trim();
-				if (!concessionMapStr.equalsIgnoreCase("0")) {
+				if (!concessionMapStr.equalsIgnoreCase("0") && !concessionMapStr.equalsIgnoreCase("0.0")) {
 					concessionMapStr = concessionMapStr.substring(1, concessionMapStr.length() - 1);
 					concessionArr = concessionMapStr.split(",");
 					for (int i = 0; i < concessionArr.length; i++) {
@@ -26640,18 +26710,18 @@ public class DBValidate {
 					+ sessionData.getSectionName() + "' and " + "GR_NO IN (SELECT GR_NO FROM " + sessionData.getDBName() + "." + tableName
 					+ " where ACADEMIC_YEAR = '" + academicYear + "' AND " + "" + stdColumnName + " = '" + std
 					+ "' AND SECTION_NM = '" + sessionData.getSectionName() + "' "
-					+ "GROUP BY GR_NO HAVING COUNT(GR_NO) > 1) order by CREATED_DATE DESC";
+					+ "GROUP BY GR_NO HAVING COUNT(GR_NO) > 1) order by CREATED_DATE ASC";
 
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(findQuery);
 
-			if (resultSet.last()) {
-				rowcount = resultSet.getRow();
-				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
+//			if (resultSet.last()) {
+//				rowcount = resultSet.getRow();
+//				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
 											// element
-			}
+//			}
 			while (resultSet.next()) {
-				f.setTitle("1) Updating " + i + " / " + rowcount);
+				f.setTitle("1) Updating " + i);
 				keyName = resultSet.getString("GR_NO") + "_" + resultSet.getString(stdColumnName) + "_"
 						+ resultSet.getString("ACADEMIC_YEAR");
 				if (listOfRecordsToKeep.get(keyName) == null) {
@@ -30120,6 +30190,42 @@ public class DBValidate {
 		}
 	}
 
+	public void updateLatestCount(SessionData sessionData, String moduleName, String academic, String section) throws SQLException {
+
+		try {
+			int lastCount = 0;
+			String findLastCount = "SELECT FEE_RECEIPT_NUMBER FROM " + sessionData.getDBName() + "." + "FEE_RECEIPT_COUNT order by CREATED_DATE DESC LIMIT 1;";
+
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(findLastCount);
+
+			while (resultSet.next()) {
+				lastCount = Integer.parseInt(resultSet.getString("FEE_RECEIPT_NUMBER"));
+			}
+			
+			if(lastCount == 0) {
+				findLastCount = "SELECT COUNT FROM " + sessionData.getDBName() + "." + "COUNT_DATA "
+						+ "WHERE MODULE_NAME='"+moduleName+"' AND ACADEMIC_YEAR='"+academic+"' AND SECTION_NM='"+section+"'";
+
+				statement = connection.createStatement();
+				resultSet = statement.executeQuery(findLastCount);
+
+				while (resultSet.next()) {
+					lastCount = Integer.parseInt(resultSet.getString("COUNT"));
+				}
+			}
+			
+			String alterCount = "ALTER TABLE " + sessionData.getDBName()
+					+ ".FEE_RECEIPT_COUNT AUTO_INCREMENT="+(lastCount+1)+"";
+			statement = connection.createStatement();
+			statement.executeUpdate(alterCount);
+			logger.info("Update fee receipt count == " + alterCount);
+			
+//			JOptionPane.showMessageDialog(null, "Last "+moduleName+" count was "+lastCount);
+		} catch (Exception e) {
+		}
+	}
+	
 	public void addRenewCodeColumn(SessionData sessionData) throws SQLException {
 
 		/// add column
@@ -30207,10 +30313,6 @@ public class DBValidate {
 			String todayDate = cm.getCurrentDate();
 			String academic = cm.getAcademicYear(sessionData,todayDate);
 			List<String> stdList = new ArrayList<String>();
-//	        stdList.add("IX");
-//	        stdList.add("X");
-
-//	        for(int j = 0; j < stdList.size(); j++) {
 			subjectMap = getSujectDetails(sessionData, "", academic);
 
 			Set set = subjectMap.entrySet();
@@ -30223,9 +30325,7 @@ public class DBValidate {
 
 				insertColumn(sessionData, "", subject, title);
 			}
-//	        }
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 	}
 	
 	public void UpdateDivLengthinTable(SessionData sessionData) {
