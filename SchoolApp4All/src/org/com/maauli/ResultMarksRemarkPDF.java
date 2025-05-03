@@ -143,6 +143,9 @@ public class ResultMarksRemarkPDF {
 		        String grNo = me.getKey().toString();
 		        LinkedHashMap studentData = new LinkedHashMap();
 		        studentData = (LinkedHashMap) me.getValue();
+		        if(studentData.get("semTotal").toString().equalsIgnoreCase("0")) {
+		        	continue;
+		        }
 		         
 				Chunk chunk01 = new Chunk(result_header_1);
 				Font font01 = FontFactory.getFont("TIMES_ROMAN");
@@ -358,7 +361,7 @@ public class ResultMarksRemarkPDF {
 			      maxMarksGradeList = maxMarksGradeList + "\n \n";
 			      minMarksGradeList = minMarksGradeList + "\n \n";
 			      marksGradeList = marksGradeList + "\n ";
-			      String dispMarks = "", remark = "PASS";
+			      String dispMarks = "", removeDot = "", remark = "PASS";
 			      String dispPassStatus = "";
 			      String dispReason = "";
 			      String dispAbsentMarks = "";
@@ -429,6 +432,18 @@ public class ResultMarksRemarkPDF {
 								dispMarks = dispMarks.substring(0, dispMarks.indexOf("("));
 								remark = "FAIL";
 							}
+							else if(dispPassStatus.equalsIgnoreCase("F")) {
+								remark = "FAIL";
+							}
+							else if(dispPassStatus.equalsIgnoreCase("P")) {
+								remark = "PASS";
+							}
+							
+							if(dispMarks.contains(".0")) {
+								removeDot = dispMarks.substring(0, dispMarks.indexOf("."));
+								removeDot = removeDot + "" + dispMarks.substring(dispMarks.indexOf("+"));
+								dispMarks = removeDot;
+							}
 							
 							if(gradeMarksMapOrder.get(item).toString().equalsIgnoreCase("Marks")){
 								noOfMarksSubjects = noOfMarksSubjects +1;
@@ -462,7 +477,6 @@ public class ResultMarksRemarkPDF {
 								subjectGradeList = subjectGradeList + "          "+subjectName.replace("_", " ")+"\n";
 								maxMarksGradeList = maxMarksGradeList + "\n \n";
 								minMarksGradeList = minMarksGradeList + "\n \n";
-								// System.out.println((subjectTitleList.size() - noOfMarksSubjects)+" : "+noOfMarksSubjects);
 								
 								if((subjectTitleList.size() - noOfMarksSubjects) > 4 && noOfGradeSubjects == 0) {
 									marksGradeList = marksGradeList + "\n ";
@@ -663,9 +677,9 @@ public class ResultMarksRemarkPDF {
 			      cell19.setPaddingLeft(10f);
 			      table.addCell(cell19);
 			      
-			      PdfPCell cell59 = new PdfPCell (new Paragraph ("          Total", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
-			      cell59.setColspan (6);
-			      cell59.setHorizontalAlignment (Element.ALIGN_LEFT);
+			      PdfPCell cell59 = new PdfPCell (new Paragraph ("Total", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+			      cell59.setColspan (4);
+			      cell59.setHorizontalAlignment (Element.ALIGN_CENTER);
 			      cell59.setPaddingBottom(5.0f);
 			      table.addCell(cell59);
 			      
@@ -682,12 +696,17 @@ public class ResultMarksRemarkPDF {
 			      table.addCell(cell61);
 			      
 			      String obtainedTotalMarks = studentData.get("semMarksObtained").toString();
-			      
 			      PdfPCell cell62 = new PdfPCell (new Paragraph ("       "+obtainedTotalMarks, FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
 			      cell62.setColspan (2);
 			      cell62.setVerticalAlignment (Element.ALIGN_MIDDLE);
 			      cell62.setPaddingBottom(5.0f);
 			      table.addCell(cell62);
+			      
+			      PdfPCell cell63 = new PdfPCell (new Paragraph ("", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+			      cell63.setColspan (2);
+			      cell63.setVerticalAlignment (Element.ALIGN_MIDDLE);
+			      cell63.setPaddingBottom(5.0f);
+			      table.addCell(cell63);
 			      
 			      String attendance = studentData.get("attendance").toString();
 			      if(attendance.equalsIgnoreCase("NA") || attendance.equalsIgnoreCase("0/0") || attendance.equalsIgnoreCase("")){

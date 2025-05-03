@@ -46,7 +46,7 @@ public class MarksSheet_IX_PDF {
 		fileOpenFlag = true;
 		boolean isMg = false, isDoubleLine = false, lastPage = true, marks_flag_std = false, result_sem_std_flag = false;
 		int displayRows= 25;
-		String examHeader = "", sem = "", semOutofMarks = "", subMarks = "", subjectMarksDisp = "", obtainedStr = "", gradeMarks = "";
+		String examHeader = "", sem = "", semOutofMarks = "", subMarks = "", subjectMarksDisp = "-", obtainedStr = "", gradeMarks = "";
 		double total = 0, totalObtained = 0, subjectMarks = 0, subjectTotal = 0, percent = 0;
 		int subjectHeadCount = maxSubMarks.size(), addRow = 0;
 		String subTitle = "", grNo = "", subGrade = "", totalGrade = "", outOfMarks = "", finalSubMarks = "0";
@@ -393,10 +393,6 @@ public class MarksSheet_IX_PDF {
 				String marksStr = "";
 				Map.Entry me = (Map.Entry) m.next();
 				grNo = me.getKey().toString();
-				System.out.println(grNo);
-				if(grNo.equalsIgnoreCase("0022494")) {
-					System.out.println(grNo);
-				}
 				grDetail = (LinkedHashMap<String, String>) me.getValue();
 				grResultMap = (LinkedHashMap<String, String>) resultMap.get(grNo);
 				optionalSubject = studentOptSubAllotMap.get(grNo) == null ? "" :studentOptSubAllotMap.get(grNo).get("optionalSubject");
@@ -454,7 +450,6 @@ public class MarksSheet_IX_PDF {
 						isMg = false;
 						Map.Entry meSubject = (Map.Entry) p.next();
 						subTitle = meSubject.getKey().toString();
-						System.out.println(subTitle);
 						gradeMarks = maxSubMarks.get(subTitle).get("marks_grade");
 								
 						if(!optionalSubject.contains(subTitle+"_YES") || optionalSubject.equalsIgnoreCase("")){
@@ -465,7 +460,6 @@ public class MarksSheet_IX_PDF {
 //							subjectMarks = Double.parseDouble(grDetail.get(subTitle + "_MARKS") == null ? "0" : grDetail.get(subTitle + "_MARKS"));
 							finalSubMarks = grResultMap.get(subTitle + "_"+sem.toUpperCase()) == null ? "0" : grResultMap.get(subTitle + "_"+sem.toUpperCase());
 							
-							System.out.println(finalSubMarks);
 //							if(!stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XI")
 //									&& !stdClass.equalsIgnoreCase("XII") && !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
 							if(!marks_flag_std) {
@@ -549,7 +543,6 @@ public class MarksSheet_IX_PDF {
 								subjectMarksDisp = "AB";
 							}
 							
-//							System.out.println(subjectMarksDisp);
 							if(commonObj.validateNumber(subjectMarksDisp)) {
 								subjectMarksDisp = ((int)(Double.parseDouble(subjectMarksDisp)))+"";
 							} else if(subjectMarksDisp.contains("+")) {
@@ -659,7 +652,6 @@ public class MarksSheet_IX_PDF {
 								subjectMarksDisp = "AB";
 							}
 							
-//							System.out.println(subjectMarksDisp);
 							if(commonObj.validateNumber(subjectMarksDisp)) {
 								subjectMarksDisp = ((int)(Double.parseDouble(subjectMarksDisp)))+"";
 							} else if(subjectMarksDisp.contains("+")) {
@@ -721,6 +713,10 @@ public class MarksSheet_IX_PDF {
 							subjectMarksDisp = "-";
 						}
 						
+						if(optionalSubject.contains(subTitle+"_NO")){
+							subjectMarksDisp = "-";
+						}
+						
 						PdfPCell cell346;
 						if(isMg){
 							subjectMarksDisp = subjectMarksDisp+" MG";
@@ -741,7 +737,9 @@ public class MarksSheet_IX_PDF {
 										"+" + ((int)(Double.parseDouble(subjectMarksDisp.substring(subjectMarksDisp.indexOf("+")+1))));
 							}
 						}
-						
+						if(marksStr.contains("+") && marksStr.contains("(") && gradeMarks.equalsIgnoreCase("Marks")) {
+							subjectMarksDisp = subjectMarksDisp + marksStr.substring(marksStr.indexOf("+"), marksStr.indexOf("("));
+						}
 						cell346 = new PdfPCell(new Paragraph(subjectMarksDisp,
 								FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 						cell346.setColspan(1);
@@ -751,6 +749,7 @@ public class MarksSheet_IX_PDF {
 
 						subjectMarks = 0;
 						finalSubMarks = "0";
+						subjectMarksDisp = "-";
 					}
 
 					if(sem.equalsIgnoreCase("final")){

@@ -2680,8 +2680,8 @@ public class Common {
 			convertedMarks = Double.parseDouble(subjectTypeMarks);
 		}
 
-//		return roundUp(convertedMarks); removed as roundup is adding one extra marks in result
-		return convertedMarks;
+		return roundToNearestInt(convertedMarks); 
+//		return convertedMarks; //removed as it was showing decimal marks in exam register
 	}
 
 	public String getDriveSerialNumber() {
@@ -4408,6 +4408,10 @@ public class Common {
 	    return retDouble;
 	}
 	
+	public int roundToNearestInt(double d) { //round to nearest integer
+	    return (int) Math.round(d);
+	}
+	
 	public static Double roundUp(double d) {
 		long retDouble = 0;
 		if(d > 0 && d <= 1){
@@ -5956,6 +5960,24 @@ public class Common {
 		else {
 			return false;
 		}
+	} 
+	
+	public String removeDotZero(String strWithDotZero) {
+		String strremovedDotZero = "";
+		if(strWithDotZero.contains(".0") && strWithDotZero.contains("+")) {
+			strremovedDotZero = strWithDotZero.substring(0, strWithDotZero.indexOf("."));
+			strremovedDotZero = strremovedDotZero + strWithDotZero.substring(strWithDotZero.indexOf("+"));
+		}
+		else if(strWithDotZero.contains(".0")) {
+			strremovedDotZero = strWithDotZero.substring(0, strWithDotZero.indexOf("."));
+		}
+		else if(strWithDotZero.equalsIgnoreCase("")) {
+			strremovedDotZero = "0";
+		}
+		else {
+			strremovedDotZero = strWithDotZero;
+		}
+		return strremovedDotZero;
 	} 
 	
 	public double checkBalanceAmount(double totalAmount, String totalAmountPaid, double totalBalanceFromDB) {

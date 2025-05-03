@@ -1570,7 +1570,7 @@ public class Result extends JFrame {
 						frame.setVisible(false);
 		            	panelHome.removeAll();///to remve entire panel
 		                List findList = new ArrayList();
-						new Result(sessionData, "", "", "", "", "", "",	findList, false, false, "", section, user_name, 
+						new Result(sessionData, "", std, div, "", "", "",	findList, false, false, "", section, user_name, 
 								user_role, "", "", "", findList, findList, findList);
 					} finally {
 						dbValidate.closeDatabase(sessionData);
@@ -1853,10 +1853,6 @@ public class Result extends JFrame {
 					sr_radio[i].setSelected(setSelected);
 //					dataPanel.add(sr_radio[i]);
 
-//					System.out.println(grNo);
-//					if(grNo.equalsIgnoreCase("0022494")) {
-//						 System.out.println("");
-//					}
 					gr_labels[i] = new JLabel(grNo);
 					gr_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 //					allGrList.add(grNo);
@@ -1935,9 +1931,13 @@ public class Result extends JFrame {
 					pipe_label7.setBounds(520, j, 120, 50);
 					dataPanel.add(pipe_label7);
 					
-					if(result.contains("|")){
+					if(total.equalsIgnoreCase("0")) {
+						result = "NA";
+					}
+					else if(result.contains("|")){
 						result = result.substring(0,result.indexOf("|"));
 					}
+					
 					result_labels[i] = new JLabel(result);
 					result_labels[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 					result_labels[i].setBounds(540, j + 2, 50, 50);
@@ -2013,12 +2013,14 @@ public class Result extends JFrame {
 					String dispAbsentMarks = "";
 					for (int n = 0; n < subjectTitleList.size(); n++) {
 						dispResult = temp[p];
-//						 System.out.println(dispResult);
 //						if(!stdClass.equalsIgnoreCase("IX") && !stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XI")
 //								&& !stdClass.equalsIgnoreCase("XII") && !stdClass.equalsIgnoreCase("JR KG") && !stdClass.equalsIgnoreCase("SR KG")){
 						if(!marks_flag_std) {
 							if(dispResult.contains("~")){
 								dispMarks = dispResult.substring(0, dispResult.indexOf("~"));
+							}
+							if(dispMarks.contains(".0")){
+								dispMarks = dispMarks.substring(0, dispMarks.indexOf("."));
 							}
 							if(dispResult.contains("AB") || dispResult.contains("MG")){
 								if(!examClass.equalsIgnoreCase("FINAL")){
@@ -2066,6 +2068,9 @@ public class Result extends JFrame {
 								if(dispMarks.contains("+") && !examClass.equalsIgnoreCase("Final")){
 									dispMarks = dispMarks.substring(0, dispMarks.indexOf("+"));
 								} 
+								if(dispMarks.contains(".0")){
+									dispMarks = dispMarks.substring(0, dispMarks.indexOf("."));
+								}
 //								else if(dispMarks.contains("+") && examClass.equalsIgnoreCase("Final") && result_final_sem2_std_flag){
 //									dispMarks = dispMarks.substring(0, dispMarks.indexOf("+"));
 //								}
@@ -2080,9 +2085,12 @@ public class Result extends JFrame {
 									dispMarks = "AB";
 								}
 								else if(dispReason.equalsIgnoreCase("AB") && !dispAbsentMarks.equalsIgnoreCase("NA") && 
-										sem.equalsIgnoreCase("FINAL") && !dispMarks.equalsIgnoreCase("AB") && !dispMarks.contains("+") && Double.parseDouble(dispMarks) == 0 && 
-										Double.parseDouble(dispAbsentMarks) == Double.parseDouble(maxSubMarks.get(subjectTitleList.get(n)).get(sem+"_"+subjectTitleList.get(n)+"_total"))){
-									dispMarks = "AB";
+										sem.equalsIgnoreCase("FINAL") && !dispMarks.equalsIgnoreCase("AB") && 
+										!dispMarks.contains("+") &&  
+										maxSubMarks.get(subjectTitleList.get(n)).get("marks_grade").equalsIgnoreCase("MARKS")){
+									if(Double.parseDouble(dispMarks) == 0 && Double.parseDouble(dispAbsentMarks) == Double.parseDouble(maxSubMarks.get(subjectTitleList.get(n)).get(sem+"_"+subjectTitleList.get(n)+"_total"))) {
+										dispMarks = "AB";
+									}
 								}
 								else if(dispPassStatus.contains("F")){
 									dispMarks = dispMarks + "(F)";
@@ -2097,7 +2105,6 @@ public class Result extends JFrame {
 							dispMarks = "AB";
 						}
 						
-//						System.out.println(dispMarks);
 						if(commonObj.validateNumber(dispMarks)) {
 							dispMarks = ((int)(Double.parseDouble(dispMarks)))+"";
 						} else if(dispMarks.contains("+")) {
@@ -2105,6 +2112,9 @@ public class Result extends JFrame {
 									commonObj.validateNumber(dispMarks.substring(dispMarks.indexOf("+")+1))) {
 								dispMarks = ((int)(Double.parseDouble(dispMarks.substring(0, dispMarks.indexOf("+"))))) + 
 										"+" + ((int)(Double.parseDouble(dispMarks.substring(dispMarks.indexOf("+")+1))));
+							}
+							else if(!commonObj.validateNumber(dispMarks.substring(0, dispMarks.indexOf("+")))) {
+								dispMarks = dispMarks.substring(0, dispMarks.indexOf("+"));
 							}
 						} else if(dispMarks.contains("(F)") && commonObj.validateNumber(dispMarks.substring(0, dispMarks.indexOf("(")))) {
 							dispMarks = (int)(Double.parseDouble(dispMarks.substring(0, dispMarks.indexOf("("))))+"";
@@ -2288,7 +2298,8 @@ public class Result extends JFrame {
 							    f.setVisible(true);
 							    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 							    
-								if(marks_flag_std){
+							    
+								if(marks_flag_std || result_final_pdf_std_flag){
 									grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicYearClass, stdClass, divClass, examClass, 
 											section, lastNameClass, firstNameClass, fatherNameClass, leftDataMap, marks_flag_std);
 									subjectTitleList = dbValidate.findSubjectTitleList(sessionData, stdClass, "", academicYearClass);
@@ -2402,7 +2413,6 @@ public class Result extends JFrame {
 									commonObj.showMessageDialog("failed to get max marks for subjects.");
 								}
 							    	
-						    	
 								if(marks_flag_std && (stdClass.equalsIgnoreCase("JR KG") || stdClass.equalsIgnoreCase("SR KG"))){
 									ResultPPRMarksPDF resultPPRMarksPDF = new ResultPPRMarksPDF(sessionData, section, academicYearClass, grStudentSelectedMap, 
 											subjectTitleList, examClass, stdClass, divClass, note, maxMarksMapOrder, gradeMarksMapOrder);

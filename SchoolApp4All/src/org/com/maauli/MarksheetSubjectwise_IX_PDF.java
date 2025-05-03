@@ -433,8 +433,8 @@ public class MarksheetSubjectwise_IX_PDF {
 
 			String maxMarks = "0";
 			if (total == 0)
-				totalA = Double.parseDouble(subMaxMarks.get("sem1_obt" + ctStr));
-			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_obt" + ctStr)))) + "";
+				totalA = Double.parseDouble(subMaxMarks.get("SEM1_obt" + ctStr));
+			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_obt" + ctStr)))) + "";
 			if (maxMarks.equalsIgnoreCase("0")) {
 				maxMarks = "-";
 			}
@@ -448,8 +448,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			
 			if(commonObj.is9thEvaluation(std, academic)){
 				if (total == 0)
-					totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_listen" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_listen" + ctStr)))) + "";
+					totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_listen" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_listen" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -460,8 +460,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				cell305.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				
 				if (total == 0)
-					totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_speak" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_speak" + ctStr)))) + "";
+					totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_speak" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_speak" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -473,8 +473,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			}
 			else if(stdInt < 11){
 				if (total == 0)
-					totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_pres" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_pres" + ctStr)))) + "";
+					totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_pres" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_pres" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -485,8 +485,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				cell305.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				
 				if (total == 0)
-					totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_mcap" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_mcap" + ctStr)))) + "";
+					totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_mcap" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_mcap" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -498,8 +498,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			}
 			else{
 				if (total == 0)
-					totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_oral" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_oral" + ctStr)))) + "";
+					totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_oral" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_oral" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -510,8 +510,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				cell305.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				
 				if (total == 0)
-					totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_assign" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_assign" + ctStr)))) + "";
+					totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_assign" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_assign" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -525,8 +525,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			PdfPCell cell347 = null;
 			if(commonObj.is9thEvaluation(std, academic)){
 				if (total == 0)
-					totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_project" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_project" + ctStr)))) + "";
+					totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_project" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_project" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -537,8 +537,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			}
 			
 			if (total == 0)
-				totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_write" + ctStr));
-			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_write" + ctStr)))) + "";
+				totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_write" + ctStr));
+			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_write" + ctStr)))) + "";
 			if (maxMarks.equalsIgnoreCase("0")) {
 				maxMarks = "-";
 			}
@@ -548,8 +548,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			cell311.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
 			if (total == 0)
-				totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_pract" + ctStr));
-			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_pract" + ctStr)))) + "";
+				totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_pract" + ctStr));
+			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_pract" + ctStr)))) + "";
 			if (maxMarks.equalsIgnoreCase("0")) {
 				maxMarks = "-";
 			}
@@ -561,8 +561,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			PdfPCell cell326 = null;
 			if(commonObj.is9thEvaluation(std, academic)){
 				if (total == 0)
-					totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_assign" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_assign" + ctStr)))) + "";
+					totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_assign" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_assign" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -573,8 +573,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			}
 			else if(stdInt < 11){
 				if (total == 0)
-					totalA = totalA + Double.parseDouble(subMaxMarks.get("sem1_activity" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem1_activity" + ctStr)))) + "";
+					totalA = totalA + Double.parseDouble(subMaxMarks.get("SEM1_activity" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM1_activity" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -591,8 +591,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			cell326a.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
 			if (total == 0)
-				totalB = Double.parseDouble(subMaxMarks.get("sem2_" + "obt" + ctStr));
-			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "obt" + ctStr)))) + "";
+				totalB = Double.parseDouble(subMaxMarks.get("SEM2_" + "obt" + ctStr));
+			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "obt" + ctStr)))) + "";
 			if (maxMarks.equalsIgnoreCase("0")) {
 				maxMarks = "-";
 			}
@@ -605,8 +605,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			PdfPCell cell326d = null;
 			if(commonObj.is9thEvaluation(std, academic)){
 				if (total == 0)
-					totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_" + "listen" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "listen" + ctStr)))) + "";
+					totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_" + "listen" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "listen" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -617,8 +617,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				cell326c.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				
 				if (total == 0)
-					totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_" + "speak" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "speak" + ctStr)))) + "";
+					totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_" + "speak" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "speak" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -630,8 +630,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			}
 			else if(stdInt < 11){
 				if (total == 0)
-					totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_" + "pres" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "pres" + ctStr)))) + "";
+					totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_" + "pres" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "pres" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -642,8 +642,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				cell326c.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				
 				if (total == 0)
-					totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_" + "mcap" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "mcap" + ctStr)))) + "";
+					totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_" + "mcap" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "mcap" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -655,8 +655,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			}
 			else{
 				if (total == 0)
-					totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_" + "oral" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "oral" + ctStr)))) + "";
+					totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_" + "oral" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "oral" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -667,8 +667,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				cell326c.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				
 				if (total == 0)
-					totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_" + "assign" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "assign" + ctStr)))) + "";
+					totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_" + "assign" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "assign" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -680,8 +680,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			}
 			
 			if (total == 0)
-				totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_" + "write" + ctStr));
-			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "write" + ctStr)))) + "";
+				totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_" + "write" + ctStr));
+			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "write" + ctStr)))) + "";
 			if (maxMarks.equalsIgnoreCase("0")) {
 				maxMarks = "-";
 			}
@@ -691,8 +691,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			cell326e.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
 			if (total == 0)
-				totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_" + "pract" + ctStr));
-			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "pract" + ctStr)))) + "";
+				totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_" + "pract" + ctStr));
+			maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "pract" + ctStr)))) + "";
 			if (maxMarks.equalsIgnoreCase("0")) {
 				maxMarks = "-";
 			}
@@ -704,8 +704,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			PdfPCell cell326g = null;
 			if(commonObj.is9thEvaluation(std, academic)){
 				if (total == 0)
-					totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_" + "assign" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "assign" + ctStr)))) + "";
+					totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_" + "assign" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "assign" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -716,8 +716,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			}
 			else if(stdInt < 11){
 				if (total == 0)
-					totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_" + "activity" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_" + "activity" + ctStr)))) + "";
+					totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_" + "activity" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_" + "activity" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -730,8 +730,8 @@ public class MarksheetSubjectwise_IX_PDF {
 			PdfPCell cell351 = null;
 			if(commonObj.is9thEvaluation(std, academic)) {
 				if (total == 0)
-					totalB = totalB + Double.parseDouble(subMaxMarks.get("sem2_project" + ctStr));
-				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("sem2_project" + ctStr)))) + "";
+					totalB = totalB + Double.parseDouble(subMaxMarks.get("SEM2_project" + ctStr));
+				maxMarks = (Math.round(Double.parseDouble(subMaxMarks.get("SEM2_project" + ctStr)))) + "";
 				if (maxMarks.equalsIgnoreCase("0")) {
 					maxMarks = "-";
 				}
@@ -969,8 +969,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				cell329.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table2.addCell(cell329);
 
-				if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_obt" + ctStr).equalsIgnoreCase("0")
-						&& !subMaxMarks.get("sem1_obt" + ctStr).equalsIgnoreCase("0.0")) {
+				if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_obt" + ctStr).equalsIgnoreCase("0")
+						&& !subMaxMarks.get("SEM1_obt" + ctStr).equalsIgnoreCase("0.0")) {
 					if (commonObj.validateNumber(grMap.get(subject + "_FOBT").toString())) {
 						subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FOBT").toString())) + "";
 						subTotalA = Math.round(Double.parseDouble(subMarks));
@@ -991,8 +991,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				PdfPCell cell331 = null;
 				PdfPCell cell332 = null;
 				if(commonObj.is9thEvaluation(std, academic)){
-					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_listen" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem1_listen" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_listen" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM1_listen" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_FLIS").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FLIS").toString())) + "";
 							subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1011,8 +1011,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell331.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell331.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					
-					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_speak" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem1_speak" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_speak" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM1_speak" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_FSPE").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FSPE").toString())) + "";
 							subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1032,8 +1032,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell332.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				}
 				else if(stdInt < 11){
-					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_pres" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem1_pres" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_pres" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM1_pres" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_FPRE").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FPRE").toString())) + "";
 							subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1052,8 +1052,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell331.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell331.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					
-					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_mcap" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem1_mcap" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_mcap" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM1_mcap" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_FMCA").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FMCA").toString())) + "";
 							subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1073,8 +1073,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell332.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				}
 				else {
-					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_oral" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem1_oral" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_oral" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM1_oral" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_FORA").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FORA").toString())) + "";
 							subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1093,8 +1093,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell331.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell331.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					
-					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_assign" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem1_assign" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_assign" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM1_assign" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_FASS").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FASS").toString())) + "";
 							subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1114,8 +1114,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell332.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				}
 				
-				if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_write" + ctStr).equalsIgnoreCase("0")
-						&& !subMaxMarks.get("sem1_write" + ctStr).equalsIgnoreCase("0.0")) {
+				if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_write" + ctStr).equalsIgnoreCase("0")
+						&& !subMaxMarks.get("SEM1_write" + ctStr).equalsIgnoreCase("0.0")) {
 					if (commonObj.validateNumber(grMap.get(subject + "_FWRI").toString())) {
 						subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FWRI").toString())) + "";
 						subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1133,8 +1133,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				cell333.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell333.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-				if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_pract" + ctStr).equalsIgnoreCase("0")
-						&& !subMaxMarks.get("sem1_pract" + ctStr).equalsIgnoreCase("0.0")) {
+				if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_pract" + ctStr).equalsIgnoreCase("0")
+						&& !subMaxMarks.get("SEM1_pract" + ctStr).equalsIgnoreCase("0.0")) {
 					if (commonObj.validateNumber(grMap.get(subject + "_FPRA").toString())) {
 						subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FPRA").toString())) + "";
 						subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1154,8 +1154,8 @@ public class MarksheetSubjectwise_IX_PDF {
 
 				PdfPCell cell335 = null;
 				if(commonObj.is9thEvaluation(std, academic)){
-					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_assign" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem1_assign" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_assign" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM1_assign" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_FASS").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FASS").toString())) + "";
 							subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1174,8 +1174,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell335.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				}
 				else if(stdInt < 11){
-					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_activity" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem1_activity" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_activity" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM1_activity" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_FACT").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FACT").toString())) + "";
 							subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1196,8 +1196,8 @@ public class MarksheetSubjectwise_IX_PDF {
 
 				PdfPCell cell348 = null;
 				if(commonObj.is9thEvaluation(std, academic)){
-					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("sem1_project" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem1_project" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem2") && !subMaxMarks.get("SEM1_project" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM1_project" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_FPRO").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_FPRO").toString())) + "";
 							subTotalA = subTotalA + Math.round(Double.parseDouble(subMarks));
@@ -1228,8 +1228,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				cell336.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell336.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-				if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_obt" + ctStr).equalsIgnoreCase("0")
-						&& !subMaxMarks.get("sem2_obt" + ctStr).equalsIgnoreCase("0.0")) {
+				if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_obt" + ctStr).equalsIgnoreCase("0")
+						&& !subMaxMarks.get("SEM2_obt" + ctStr).equalsIgnoreCase("0.0")) {
 					if (commonObj.validateNumber(grMap.get(subject + "_SOBT").toString())) {
 						subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SOBT").toString())) + "";
 						subTotalB = Math.round(Double.parseDouble(subMarks));
@@ -1250,8 +1250,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				PdfPCell cell338 = null;
 				PdfPCell cell339 = null;
 				if(commonObj.is9thEvaluation(std, academic)){
-					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_listen" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem2_listen" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_listen" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM2_listen" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_SLIS").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SLIS").toString())) + "";
 							subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1270,8 +1270,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell338.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell338.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_speak" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem2_speak" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_speak" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM2_speak" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_SSPE").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SSPE").toString())) + "";
 							subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1291,8 +1291,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell339.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				}
 				else if(stdInt < 11){
-					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_pres" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem2_pres" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_pres" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM2_pres" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_SPRE").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SPRE").toString())) + "";
 							subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1311,8 +1311,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell338.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell338.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_mcap" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem2_mcap" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_mcap" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM2_mcap" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_SMCA").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SMCA").toString())) + "";
 							subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1332,8 +1332,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell339.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				}
 				else{
-					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_oral" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem2_oral" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_oral" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM2_oral" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_SORA").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SORA").toString())) + "";
 							subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1352,8 +1352,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell338.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell338.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					
-					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_assign" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem2_assign" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_assign" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM2_assign" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_SASS").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SASS").toString())) + "";
 							subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1373,8 +1373,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell339.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				}
 				
-				if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_write" + ctStr).equalsIgnoreCase("0")
-						&& !subMaxMarks.get("sem2_write" + ctStr).equalsIgnoreCase("0.0")) {
+				if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_write" + ctStr).equalsIgnoreCase("0")
+						&& !subMaxMarks.get("SEM2_write" + ctStr).equalsIgnoreCase("0.0")) {
 					if (commonObj.validateNumber(grMap.get(subject + "_SWRI").toString())) {
 						subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SWRI").toString())) + "";
 						subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1393,8 +1393,8 @@ public class MarksheetSubjectwise_IX_PDF {
 				cell340.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell340.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-				if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_pract" + ctStr).equalsIgnoreCase("0")
-						&& !subMaxMarks.get("sem2_pract" + ctStr).equalsIgnoreCase("0.0")) {
+				if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_pract" + ctStr).equalsIgnoreCase("0")
+						&& !subMaxMarks.get("SEM2_pract" + ctStr).equalsIgnoreCase("0.0")) {
 					if (commonObj.validateNumber(grMap.get(subject + "_SPRA").toString())) {
 						subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SPRA").toString())) + "";
 						subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1414,8 +1414,8 @@ public class MarksheetSubjectwise_IX_PDF {
 
 				PdfPCell cell342 = null;
 				if(commonObj.is9thEvaluation(std, academic)){
-					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_assign" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem2_assign" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_assign" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM2_assign" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_SASS").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SASS").toString())) + "";
 							subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1434,8 +1434,8 @@ public class MarksheetSubjectwise_IX_PDF {
 					cell342.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				}
 				else if(stdInt < 11){
-					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_activity" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem2_activity" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_activity" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM2_activity" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_SACT").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SACT").toString())) + "";
 							subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1456,8 +1456,8 @@ public class MarksheetSubjectwise_IX_PDF {
 
 				PdfPCell cell350 = null;
 				if(commonObj.is9thEvaluation(std, academic)){
-					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("sem2_project" + ctStr).equalsIgnoreCase("0")
-							&& !subMaxMarks.get("sem2_project" + ctStr).equalsIgnoreCase("0.0")) {
+					if (!sem.equalsIgnoreCase("sem1") && !subMaxMarks.get("SEM2_project" + ctStr).equalsIgnoreCase("0")
+							&& !subMaxMarks.get("SEM2_project" + ctStr).equalsIgnoreCase("0.0")) {
 						if (commonObj.validateNumber(grMap.get(subject + "_SPRO").toString())) {
 							subMarks = Math.round(Double.parseDouble(grMap.get(subject + "_SPRO").toString())) + "";
 							subTotalB = subTotalB + Math.round(Double.parseDouble(subMarks));
@@ -1603,7 +1603,7 @@ public class MarksheetSubjectwise_IX_PDF {
 					grade = grMap.get(subject + "_FINAL").toString();
 					
 					if(exam.equalsIgnoreCase("Final") && marks_grade.equalsIgnoreCase("GRADE") && !grade.equalsIgnoreCase("-")){
-						if((subTotalA == 0 && subTotalB != 0) || (subTotalA != 0 && subTotalB == 0)) {
+						if((subTotalA == 0 && subTotalB != 0) || (subTotalA != 0 && subTotalB == 0) && stdInt > 10) {
 							average = String.format("%.0f", ((Double.parseDouble(sem1Total) + Double.parseDouble(sem2Total))));
 						}
 						else {
@@ -1620,6 +1620,10 @@ public class MarksheetSubjectwise_IX_PDF {
 				if(leftDataMap != null && leftDataMap.get(grNo) != null){
 					average = "-";
 				}
+				else if(average.contains(".")) {
+					average = average.substring(0, average.indexOf("."));
+				}
+
 				PdfPCell cell346;
 				if (!average.contains("+")) {
 					cell346 = new PdfPCell(new Paragraph(average, FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));

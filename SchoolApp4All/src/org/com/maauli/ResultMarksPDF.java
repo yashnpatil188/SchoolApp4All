@@ -141,6 +141,10 @@ public class ResultMarksPDF {
 			while(i.hasNext()) {
 				Map.Entry me = (Map.Entry)i.next();
 		        String grNo = me.getKey().toString();
+		        System.out.println(grNo);
+		        if(grNo.equalsIgnoreCase("0002497")) {
+		        	System.out.println(grNo);
+		        }
 		        LinkedHashMap studentData = new LinkedHashMap();
 		        studentData = (LinkedHashMap) me.getValue();
 		         
@@ -353,7 +357,7 @@ public class ResultMarksPDF {
 			      maxMarksGradeList = maxMarksGradeList + "\n \n";
 			      minMarksGradeList = minMarksGradeList + "\n \n";
 			      marksGradeList = marksGradeList + "\n ";
-			      String dispMarks = "";
+			      String dispMarks = "", dispMarksStr = "";
 			      String dispPassStatus = "";
 			      String dispReason = "";
 			      String dispAbsentMarks = "";
@@ -402,8 +406,11 @@ public class ResultMarksPDF {
 										dispReason = subjectMarksObtained.substring(subjectMarksObtained.indexOf("#")+1, subjectMarksObtained.indexOf("@"));
 										dispAbsentMarks = subjectMarksObtained.substring(subjectMarksObtained.indexOf("@")+1, subjectMarksObtained.indexOf(")"));
 
-										if(dispReason.equalsIgnoreCase("MG")){
+										if(dispReason.equalsIgnoreCase("MG") && dispMarks.contains("(")){
 											dispMarks = (int)(Double.parseDouble(dispMarks.substring(0, dispMarks.indexOf("(")))) + " (MG)";
+										}
+										else if(dispReason.equalsIgnoreCase("MG") && dispMarks.contains(".")){
+											dispMarks = (int)(Double.parseDouble(dispMarks.substring(0, dispMarks.indexOf(".")))) + " (MG)";
 										}
 										else if(dispPassStatus.equalsIgnoreCase("F") && commonObj.validateNumber(dispMarks)){
 											dispMarks = (int)(Double.parseDouble(dispMarks)) + " (F)";
@@ -416,6 +423,12 @@ public class ResultMarksPDF {
 								else{
 									dispMarks = subjectMarksObtained;
 								}
+							}
+							
+							if(dispMarks.contains(".0")) {
+								dispMarksStr = dispMarks.substring(0, dispMarks.indexOf("."));
+								dispMarksStr = dispMarksStr + dispMarks.substring(dispMarks.indexOf("+"));
+								dispMarks = dispMarksStr;
 							}
 							
 							if(gradeMarksMapOrder.get(item).toString().equalsIgnoreCase("Marks")){

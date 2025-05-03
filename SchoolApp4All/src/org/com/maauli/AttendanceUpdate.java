@@ -1834,6 +1834,7 @@ public class AttendanceUpdate extends JFrame {
 			final JTextField[] reasonText = new JTextField[listSize];
 			
 			int k = 0;
+			String totalDays = "0";
 			for (int i = 0; i < listSize; i++) {
 				j = j + 30;
 				k = j;
@@ -1927,11 +1928,15 @@ public class AttendanceUpdate extends JFrame {
 					attendedDays_labels[i].setBounds(650, j + 12, 150, 20);
 					
 					String attendedDays = columnArray[3].substring(0, columnArray[3].indexOf("/"));
-					String totalDays = columnArray[3].substring(columnArray[3].indexOf("/")+1);
-					if(totalDays_text.getText() != null && !totalDays_text.getText().equalsIgnoreCase("") && (Integer.parseInt(totalDays) > Integer.parseInt(totalDays_text.getText()))){
+					totalDays = columnArray[3].substring(columnArray[3].indexOf("/")+1);
+					if(totalDays.contains(".")) {
+						totalDays = totalDays.substring(0, totalDays.indexOf("."));
+					}
+					if(totalDays_text.getText() != null && !totalDays_text.getText().equalsIgnoreCase("") 
+							&& (Integer.parseInt(totalDays) > Integer.parseInt(totalDays_text.getText()))){
 						totalDays_text.setText(totalDays);
 					}
-					else{
+					else if(Integer.parseInt(totalDays) != 0){
 						totalDays_text.setText(totalDays);
 					}
 					attendedDaysText[i].setText(attendedDays);
@@ -2095,7 +2100,7 @@ public class AttendanceUpdate extends JFrame {
 			updateButton.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					boolean insertAttendance = true;
+					boolean insertAttendance = true, attendancePageError = false;
 					JFrame f = new JFrame("Attendance Update in progress. Please Don't Close");
 					try {
 						f.setBounds(screenWidth/2 - 150, screenHeight/2, 90, 25);
@@ -2112,13 +2117,18 @@ public class AttendanceUpdate extends JFrame {
 					    	String totalDays = totalDays_text.getText();
 					    	
 					    	if(totalDays.trim().equalsIgnoreCase("")){
+					    		attendancePageError = false;
 					    		JOptionPane.showMessageDialog(null, "Please insert Total Days");
+					    	}
+					    	else if(totalDays.contains(".")){
+					    		attendancePageError = false;
+					    		JOptionPane.showMessageDialog(null, "Total Days cannot be in decimal");
 					    	}
 					    	else{
 					    		boolean validFlag = true;
 					    		String studentDetail = "";
 				    			String attendance = "";
-				    			String rollNo = "";
+				    			String rollNo = "", maxDaysStr = "0";
 				    			int present = 0;
 				    			int maxDays = 0;
 				    			foundStudentList.clear();
@@ -2130,7 +2140,11 @@ public class AttendanceUpdate extends JFrame {
 				    				rollNo = studentDetail.substring(0, studentDetail.indexOf("|"));
 					    			attendance = studentDetail.substring(studentDetail.lastIndexOf("|")+1);
 					    			present = Integer.parseInt(attendance.substring(0, attendance.indexOf("/")));
-					    			maxDays = Integer.parseInt(attendance.substring(attendance.indexOf("/")+1));
+					    			maxDaysStr = attendance.substring(attendance.indexOf("/")+1);
+					    			if(maxDaysStr.contains(".")) {
+					    				maxDaysStr = maxDaysStr.substring(0, maxDaysStr.indexOf("."));
+					    			}
+					    			maxDays = Integer.parseInt(maxDaysStr);
 					    			if(present > Integer.parseInt(totalDays)){
 					    				validFlag = false;
 					    				insertAttendance = false;
@@ -2198,7 +2212,9 @@ public class AttendanceUpdate extends JFrame {
 					    }
 					    
 						if(insertAttendance){
-							commonObj.showMessageDialog("Attendance updated successfully.");
+							if(attendancePageError) {
+								commonObj.showMessageDialog("Attendance updated successfully.");
+							}
 							List studentList = new ArrayList();
 							frame.setVisible(false);
 							new AttendanceUpdate(sessionData, stdClass, divClass, academicYearClass, section, user_name, user_role, studentList, catTypeClass,"",

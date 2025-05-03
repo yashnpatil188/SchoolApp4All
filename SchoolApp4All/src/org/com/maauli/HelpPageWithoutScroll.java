@@ -224,6 +224,66 @@ public class HelpPageWithoutScroll {
             }
         });
 		
+		height = height + 45;
+		JButton updateSubjectAllotmentOrderButton = new JButton("Update Subject Order");
+		updateSubjectAllotmentOrderButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
+		updateSubjectAllotmentOrderButton.setBounds(width, height, 200, 35);
+        panel.add(updateSubjectAllotmentOrderButton);
+        
+        String feesReportYearList1 = "";
+		if (dbValidate.connectDatabase(sessionData)) {
+			try {
+				feesReportYearList1 = dbValidate.getAcademicYearList(sessionData, "SUBJECT", "ACADEMIC_YEAR").toString();
+			} catch (Exception e1) {
+			}
+		}
+		
+		String[] academicYearList1 = feesReportYearList1.split(",");
+ 		final JComboBox academicYear1_combo = new JComboBox(academicYearList1);
+ 		academicYear1_combo.setFont(new Font("Book Antiqua", Font.BOLD, 16));
+ 		academicYear1_combo.setBounds(260, height, 150, 40);
+ 		panel.add(academicYear1_combo);
+        
+		final JComboBox std_combo1 = new JComboBox(stdList);
+		std_combo1.setFont(new Font("Book Antiqua", Font.BOLD, 16));
+		std_combo1.setBounds(425, height, 150, 40);
+		panel.add(std_combo1);
+		
+        JLabel updateSubjectAllotmentOrderLabel = new JLabel("Update subject allotment order for reports");
+        updateSubjectAllotmentOrderLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
+        updateSubjectAllotmentOrderLabel.setBounds(600, height, 900, 40);
+		panel.add(updateSubjectAllotmentOrderLabel);
+		
+		updateSubjectAllotmentOrderButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+            	
+            	String stdSel = std_combo1.getSelectedItem().toString();
+            	String academicYear = academicYear1_combo.getSelectedItem() + "";
+            	boolean flag = false;
+            	int reply = JOptionPane.showConfirmDialog(null, "Would you still like to update subject order "
+            			+ "std "+stdSel+" \n for academic year "+academicYear+"?", 
+            			"Confirm update", JOptionPane.YES_NO_OPTION);
+            	
+				if (reply == JOptionPane.YES_OPTION && dbValidate.connectDatabase(sessionData)) {
+					try {
+						JFrame f = new JFrame("Update subject order in progress. Please Don't Close");
+						commonObj.startProgressBar(f);
+						flag = dbValidate.updateSubjecAllotmentOrder(sessionData, academicYear, stdSel, f);
+						commonObj.closeProgressBar(f);
+						if(flag) {
+							JOptionPane.showMessageDialog(null, "Subject order updated");
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "Subject order update failed");
+						}
+					} catch (Exception e1) {
+						commonObj.logException(e1);
+					}
+				}
+            }
+        });
+		
         height = height + 45;
 		JButton updateFeesReportButton = new JButton("Update Fees Report");
 		updateFeesReportButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));

@@ -109,21 +109,6 @@ public class DBValidate {
 
 	EncryptDecryptStr encdec = new EncryptDecryptStr();
 
-	/*
-	 * public boolean connectDatabase(SessionData sessiontData1) { boolean
-	 * dbConnection = false; try { String url =
-	 * sessionData.getConfigMap().get("DBURL_"+sessionData.getDBName()); String dbUser =
-	 * sessionData.getDBUser(); String dbPass = sessionData.getDBPass();
-	 * if(dbUser.equalsIgnoreCase(null) || dbUser.equalsIgnoreCase("")){
-	 * sessionData.setDBUser(encdec.decryptString(user));
-	 * sessionData.setDBPass(encdec.decryptString(pwd)); dbUser =
-	 * sessionData.getDBUser(); dbPass = sessionData.getDBPass(); } DataSource
-	 * dataSource = DataTransaction.getDataSource(sessionData); connection =
-	 * dataSource.getConnection(); dbConnection = true; } catch (Exception e) {
-	 * logger.error("Database connectivity issue...");
-	 * JOptionPane.showMessageDialog(null, "Database connectivity issue..."); return
-	 * dbConnection; } return dbConnection; }
-	 */
 	public boolean connectDatabaseForSQL(String dburl) {
 		boolean dbConnection = false;
 		String dbUser = "";
@@ -139,7 +124,8 @@ public class DBValidate {
 			connection = DriverManager.getConnection(dburl, dbUser, dbPass);
 			dbConnection = true;
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Database connectivity issue...");
+			cm.logException(e);
+			JOptionPane.showMessageDialog(null, "connectDatabaseForSQL...Database connectivity issue");
 			return dbConnection;
 		}
 		return dbConnection;
@@ -169,20 +155,44 @@ public class DBValidate {
 				dbPass = sessionData.getDBPass();
 			}
 
-//			if(sessionData.getConnection() == null || sessionData.getConnection().isClosed()) {
-			Class.forName(driver);
-			connection = DriverManager.getConnection(url, dbUser, dbPass);
-			dbConnection = true;
-			sessionData.setConnection(connection);
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					cm.logException(e);
+				}
+			}
+			
+//			if(sessionData.getConnection() == null) {
+				Class.forName(driver);
+				connection = DriverManager.getConnection(url, dbUser, dbPass);
+				dbConnection = true;
+				sessionData.setConnection(connection);
 //			}
 //			else {
 //				dbConnection = true;
 //			}
 		} catch (Exception e) {
 			cm.logException(e);
-			JOptionPane.showMessageDialog(null, "Database connectivity issue...");
+			JOptionPane.showMessageDialog(null, "connectDatabase..Database connectivity issue");
 			return dbConnection;
 		}
+//		finally{
+//		 /*This block should be added to your code
+//		  * You need to release the resources like connections
+//		  */
+//			if(connection != null) {
+//				try {
+//					connection.close();
+//				} catch (SQLException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//					cm.logException(e);
+//				}
+//			}
+//		}
 		return dbConnection;
 	}
 	
@@ -210,7 +220,7 @@ public class DBValidate {
 			sessionData.setConnection(connection);
 		} catch (Exception e) {
 			cm.logException(e);
-			JOptionPane.showMessageDialog(null, "Database connectivity issue...");
+			JOptionPane.showMessageDialog(null, "connectToDatabase..Database connectivity issue");
 			return connection;
 		}
 		return connection;
@@ -904,9 +914,13 @@ public class DBValidate {
 			cm.logException(e);
 		}
 
-		if (!std.equalsIgnoreCase("All") && !std.equalsIgnoreCase("")) {
+		if (!std.equalsIgnoreCase("All") && !std.equalsIgnoreCase("") && !div.equalsIgnoreCase("All")) {
 			condition = " AND CLASS_ALLOTMENT.PRESENT_STD='" + std + "' AND CLASS_ALLOTMENT.PRESENT_DIV='" + div + "' ";
 		}
+		else if (!std.equalsIgnoreCase("All") && !std.equalsIgnoreCase("") && div.equalsIgnoreCase("All")) {
+			condition = " AND CLASS_ALLOTMENT.PRESENT_STD='" + std + "' ";
+		}
+		
 		if (!gender.equalsIgnoreCase("")) {
 			addCondition = " AND hs_general_register.GENDER='" + gender + "'";
 		}
@@ -2521,12 +2535,6 @@ public class DBValidate {
 					+ ",'YYYY') = DATE_FORMAT(SYSDATE(), 'YYYY')";
 			logger.info(query);
 			connectDatabase(sessionData);
-			/*
-			 * Class.forName(driver); try { connection = DriverManager.getConnection(url,
-			 * user, pwd); } catch (Exception e) {
-			 * logger.error("Database connectivity issue...");
-			 * JOptionPane.showMessageDialog(null, "Database connectivity issue..."); }
-			 */
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(query);
 
@@ -2554,12 +2562,6 @@ public class DBValidate {
 					+ patternStyle + "')";
 			logger.info(query);
 			connectDatabase(sessionData);
-			/*
-			 * Class.forName(driver); try { connection = DriverManager.getConnection(url,
-			 * user, pwd); } catch (Exception e) {
-			 * logger.error("Database connectivity issue...");
-			 * JOptionPane.showMessageDialog(null, "Database connectivity issue..."); }
-			 */
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(query);
 
@@ -3409,12 +3411,6 @@ public class DBValidate {
 
 				logger.info("findPromoteStudentList query == " + findQuery);
 				connectDatabase(sessionData);
-				/*
-				 * Class.forName(driver); try { connection = DriverManager.getConnection(url,
-				 * user, pwd); } catch (Exception e) {
-				 * logger.error("Database connectivity issue...");
-				 * JOptionPane.showMessageDialog(null, "Database connectivity issue..."); }
-				 */
 				statement = connection.createStatement();
 				resultSet = statement.executeQuery(findQuery);
 
@@ -4021,12 +4017,6 @@ public class DBValidate {
 					+ sessionData.getSectionName() + "' ORDER BY " + table_name + ".ROLL_NO * 1";
 			logger.info(query);
 			connectDatabase(sessionData);
-			/*
-			 * Class.forName(driver); try { connection = DriverManager.getConnection(url,
-			 * user, pwd); } catch (Exception e) {
-			 * logger.error("Database connectivity issue...");
-			 * JOptionPane.showMessageDialog(null, "Database connectivity issue..."); }
-			 */
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(query);
 
@@ -5774,12 +5764,6 @@ public class DBValidate {
 //			logger.info("findSubListClassAllot == " + findQuery);
 
 			connectDatabase(sessionData);
-			/*
-			 * Class.forName(driver); try { connection = DriverManager.getConnection(url,
-			 * user, pwd); } catch (Exception e) {
-			 * logger.error("Database connectivity issue...");
-			 * JOptionPane.showMessageDialog(null, "Database connectivity issue..."); }
-			 */
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(findQuery);
 			while (resultSet.next()) {
@@ -6662,12 +6646,6 @@ public class DBValidate {
 //			logger.info("getTopDataquery::" + getTopDataquery);
 
 			connectDatabase(sessionData);
-			/*
-			 * Class.forName(driver); try { connection = DriverManager.getConnection(url,
-			 * user, pwd); } catch (Exception e) {
-			 * logger.error("Database connectivity issue...");
-			 * JOptionPane.showMessageDialog(null, "Database connectivity issue..."); }
-			 */
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(getTopDataquery);
 
@@ -6889,9 +6867,6 @@ public class DBValidate {
 				String updateSubMarks = "";
 //				logger.info("subject marks detail before update== " + marksArray[k].toString());
 				String grNo = marksArray[k].substring(0, marksArray[k].indexOf("|"));
-//				if(grNo.equalsIgnoreCase("0022453")){
-//					System.out.println("");
-//				}
 				String subMarks = marksArray[k].substring(marksArray[k].lastIndexOf("|||") + 3);
 				if (studentMap.get(grNo) != null && !lvType.equalsIgnoreCase("REM")) {
 					String dob, obt, ora, ass, wri, pra, pre, act, pro, oth, ora1, pra1, wri1, lis, spe, ass1, itot,
@@ -7782,6 +7757,9 @@ public class DBValidate {
 						: (resultSet.getString("SUBJECT_TITLE").trim());
 				subjectTitle = subjectTitle.replace(" ", "_");
 				maxMarks = resultSet.getString("MAX_MARKS") == null ? " " : (resultSet.getString("MAX_MARKS").trim());
+				if(maxMarks.contains(".")) {
+					maxMarks = maxMarks.substring(0, maxMarks.indexOf("."));
+				}
 				if (semester.equalsIgnoreCase("FINAL")) {
 					double marksDivisor = cm.getConvertMarksForDivisor(Double.parseDouble(maxMarks), 0, false);
 					marksDivisor = cm.roundUp(marksDivisor);
@@ -7830,7 +7808,7 @@ public class DBValidate {
 				semester = sem = "FINAL";
 //				sem = "FINAL";
 			}
-			marks_flag_std = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_MARKS_"+sem.replaceAll(" ", "_")));
+			marks_flag_std = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_MARKS_"+std.replaceAll(" ", "_")));
 			result_sem_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem+"_"+std.replaceAll(" ", "_")));
 			
 			if (initialYearFromAcademic < 2017) {// To get results before 2017 on previous logic
@@ -8034,6 +8012,9 @@ public class DBValidate {
 							: (resultSet.getString("SEM1_MARKS").trim());
 					sem2Marks = resultSet.getString("SEM2_MARKS") == null ? "0"
 							: (resultSet.getString("SEM2_MARKS").trim());
+					
+					sem1Marks = (int)(Double.parseDouble(sem1Marks))+"";
+					sem2Marks = (int)(Double.parseDouble(sem2Marks))+"";
 
 					if (semester.equalsIgnoreCase("FINAL") && result_sem_std_flag && !marks_flag_std) {
 						semCount = 0;
@@ -8041,14 +8022,14 @@ public class DBValidate {
 						semCount = 1;
 					}
 					
-					if (Integer.parseInt(sem2Marks) > 0) {
+					if ((int)(Double.parseDouble(sem2Marks)) > 0) {
 						semCount = semCount + 1;
 					}
 					if(semester.equalsIgnoreCase("FINAL") && result_sem_std_flag && !marks_flag_std) {
-						maxMarks = (Integer.parseInt(sem2Marks)) + "";
+						maxMarks = ((int)(Double.parseDouble(sem2Marks))) + "";
 					}
 					else {
-						maxMarks = (Integer.parseInt(sem1Marks) + Integer.parseInt(sem2Marks)) + "";
+						maxMarks = ((int)(Double.parseDouble(sem1Marks)) + (int)(Double.parseDouble(sem2Marks))) + "";
 					}
 				}
 
@@ -8286,7 +8267,6 @@ public class DBValidate {
 			String queryfee_receipt_count = "CREATE TABLE FEE_RECEIPT_COUNT (FEE_RECEIPT_NUMBER int NOT NULL AUTO_INCREMENT,GR_NO varchar(10) NOT NULL,ACADEMIC_YEAR varchar(10),SECTION_NM varchar(10),UUID varchar(50),CREATED_BY varchar(200),CREATED_DATE TIMESTAMP,PRIMARY KEY (fee_receipt_number));";
 			statement.executeUpdate(queryfee_receipt_count);
 		} catch (Exception e) {
-//			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -9342,11 +9322,19 @@ public class DBValidate {
 			int grandTotal = 0;
 			int maleTotal = 0;
 			int femaleTotal = 0;
-			if (resultSet.last()) {
-				rowcount = resultSet.getRow();
-				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
+//			if (resultSet.last()) {
+//				rowcount = resultSet.getRow();
+//				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
 											// element
+//			}
+			while (resultSet.next()) {
+				rowcount = rowcount+1;
 			}
+			//run query again to get resultset
+			resultSet = null;
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(findQuery);
+			
 
 			while (resultSet.next()) {
 				stdDb = resultSet.getString("PRESENT_STD") == null ? " " : (resultSet.getString("PRESENT_STD").trim());
@@ -10910,9 +10898,6 @@ public class DBValidate {
 				studentResultMap.put("birthDate", birthDB);
 				studentResultMap.put("grNo", grNoDB);
 				rollNoDB = resultSet.getString("ROLL_NO") == null ? "1" : (resultSet.getString("ROLL_NO").trim());
-				if (rollNoDB.equalsIgnoreCase("")) {
-					rollNoDB = "1";
-				}
 				studentResultMap.put("rollNo", rollNoDB);
 				lastNameDB = resultSet.getString("LAST_NAME") == null ? " " : (resultSet.getString("LAST_NAME").trim());
 				studentResultMap.put("lastName", lastNameDB);
@@ -11019,6 +11004,7 @@ public class DBValidate {
 				studentResultMap.put("conduct", attFinalDB);
 				semTotal = resultSet.getString(semester + "_TOTAL") == null ? "-"
 						: (resultSet.getString(semester + "_TOTAL").trim());
+				
 				studentResultMap.put("semTotal", semTotal);
 				sem1Total = resultSet.getString("SEM1_TOTAL") == null ? "-"
 						: (resultSet.getString("SEM1_TOTAL").trim());
@@ -12151,9 +12137,6 @@ public class DBValidate {
 
 			while (resultSet.next()) {
 				grNoDB = resultSet.getString("GR_NO") == null ? "NA" : (resultSet.getString("GR_NO").trim());
-//				if(grNoDB.equalsIgnoreCase("0022494")) {
-//					System.out.println(grNoDB);
-//				} 
 				addToMap = grNoDB;
 				if (result_sem_std_flag) {
 					for (int i = 0; i < subjectTitleList.size(); i++) {
@@ -12168,7 +12151,6 @@ public class DBValidate {
 						double divisorToPass = 0.0;
 
 						subjectTitle = subjectTitleList.get(i).replace(" ", "_");
-//						System.out.println(subjectTitle);
 						subMaxMarks = Double.parseDouble(maxMarks.get(subjectTitle).toString());
 						if (subjectSemMap.get(subjectTitle) == 2 && marks_flag_std && result_sem_std_flag) {
 							divisor = subMaxMarks / 100;
@@ -12298,8 +12280,8 @@ public class DBValidate {
 							 * gradeDataSem2.substring(0,gradeDataSem2.indexOf("(")); }
 							 */
 //							if(marks_flag_std && result_sem_std_flag) {
-////								avgMarks = (Double.parseDouble(marks1.substring(marks1.indexOf("+") + 1))
-////										+ Double.parseDouble(marks2.substring(marks2.indexOf("+") + 1))) / 2.0;
+//								avgMarks = (Double.parseDouble(marks1.substring(marks1.indexOf("+") + 1))
+//										+ Double.parseDouble(marks2.substring(marks2.indexOf("+") + 1))) / 2.0;
 //								avgMarks = (Double.parseDouble(marks1.substring(marks1.indexOf("+") + 1))
 //										+ Double.parseDouble(marks2.substring(marks2.indexOf("+") + 1))) / divisor;
 //								avgStr = avgMarks + "";
@@ -12324,6 +12306,9 @@ public class DBValidate {
 							double totalAbsentMarks = 0.0;
 							
 							marks2 = gradeDataSem2.substring(0, gradeDataSem2.indexOf("("));
+							if(marks2.contains("+")) {
+								marks2 = marks2.substring(marks2.indexOf("+")+1);
+							}
 							passStatus2 = gradeDataSem2.substring(gradeDataSem2.indexOf("(") + 1,
 									gradeDataSem2.indexOf("#"));
 							reason2 = gradeDataSem2.substring(gradeDataSem2.indexOf("#") + 1,
@@ -12380,11 +12365,13 @@ public class DBValidate {
 								avgStr = avgStr + "+" + reasonForAbsence + "+" + totalAbsentMarks + "~" + divisorToPass;
 							}
 						} else if (gradeDataSem2.equalsIgnoreCase("NA") && !gradeDataSem1.equalsIgnoreCase("NA")
-								&& grade_marks.equalsIgnoreCase("GRADE") && exam.equalsIgnoreCase("Final")) {
+								&& grade_marks.equalsIgnoreCase("GRADE") && !marks1.equalsIgnoreCase("") 
+								&& exam.equalsIgnoreCase("Final")) {
 							avgMarks = Double.parseDouble(marks1.substring(marks1.indexOf("+") + 1)) / 1.0;
 							avgStr = avgMarks + "";
 						} else if (gradeDataSem1.equalsIgnoreCase("NA") && !gradeDataSem2.equalsIgnoreCase("NA")
-								&& grade_marks.equalsIgnoreCase("GRADE") && exam.equalsIgnoreCase("Final")) {
+								&& grade_marks.equalsIgnoreCase("GRADE") && !marks2.equalsIgnoreCase("") 
+								&& exam.equalsIgnoreCase("Final")) {
 							avgMarks = Double.parseDouble(marks2.substring(marks2.indexOf("+") + 1)) / 1.0;
 							avgStr = avgMarks + "";
 						} else if (gradeDataSem1.equalsIgnoreCase("NA") && gradeDataSem2.equalsIgnoreCase("NA")) {
@@ -12495,7 +12482,7 @@ public class DBValidate {
 								avgStr = "AB";
 							}
 							else if(!absentMarks1.equalsIgnoreCase("NA") && absentMarks2.equalsIgnoreCase("NA") && 
-									 !absentMarks2.equalsIgnoreCase("") && Double.parseDouble(absentMarks2) == subMaxMarks) {
+									 !absentMarks1.equalsIgnoreCase("") && Double.parseDouble(absentMarks1) == subMaxMarks) {
 								avgStr = "AB";
 							}
 							
@@ -12514,7 +12501,6 @@ public class DBValidate {
 			// /////////end of fetch result
 			// list/////////////////////////////////////////////////////////////////
 		} catch (Exception e) {
-			// System.out.println(e.getMessage());
 			cm.logException(e);
 		}
 		return finalResulData;
@@ -13518,10 +13504,12 @@ public class DBValidate {
 							: (resultSet.getString("SEM2_MAX_MARKS").trim());
 				}
 
-				if (!sem1MaxMarks.equalsIgnoreCase("0") && !sem1MaxMarks.equalsIgnoreCase("NA")) {
+				if (!sem1MaxMarks.equalsIgnoreCase("0") && !sem1MaxMarks.equalsIgnoreCase("0.0") && 
+						!sem1MaxMarks.equalsIgnoreCase("NA")) {
 					semesterSum += 1;
 				}
-				if (!sem2MaxMarks.equalsIgnoreCase("0") && !sem2MaxMarks.equalsIgnoreCase("NA")) {
+				if (!sem2MaxMarks.equalsIgnoreCase("0") && !sem2MaxMarks.equalsIgnoreCase("0.0") 
+						&& !sem2MaxMarks.equalsIgnoreCase("NA")) {
 					semesterSum += 1;
 				}
 				maxMarks = (Double.parseDouble(sem1MaxMarks) + Double.parseDouble(sem2MaxMarks)) + "";
@@ -13569,11 +13557,18 @@ public class DBValidate {
 			statement = connection.createStatement (ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			resultSet = statement.executeQuery(subListQuery);
 			int rowCount = 0;
-			if (resultSet.last()) {// make cursor to point to the last row in the ResultSet object
-				rowCount = resultSet.getRow();
-				resultSet.beforeFirst(); // make cursor to point to the front of the ResultSet object, just before the
-											// first row.
+//			if (resultSet.last()) {// make cursor to point to the last row in the ResultSet object
+//				rowCount = resultSet.getRow();
+//				resultSet.beforeFirst(); // make cursor to point to the front of the ResultSet object, just before the
+//											// first row.
+//			}
+			while (resultSet.next()) {
+				rowCount = rowCount+1;
 			}
+			//run query again to get resultset
+			resultSet = null;
+			statement = connection.createStatement (ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			resultSet = statement.executeQuery(subListQuery);
 
 			String subjectGroupOption = "";
 			String ft_marksObtained = "";
@@ -13802,10 +13797,6 @@ public class DBValidate {
 							updateResultQuery = "UPDATE " + sessionData.getDBName() + ".RESULT_DATA SET ";
 							boolean mgFlag = false;
 							grNo = resultSet.getString("GR_NO") == null ? " " : (resultSet.getString("GR_NO").trim());
-							// System.out.println(grNo);
-//							if(grNo.equalsIgnoreCase("0022494")) {
-//								 System.out.println(grNo);
-//							}
 							suid = resultSet.getString("SUID") == null ? " " : (resultSet.getString("SUID").trim());
 							optionalSubject = resultSet.getString("OPTIONAL_SUBJECT") == null ? " "
 									: (resultSet.getString("OPTIONAL_SUBJECT").trim());
@@ -13842,9 +13833,6 @@ public class DBValidate {
 								// 1 - check for group logic
 								if (studentMarksFinalMap.get(grNo) != null) {
 									marksSemWise = studentMarksFinalMap.get(grNo).toString();
-//									if(grNo.equalsIgnoreCase("0022494")){
-//										 System.out.println("");
-//									}
 									StringTokenizer st = new StringTokenizer(marksSemWise, "|");
 									tokenSize = st.countTokens();
 									String[] columnArray = new String[tokenSize];
@@ -13869,11 +13857,13 @@ public class DBValidate {
 									double avgDivisor = 2.0;
 									Map.Entry me = (Map.Entry) p.next();
 									String subject = me.getKey().toString();
-									// System.out.println(subject);
 									String subjectMarks = me.getValue().toString();// avg,sem1,sem2
 									String subjectGroupName = subjectGroupMap.get(subject).toString();
 									String gradeMarks = subjectDetailMap.get(subject).toString();
 
+									if(subjectSemMap.get(subject) != null) {
+										avgDivisor = subjectSemMap.get(subject);
+									}
 									/** getting marks as average+reason+marksAbsent~divisor **/
 									if (optionalSubjectList.contains(subject + "_NO")) {
 										updateResultQuery = updateResultQuery + subject + "_" + semester + " = "
@@ -14109,10 +14099,13 @@ public class DBValidate {
 										if(!marks_flag_std && result_sem_std_flag) {
 											maxMarksMapDivisor = 1;
 										}
+										if(subjectSemMap.get(sub) != null) {
+											maxMarksMapDivisor = subjectSemMap.get(sub).intValue();
+										}
 										
 										if (subjectDetailMap.get(sub).toString().equalsIgnoreCase("GRADE")) {
 											String avgMarks = subStr.substring(0, subStr.indexOf("|"));
-											if(!avgMarks.contains("AB")){
+											if(!avgMarks.contains("AB") && !avgMarks.contains("NA")){
 												updateGrade = cm.getGradeFromMarks(
 														(Double.parseDouble(maxMarksMap.get(sub).toString()) / maxMarksMapDivisor), sub,
 															Double.parseDouble(avgMarks + ""), std);
@@ -14203,6 +14196,7 @@ public class DBValidate {
 											.substring(marksStr.toString().lastIndexOf("|") + 1);
 									if (gradeMarks.equalsIgnoreCase("MARKS")
 											&& !optionalSubjectList.contains(subject + "_NO")) {
+//									if (!optionalSubjectList.contains(subject + "_NO")) {
 										semesterMarks = semesterMarks + avgMarks;
 									} else if (gradeMarks.equalsIgnoreCase("MARKS")) {
 										passFail = "NA~0.0";
@@ -14741,6 +14735,7 @@ public class DBValidate {
 											.substring(marksStr.toString().lastIndexOf("|") + 1);
 									if (gradeMarks.equalsIgnoreCase("MARKS")
 											&& !optionalSubjectList.contains(subject + "_NO")) {
+//									if (!optionalSubjectList.contains(subject + "_NO")) {
 										semesterMarks = semesterMarks + avgMarks;
 										totalMarks = totalMarks
 												+ ((Double.parseDouble(maxMarksMap.get(subject).toString())));
@@ -15289,6 +15284,9 @@ public class DBValidate {
 			} else if(reasonDetail.contains("AB,")) {
 				reasonForAbsence = reasonDetail.substring(0, reasonDetail.indexOf(","));
 				absentForMarks = reasonDetail.substring(reasonDetail.indexOf(",") + 1);
+			} else if(reasonDetail.contains("MG,")) {
+				reasonForAbsence = reasonDetail.substring(0, reasonDetail.indexOf(","));
+				absentForMarks = reasonDetail.substring(reasonDetail.indexOf(",") + 1);
 			}
 		}
 
@@ -15305,13 +15303,20 @@ public class DBValidate {
 
 		String gradeMarks = subjectDetailMap.get(subject).toString();
 		if (calculateMarks && gradeMarks.equalsIgnoreCase("GRADE") && semester.equalsIgnoreCase("FINAL")) {
-//			int maxMarksMapDivisor = 2;
+			double maxMarksMapDivisor = 2;
+			if(markFail.contains("|")) {
+				maxMarksMapDivisor = Double.parseDouble(markFail.substring(markFail.indexOf("|")+1));
+			}
+			else if(markFail.contains("~")) {
+				maxMarksMapDivisor = Double.parseDouble(markFail.substring(markFail.indexOf("~")+1));
+			};
+			
 //			if(!marks_flag_std && result_sem_std_flag) {
 //				maxMarksMapDivisor = 1;
 //			}
 //			if (subjectReasonMap.get(subject) == null) {
-			updateGrade = cm.getGradeFromMarks(Double.parseDouble(maxMarksMap.get(subject).toString()), subject,
-					Double.parseDouble(avgMarks + ""), std);
+			updateGrade = cm.getGradeFromMarks(Double.parseDouble(maxMarksMap.get(subject).toString())/maxMarksMapDivisor, 
+					subject, Double.parseDouble(avgMarks + ""), std);
 //			} else {
 //				updateGrade = subjectReasonMap.get(subject)+"";
 //			}
@@ -18767,9 +18772,6 @@ public class DBValidate {
 				}
 
 				grNo = resultSet.getString("GR_NO") == null ? "-" : (resultSet.getString("GR_NO").trim());
-//				if(grNo.equalsIgnoreCase("0013667")) {
-//					// System.out.println(grNo);
-//				}
 				lcDate = studentLCMap.get(grNo);
 				// Check for final class allotment date
 				if (lcDate != null
@@ -18800,7 +18802,6 @@ public class DBValidate {
 					subjectmap = (LinkedHashMap) me.getValue();
 					subject = subjectmap.get("subject_name").toString();
 					subjectTitle = subjectmap.get("subject_title").toString();
-					// System.out.println(subjectTitle);
 
 					dob = resultSet.getString(subject + "_" + examInitial + "DOB") == null ? "-"
 							: cm.roundUpString((resultSet.getString(subject + "_" + examInitial + "DOB").trim()));
@@ -23888,9 +23889,6 @@ public class DBValidate {
 				studentTotalAmount = 0;
 				LinkedHashMap<String, String> feesReportDetailMap = new LinkedHashMap<String, String>();
 				grNoDb = resultSetFeesData.getString("GR_NO");
-				if(grNoDb.equalsIgnoreCase("0002326")) {
-					System.out.println(grNoDb);
-				}
 				stdDb = resultSetFeesData.getString("STD_1");
 				divDb = resultSetFeesData.getString("DIV_1");
 				nameDb = resultSetFeesData.getString("NAME") == null ? " "
@@ -24313,7 +24311,6 @@ public class DBValidate {
 					+ whereCondition + " ORDER BY " + tableName + ".STD_1";
 			statement = connection.createStatement();
 			resultSetFeesData = statement.executeQuery(query);
-			System.out.println(query);
 
 			while (resultSetFeesData.next()) {
 				detailStr = "";
@@ -25325,11 +25322,18 @@ public class DBValidate {
 			int grandTotal = 0;
 			int freeTotal = 0;
 			int payableTotal = 0;
-			if (resultSet.last()) {
-				rowcount = resultSet.getRow();
-				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
-											// element
+//			if (resultSet.last()) {
+//				rowcount = resultSet.getRow();
+//				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
+//											// element
+//			}
+			while (resultSet.next()) {
+				rowcount = rowcount+1;
 			}
+			//run query again to get resultset
+			resultSet = null;
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(findQuery);
 
 			while (resultSet.next()) {
 				stdDb = resultSet.getString("PRESENT_STD") == null ? " " : (resultSet.getString("PRESENT_STD").trim());
@@ -25753,7 +25757,7 @@ public class DBValidate {
 		LinkedHashMap<String, Double> feesHeadTotalMap = new LinkedHashMap<String, Double>();
 		LinkedHashMap<String, Double> unpaidTotalMap = new LinkedHashMap<String, Double>();
 
-		String feesHead = "", feesHeadColumn = "", grNoDb = "", stdDb = "", divDb = "", rollNo = "", feesDate = "",
+		String feesHead = "", optionFeeStr = "", feesHeadColumn = "", grNoDb = "", stdDb = "", divDb = "", rollNo = "", feesDate = "",
 				whereCondition = "", bank = "", paymentMode = "", receipt = "", chequeDDNo = "", chequeDDDate = "",
 				detailStr = "", feesHeadStr = "", nameDb = "", rollNoDb = "", prevStd = "", findColumnListQuery = "",
 				columnList = "", unpaidList = "", columnName = "", tableName = "", concessionMapStr = "",
@@ -25949,7 +25953,8 @@ public class DBValidate {
 
 					if (optionalList != null) {
 						for (int n = 0; n < optionalList.length; n++) {
-							if (optionalList[n].contains(feesHead + "^") && subFee.equalsIgnoreCase("")) {
+							optionFeeStr = cm.revertCommaApostrophy(feesHead);
+							if (optionalList[n].contains(optionFeeStr + "^") && subFee.equalsIgnoreCase("")) {
 								subFee = optionalList[n].substring(optionalList[n].indexOf("^") + 1);
 								isOptional = true;
 							}
@@ -26743,6 +26748,43 @@ public class DBValidate {
 		}
 
 		return listOfRecordsToKeep;
+	}
+	
+	public boolean updateSubjecAllotmentOrder(SessionData sessionData, String academicYear, String std, JFrame f) throws Exception {
+		String orderNo = "", subjectname = "", subjectTitle = "", updateQuery = "";
+		int rowcount = 0, i = 1;
+
+		try {
+			String findQuery = "select SUBJECT.ORDER_NO,SUBJECT_ALLOTMENT.SUBJECT_NAME,SUBJECT_ALLOTMENT.SUBJECT_TITLE,"
+					+ "SUBJECT_ALLOTMENT.ACADEMIC_YEAR,SUBJECT_ALLOTMENT.SECTION_NM,SUBJECT_ALLOTMENT.STD_1 "
+					+ "from " + sessionData.getDBName() + ".SUBJECT_ALLOTMENT LEFT JOIN "+ sessionData.getDBName() +".SUBJECT ON SUBJECT_ALLOTMENT.ACADEMIC_YEAR=SUBJECT.ACADEMIC_YEAR AND SUBJECT_ALLOTMENT.STD_1=SUBJECT.STD_1 \r\n"
+					+ "AND SUBJECT_ALLOTMENT.SUBJECT_NAME=SUBJECT.SUBJECT_NAME AND SUBJECT_ALLOTMENT.SECTION_NM=SUBJECT.SECTION_NM "
+					+ "WHERE SUBJECT_ALLOTMENT.ACADEMIC_YEAR='"+academicYear+"' AND SUBJECT_ALLOTMENT.STD_1='"+std+"' "
+					+ "AND (SUBJECT_ALLOTMENT.SECTION_NM='"+sessionData.getSectionName()+"') ORDER BY SUBJECT.ORDER_NO ASC";
+
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(findQuery);
+
+			while (resultSet.next()) {
+				f.setTitle("1) Updating " + i);
+				orderNo = resultSet.getString("ORDER_NO");
+				subjectname = resultSet.getString("SUBJECT_NAME");
+				subjectTitle = resultSet.getString("SUBJECT_TITLE");
+				
+				updateQuery = "UPDATE " + sessionData.getDBName() + ".SUBJECT_ALLOTMENT SET ORDER_NO='"+orderNo+"' "
+						+ "where SUBJECT_ALLOTMENT.SUBJECT_NAME='"+subjectname+"' AND SUBJECT_ALLOTMENT.SUBJECT_TITLE = '"+subjectTitle+"' AND "
+						+ "SUBJECT_ALLOTMENT.ACADEMIC_YEAR='"+academicYear+"' AND SUBJECT_ALLOTMENT.STD_1='"+std+"' AND "
+						+ "SUBJECT_ALLOTMENT.SECTION_NM='"+sessionData.getSectionName()+"'";
+					statement = connection.createStatement();
+					statement.executeUpdate(updateQuery);
+				i++;
+			}
+		} catch (Exception e) {
+			cm.logException(e);
+			return false;
+		}
+
+		return true;
 	}
 
 	////// Add SchoolHead///////////////////////////////////
@@ -27987,7 +28029,8 @@ public class DBValidate {
 		LinkedHashMap<String, LinkedHashMap<String, String>> attendanceMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		String grNo = "", query = "", configValue = "", column = "", columnTot = "", attended = "", totalStr = "",
 				monthTotStr = "", attStr = "", yearly = "", sem1 = "", sem2 = "", jan = "", feb = "", mar = "",
-				apr = "", may = "", jun = "", jul = "", aug = "", sep = "", oct = "", nov = "", dec = "";
+				apr = "", may = "", jun = "", jul = "", aug = "", sep = "", oct = "", nov = "", dec = "", 
+				sem1TotStr = "", sem2TotStr = "";
 		int startMonth = 1, endMonth = 12, j = 0;
 		double totalAtt = 0.0;
 
@@ -28077,11 +28120,20 @@ public class DBValidate {
 					}
 					totalAttendance.put("YEARLY_TOT", totalStr);
 
+					sem1TotStr = totalAttendance.get("SEM1_TOT");
+					if(sem1TotStr.contains(".")) {
+						sem1TotStr = sem1TotStr.substring(0, sem1TotStr.indexOf("."));
+					}
+					sem2TotStr = totalAttendance.get("SEM2_TOT");
+					if(sem2TotStr.contains(".")) {
+						sem2TotStr = sem2TotStr.substring(0, sem2TotStr.indexOf("."));
+					}
+					
 					if ((!totalAttendance.get("SEM1_TOT").equalsIgnoreCase("0")
 							|| !totalAttendance.get("SEM2_TOT").equalsIgnoreCase("0"))
 							&& totalAttendance.get("YEARLY_TOT").equalsIgnoreCase("0")) {
-						totalAttendance.put("YEARLY_TOT", (Integer.parseInt(totalAttendance.get("SEM1_TOT"))
-								+ Integer.parseInt(totalAttendance.get("SEM2_TOT"))) + "");
+						totalAttendance.put("YEARLY_TOT", (Integer.parseInt(sem1TotStr)
+								+ Integer.parseInt(sem2TotStr)) + "");
 					}
 
 					attendanceMap.put("total", totalAttendance);
@@ -28130,7 +28182,7 @@ public class DBValidate {
 				j++;
 			}
 		} catch (Exception e) {
-			if (e.getMessage().contains("Table 'nesschool.attendance_period' doesn't exist")) {
+			if (e.getMessage().contains("Table 'attendance_period' doesn't exist")) {
 				JOptionPane.showMessageDialog(null, "Please click on Periodly Attendance button in Help Page");
 			}
 			cm.logException(e);
@@ -29428,12 +29480,21 @@ public class DBValidate {
 				while (j.hasNext()) {
 					Map.Entry me = (Map.Entry) j.next();
 					subjectName = me.getValue().toString();
-					remarkSem1 = resultSet.getString(subjectName + "_REMSEM1") == null ? ""
-							: (resultSet.getString(subjectName + "_REMSEM1").trim());
-					remarkSem2 = resultSet.getString(subjectName + "_REMSEM2") == null ? ""
-							: (resultSet.getString(subjectName + "_REMSEM2").trim());
-					remarkFinal = resultSet.getString(subjectName + "_REMFINAL") == null ? ""
-							: (resultSet.getString(subjectName + "_REMFINAL").trim());
+					try {
+						remarkSem1 = resultSet.getString(subjectName + "_REMSEM1") == null ? ""
+								: (resultSet.getString(subjectName + "_REMSEM1").trim());
+						remarkSem2 = resultSet.getString(subjectName + "_REMSEM2") == null ? ""
+								: (resultSet.getString(subjectName + "_REMSEM2").trim());
+						remarkFinal = resultSet.getString(subjectName + "_REMFINAL") == null ? ""
+								: (resultSet.getString(subjectName + "_REMFINAL").trim());
+					}
+					catch(Exception e) {
+						cm.logException(e);
+						System.out.println(e.getMessage());
+						remarkSem1 = "";
+						remarkSem2 = "";
+						remarkFinal = "";
+					}
 					grDetail.put(subjectName + "_REMSEM1", remarkSem1);
 					grDetail.put(subjectName + "_REMSEM2", remarkSem2);
 					grDetail.put(subjectName + "_REMFINAL", remarkFinal);
@@ -29780,11 +29841,19 @@ public class DBValidate {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(findQuery);
 
-			if (resultSet.last()) {
-				rowcount = resultSet.getRow();
-				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
-											// element
+//			if (resultSet.last()) {
+//				rowcount = resultSet.getRow();
+//				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
+//											// element
+//			}
+			while (resultSet.next()) {
+				rowcount = rowcount+1;
 			}
+			//run query again to get resultset
+			resultSet = null;
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(findQuery);
+			
 			if (rowcount > 0) {
 				while (resultSet.next()) {
 					f.setTitle("1) Updating " + i + " / " + rowcount);
@@ -29819,11 +29888,19 @@ public class DBValidate {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(findQuery);
 
-			if (resultSet.last()) {
-				rowcount = resultSet.getRow();
-				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
-											// element
+//			if (resultSet.last()) {
+//				rowcount = resultSet.getRow();
+//				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
+//											// element
+//			}
+			while (resultSet.next()) {
+				rowcount = rowcount+1;
 			}
+			//run query again to get resultset
+			resultSet = null;
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(findQuery);
+			
 			if (rowcount > 0) {
 				while (resultSet.next()) {
 					f.setTitle("2) Updating " + i + " / " + rowcount);
@@ -29892,11 +29969,19 @@ public class DBValidate {
 
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(findQuery);
-			if (resultSet.last()) {
-				rowcount = resultSet.getRow();
-				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
-											// element
+//			if (resultSet.last()) {
+//				rowcount = resultSet.getRow();
+//				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
+//											// element
+//			}
+			while (resultSet.next()) {
+				rowcount = rowcount+1;
 			}
+			//run query again to get resultset
+			resultSet = null;
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(findQuery);
+			
 			while (resultSet.next()) {
 				f.setTitle("1) Updating " + i + " / " + rowcount);
 				grNo = resultSet.getString("GR_NO") == null ? "" : (resultSet.getString("GR_NO"));
@@ -30128,11 +30213,18 @@ public class DBValidate {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(selectQuery);
 
-			if (resultSet.last()) {
-				rowcount = resultSet.getRow();
-				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
-											// element
+//			if (resultSet.last()) {
+//				rowcount = resultSet.getRow();
+//				resultSet.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first
+//											// element
+//			}
+			while (resultSet.next()) {
+				rowcount = rowcount+1;
 			}
+			//run query again to get resultset
+			resultSet = null;
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(selectQuery);
 
 			while (resultSet.next()) {
 				f.setTitle("Updating " + i + " / " + rowcount + " data for Roll No in Fees. Please Don't Close");

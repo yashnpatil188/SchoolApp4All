@@ -1421,8 +1421,9 @@ public class MarksEntry extends JFrame {
 									frame.setVisible(false);
 									panelHome.removeAll();///to remve entire panel
 									
-									MarksEntryStudent.getMarksEntryStudent(sessionData, std, markList, academicSel, false, div, from, to, lastName, 
+									new MarksEntryStudent(sessionData, std, markList, academicSel, false, div, from, to, lastName, 
 											firstName, fatherName, exam, subject, type, section, user_name, user_role, "", grNo);
+									
 								}
 								else if(!isGrSelected && type.equalsIgnoreCase("Remark")){
 									dbValidate.addRemarkColumn(sessionData, subject);
@@ -1437,7 +1438,7 @@ public class MarksEntry extends JFrame {
 									frame.setVisible(false);
 									panelHome.removeAll();///to remve entire panel
 									
-									MarksEntryStudent.getMarksEntryStudent(sessionData, std, markList, academicSel, false, div, from, to, lastName, firstName, fatherName, exam, 
+									new MarksEntryStudent(sessionData, std, markList, academicSel, false, div, from, to, lastName, firstName, fatherName, exam, 
 											subject, type, section, user_name, user_role, "", grNo);
 								}
 							} catch (Exception e1) {

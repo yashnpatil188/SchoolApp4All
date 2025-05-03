@@ -1316,13 +1316,13 @@ public class Reports extends JFrame {
 									f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 									String sem = "";
-									if (exam.equalsIgnoreCase("Semester 2")) {
+									if (exam.equalsIgnoreCase("Semester 2") || exam.equalsIgnoreCase("Final")) {
 										sem = "SEM2";
 									} else {
 										sem = "SEM1";
 									}
 
-									if (exam.equalsIgnoreCase("Final")) {
+									if (exam.equalsIgnoreCase("Final") && result_marks) {
 										maxSubMarks = dbValidate.getMaxMarksReportForAllSubjects(sessionData, std,
 												academicSel, exam);
 										grStudentMap = dbValidate.printResultWithMarksList(sessionData, academicSel,

@@ -538,6 +538,7 @@ public class ProgressReport_PDF {
 				cell405.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table2.addCell(cell405);
 
+				String sem2MarksDisp = "";
 				Set setSubjectHeader = maxSubMarks.entrySet();
 				noOfSubjects = maxSubMarks.size();
 				noOfSubjectsFloat = (float) noOfSubjects;
@@ -546,6 +547,7 @@ public class ProgressReport_PDF {
 					Map.Entry meSubject = (Map.Entry) n.next();
 					subTitle = meSubject.getKey().toString();
 					skipSubject = false;
+					sem2MarksDisp = "";
 					
 					for(int i=0; i < optionalList.length; i++){
 						if(optionalList[i].equalsIgnoreCase(subTitle+"_NO")){
@@ -582,7 +584,27 @@ public class ProgressReport_PDF {
 					table2.addCell(cell306);
 					table2.addCell(cell307);
 
-					PdfPCell cell408 = new PdfPCell(new Paragraph(grResultMap.get(subTitle+"_SEM2") == "NA" ? "" : grResultMap.get(subTitle+"_SEM2"), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+					sem2MarksDisp = grResultMap.get(subTitle+"_SEM2");
+					if(maxSubMarks.get(subTitle).get("marks_grade").equalsIgnoreCase("Marks")) {
+						if(!sem2MarksDisp.equalsIgnoreCase("NA") && sem2MarksDisp.substring(0, sem2MarksDisp.indexOf("(")).contains("+")) {
+							sem2MarksDisp = sem2MarksDisp.substring(0, sem2MarksDisp.indexOf("("));
+							sem2MarksDisp = commonObj.removeDotZero(sem2MarksDisp);
+						}
+						else if(sem2MarksDisp.contains("#") && sem2MarksDisp.contains("(P")) {
+							sem2MarksDisp = sem2MarksDisp.substring(0, sem2MarksDisp.indexOf("("));
+							sem2MarksDisp = commonObj.removeDotZero(sem2MarksDisp);
+						}
+						else if(grResultMap.get(subTitle+"_SEM2").contains("#") && grResultMap.get(subTitle+"_SEM2").contains("(F")) {
+							sem2MarksDisp = commonObj.removeDotZero(sem2MarksDisp)+"(F)";
+						}
+					}
+					else {
+						if(sem2MarksDisp.contains("+")) {
+							sem2MarksDisp = sem2MarksDisp.substring(0, sem2MarksDisp.indexOf("+"));
+						}
+					}
+					
+					PdfPCell cell408 = new PdfPCell(new Paragraph(sem2MarksDisp == "NA" ? "" : sem2MarksDisp, FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 					cell408.setColspan(5);
 					cell408.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell408.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -599,10 +621,12 @@ public class ProgressReport_PDF {
 					}
 					
 					hobbies = commonObj.revertCommaApostrophy(commonObj.FirstWordCap(resultMap.get(grNo).get("hobbies")));
-					improve = commonObj.revertCommaApostrophy(commonObj.FirstWordCap(resultMap.get(grNo).get("semImprove").replace("*", ", ").replace("_", " ")));
-					improveSem1 = commonObj.revertCommaApostrophy(commonObj.FirstWordCap(resultMap.get(grNo).get("sem1Improve").replace("*", ", ").replace("_", " ")));
-					if(exam.equalsIgnoreCase("Semester 2")) {
+					improve = commonObj.revertCommaApostrophy(commonObj.FirstWordCap(resultMap.get(grNo).get("semImprove").replace("*", ", ").replace("_", " ").replace("'", "")));
+					improveSem1 = commonObj.revertCommaApostrophy(commonObj.FirstWordCap(resultMap.get(grNo).get("sem1Improve").replace("*", ", ").replace("_", " ").replace("'", "")));
+					improveSem1 = improveSem1.replace("'", "");
+					if(exam.equalsIgnoreCase("Semester 2") || exam.equalsIgnoreCase("Final")) {
 						improveSem2 = commonObj.revertCommaApostrophy(commonObj.FirstWordCap(resultMap.get(grNo).get("sem2Improve").replace("*", ", ").replace("_", " ")));
+						improveSem2 = improveSem2.replace("'", "");
 					}
 					
 					if(srNo == 1){
@@ -799,7 +823,7 @@ public class ProgressReport_PDF {
 						 cell524 = null, cell525 = null, cell526 = null, cell527 = null, cell528 = null, cell529 = null,
 						 cell531 = null, cell532 = null, cell533 = null, cell534 = null, cell535 = null, cell536 = null, cell537 = null,
 						 cell538 = null, cell539 = null, cell540 = null, cell541 = null, cell542 = null, cell543 = null;
-				if(sem.equalsIgnoreCase("SEM1") && attendanceMap != null && !attendanceMap.isEmpty()) {
+				if(sem.equalsIgnoreCase("SEM1") && attendanceMap != null && !attendanceMap.isEmpty() && !exam.equalsIgnoreCase("FINAL")) {
 					cell517 = new PdfPCell(new Paragraph(attendanceMap.get("total").get(commonObj.intgerToMonth((startMonth)+"")+"_TOT"), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 					cell518 = new PdfPCell(new Paragraph(attendanceMap.get("total").get(commonObj.intgerToMonth((startMonth+1)+"")+"_TOT"), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 					cell519 = new PdfPCell(new Paragraph(attendanceMap.get("total").get(commonObj.intgerToMonth((startMonth+2)+"")+"_TOT"), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));

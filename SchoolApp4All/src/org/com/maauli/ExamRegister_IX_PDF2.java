@@ -25,7 +25,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.lowagie.text.DocumentException;
 import com.itextpdf.text.PageSize;
 
-public class ExamRegister_IX_PDF {
+public class ExamRegister_IX_PDF2 {
 
 	static String fileName = "";
 	static String fileAddress = "";
@@ -33,9 +33,9 @@ public class ExamRegister_IX_PDF {
 	static boolean fileOpenFlag = false;
 	Common commonObj = new Common();
 	ResourceBundle bundle = ResourceBundle.getBundle("org.com.accesser.school");
-	static Logger logger = Logger.getLogger(ExamRegister_IX_PDF.class.getName());
+	static Logger logger = Logger.getLogger(ExamRegister_IX_PDF2.class.getName());
 
-	public ExamRegister_IX_PDF(SessionData sessionData, String exam, String subject, String std, String div,
+	public ExamRegister_IX_PDF2(SessionData sessionData, String exam, String subject, String std, String div,
 			String academic, LinkedHashMap<String, LinkedHashMap<String, String>> marksSemDataMap,
 			LinkedHashMap<String, LinkedHashMap<String, String>> studentOptSubAllotMap,
 			LinkedHashMap<String, LinkedHashMap<String, String>> maxSubMarks, 
@@ -51,10 +51,10 @@ public class ExamRegister_IX_PDF {
 		boolean isMg = false, isDoubleLine = false, lastPage = true;
 		int displayRows= 4, stdInt = 0, rowSpanInt = 14;
 		String examHeader = "", sem = "", subMarks = "", subjectMarksDisp = "", obtainedStr = "", subject1FromMap = "",
-				subject2FromMap = "", prevSubjectTitle = "", subTitleDisp = "";
+				subject2FromMap = "", prevSubjectTitle = "";
 		double total = 0, totalObtained = 0, subjectMarks = 0, subjectTotal = 0, percent = 0;
-		int subjectHeadCount = subjectMap.size(), addRow = 0, fontSize = 10;
-		String subTitle = "", subName = "", subNameDisp = "", grNo = "", subGrade = "", totalGrade = "", outOfMarks = "", finalSubMarks = "0";
+		int subjectHeadCount = subjectMap.size(), addRow = 0;
+		String subTitle = "", subName = "", grNo = "", subGrade = "", totalGrade = "", outOfMarks = "", finalSubMarks = "0";
 		String[] optionList;
 		String bonafide_header = sessionData.getConfigMap().get("BONAFIDE_HEADER_" + sessionData.getAppType());
 		String bonafide_header_0 = sessionData.getConfigMap().get("BONAFIDE_HEADER_0_" + sessionData.getAppType());
@@ -201,16 +201,13 @@ public class ExamRegister_IX_PDF {
 				while (n.hasNext()) {
 					Map.Entry me = (Map.Entry) n.next();
 					subName = me.getKey().toString();
-					subTitleDisp = subjectMap.get(subName).get("subject_title").replace("__", "_");
-					subNameDisp = subName.replace("__", "_");
 					subjectHeaderCount++;
-					
 					if(i == 0 && subjectCountMap.get(subjectMap.get(subName).get("subject_title")) == 1){
 						columnWidths[addToFloat]=  1.2f;
 						addToFloat = addToFloat+1;
 					}
 					else if(i == 0 && subjectCountMap.get(subjectMap.get(subName).get("subject_title")) > 1){
-						columnWidths[addToFloat]=  1.2f;
+						columnWidths[addToFloat]=  1.7f;
 						addToFloat = addToFloat+1;
 					}
 					
@@ -219,21 +216,21 @@ public class ExamRegister_IX_PDF {
 					if(!prevSubjectTitle.equalsIgnoreCase(subjectMap.get(subName).get("subject_title")) && 
 							subjectCountMap.get(subjectMap.get(subName).get("subject_title")) > 1 && i == 0){
 						cell305 = new PdfPCell(
-								new Paragraph(subTitleDisp.replace("_", "\n"), FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
+								new Paragraph(subjectMap.get(subName).get("subject_title").replace("_", "\n"), FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
 //						cell305 = new PdfPCell(
 //								new Paragraph(subjectMap.get(subName).get("subject_title").replace("_", " "), FontFactory.getFont(FontFactory.TIMES_ROMAN, 8)));
-						cell305.setColspan(2);
-//						cell305.setColspan(1);
+//						cell305.setColspan(2);
+						cell305.setColspan(1);
 						cell305.setRowspan(1);
 						cell305.setNoWrap(false);
 						cell305.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell305.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//						cell305.setRotation(90);
+						cell305.setRotation(90);
 						tableHeader.addCell(cell305);
 					}
 					else if(subjectCountMap.get(subjectMap.get(subName).get("subject_title")) > 1 && i == 1){
 						cell305 = new PdfPCell(
-								new Paragraph(subNameDisp.replace("_", "\n"), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+								new Paragraph(subName.replace("_", "\n"), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 //						cell305 = new PdfPCell(
 //								new Paragraph(subName.replace("_", " "), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 						cell305.setColspan(1);
@@ -246,7 +243,7 @@ public class ExamRegister_IX_PDF {
 					}
 					else if(subjectCountMap.get(subjectMap.get(subName).get("subject_title")) < 2 && i == 0){
 						cell305 = new PdfPCell(
-								new Paragraph(subNameDisp.replace("_", "\n"), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+								new Paragraph(subName.replace("_", "\n"), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 //						cell305 = new PdfPCell(
 //								new Paragraph(subName.replace("_", " "), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 						cell305.setColspan(1);
@@ -305,7 +302,7 @@ public class ExamRegister_IX_PDF {
 			
 			double count = marksSemDataMap.size();
 			boolean isOpted = true;
-			String optionalSubject = "", subMarksFromMap = "", subMarksFromMapStr = "";
+			String optionalSubject = "", subMarksFromMap = "";
 //			String attendance = "", working = "", attended = "";
 			String result = "", subtotalStr = "";
 			Double subTotal = 0.0;
@@ -422,12 +419,6 @@ public class ExamRegister_IX_PDF {
 								if(subMarksFromMap.contains(".") && subMarksFromMap.substring(subMarksFromMap.indexOf(".")+1).equalsIgnoreCase("0")){
 									subMarksFromMap = subMarksFromMap.substring(0, subMarksFromMap.indexOf("."));
 								}
-								if(subMarksFromMap.contains(".0")){
-									subMarksFromMapStr = subMarksFromMap.substring(0, subMarksFromMap.indexOf(".0"));
-									subMarksFromMapStr = subMarksFromMapStr + subMarksFromMap.substring(subMarksFromMap.indexOf("+"));
-									subMarksFromMap = subMarksFromMapStr;
-								}
-								
 								for(int k = 0; k < optionList.length; k++){
 									if(optionList[k].toString().equalsIgnoreCase(subTitle+"_NO")){
 										isOpted = false;
@@ -441,19 +432,8 @@ public class ExamRegister_IX_PDF {
 								subMarksFromMap = "-";
 							}
 							
-							if(subMarksFromMap.contains("+") && subMarksFromMap.substring(subMarksFromMap.indexOf("+")+1).length()>1) {
-								fontSize = 8;
-							}
-							else {
-								fontSize = 10;
-							}
-							
-//							if(subMarksFromMap.contains(".")) {
-//								subMarksFromMap = commonObj.roundToNearestInt(Double.parseDouble(subMarksFromMap))+"";
-//							}
 							PdfPCell cell346 = new PdfPCell(new Paragraph(subMarksFromMap,
-									FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize)));
-							
+									FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
 //							cell346.setColspan(1);
 							if(!meType.getValue().toString().equalsIgnoreCase("AVERAGE") && !meType.getValue().toString().equalsIgnoreCase("TOTAL")){
 								cell346.setColspan(1);

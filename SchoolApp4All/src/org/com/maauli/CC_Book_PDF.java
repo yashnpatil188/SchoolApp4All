@@ -80,7 +80,6 @@ public class CC_Book_PDF {
 		    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		    
 		    marks_flag_std = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_MARKS_"+std.replaceAll(" ", "_")));
-			result_sem_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem+"_"+std.replaceAll(" ", "_")));
 			
 			int filterTableCount = 0;
 			for(int j = 0; j < filterFieldsList.length; j++){
@@ -93,15 +92,16 @@ public class CC_Book_PDF {
 			String footer = sessionData.getConfigMap().get("FOOTER_"+sessionData.getAppType());
 			
 			if (exam.equalsIgnoreCase("Semester 1")) {
-				sem = "sem1";
+				sem = "SEM1";
 				semInitial = "F";
 				examHeader = "First Term  " + academic;
 			} else if (exam.equalsIgnoreCase("Semester 2")) {
-				sem = "sem2";
+				sem = "SEM2";
 				semInitial = "S";
 				examHeader = "Second Term  "+academic;
 			}
 			
+			result_sem_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_"+sem+"_"+std.replaceAll(" ", "_")));
 			path = commonObj.createTodayFolder(commonObj.getDriveName() + 
 					sessionData.getConfigMap().get("REPORT_PDF_PATH_" + sessionData.getDBName()), true)+ "/";
 			remarkImagePath = commonObj.createFolder(commonObj.getDriveName()+"/"+sessionData.getDBName()+"_app/Remark_Images/");
@@ -516,6 +516,7 @@ public class CC_Book_PDF {
 				cell326g.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table2.addCell(cell326g);
 
+				columnnList.clear();
 				int rowCount = 1;
 				int doubleLineSubject = 0;
 				Set setMax = maxSubMarks.entrySet();
@@ -1004,9 +1005,13 @@ public class CC_Book_PDF {
 				int count = 0;
 //				Set setSubject = maxSubMarks.entrySet();
 //				Iterator p = setMax.iterator();
-				
+				columnn1List.clear();
+				columnn2List.clear();
 				for(int i=0; i < columnnList.size();i++) {
-					if(count < size/2){
+					if(count <= columnnList.size()/2 && count % 2 == 0){
+						columnn1List.add(commonObj.FirstWordCap(columnnList.get(i).toString()));
+					}
+					else if(count < columnnList.size()/2){
 						columnn1List.add(commonObj.FirstWordCap(columnnList.get(i).toString()));
 					}
 					else{
