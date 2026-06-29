@@ -280,6 +280,7 @@ public class CreateLcPDFNew {
 						String mediumDb = LCDetaillist.get(36);
 						String admittedStdBranch = LCDetaillist.get(37);
 						String penNumber = LCDetaillist.get(38);
+						String apaarId = LCDetaillist.get(39);
 						String duplicateLcNo ="";
 						String duplicateLcDate ="";
 						String sinceDate = "";
@@ -854,7 +855,7 @@ public class CreateLcPDFNew {
 						}
 						
 						Chunk chunkGrNo = new Chunk("                                                                                                                 " +
-								 "           G.R. No.:  "+grDb);
+								 "        G.R. No.:  "+grDb);
 						chunkGrNo.setFont(fontClass1);
 						
 						Paragraph paraGrNo = new Paragraph();
@@ -868,12 +869,8 @@ public class CreateLcPDFNew {
 						paraGrNo.setAlignment(Element.ALIGN_LEFT);
 						document.add(paraGrNo);
 
-						Chunk chunkLcNoTitle = new Chunk("                                                                                                                 " +
-														 "           L.C. No. :");
-						/*Font fontLcNoTitle = new Font(Font.TIMES_ROMAN);
-						fontLcNoTitle.setStyle(Font.BOLD);
-						fontLcNoTitle.setSize(16);
-						fontLcNoTitle.setColor(Color.BLACK);*/
+						Chunk chunkLcNoTitle = new Chunk("                                                                        "
+								+ "                                                 L.C. No. :");
 						chunkLcNoTitle.setFont(fontClass1);
 						Paragraph paraLcNoTitle = new Paragraph();
 						paraLcNoTitle.setSpacingBefore(-4);
@@ -881,12 +878,8 @@ public class CreateLcPDFNew {
 						paraLcNoTitle.setAlignment(Element.ALIGN_LEFT);
 						document.add(paraLcNoTitle);
 						
-						Chunk chunkLcNo = new Chunk("                                                                                                                 " +
-						 "                             "+showNewLcNo);
-						/*Font fontLcNo = new Font(Font.TIMES_ROMAN);
-						fontLcNo.setStyle(Font.BOLD);
-						fontLcNo.setSize(16);
-						fontLcNo.setColor(Color.BLACK);*/
+						Chunk chunkLcNo = new Chunk("                                                                               "
+								+ "                                                               "+showNewLcNo);
 						chunkLcNo.setFont(fontClass1);
 						Paragraph paraLcNo = new Paragraph();	
 						paraLcNo.setSpacingBefore(-16);
@@ -903,6 +896,27 @@ public class CreateLcPDFNew {
 							paraPenNumber.add(chunkPenNumber);
 							paraPenNumber.setAlignment(Element.ALIGN_LEFT);
 							document.add(paraPenNumber);
+						}
+						
+						if(penNumber == null || penNumber.equalsIgnoreCase("") || penNumber.equalsIgnoreCase("-")) {
+							Chunk chunkApaarId = new Chunk("    APAAR ID:  "+apaarId);
+							chunkApaarId.setFont(fontClass1);
+							
+							Paragraph paraApaarId = new Paragraph();
+							paraApaarId.setSpacingBefore(-4);
+							paraApaarId.add(chunkApaarId);
+							paraApaarId.setAlignment(Element.ALIGN_LEFT);
+							document.add(paraApaarId);
+						} else if(apaarId != null && !apaarId.equalsIgnoreCase("") && !apaarId.equalsIgnoreCase("-")) {
+							Chunk chunkApaarId = new Chunk("                                                                     "
+									+ "                                                    APAAR ID:  "+apaarId);
+							chunkApaarId.setFont(fontClass1);
+							
+							Paragraph paraApaarId = new Paragraph();
+							paraApaarId.setSpacingBefore(-16);
+							paraApaarId.add(chunkApaarId);
+							paraApaarId.setAlignment(Element.ALIGN_LEFT);
+							document.add(paraApaarId);
 						}
 						
 			//			LineSeparator sep1 = new LineSeparator();

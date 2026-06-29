@@ -170,6 +170,7 @@ public class DBValidate {
 				connection = DriverManager.getConnection(url, dbUser, dbPass);
 				dbConnection = true;
 				sessionData.setConnection(connection);
+				getSQLActiveConnectionsCount(sessionData);
 //			}
 //			else {
 //				dbConnection = true;
@@ -218,6 +219,7 @@ public class DBValidate {
 			connection = DriverManager.getConnection(sessionData.getDbURL(), dbUser, dbPass);
 			dbConnection = true;
 			sessionData.setConnection(connection);
+			getSQLActiveConnectionsCount(sessionData);
 		} catch (Exception e) {
 			cm.logException(e);
 			JOptionPane.showMessageDialog(null, "connectToDatabase..Database connectivity issue");
@@ -249,6 +251,41 @@ public class DBValidate {
 		return dbClose;
 	}
 
+	///check active connections in mysql///
+	public boolean getSQLActiveConnectionsCount(SessionData sessionData)
+			throws Exception {
+		String variableName = "", countOfConnections = "", maxConnections = "", value = "";
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("show variables like 'max_connections'");//get max sql connections
+			
+			if (resultSet.next()) {
+                variableName = resultSet.getString("Variable_name");
+                maxConnections = resultSet.getString("Value");
+//                System.out.println("Sql active connections : " +variableName + " = " + maxConnections);
+//                logger.info("Sql active connections = "  +variableName + " = " + maxConnections);
+            } 
+			
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SHOW STATUS LIKE 'Threads_connected'"); //get current active sql connections
+			if (resultSet.next()) {
+                variableName = resultSet.getString("Variable_name");
+                countOfConnections = resultSet.getString("Value");
+//                System.out.println("Sql active connections : " +variableName + " = " + countOfConnections);
+                logger.info("Sql active connections = "  +variableName + " = " + countOfConnections);
+                
+                if(Integer.parseInt(countOfConnections) > (Integer.parseInt(maxConnections)*0.8)) {//checking if greater than 80% max count
+                	statement = connection.createStatement();
+        			statement.executeUpdate("SET GLOBAL max_connections = "+(Integer.parseInt(maxConnections)+100));
+                }
+            } 
+		} catch (Exception e) {
+			cm.logException(e);
+			return false;
+		}
+		return true;
+		
+	}
 	////// validateUser/////////////
 	public boolean validateUser(SessionData sessionData, String userName, String password, String role)
 			throws Exception {
@@ -392,7 +429,7 @@ public class DBValidate {
 			String admitted_std, String admitted_div, String present_std, String present_div, String date_admitted,
 			String paying_free, String created_by, String section, String adhaarCard, String otherReligion, String suid,
 			String taluka, String district, String state, String country, String subcast, String academicYear,
-			String hobbies, String lastSchoolUdise, String pen) throws SQLException {
+			String hobbies, String lastSchoolUdise, String pen, String apaar) throws SQLException {
 
 		try {
 			String uniqueStr = first_name + cm.timeInMillis();
@@ -418,7 +455,7 @@ public class DBValidate {
 					+ "RELIGION,CATEGORY,CAST,MOTHER_TONGUE,LAST_SCHOOL,"
 					+ "ADMITTED_STD,ADMITTED_DIV,PRESENT_STD,PRESENT_DIV,ACADEMIC_YEAR,DATE_ADMITTED,PAYING_FREE,"
 					+ "CREATED_DATE,CREATED_BY,SECTION_NM,UNIQUE_ID,GR_NO,ADHAAR_CARD,SUB_RELIGION,SUID,TALUKA,DISTRICT,"
-					+ "STATE,COUNTRY,SUB_CASTE,EXTRA_1,LAST_SCH_UDISE,PEN) " + "VALUES ('" + last_name.trim().toUpperCase()
+					+ "STATE,COUNTRY,SUB_CASTE,EXTRA_1,LAST_SCH_UDISE,PEN,APAARID) " + "VALUES ('" + last_name.trim().toUpperCase()
 					+ "','" + first_name.trim().toUpperCase() + "'," + "'" + father_name.trim().toUpperCase() + "','"
 					+ mother_name.trim().toUpperCase() + "'," + "'" + gender.trim().toUpperCase() + "','"
 					+ email.trim().toUpperCase() + "','" + permanent_add.trim() + "','" + res_add.trim() + "','" + c1
@@ -434,7 +471,7 @@ public class DBValidate {
 					+ created_by.trim().toUpperCase() + "','" + section.trim().toUpperCase() + "','"
 					+ uniqueStr.trim().toUpperCase() + "','" + gr_no + "','" + adhaarCard + "','"
 					+ otherReligion.trim().toUpperCase() + "'," + "'" + suid + "','" + taluka + "','" + district + "','"
-					+ state + "','" + country + "','" + subcast + "','" + hobbies + "','" + lastSchoolUdise + "','" + pen + "')";
+					+ state + "','" + country + "','" + subcast + "','" + hobbies + "','" + lastSchoolUdise + "','" + pen + "','" + apaar + "')";
 
 			logger.info("insertAdmit===>" + insertAdmit);
 			statement = connection.createStatement();
@@ -655,7 +692,7 @@ public class DBValidate {
 			String admitted_div, String present_std, String present_div, String date_admitted, String paying_free,
 			String modified_by, String section, String adhaarCard, String otherReligion, String academicYearDB,
 			String suid, String taluka, String district, String state, String country, String subcast, String hobbies,
-			String admittedStdBranch, String oldAcademicYear, String lastSchoolUdise, String pen) throws SQLException {
+			String admittedStdBranch, String oldAcademicYear, String lastSchoolUdise, String pen, String apaar) throws SQLException {
 
 		try {
 			logger.info("Edit Form");
@@ -700,6 +737,7 @@ public class DBValidate {
 					+ district + "',STATE = '" + state + "'" + ",COUNTRY = '" + country + "',SUB_CASTE = '" + subcast
 					+ "',EXTRA_1 = '" + hobbies + "'" + ", ADMITTEDSTDBRANCH = '" + admittedStdBranch
 					+ "', ACADEMIC_YEAR='" + academicYearDB + "', LAST_SCH_UDISE='" + lastSchoolUdise + "', PEN='" + pen + "'"
+					+ ", APAARID='" + apaar + "'"
 					+ " WHERE GR_NO='" + gr_no.trim() + "' AND SECTION_NM='" + section.trim().toUpperCase()
 					+ "' and ACADEMIC_YEAR='" + oldAcademicYear + "'";
 
@@ -1378,7 +1416,7 @@ public class DBValidate {
 			String districtDB = "";
 			String stateDB = "";
 			String countryDB = "";
-			String hobbiesDB = "", penDB = "";
+			String hobbiesDB = "", penDB = "", apaarDB = "";
 			String admittedStdBranch = "";
 			String lastSchoolUdise = "";
 
@@ -1455,6 +1493,7 @@ public class DBValidate {
 				countryDB = resultSet.getString("COUNTRY") == null ? " " : (resultSet.getString("COUNTRY").trim());
 				hobbiesDB = resultSet.getString("EXTRA_1") == null ? " " : (resultSet.getString("EXTRA_1").trim());
 				penDB = resultSet.getString("PEN") == null ? " " : (resultSet.getString("PEN").trim());
+				apaarDB = resultSet.getString("APAARID") == null ? " " : (resultSet.getString("APAARID").trim());
 				admittedStdBranch = resultSet.getString("admittedStdBranch") == null ? " "
 						: (resultSet.getString("admittedStdBranch").trim());
 			}
@@ -1465,7 +1504,8 @@ public class DBValidate {
 					+ castDB + "," + mTongueDB + "," + doaDB + "," + lastSchoolDB + "," + admStdDB + "," + admDivDB
 					+ "," + payDB + "," + adhaarDB + "," + otherReligionDB + "," + presentStdDB + "," + presentDivDB
 					+ "," + academicYearDB + "," + suidDB + "," + subCastDB + "," + talukaDB + "," + districtDB + ","
-					+ stateDB + "," + countryDB + "," + hobbiesDB + "," + admittedStdBranch + "," + lastSchoolUdise + "," + penDB;
+					+ stateDB + "," + countryDB + "," + hobbiesDB + "," + admittedStdBranch + "," + lastSchoolUdise + "," 
+					+ penDB + "," + apaarDB;
 			logger.info("retStr==>" + retStr);
 			studentArray[0] = grDB;
 			studentArray[1] = lastDB;
@@ -1506,6 +1546,7 @@ public class DBValidate {
 			studentArray[36] = admittedStdBranch;
 			studentArray[37] = lastSchoolUdise;
 			studentArray[38] = penDB;
+			studentArray[39] = apaarDB;
 		} catch (Exception e) {
 			cm.logException(e);
 		}
@@ -1556,7 +1597,7 @@ public class DBValidate {
 			String districtDB = "";
 			String stateDB = "";
 			String countryDB = "";
-			String hobbiesDB = "", penDB = "";
+			String hobbiesDB = "", penDB = "", apaarDB = "";
 			String admittedStdBranch = "";
 
 			Set set = grMap.entrySet();
@@ -1639,6 +1680,7 @@ public class DBValidate {
 				countryDB = resultSet.getString("COUNTRY") == null ? " " : (resultSet.getString("COUNTRY").trim());
 				hobbiesDB = resultSet.getString("EXTRA_1") == null ? " " : (resultSet.getString("EXTRA_1").trim());
 				penDB = resultSet.getString("PEN") == null ? " " : (resultSet.getString("PEN").trim());
+				apaarDB = resultSet.getString("APAARID") == null ? " " : (resultSet.getString("APAARID").trim());
 				admittedStdBranch = resultSet.getString("admittedStdBranch") == null ? " "
 						: (resultSet.getString("admittedStdBranch").trim());
 
@@ -1680,6 +1722,7 @@ public class DBValidate {
 				studentDetail.put("hobbies", hobbiesDB);
 				studentDetail.put("admittedStdBranch", admittedStdBranch);
 				studentDetail.put("pen", penDB);
+				studentDetail.put("apaar", apaarDB);
 				studentMap.put(grDB, studentDetail);
 			}
 		} catch (Exception e) {
@@ -2355,7 +2398,7 @@ public class DBValidate {
 		String stateDb = "";
 		String countryDb = "";
 		String adhaarCardDb = "";
-		String penDb = "";
+		String penDb = "", apaarDb = "";
 		String mother_tongue = "";
 		String medium = "";
 		String admittedStdBranch = "";
@@ -2375,7 +2418,7 @@ public class DBValidate {
 		try {
 
 			if (!formGrList.trim().equalsIgnoreCase("")) {
-				findQuery = "SELECT HS_GENERAL_REGISTER.GR_NO, HS_GENERAL_REGISTER.PEN, HS_GENERAL_REGISTER.EXTRA_2,EXTRA_3, ORIGINAL_LC, HS_GENERAL_REGISTER.LAST_NAME, "
+				findQuery = "SELECT HS_GENERAL_REGISTER.GR_NO, HS_GENERAL_REGISTER.PEN, HS_GENERAL_REGISTER.APAARID, HS_GENERAL_REGISTER.EXTRA_2,EXTRA_3, ORIGINAL_LC, HS_GENERAL_REGISTER.LAST_NAME, "
 						+ "HS_GENERAL_REGISTER.FIRST_NAME, HS_GENERAL_REGISTER.FATHER_NAME, HS_GENERAL_REGISTER.MOTHER_NAME, NATIONALITY, RELIGION,SUB_RELIGION, CAST, "
 						+ "DATE_FORMAT(DOB, '%d-%m-%Y') AS DOB, DOB_WORDS, LAST_SCHOOL, DATE_FORMAT(HS_GENERAL_REGISTER.DATE_ADMITTED, '%d-%m-%Y') AS DATE_ADMITTED, "
 						+ "HS_GENERAL_REGISTER.PROGRESS, HS_GENERAL_REGISTER.CONDUCT, DATE_FORMAT(DATE_LEAVING, '%d-%m-%Y') AS DATE_LEAVING, LEAVING_STD, REASON, HS_GENERAL_REGISTER.REMARK_0, DUPLICATE_LC, "
@@ -2508,6 +2551,8 @@ public class DBValidate {
 				mother_tongue = cm.ifNullThenDash(mother_tongue);
 				penDb = resultSet.getString("PEN");
 				penDb = cm.ifNullThenDash(penDb);
+				apaarDb = resultSet.getString("APAARID");
+				apaarDb = cm.ifNullThenDash(apaarDb);
 				studentLCList.add(grDb + "|" + originalLcDb + "|" + nameDb + "|" + motherNameDb + "|" + nationalityDb
 						+ "|" + otherReligionDb + "|" + castDb + "|" + dobDb + "|" + dobWordsDb + "|" + lastSchoolDb
 						+ "|" + dateAdmittedDb + "|" + progressDb + "|" + conductDb + "|" + dateLeavingDb + "|"
@@ -2516,7 +2561,7 @@ public class DBValidate {
 						+ "|" + cm.FirstWordCap(fee_statusDb) + "|" + triplicateLcDb + "|" + triplicateLcDateDb + "|"
 						+ lcIssueCountDb + "|" + admittedStdDb + "|" + suidDb + "|" + subCasteDb + "|" + talukaDb + "|"
 						+ districtDb + "|" + stateDb + "|" + countryDb + "|" + adhaarCardDb + "|" + mother_tongue + "|"
-						+ medium + "|" + admittedStdBranch + "|" + penDb);
+						+ medium + "|" + admittedStdBranch + "|" + penDb + "|" + apaarDb);
 				findFlag = true;
 			}
 		} catch (Exception e) {
@@ -5521,217 +5566,217 @@ public class DBValidate {
 				subMaxMinMap.put("marks_grade", marks_Grade);
 				optional = resultSet.getString("OPTIONAL") == null ? "0" : (resultSet.getString("OPTIONAL").trim());
 				subMaxMinMap.put("optional", optional);
-				sem1Dobs = resultSet.getString("SEM1_DOBS") == null ? "0" : (resultSet.getString("SEM1_DOBS").trim());
+				sem1Dobs = resultSet.getString("SEM1_DOBS").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM1_DOBS").trim());
 				subMaxMinMap.put("sem1_dobs", sem1Dobs);
-				sem1Obt = resultSet.getString("SEM1_OBT") == null ? "0" : (resultSet.getString("SEM1_OBT").trim());
+				sem1Obt = resultSet.getString("SEM1_OBT").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM1_OBT").trim());
 				subMaxMinMap.put("sem1_obt", sem1Obt);
-				sem1Oral = resultSet.getString("SEM1_ORAL") == null ? "0" : (resultSet.getString("SEM1_ORAL").trim());
+				sem1Oral = resultSet.getString("SEM1_ORAL").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM1_ORAL").trim());
 				subMaxMinMap.put("sem1_oral", sem1Oral);
-				sem1Assign = resultSet.getString("SEM1_ASSIGN") == null ? "0"
+				sem1Assign = resultSet.getString("SEM1_ASSIGN").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_ASSIGN").trim());
 				subMaxMinMap.put("sem1_assign", sem1Assign);
-				sem1Write = resultSet.getString("SEM1_WRITE") == null ? "0"
+				sem1Write = resultSet.getString("SEM1_WRITE").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_WRITE").trim());
 				subMaxMinMap.put("sem1_write", sem1Write);
-				sem1Pract = resultSet.getString("SEM1_PRACT") == null ? "0"
+				sem1Pract = resultSet.getString("SEM1_PRACT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_PRACT").trim());
 				subMaxMinMap.put("sem1_pract", sem1Pract);
-				sem1Activity = resultSet.getString("SEM1_ACTIVITY") == null ? "0"
+				sem1Activity = resultSet.getString("SEM1_ACTIVITY").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_ACTIVITY").trim());
 				subMaxMinMap.put("sem1_act", sem1Activity);
-				sem1Pres = resultSet.getString("SEM1_PRES") == null ? "0" : (resultSet.getString("SEM1_PRES").trim());
+				sem1Pres = resultSet.getString("SEM1_PRES").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM1_PRES").trim());
 				subMaxMinMap.put("sem1_pres", sem1Pres);
-				sem1Mcap = resultSet.getString("SEM1_MCAP") == null ? "0" : (resultSet.getString("SEM1_MCAP").trim());
+				sem1Mcap = resultSet.getString("SEM1_MCAP").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM1_MCAP").trim());
 				subMaxMinMap.put("sem1_mcap", sem1Mcap);
-				sem1Project = resultSet.getString("SEM1_PROJECT") == null ? "0"
+				sem1Project = resultSet.getString("SEM1_PROJECT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_PROJECT").trim());
 				subMaxMinMap.put("sem1_project", sem1Project);
-				sem1Other = resultSet.getString("SEM1_OTHER") == null ? "0"
+				sem1Other = resultSet.getString("SEM1_OTHER").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_OTHER").trim());
 				subMaxMinMap.put("sem1_other", sem1Other);
-				sem1Oral1 = resultSet.getString("SEM1_ORAL1") == null ? "0"
+				sem1Oral1 = resultSet.getString("SEM1_ORAL1").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_ORAL1").trim());
 				subMaxMinMap.put("sem1_oral1", sem1Oral1);
-				sem1Pract1 = resultSet.getString("SEM1_PRACT1") == null ? "0"
+				sem1Pract1 = resultSet.getString("SEM1_PRACT1").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_PRACT1").trim());
 				subMaxMinMap.put("sem1_pract1", sem1Pract1);
-				sem1Write1 = resultSet.getString("SEM1_WRITE1") == null ? "0"
+				sem1Write1 = resultSet.getString("SEM1_WRITE1").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_WRITE1").trim());
 				subMaxMinMap.put("sem1_write1", sem1Write1);
-				sem1Speak = resultSet.getString("SEM1_SPEAK") == null ? "0"
+				sem1Speak = resultSet.getString("SEM1_SPEAK").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_SPEAK").trim());
 				subMaxMinMap.put("sem1_speak", sem1Speak);
-				sem1Listen = resultSet.getString("SEM1_LISTEN") == null ? "0"
+				sem1Listen = resultSet.getString("SEM1_LISTEN").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_LISTEN").trim());
 				subMaxMinMap.put("sem1_listen", sem1Listen);
-				sem1Assign1 = resultSet.getString("SEM1_ASSIGN1") == null ? "0"
+				sem1Assign1 = resultSet.getString("SEM1_ASSIGN1").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_ASSIGN1").trim());
 				subMaxMinMap.put("sem1_assign1", sem1Assign1);
-				sem1InTot = resultSet.getString("SEM1_INTOT") == null ? "0"
+				sem1InTot = resultSet.getString("SEM1_INTOT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_INTOT").trim());
 				subMaxMinMap.put("sem1_intot", sem1InTot);
 
-				sem2Pres = resultSet.getString("SEM2_PRES") == null ? "0" : (resultSet.getString("SEM2_PRES").trim());
+				sem2Pres = resultSet.getString("SEM2_PRES").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM2_PRES").trim());
 				subMaxMinMap.put("sem2_pres", sem2Pres);
-				sem2Mcap = resultSet.getString("SEM2_MCAP") == null ? "0" : (resultSet.getString("SEM2_MCAP").trim());
+				sem2Mcap = resultSet.getString("SEM2_MCAP").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM2_MCAP").trim());
 				subMaxMinMap.put("sem2_mcap", sem2Mcap);
-				sem2Dobs = resultSet.getString("SEM2_DOBS") == null ? "0" : (resultSet.getString("SEM2_DOBS").trim());
+				sem2Dobs = resultSet.getString("SEM2_DOBS").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM2_DOBS").trim());
 				subMaxMinMap.put("sem2_dobs", sem2Dobs);
-				sem2Obt = resultSet.getString("SEM2_OBT") == null ? "0" : (resultSet.getString("SEM2_OBT").trim());
+				sem2Obt = resultSet.getString("SEM2_OBT").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM2_OBT").trim());
 				subMaxMinMap.put("sem2_obt", sem2Obt);
-				sem2Oral = resultSet.getString("SEM2_ORAL") == null ? "0" : (resultSet.getString("SEM2_ORAL").trim());
+				sem2Oral = resultSet.getString("SEM2_ORAL").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM2_ORAL").trim());
 				subMaxMinMap.put("sem2_oral", sem2Oral);
-				sem2Assign = resultSet.getString("SEM2_ASSIGN") == null ? "0"
+				sem2Assign = resultSet.getString("SEM2_ASSIGN").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_ASSIGN").trim());
 				subMaxMinMap.put("sem2_assign", sem2Assign);
-				sem2Write = resultSet.getString("SEM2_WRITE") == null ? "0"
+				sem2Write = resultSet.getString("SEM2_WRITE").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_WRITE").trim());
 				subMaxMinMap.put("sem2_write", sem2Write);
-				sem2Pract = resultSet.getString("SEM2_PRACT") == null ? "0"
+				sem2Pract = resultSet.getString("SEM2_PRACT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_PRACT").trim());
 				subMaxMinMap.put("sem2_pract", sem2Pract);
-				sem2Activity = resultSet.getString("SEM2_ACTIVITY") == null ? "0"
+				sem2Activity = resultSet.getString("SEM2_ACTIVITY").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_ACTIVITY").trim());
 				subMaxMinMap.put("sem2_act", sem2Activity);
-				sem2Project = resultSet.getString("SEM2_PROJECT") == null ? "0"
+				sem2Project = resultSet.getString("SEM2_PROJECT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_PROJECT").trim());
 				subMaxMinMap.put("sem2_project", sem2Project);
-				sem2Other = resultSet.getString("SEM2_OTHER") == null ? "0"
+				sem2Other = resultSet.getString("SEM2_OTHER").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_OTHER").trim());
 				subMaxMinMap.put("sem2_other", sem2Other);
-				sem2Oral1 = resultSet.getString("SEM2_ORAL1") == null ? "0"
+				sem2Oral1 = resultSet.getString("SEM2_ORAL1").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_ORAL1").trim());
 				subMaxMinMap.put("sem2_oral1", sem2Oral1);
-				sem2Pract1 = resultSet.getString("SEM2_PRACT1") == null ? "0"
+				sem2Pract1 = resultSet.getString("SEM2_PRACT1").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_PRACT1").trim());
 				subMaxMinMap.put("sem2_pract1", sem2Pract1);
-				sem2Write1 = resultSet.getString("SEM2_WRITE1") == null ? "0"
+				sem2Write1 = resultSet.getString("SEM2_WRITE1").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_WRITE1").trim());
 				subMaxMinMap.put("sem2_write1", sem2Write1);
-				sem2Speak = resultSet.getString("SEM2_SPEAK") == null ? "0"
+				sem2Speak = resultSet.getString("SEM2_SPEAK").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_SPEAK").trim());
 				subMaxMinMap.put("sem2_speak", sem2Speak);
-				sem2Listen = resultSet.getString("SEM2_LISTEN") == null ? "0"
+				sem2Listen = resultSet.getString("SEM2_LISTEN").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_LISTEN").trim());
 				subMaxMinMap.put("sem2_listen", sem2Listen);
-				sem2Assign1 = resultSet.getString("SEM2_ASSIGN1") == null ? "0"
+				sem2Assign1 = resultSet.getString("SEM2_ASSIGN1").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_ASSIGN1").trim());
 				subMaxMinMap.put("sem2_assign1", sem2Assign1);
-				sem2InTot = resultSet.getString("SEM2_INTOT") == null ? "0"
+				sem2InTot = resultSet.getString("SEM2_INTOT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_INTOT").trim());
 				subMaxMinMap.put("sem2_intot", sem2InTot);
 
-				sem1DobsCt = resultSet.getString("SEM1_DOBS_CT") == null ? "0"
+				sem1DobsCt = resultSet.getString("SEM1_DOBS_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_DOBS_CT").trim());
 				subMaxMinMap.put("sem1_dobs_ct", sem1DobsCt);
-				sem1ObtCt = resultSet.getString("SEM1_OBT_CT") == null ? "0"
+				sem1ObtCt = resultSet.getString("SEM1_OBT_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_OBT_CT").trim());
 				subMaxMinMap.put("sem1_obt_ct", sem1ObtCt);
-				sem1OralCt = resultSet.getString("SEM1_ORAL_CT") == null ? "0"
+				sem1OralCt = resultSet.getString("SEM1_ORAL_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_ORAL_CT").trim());
 				subMaxMinMap.put("sem1_oral_ct", sem1OralCt);
-				sem1AssignCt = resultSet.getString("SEM1_ASSIGN_CT") == null ? "0"
+				sem1AssignCt = resultSet.getString("SEM1_ASSIGN_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_ASSIGN_CT").trim());
 				subMaxMinMap.put("sem1_assign_ct", sem1AssignCt);
-				sem1WriteCt = resultSet.getString("SEM1_WRITE_CT") == null ? "0"
+				sem1WriteCt = resultSet.getString("SEM1_WRITE_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_WRITE_CT").trim());
 				subMaxMinMap.put("sem1_write_ct", sem1WriteCt);
-				sem1PractCt = resultSet.getString("SEM1_PRACT_CT") == null ? "0"
+				sem1PractCt = resultSet.getString("SEM1_PRACT_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_PRACT_CT").trim());
 				subMaxMinMap.put("sem1_pract_ct", sem1PractCt);
-				sem1ActivityCt = resultSet.getString("SEM1_ACTIVITY_CT") == null ? "0"
+				sem1ActivityCt = resultSet.getString("SEM1_ACTIVITY_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_ACTIVITY_CT").trim());
 				subMaxMinMap.put("sem1_act_ct", sem1ActivityCt);
-				sem1PresCt = resultSet.getString("SEM1_PRES_CT") == null ? "0"
+				sem1PresCt = resultSet.getString("SEM1_PRES_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_PRES_CT").trim());
 				subMaxMinMap.put("sem1_pres_ct", sem1PresCt);
-				sem1McapCt = resultSet.getString("SEM1_MCAP_CT") == null ? "0"
+				sem1McapCt = resultSet.getString("SEM1_MCAP_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_MCAP_CT").trim());
 				subMaxMinMap.put("sem1_mcap_ct", sem1McapCt);
-				sem1ProjectCt = resultSet.getString("SEM1_PROJECT_CT") == null ? "0"
+				sem1ProjectCt = resultSet.getString("SEM1_PROJECT_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_PROJECT_CT").trim());
 				subMaxMinMap.put("sem1_project_ct", sem1ProjectCt);
-				sem1OtherCt = resultSet.getString("SEM1_OTHER_CT") == null ? "0"
+				sem1OtherCt = resultSet.getString("SEM1_OTHER_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_OTHER_CT").trim());
 				subMaxMinMap.put("sem1_other_ct", sem1OtherCt);
-				sem1Oral1Ct = resultSet.getString("SEM1_ORAL1_CT") == null ? "0"
+				sem1Oral1Ct = resultSet.getString("SEM1_ORAL1_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_ORAL1_CT").trim());
 				subMaxMinMap.put("sem1_oral1_ct", sem1Oral1Ct);
-				sem1Pract1Ct = resultSet.getString("SEM1_PRACT1_CT") == null ? "0"
+				sem1Pract1Ct = resultSet.getString("SEM1_PRACT1_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_PRACT1_CT").trim());
 				subMaxMinMap.put("sem1_pract1_ct", sem1Pract1Ct);
-				sem1Write1Ct = resultSet.getString("SEM1_WRITE1_CT") == null ? "0"
+				sem1Write1Ct = resultSet.getString("SEM1_WRITE1_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_WRITE1_CT").trim());
 				subMaxMinMap.put("sem1_write1_ct", sem1Write1Ct);
-				sem1SpeakCt = resultSet.getString("SEM1_SPEAK_CT") == null ? "0"
+				sem1SpeakCt = resultSet.getString("SEM1_SPEAK_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_SPEAK_CT").trim());
 				subMaxMinMap.put("sem1_speak_ct", sem1SpeakCt);
-				sem1ListenCt = resultSet.getString("SEM1_LISTEN_CT") == null ? "0"
+				sem1ListenCt = resultSet.getString("SEM1_LISTEN_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_LISTEN_CT").trim());
 				subMaxMinMap.put("sem1_listen_ct", sem1ListenCt);
-				sem1Assign1Ct = resultSet.getString("SEM1_ASSIGN1_CT") == null ? "0"
+				sem1Assign1Ct = resultSet.getString("SEM1_ASSIGN1_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_ASSIGN1_CT").trim());
 				subMaxMinMap.put("sem1_assign1_ct", sem1Assign1Ct);
-				sem1InTotCt = resultSet.getString("SEM1_INTOT_CT") == null ? "0"
+				sem1InTotCt = resultSet.getString("SEM1_INTOT_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM1_INTOT_CT").trim());
 				subMaxMinMap.put("sem1_intot_ct", sem1InTotCt);
 
-				sem2ProjectCt = resultSet.getString("SEM2_PROJECT_CT") == null ? "0"
+				sem2ProjectCt = resultSet.getString("SEM2_PROJECT_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_PROJECT_CT").trim());
 				subMaxMinMap.put("sem2_project_ct", sem2ProjectCt);
-				sem2OtherCt = resultSet.getString("SEM2_OTHER_CT") == null ? "0"
+				sem2OtherCt = resultSet.getString("SEM2_OTHER_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_OTHER_CT").trim());
 				subMaxMinMap.put("sem2_other_ct", sem2OtherCt);
-				sem2Oral1Ct = resultSet.getString("SEM2_ORAL1_CT") == null ? "0"
+				sem2Oral1Ct = resultSet.getString("SEM2_ORAL1_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_ORAL1_CT").trim());
 				subMaxMinMap.put("sem2_oral1_ct", sem2Oral1Ct);
-				sem2Pract1Ct = resultSet.getString("SEM2_PRACT1_CT") == null ? "0"
+				sem2Pract1Ct = resultSet.getString("SEM2_PRACT1_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_PRACT1_CT").trim());
 				subMaxMinMap.put("sem2_pract1_ct", sem2Pract1Ct);
-				sem2Write1Ct = resultSet.getString("SEM2_WRITE1_CT") == null ? "0"
+				sem2Write1Ct = resultSet.getString("SEM2_WRITE1_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_WRITE1_CT").trim());
 				subMaxMinMap.put("sem2_write1_ct", sem2Write1Ct);
-				sem2PresCt = resultSet.getString("SEM2_PRES_CT") == null ? "0"
+				sem2PresCt = resultSet.getString("SEM2_PRES_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_PRES_CT").trim());
 				subMaxMinMap.put("sem2_pres_ct", sem2PresCt);
-				sem2McapCt = resultSet.getString("SEM2_MCAP_CT") == null ? "0"
+				sem2McapCt = resultSet.getString("SEM2_MCAP_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_MCAP_CT").trim());
 				subMaxMinMap.put("sem2_mcap_ct", sem2McapCt);
-				sem2DobsCt = resultSet.getString("SEM2_DOBS_CT") == null ? "0"
+				sem2DobsCt = resultSet.getString("SEM2_DOBS_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_DOBS_CT").trim());
 				subMaxMinMap.put("sem2_dobs_ct", sem2DobsCt);
-				sem2ObtCt = resultSet.getString("SEM2_OBT_CT") == null ? "0"
+				sem2ObtCt = resultSet.getString("SEM2_OBT_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_OBT_CT").trim());
 				subMaxMinMap.put("sem2_obt_ct", sem2ObtCt);
-				sem2OralCt = resultSet.getString("SEM2_ORAL_CT") == null ? "0"
+				sem2OralCt = resultSet.getString("SEM2_ORAL_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_ORAL_CT").trim());
 				subMaxMinMap.put("sem2_oral_ct", sem2OralCt);
-				sem2AssignCt = resultSet.getString("SEM2_ASSIGN_CT") == null ? "0"
+				sem2AssignCt = resultSet.getString("SEM2_ASSIGN_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_ASSIGN_CT").trim());
 				subMaxMinMap.put("sem2_assign_ct", sem2AssignCt);
-				sem2WriteCt = resultSet.getString("SEM2_WRITE_CT") == null ? "0"
+				sem2WriteCt = resultSet.getString("SEM2_WRITE_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_WRITE_CT").trim());
 				subMaxMinMap.put("sem2_write_ct", sem2WriteCt);
-				sem2PractCt = resultSet.getString("SEM2_PRACT_CT") == null ? "0"
+				sem2PractCt = resultSet.getString("SEM2_PRACT_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_PRACT_CT").trim());
 				subMaxMinMap.put("sem2_pract_ct", sem2PractCt);
-				sem2ActivityCt = resultSet.getString("SEM2_ACTIVITY_CT") == null ? "0"
+				sem2ActivityCt = resultSet.getString("SEM2_ACTIVITY_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_ACTIVITY_CT").trim());
 				subMaxMinMap.put("sem2_act_ct", sem2ActivityCt);
-				sem2SpeakCt = resultSet.getString("SEM2_SPEAK_CT") == null ? "0"
+				sem2SpeakCt = resultSet.getString("SEM2_SPEAK_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_SPEAK_CT").trim());
 				subMaxMinMap.put("sem2_speak_ct", sem2SpeakCt);
-				sem2ListenCt = resultSet.getString("SEM2_LISTEN_CT") == null ? "0"
+				sem2ListenCt = resultSet.getString("SEM2_LISTEN_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_LISTEN_CT").trim());
 				subMaxMinMap.put("sem2_listen_ct", sem2ListenCt);
-				sem2Assign1Ct = resultSet.getString("SEM2_ASSIGN1_CT") == null ? "0"
+				sem2Assign1Ct = resultSet.getString("SEM2_ASSIGN1_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_ASSIGN1_CT").trim());
 				subMaxMinMap.put("sem2_assign1_ct", sem2Assign1Ct);
-				sem2InTotCt = resultSet.getString("SEM2_INTOT_CT") == null ? "0"
+				sem2InTotCt = resultSet.getString("SEM2_INTOT_CT").equalsIgnoreCase("null") ? "0"
 						: (resultSet.getString("SEM2_INTOT_CT").trim());
 				subMaxMinMap.put("sem2_intot_ct", sem2InTotCt);
 
-				orderNo = resultSet.getString("ORDER_NO") == null ? "0" : (resultSet.getString("ORDER_NO").trim());
+				orderNo = resultSet.getString("ORDER_NO").equalsIgnoreCase("null") ? "0" : (resultSet.getString("ORDER_NO").trim());
 				subMaxMinMap.put("order_no", orderNo);
 				subjectMap.put(sub, subMaxMinMap);
 
@@ -9452,7 +9497,7 @@ public class DBValidate {
 		String district = "";
 		String state = "";
 		String country = "";
-		String studentId = "";
+		String studentId = "", pen = "", apaarid = "";
 		String queryCondition = "";
 		String residential_address = "", permanent_address = "", paying_free = "";
 		boolean findFlag = false;
@@ -9494,7 +9539,7 @@ public class DBValidate {
 					+ "HS_GENERAL_REGISTER.BIRTH_PLACE,CLASS_ALLOTMENT.PRESENT_STD,CLASS_ALLOTMENT.PRESENT_DIV,HS_GENERAL_REGISTER.CATEGORY,"
 					+ "HS_GENERAL_REGISTER.DOB_WORDS,HS_GENERAL_REGISTER.LAST_SCHOOL,DATE_FORMAT(HS_GENERAL_REGISTER.DATE_ADMITTED,'%d/%m/%Y') AS DATE_ADMITTED,"
 					+ "HS_GENERAL_REGISTER.ADHAAR_CARD,HS_GENERAL_REGISTER.LAST_NAME,HS_GENERAL_REGISTER.FIRST_NAME,"
-					+ "HS_GENERAL_REGISTER.FATHER_NAME,RESIDENTIAL_ADDRESS,PERMANENT_ADDRESS,"
+					+ "HS_GENERAL_REGISTER.FATHER_NAME,RESIDENTIAL_ADDRESS,PERMANENT_ADDRESS,PEN,APAARID,"
 					+ "HS_GENERAL_REGISTER.GENDER,DATE_FORMAT(HS_GENERAL_REGISTER.DOB,'%d/%m/%Y') AS DOB,HS_GENERAL_REGISTER.PAYING_FREE "
 					+ "FROM " + sessionData.getDBName() + "." + "CLASS_ALLOTMENT LEFT JOIN " + sessionData.getDBName()
 					+ "." + "HS_GENERAL_REGISTER ON " + "HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO "
@@ -9510,7 +9555,7 @@ public class DBValidate {
 			generalDataExcelList.add(
 					"Roll No.|GR No.|Last Name|First Name|Father Name|Mother Name|Mother Tongue|Gender|Birth Date|Birth Place|DOB in WORDS|"
 							+ "CONTACT 1|CONTACT 2|Cast|Category|Last School|Date Admitted|Adhaar Card|Present Std|Present Div|Permanent Address|Residential Address|"
-							+ "Religion|Taluka|District|State|Country|Student ID|PAYING_FREE");
+							+ "Religion|Taluka|District|State|Country|Student ID|PAYING_FREE|PEN|APAARID");
 
 			while (resultSet.next()) {
 				rollNo = resultSet.getString("ROLL_NO") == null ? "1" : (resultSet.getString("ROLL_NO").trim());
@@ -9567,8 +9612,9 @@ public class DBValidate {
 				state = resultSet.getString("STATE") == null ? "-" : (resultSet.getString("STATE").trim());
 				country = resultSet.getString("COUNTRY") == null ? "-" : (resultSet.getString("COUNTRY").trim());
 				studentId = resultSet.getString("SUID") == null ? "-" : (resultSet.getString("SUID").trim());
-				paying_free = resultSet.getString("PAYING_FREE") == null ? "-"
-						: (resultSet.getString("PAYING_FREE").trim());
+				paying_free = resultSet.getString("PAYING_FREE") == null ? "-" : (resultSet.getString("PAYING_FREE").trim());
+				pen = resultSet.getString("PEN") == null ? "-" : (resultSet.getString("PEN").trim());
+				apaarid = resultSet.getString("APAARID") == null ? "-" : (resultSet.getString("APAARID").trim());
 
 				if (religion.equalsIgnoreCase(""))
 					religion = "-";
@@ -9630,6 +9676,10 @@ public class DBValidate {
 					permanent_address = "-";
 				if (paying_free.equalsIgnoreCase(""))
 					paying_free = "-";
+				if (pen.equalsIgnoreCase(""))
+					pen = "-";
+				if (apaarid.equalsIgnoreCase(""))
+					apaarid = "-";
 
 				generalDataList.add(rollNo + "|" + grNo + "|" + name + "|" + gender + "|" + dob);
 				generalDataExcelList.add(rollNo + "|" + grNo + "|" + lastName + "|" + firstName + "|" + fatherName + "|"
@@ -9637,7 +9687,8 @@ public class DBValidate {
 						+ dobWords + "|" + contact1 + "|" + contact2 + "|" + cast + "|" + category + "|"
 						+ lastSchoolAttended + "|" + dateOfAdmission + "|" + adhaarCard + "|" + presentStd + "|"
 						+ presentDiv + "|" + permanent_address + "|" + residential_address + "|" + religion + "|"
-						+ taluka + "|" + district + "|" + state + "|" + country + "|" + studentId + "|" + paying_free);
+						+ taluka + "|" + district + "|" + state + "|" + country + "|" + studentId + "|" + paying_free 
+						+ "|" + pen + "|" + apaarid);
 				findFlag = true;
 			}
 
@@ -16732,7 +16783,7 @@ public class DBValidate {
 		String originalLcdb = "";
 		String originalLcDatedb = "";
 		String adhaardb = "";
-		String suid_db = "", pen_db = "";
+		String suid_db = "", pen_db = "", apaar_db = "";
 		boolean findFlag = false;
 		List<String> studentBonafideList = new ArrayList<String>();
 
@@ -16747,9 +16798,13 @@ public class DBValidate {
 		try {
 
 			if (!formGrList.trim().equalsIgnoreCase("")) {
-				findQuery = "SELECT HS_GENERAL_REGISTER.ADMITTED_STD,HS_GENERAL_REGISTER.ADMITTED_DIV,HS_GENERAL_REGISTER.GR_NO, HS_GENERAL_REGISTER.LAST_NAME, HS_GENERAL_REGISTER.FIRST_NAME, HS_GENERAL_REGISTER.FATHER_NAME, HS_GENERAL_REGISTER.MOTHER_NAME, RELIGION, SUB_RELIGION, CAST, HS_GENERAL_REGISTER.PEN, "
-						+ "DATE_FORMAT(HS_GENERAL_REGISTER.DATE_ADMITTED, '%d-%m-%Y') AS DATE_ADMITTED,DATE_FORMAT(DOB, '%d-%m-%Y') AS DOB, DOB_WORDS, HS_GENERAL_REGISTER.PRESENT_STD, HS_GENERAL_REGISTER.PRESENT_DIV, BIRTH_PLACE, GENDER, HS_GENERAL_REGISTER.ACADEMIC_YEAR, "
-						+ "ORIGINAL_LC, DATE_FORMAT(HS_GENERAL_REGISTER.DATE_LEAVING, '%d/%m/%Y') AS DATE_LEAVING, TALUKA, DISTRICT, STATE, COUNTRY,ROLL_NO,ADHAAR_CARD,HS_GENERAL_REGISTER.SUID  "
+				findQuery = "SELECT HS_GENERAL_REGISTER.ADMITTED_STD,HS_GENERAL_REGISTER.ADMITTED_DIV,HS_GENERAL_REGISTER.GR_NO, "
+						+ "HS_GENERAL_REGISTER.LAST_NAME, HS_GENERAL_REGISTER.FIRST_NAME, HS_GENERAL_REGISTER.FATHER_NAME, "
+						+ "HS_GENERAL_REGISTER.MOTHER_NAME, RELIGION, SUB_RELIGION, CAST, HS_GENERAL_REGISTER.PEN, HS_GENERAL_REGISTER.APAARID, "
+						+ "DATE_FORMAT(HS_GENERAL_REGISTER.DATE_ADMITTED, '%d-%m-%Y') AS DATE_ADMITTED,DATE_FORMAT(DOB, '%d-%m-%Y') AS DOB, "
+						+ "DOB_WORDS, HS_GENERAL_REGISTER.PRESENT_STD, HS_GENERAL_REGISTER.PRESENT_DIV, BIRTH_PLACE, GENDER, "
+						+ "HS_GENERAL_REGISTER.ACADEMIC_YEAR, ORIGINAL_LC, DATE_FORMAT(HS_GENERAL_REGISTER.DATE_LEAVING, '%d/%m/%Y') AS DATE_LEAVING, "
+						+ "TALUKA, DISTRICT, STATE, COUNTRY,ROLL_NO,ADHAAR_CARD,HS_GENERAL_REGISTER.SUID  "
 						+ "FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "." + "CLASS_ALLOTMENT ON "
 						+ "HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO  AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE "
@@ -16821,6 +16876,10 @@ public class DBValidate {
 				if(pen_db.equalsIgnoreCase("")) {
 					pen_db = " ";
 				}
+				apaar_db = resultSet.getString("APAARID") == null ? " " : (resultSet.getString("APAARID").trim());
+				if(apaar_db.equalsIgnoreCase("")) {
+					apaar_db = " ";
+				}
 				adhaardb = resultSet.getString("ADHAAR_CARD") == null ? " "
 						: (resultSet.getString("ADHAAR_CARD").trim());
 				if (adhaardb.equalsIgnoreCase("")) {
@@ -16838,7 +16897,8 @@ public class DBValidate {
 							+ academicYear + "|" + dobDb + "|" + dobWordsDb + "|" + otherReligionDb + "|" + castDb + "|"
 							+ birthPlaceDb + "|" + grDb + "|" + originalLcdb + "|" + originalLcDatedb + "|" + talukaDb
 							+ "|" + districtDb + "|" + stateDb + "|" + countryDb + "|" + admittedStdDb + "|"
-							+ admittedDivDb + "|" + doaDb + "|" + adhaardb + "|" + motherNameDb + "|" + suid_db + "|" + pen_db);
+							+ admittedDivDb + "|" + doaDb + "|" + adhaardb + "|" + motherNameDb + "|" + suid_db + "|" 
+							+ pen_db + "|" + apaar_db);
 				}
 
 				findFlag = true;
@@ -19558,15 +19618,6 @@ public class DBValidate {
 				}
 			}
 
-			findQuery = "select * from " + sessionData.getDBName() + ".marks_entry where ACADEMIC_YEAR = '"
-					+ academicYear + "' " + "and section_nm='" + sessionData.getSectionName() + "' " + condition
-					+ " ORDER BY ROLL_NO * 1 ";
-
-			logger.info("findgeneralWise query :: " + findQuery);
-
-			statement = connection.createStatement();
-			resultSetData = statement.executeQuery(findQuery);
-
 			if (!std.equalsIgnoreCase("") && !std.equalsIgnoreCase("Select")) {
 				String maxMarks = "";
 				findSubList = findSubjectList(sessionData, std, academicYear);
@@ -19593,6 +19644,15 @@ public class DBValidate {
 			generalDataExcelList.add(headers);
 			generalDataExcelList.add(headersMax);
 			type = cm.getActualLvType(type, stdInt);
+			
+			findQuery = "select * from " + sessionData.getDBName() + ".marks_entry where ACADEMIC_YEAR = '"
+					+ academicYear + "' " + "and section_nm='" + sessionData.getSectionName() + "' " + condition
+					+ " ORDER BY ROLL_NO * 1 ";
+
+			logger.info("findgeneralWise query :: " + findQuery);
+
+			statement = connection.createStatement();
+			resultSetData = statement.executeQuery(findQuery);
 
 			while (resultSetData.next()) {
 				LinkedHashMap<String, String> marksDetails = new LinkedHashMap<String, String>();
@@ -20733,12 +20793,16 @@ public class DBValidate {
 							: (resultSet.getString(me.getKey().toString()).trim());
 					if (marks.contains("+")) {
 						marks = marks.substring(0, marks.indexOf("+"));
+						
+						if(!marks.contains("MG") && !marks.contains("AB")) {
+							marks = "" + (int) Double.parseDouble(marks);
+						}
 					}
 
 					if (subjectDetail.get(title1 + "_MARKS") != null
 							&& !subjectDetail.get(title1 + "_MARKS").toString().equalsIgnoreCase("NA")) {
-						addMarks = (Integer.parseInt(marks)
-								+ Integer.parseInt(subjectDetail.get(title1 + "_MARKS").toString()));
+						addMarks = (Integer.parseInt(marks) 
+								+ (int) Double.parseDouble(subjectDetail.get(title1 + "_MARKS").toString()));
 						subjectDetail.put(title1 + "_MARKS", addMarks);
 					} else {
 						grade = resultSet.getString(title1 + "_" + sem) == null ? "NA"
@@ -21438,6 +21502,15 @@ public class DBValidate {
 
 			if (coulmnNames.length() > 1) {
 				try {
+					String mySQLQuery = "ALTER TABLE " + sessionData.getDBName() + ".FEES_DATA_MANDATORY ROW_FORMAT=DYNAMIC";
+					statement.executeUpdate(mySQLQuery);
+					
+					mySQLQuery = "SET GLOBAL innodb_default_row_format='dynamic'";
+					statement.executeUpdate(mySQLQuery);
+					
+					mySQLQuery = "SET SESSION innodb_strict_mode=OFF";
+					statement.executeUpdate(mySQLQuery);
+					
 					insertQuery = "ALTER TABLE " + sessionData.getDBName() + "." + "FEES_DATA_MANDATORY ADD ("
 							+ coulmnNames + ")";
 					logger.info("insert FEES_DATA_MANDATORY Column query == " + insertQuery);
@@ -21446,7 +21519,7 @@ public class DBValidate {
 				}
 				catch (Exception e) {
 					logger.warn("failed to create column name for subect " + fee_name + " in FEES_DATA_MANDATORY >> " + e);
-					if(e.getMessage().contains("You have an error in your SQL syntax")) {
+					if(e.toString().contains("SQLSyntaxErrorException") || e.getMessage().contains("You have an error in your SQL syntax")) {
 						retFlag = false;
 						JOptionPane.showMessageDialog(null, "Unable to add Fees Head. Please contact Admin");
 					}
@@ -23071,11 +23144,37 @@ public class DBValidate {
 	public int createFeeReceiptNumber(SessionData sessionData, String grNo, String academic, String section, String uuid, String mode)
 			throws Exception {
 		logger.info("=========createFeeReceiptNumber Query============");
-		String receiptQuery = "";
-		boolean flag = false;
-		int receiptNumber = 0;
+		String receiptQuery = "", receiptCountQuery = "", truncateReceiptCountQuery = "";
+		int receiptNumber = 0, receiptCount = 0;
+		
+		boolean feeReceiptCountResetflag = Boolean.parseBoolean(sessionData.getConfigMap().get("FEE_RECEIPT_COUNT_RESET"));
 	
 		try {
+			if (feeReceiptCountResetflag) {
+				receiptCountQuery = "SELECT count(*) AS COUNT FROM "+ sessionData.getDBName() +".FEE_RECEIPT_COUNT "
+						+ "where SECTION_NM='"+section+"' AND ACADEMIC_YEAR='"+academic+"'";
+				statement = connection.createStatement();
+				resultSet = statement.executeQuery(receiptCountQuery);
+				
+				while (resultSet.next()) {
+					receiptCount = resultSet.getInt("COUNT");
+				}
+				
+				if(receiptCount == 0){
+					String mySQLQuery = "SET SQL_SAFE_UPDATES = 0";
+					statement.executeUpdate(mySQLQuery);
+					
+					truncateReceiptCountQuery = "DELETE FROM "+ sessionData.getDBName() +".FEE_RECEIPT_COUNT where SECTION_NM='"+section+"'";
+					statement = connection.createStatement();
+					statement.executeUpdate(truncateReceiptCountQuery);
+					
+					String alterCount = "ALTER TABLE " + sessionData.getDBName() + ".FEE_RECEIPT_COUNT AUTO_INCREMENT=0";
+					statement = connection.createStatement();
+					statement.executeUpdate(alterCount);
+					logger.info("Update fee receipt count == " + alterCount);
+				}
+			} 
+			
 			if (!mode.equalsIgnoreCase("VALIDATE")) {
 				receiptQuery = "INSERT INTO " + sessionData.getDBName() + ".FEE_RECEIPT_COUNT (GR_NO, ACADEMIC_YEAR, SECTION_NM, "
 						+ "UUID, CREATED_BY, CREATED_DATE) "
@@ -30282,37 +30381,44 @@ public class DBValidate {
 		}
 	}
 
-	public void updateLatestCount(SessionData sessionData, String moduleName, String academic, String section) throws SQLException {
+	public void updateLatestCount(SessionData sessionData, String moduleName, String academic, String section, String latestResetStr) throws SQLException {
 
 		try {
 			int lastCount = 0;
-			String findLastCount = "SELECT FEE_RECEIPT_NUMBER FROM " + sessionData.getDBName() + "." + "FEE_RECEIPT_COUNT order by CREATED_DATE DESC LIMIT 1;";
-
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(findLastCount);
-
-			while (resultSet.next()) {
-				lastCount = Integer.parseInt(resultSet.getString("FEE_RECEIPT_NUMBER"));
-			}
-			
-			if(lastCount == 0) {
-				findLastCount = "SELECT COUNT FROM " + sessionData.getDBName() + "." + "COUNT_DATA "
-						+ "WHERE MODULE_NAME='"+moduleName+"' AND ACADEMIC_YEAR='"+academic+"' AND SECTION_NM='"+section+"'";
+			if(!latestResetStr.equalsIgnoreCase("Reset count to Zero")) {
+				String findLastCount = "SELECT FEE_RECEIPT_NUMBER FROM " + sessionData.getDBName() + "." + "FEE_RECEIPT_COUNT order by CREATED_DATE DESC LIMIT 1;";
 
 				statement = connection.createStatement();
 				resultSet = statement.executeQuery(findLastCount);
 
 				while (resultSet.next()) {
-					lastCount = Integer.parseInt(resultSet.getString("COUNT"));
+					lastCount = Integer.parseInt(resultSet.getString("FEE_RECEIPT_NUMBER"));
 				}
+				
+				if(lastCount == 0) {
+					findLastCount = "SELECT COUNT FROM " + sessionData.getDBName() + "." + "COUNT_DATA "
+							+ "WHERE MODULE_NAME='"+moduleName+"' AND ACADEMIC_YEAR='"+academic+"' AND SECTION_NM='"+section+"'";
+
+					statement = connection.createStatement();
+					resultSet = statement.executeQuery(findLastCount);
+
+					while (resultSet.next()) {
+						lastCount = Integer.parseInt(resultSet.getString("COUNT"));
+					}
+				}
+				lastCount = lastCount + 1;
+			}
+			else if(latestResetStr.equalsIgnoreCase("Reset count to Zero")) {
+				lastCount = 0;
+				String truncateReceiptCountQuery = "DELETE FROM "+ sessionData.getDBName() +".FEE_RECEIPT_COUNT where SECTION_NM='"+section+"'";
+				statement = connection.createStatement();
+				statement.executeUpdate(truncateReceiptCountQuery);
 			}
 			
-			String alterCount = "ALTER TABLE " + sessionData.getDBName()
-					+ ".FEE_RECEIPT_COUNT AUTO_INCREMENT="+(lastCount+1)+"";
+			String alterCount = "ALTER TABLE " + sessionData.getDBName() + ".FEE_RECEIPT_COUNT AUTO_INCREMENT="+lastCount+"";
 			statement = connection.createStatement();
 			statement.executeUpdate(alterCount);
-			logger.info("Update fee receipt count == " + alterCount);
-			
+			logger.info("Update fee receipt count ("+latestResetStr+") == " + lastCount);
 //			JOptionPane.showMessageDialog(null, "Last "+moduleName+" count was "+lastCount);
 		} catch (Exception e) {
 		}
@@ -30336,6 +30442,18 @@ public class DBValidate {
 		try {
 			String insertCoulmn = "ALTER TABLE " + sessionData.getDBName()
 					+ ".hs_general_register ADD (PEN  text)";
+			statement = connection.createStatement();
+			statement.executeUpdate(insertCoulmn);
+		} catch (Exception e) {
+		}
+	}
+	
+	public void addApaarIdColumn(SessionData sessionData) throws SQLException {
+
+		/// add column
+		try {
+			String insertCoulmn = "ALTER TABLE " + sessionData.getDBName()
+					+ ".hs_general_register ADD (APAARID  text)";
 			statement = connection.createStatement();
 			statement.executeUpdate(insertCoulmn);
 		} catch (Exception e) {

@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.com.accesser.DBValidate;
@@ -54,10 +55,23 @@ public class SchoolForAllLoginView {
 			schoolMap = new LinkedHashMap<String, String>();
 			initialConfigMap = new LinkedHashMap<String, String>();
 			configMap = new LinkedHashMap<String, String>();
+			String optionSelect = "";
 	
 			sessionData.setDBName("getschool");
+			boolean multiIpFlag = System.getenv("School_Multi_IP") == null ? false : Boolean.parseBoolean(System.getenv("School_Multi_IP"));
+			logger.info("multiIpFlag : "+multiIpFlag);
+			if(multiIpFlag) {
+				optionSelect = JOptionPane.showInputDialog("Please Enter \n PPR for Pre-Primary "
+						+ " \n PRI for Primary \n HIGH for High School \n COL for College");
+			}
+			
 			if((System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0)) {
 				sessionData.setSchoolApp_ip("127.0.0.1");
+			}
+			else if(multiIpFlag && !optionSelect.equalsIgnoreCase("")){
+				logger.info("optionSelect : "+optionSelect);
+				logger.info("SchoolApp_"+optionSelect.toUpperCase()+"_IP : "+System.getenv("SchoolApp_"+optionSelect.toUpperCase()+"_IP"));
+				sessionData.setSchoolApp_ip(System.getenv("SchoolApp_"+optionSelect.toUpperCase()+"_IP"));
 			}
 			else {
 				sessionData.setSchoolApp_ip(System.getenv("SchoolApp_IP"));

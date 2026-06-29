@@ -1568,14 +1568,14 @@ public class AdmissionFormNew extends JFrame {
  		bottombandPanel.add(hobbies_text);
  		
 		///////////////Permanent Education Number insert into PEN//////////////
-		JLabel pen_label = new JLabel("Permanent Education Number:");
-		pen_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));
-		pen_label.setBounds(620, 560, 300, 50);
-		bottombandPanel.add(pen_label);
+//		JLabel pen_label = new JLabel("Permanent Education Number:");
+//		pen_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));
+//		pen_label.setBounds(620, 560, 300, 50);
+//		bottombandPanel.add(pen_label);
 		
 		final JTextField pen_text = new JTextField();
 		pen_text.setFont(new Font("Book Antiqua", Font.BOLD, 16));
-		pen_text.setBounds(880, 570, 230, 25);
+		pen_text.setBounds(610, 570, 280, 25);
 		String pen = "";
 		if(classPageStatus.equalsIgnoreCase("VIEW")){
 			pen = commonObj.revertCommaApostrophy(studentInfo[38]);
@@ -1585,7 +1585,37 @@ public class AdmissionFormNew extends JFrame {
 			pen = commonObj.revertCommaApostrophy(studentInfo[38]);
 			pen_text.setText(pen);
 		}
+		if(pen.trim().equalsIgnoreCase("")) {
+			pen_text.setText("Permanent Education Number");
+			pen_text.setForeground(Color.GRAY);
+ 		}
+ 		else {
+ 			pen_text.setForeground(Color.BLACK);
+ 		}
+		pen_text.setToolTipText("Permanent Education Number");
 		bottombandPanel.add(pen_text);
+		
+		final JTextField apaarId_text = new JTextField();
+		apaarId_text.setFont(new Font("Book Antiqua", Font.BOLD, 16));
+		apaarId_text.setBounds(900, 570, 180, 25);
+		String apaar = "";
+		if(classPageStatus.equalsIgnoreCase("VIEW")){
+			apaar = commonObj.revertCommaApostrophy(studentInfo[39]);
+			apaarId_text.setText(apaar);
+			apaarId_text.setEditable(false);
+		} else if(classPageStatus.equalsIgnoreCase("EDIT")){
+			apaar = commonObj.revertCommaApostrophy(studentInfo[39]);
+			apaarId_text.setText(apaar);
+		}
+		if(apaar.trim().equalsIgnoreCase("")) {
+			apaarId_text.setText("APAAR ID");
+			apaarId_text.setForeground(Color.GRAY);
+ 		}
+ 		else {
+ 			apaarId_text.setForeground(Color.BLACK);
+ 		}
+		apaarId_text.setToolTipText("APAAR ID");
+		bottombandPanel.add(apaarId_text);
  		
  		String stdAdmittedWords = "";
  		if(classPageStatus.equalsIgnoreCase("EDIT")){
@@ -1648,7 +1678,7 @@ public class AdmissionFormNew extends JFrame {
 				String adhaarCard3 = "";
 				String adhaarCard = "";
 				String otherReligion = "";
-				String hobbies = "", pen = "";
+				String hobbies = "", pen = "", apaar = "";
 				String academicSel = year_combo.getSelectedItem().toString();
 
 				gr_no = gr_no_text.getText().trim();
@@ -1703,6 +1733,7 @@ public class AdmissionFormNew extends JFrame {
 				hobbies = hobbies_text.getText();
 				hobbies = commonObj.replaceCommaApostrophy(hobbies);
 				pen = pen_text.getText();
+				apaar = apaarId_text.getText();
 
 				int reply = 0;
 				try {
@@ -1781,7 +1812,7 @@ public class AdmissionFormNew extends JFrame {
 				String adhaarCard3 = "";
 				String adhaarCard = "";
 				String otherReligion = "";
-				String hobbies = "", pen = "";
+				String hobbies = "", pen = "", apaar = "";
 				String lastSchoolUdise = "";
 				String academicSel = year_combo.getSelectedItem().toString();
 
@@ -1841,6 +1872,13 @@ public class AdmissionFormNew extends JFrame {
 				hobbies = hobbies_text.getText();
 				hobbies = commonObj.replaceCommaApostrophy(hobbies);
 				pen = pen_text.getText().trim();
+				if(pen.equalsIgnoreCase("Permanent Education Number")) {
+					pen = "";
+				}
+				apaar = apaarId_text.getText().trim();
+				if(apaar.equalsIgnoreCase("APAAR ID")) {
+					apaar = "";
+				}
 				
 				boolean checkGrNoFlag = false;
 				String lastGrNo = "";
@@ -2059,6 +2097,12 @@ public class AdmissionFormNew extends JFrame {
 						} else if (pen.length() > 20) {
 							validateFields = false;
 							JOptionPane.showMessageDialog(null, commonObj.charExceeded("Permanent Education Number", pen, 20));
+						} else if (!apaar.equalsIgnoreCase("") && (!commonObj.validateNumber(apaar))) {
+							validateFields = false;
+							JOptionPane.showMessageDialog(null, "Please enter valid APAAR ID");
+						} else if (!apaar.equalsIgnoreCase("") && apaar.length() != 12) {
+							validateFields = false;
+							JOptionPane.showMessageDialog(null, "Please enter valid 12 digit APAAR ID");
 						}
 					}
 					Boolean flagValue = false;
@@ -2076,7 +2120,7 @@ public class AdmissionFormNew extends JFrame {
 												emailId, permanentAdd, residentAdd, contact1, contact2, birthDate, dobWords,
 												birthPlace, nationality, religion, category, cast, motherTongue, lastSchool, admittedStd, admittedDiv,
 												presentStd, presentDiv, dateAdmitted, paymentStatus, userName, section,adhaarCard,otherReligion,suid,
-												taluka, district,state,country,subcast, academicSel, hobbies, lastSchoolUdise, pen);
+												taluka, district,state,country,subcast, academicSel, hobbies, lastSchoolUdise, pen, apaar);
 									} catch (Exception e1) {
 										JOptionPane.showMessageDialog(null, "Error : "+ e1);
 									}
@@ -2090,7 +2134,7 @@ public class AdmissionFormNew extends JFrame {
 										emailId, permanentAdd, residentAdd, contact1, contact2, birthDate, dobWords, birthPlace,
 										nationality, religion, category, cast, motherTongue, lastSchool, admittedStd, admittedDiv,
 										presentStd, presentDiv, dateAdmitted, paymentStatus, userName, section, adhaarCard, otherReligion, academicSel,suid,
-										taluka, district,state,country,subcast, hobbies, admittedStdBranch, oldAcademicYear, lastSchoolUdise, pen);
+										taluka, district,state,country,subcast, hobbies, admittedStdBranch, oldAcademicYear, lastSchoolUdise, pen, apaar);
 							}
 							
 							if (flagValue) {//generate PDF
@@ -2223,6 +2267,50 @@ public class AdmissionFormNew extends JFrame {
 				if (lastSchoolUdise.equalsIgnoreCase("Last School Udise") || lastSchoolUdise.equalsIgnoreCase("")) {
 					lastSchoolUdise_text.setForeground(Color.GRAY);
 					lastSchoolUdise_text.setText("Last School Udise");
+				}
+			}
+		});
+		
+		pen_text.addFocusListener(new java.awt.event.FocusAdapter() {
+			String pen = "";
+			public void focusGained(java.awt.event.FocusEvent event) {
+
+				pen = pen_text.getText();
+				pen_text.setForeground(Color.BLACK);
+				if (!pen.equalsIgnoreCase("Permanent Education Number")) {
+					pen_text.selectAll();
+				} else {
+					pen_text.setText("");
+				}
+			}
+
+			public void focusLost(java.awt.event.FocusEvent event) {
+				pen = pen_text.getText();
+				if (pen.equalsIgnoreCase("Permanent Education Number") || pen.equalsIgnoreCase("")) {
+					pen_text.setForeground(Color.GRAY);
+					pen_text.setText("Permanent Education Number");
+				}
+			}
+		});
+		
+		apaarId_text.addFocusListener(new java.awt.event.FocusAdapter() {
+			String apaar = "";
+			public void focusGained(java.awt.event.FocusEvent event) {
+
+				apaar = apaarId_text.getText();
+				apaarId_text.setForeground(Color.BLACK);
+				if (!apaar.equalsIgnoreCase("APAAR ID")) {
+					apaarId_text.selectAll();
+				} else {
+					apaarId_text.setText("");
+				}
+			}
+
+			public void focusLost(java.awt.event.FocusEvent event) {
+				apaar = apaarId_text.getText();
+				if (apaar.equalsIgnoreCase("APAAR ID") || apaar.equalsIgnoreCase("")) {
+					apaarId_text.setForeground(Color.GRAY);
+					apaarId_text.setText("APAAR ID");
 				}
 			}
 		});

@@ -355,10 +355,16 @@ public class HelpPageWithoutScroll {
 		updateFeeReceiptCountButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
 		updateFeeReceiptCountButton.setBounds(width, height, 200, 35);
         panel.add(updateFeeReceiptCountButton);
+        
+        String [] updateFeeCount = { "Update Latest Count", "Reset count to Zero" };
+ 		final JComboBox updateFeeCount_combo = new JComboBox(updateFeeCount);
+ 		updateFeeCount_combo.setFont(new Font("Book Antiqua", Font.BOLD, 16));
+ 		updateFeeCount_combo.setBounds(260, height, 240, 40);
+ 		panel.add(updateFeeCount_combo);
 
         JLabel updateFeeReceiptCountLabel = new JLabel("Update latest fee receipt count");
         updateFeeReceiptCountLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
-        updateFeeReceiptCountLabel.setBounds(260, height, 900, 40);
+        updateFeeReceiptCountLabel.setBounds(500, height, 900, 40);
 		panel.add(updateFeeReceiptCountLabel);
 		
 		updateFeeReceiptCountButton.addActionListener(new ActionListener() {
@@ -366,7 +372,8 @@ public class HelpPageWithoutScroll {
             public void actionPerformed(ActionEvent e) {
             	if(dbValidate.connectDatabase(sessionData)) {
             		try {
-						dbValidate.updateLatestCount(sessionData, "FEE_RECEIPT", academicYear, sessionData.getSectionName());
+            			String latestResetStr = updateFeeCount_combo.getSelectedItem().toString();
+						dbValidate.updateLatestCount(sessionData, "FEE_RECEIPT", academicYear, sessionData.getSectionName(),latestResetStr);
 					} catch (SQLException e1) {
 					}
             	}
@@ -789,7 +796,7 @@ public class HelpPageWithoutScroll {
 		newStudentsToAttButton.setBounds(width, height, 200, 35);
         panel.add(newStudentsToAttButton);
 
-        JLabel newStudentsToAttLabel = new JLabel("Add all  new students in latest attendance list");
+        JLabel newStudentsToAttLabel = new JLabel("Add all new students in latest attendance list");
         newStudentsToAttLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
         newStudentsToAttLabel.setBounds(260, height, 900, 40);
 		panel.add(newStudentsToAttLabel);
@@ -805,27 +812,6 @@ public class HelpPageWithoutScroll {
             }
         });
 		
-//		height = height + 45;
-//		JButton updateAttButton = new JButton("Update Attendance");
-//		updateAttButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
-//		updateAttButton.setBounds(width, height, 200, 35);
-//        panel.add(updateAttButton);
-//
-//        JLabel updateAttLabel = new JLabel("Update Attendance to new format");
-//        updateAttLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
-//        updateAttLabel.setBounds(260, height, 900, 40);
-//		panel.add(updateAttLabel);
-//		
-//		updateAttButton.addActionListener(new ActionListener() {
-//
-//            public void actionPerformed(ActionEvent e) {
-//            	if(dbValidate.connectDatabase(sessionData)) {
-//            		dbValidate.updateAttendanceToNewFormat(sessionData);
-//            		JOptionPane.showMessageDialog(null, "Complete");
-//            	}
-//            }
-//        });
-		
 		height = height + 45;
 		JButton updateFieldButton = new JButton("Update Field in Register");
 		updateFieldButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
@@ -835,7 +821,7 @@ public class HelpPageWithoutScroll {
         String fieldStr = "Select,Academic_Year,Adhaar_card,Admitted_Std,Admitted_Div,Bank_Name,Bank_Branch,Bank_Account,Bank_IFSC,Birth_Place,"
 				+ "Contact_1,Contact_2,Country,Date_of_Admission,Date_of_Birth,Date_of_Leaving,Hobbies,Last_school,Mother_Tongue,Nationality,"
 				+ "State,Student_Udise,Taluka,District,Replace_Gr_No,First_Name,Last_Name,Father_Name,Mother_Name,PEN,Paying_Free,Permanent_Address,"
-				+ "Residential_Address,Gender,Email,Cast,Sub_Caste";
+				+ "Residential_Address,Gender,Email,Cast,Sub_Caste,APAAR_ID";
 //        if(sessionData.getUserName().equalsIgnoreCase("prp")) {
 //        	fieldStr = fieldStr+",Import Backup Data";
 //        }

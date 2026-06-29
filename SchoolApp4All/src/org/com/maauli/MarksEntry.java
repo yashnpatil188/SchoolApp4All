@@ -1913,9 +1913,12 @@ public class MarksEntry extends JFrame {
 					maxMarks_label[i].setFont(new Font("Book Antiqua", Font.BOLD, 16));
 					maxMarks_label[i].setToolTipText(studentName);
 					maxMarks_label[i].setBounds(600, j + 12, 60, 20);
-					if(!stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XII") && !examClass.equalsIgnoreCase("Final")){
+					if(!examClass.equalsIgnoreCase("Final")){
 						dataPanel.add(maxMarks_label[i]);
 					}
+//					if(!stdClass.equalsIgnoreCase("X") && !stdClass.equalsIgnoreCase("XII") && !examClass.equalsIgnoreCase("Final")){
+//						dataPanel.add(maxMarks_label[i]);
+//					}
 				}
 				else {
 					String[] remarkList = ("Select,"+sessionData.getConfigMap().get("REMARK_LIST"+"_"+stdClass+"_"+subjectClass)).split(",");
@@ -2194,7 +2197,8 @@ public class MarksEntry extends JFrame {
 										lvType = lvType + "1";
 									}
 								}
-								updateMarks = dbValidate.updateSubMarks(sessionData, studMarkList, academicYearClass, stdClass, divClass, subjectClass, subExamType, lvExam, lvType, maxMarksFromMap, typeClass);
+								updateMarks = dbValidate.updateSubMarks(sessionData, studMarkList, academicYearClass, stdClass, divClass, 
+										subjectClass, subExamType, lvExam, lvType, maxMarksFromMap, typeClass);
 								if (!updateMarks) {
 									JOptionPane.showMessageDialog(null, "" + subjectClass + " marks not updated successfully");
 								} else {

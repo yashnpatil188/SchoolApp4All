@@ -286,7 +286,7 @@ public class SearchFeeStudentNew extends JFrame {
 //				dbValidate.deleteDuplicateData(sessionData1, academicYear, stdClass, divClass, "fees_data_mandatory", "STD_1", "DIV_1");
 				
 				
-				dbValidate.updateLatestCount(sessionData, "FEE_RECEIPT", academicYearClass, sessionData.getSectionName());
+				dbValidate.updateLatestCount(sessionData, "FEE_RECEIPT", academicYearClass, sessionData.getSectionName(), "");
 			}
 		} catch (Exception e1) {
             logger.error("Exception while getting table order ==>>>" + e1);

@@ -67,6 +67,7 @@ public class LoginDetails {
 			if(dbValidate.connectDatabase(sessionData1)){
 				dbValidate.addRenewCodeColumn(sessionData1);
 				dbValidate.addPenNumberColumn(sessionData1);
+				dbValidate.addApaarIdColumn(sessionData1);
 				dbValidate.addBalanceFeeColumn(sessionData1);
 				dbValidate.update_max_allowed_packet(sessionData1);
 				tm = dbValidate.getAuthenticationDetails(sessionData, sessionData.getSchoolName());

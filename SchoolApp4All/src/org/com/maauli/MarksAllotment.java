@@ -970,9 +970,18 @@ public class MarksAllotment extends JFrame {
 						}
 
 					} catch (Exception e1) {
-						logger.info("Exception e1 ==>>>" + e1);
-						new Student(sessionData, section, user_name, user_role);
-						frame.setVisible(false);
+//						logger.info("Exception e1 ==>>>" + e1);
+//						new Student(sessionData, section, user_name, user_role);
+//						frame.setVisible(false);
+						
+						logger.info("Exception e1 ===>>>" + e1);
+                        new CreateSubject(sessionData, category, stdClass, section, user_name, user_role, academicSel);
+                        frame.setVisible(false);
+                        
+//						List subAllotList = new ArrayList();
+//						logger.info("Exception e1 ===>>>" + e1);
+//                        new MarksAllotment(sessionData, std, subAllotList, academicSel, category, false, section, user_name, user_role, "");
+//                        frame.setVisible(false);
 					}
 				} else if (validateFields & category.equalsIgnoreCase("Student Subject Allotment")) {
 					try {

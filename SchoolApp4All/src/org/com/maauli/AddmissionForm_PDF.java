@@ -164,7 +164,7 @@ public class AddmissionForm_PDF {
 
 				Chunk chunk53 = new Chunk(
 						"														 																																																																																																											"
-								+ "	DATE OF ADMISSION: ");
+								+ "	          DATE OF ADMISSION: ");
 				Font font53 = FontFactory.getFont("TIMES_ROMAN");
 				font53.setStyle(Font.NORMAL);
 				font53.setSize(10);
@@ -176,7 +176,7 @@ public class AddmissionForm_PDF {
 
 				Chunk chunk54 = new Chunk(
 						"														 																																																																																																																																																	"
-								+ "		" + commonObj.formatyyyymmddtoddmmyyyy(studentDetail.get("doa")));
+								+ "	          	" + commonObj.formatyyyymmddtoddmmyyyy(studentDetail.get("doa")));
 				Font font54 = FontFactory.getFont("TIMES_ROMAN");
 				font54.setStyle(Font.NORMAL);
 				font54.setSize(10);
@@ -210,7 +210,7 @@ public class AddmissionForm_PDF {
 
 				Chunk chunk57 = new Chunk(
 						"																																																														"
-								+ "		ADHAAR CARD:");
+								+ "		          ADHAAR CARD:");
 				Font font57 = FontFactory.getFont("TIMES_ROMAN");
 				font57.setStyle(Font.NORMAL);
 				font57.setSize(10);
@@ -222,7 +222,7 @@ public class AddmissionForm_PDF {
 
 				Chunk chunk57a = new Chunk(
 						"      																																																																											"
-								+ "			       	" + studentDetail.get("adhaar"));
+								+ "			                 	" + studentDetail.get("adhaar"));
 				Font font57a = FontFactory.getFont("TIMES_ROMAN");
 				font57a.setStyle(Font.NORMAL);
 				font57a.setSize(10);
@@ -234,7 +234,7 @@ public class AddmissionForm_PDF {
 				
 				Chunk chunk58 = new Chunk(
 						"														 																																																																																																										"
-								+ "		PEN NO.:");
+								+ "		          PEN NO.:");
 				Font font58 = FontFactory.getFont("TIMES_ROMAN");
 				font58.setStyle(Font.NORMAL);
 				font58.setSize(10);
@@ -246,7 +246,7 @@ public class AddmissionForm_PDF {
 
 				Chunk chunk58a = new Chunk(
 						"     	 																				 																																																																																																					"
-								+ "			       	" + studentDetail.get("pen"));
+								+ "			                 	" + studentDetail.get("pen"));
 				Font font58a = FontFactory.getFont("TIMES_ROMAN");
 				font58a.setStyle(Font.NORMAL);
 				font58a.setSize(10);

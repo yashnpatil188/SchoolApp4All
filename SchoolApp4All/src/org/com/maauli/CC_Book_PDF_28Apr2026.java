@@ -32,7 +32,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.lowagie.text.DocumentException;
 import com.itextpdf.text.PageSize;
 
-public class CC_Book_PDF {
+public class CC_Book_PDF_28Apr2026 {
 
 	static String fileName = "";
 	static String fileAddress = "";
@@ -43,7 +43,7 @@ public class CC_Book_PDF {
 	ResourceBundle bundle = ResourceBundle.getBundle("org.com.accesser.school");
 	static Logger logger = Logger.getLogger(BonafidePDF.class.getName());
 
-	public CC_Book_PDF(SessionData sessionData, String exam, String subject, String std, String div, String academic,
+	public CC_Book_PDF_28Apr2026(SessionData sessionData, String exam, String subject, String std, String div, String academic,
 			LinkedHashMap<String, LinkedHashMap<String, String>> marksSemDataMap,
 			LinkedHashMap<String, LinkedHashMap<String, String>> studentOptSubAllotMap,
 			LinkedHashMap<String, LinkedHashMap<String, String>> maxSubMarks) throws DocumentException {
@@ -625,10 +625,6 @@ public class CC_Book_PDF {
 					if(subMaxMarks.get(sem+"_obt") == null || Double.parseDouble(subMaxMarks.get(sem+"_obt")) == 0){
 						mobt = "-";
 					}
-//					else if(Double.parseDouble(subMaxMarks.get(sem+"_obt_ct")) > 0){
-//						mobt = subMaxMarks.get(sem+"_obt_ct");
-//						maxTotalA = maxTotalA + Double.parseDouble(mobt);
-//					}
 					else{
 						mobt = subMaxMarks.get(sem+"_obt");
 						maxTotalA = maxTotalA + Double.parseDouble(mobt);
@@ -815,16 +811,6 @@ public class CC_Book_PDF {
 					if(mobt.equalsIgnoreCase("-")){
 						obt = "-";
 					}
-//					else if(Double.parseDouble(subMaxMarks.get(sem+"_obt_ct")) > 0){
-//						obt = grMap.get(subject+"_"+semInitial+"OBT")+"";
-//						if(obt.equalsIgnoreCase("null")) {
-//							obt = "-";
-//						}
-//						if(!obt.equalsIgnoreCase("AB") && !obt.equalsIgnoreCase("MG") && !obt.equalsIgnoreCase("") && !obt.equalsIgnoreCase("-"))
-//							obt = "" + commonObj.convertMarks(std, dob, subject,
-//									subMaxMarks.get(sem+"_dobs_ct").toString(), "DOBS", subMaxMarks, sem);
-//							totalA = totalA + Double.parseDouble(obt);
-//					}
 					else{
 						obt = grMap.get(subject+"_"+semInitial+"OBT")+"";
 						if(obt.equalsIgnoreCase("null")) {

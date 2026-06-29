@@ -74,6 +74,10 @@ public class BonafidePDF {
     static String app_header_0 			= "";
     static String bonafide_header		= "";
     static String bonafide_header_0		= "";
+    static String image_pdf_bonafide_top_date_pos_y = "";
+    static String image_pdf_bonafide_top_certificate_text_pos_y = "";
+    static String image_pdf_bonafide_bottom_date_pos_y = "";
+    static String image_pdf_bonafide_bottom_certificate_text_pos_y = "";
     static String footer				= "";
 	static String app_header_0_fontName = "";
     static int app_header_0_fontSize = 0;
@@ -130,6 +134,12 @@ public class BonafidePDF {
     	app_header_2_heightSpace = Integer.parseInt(sessionData1.getConfigMap().get("APP_HEADER_2_HEIGHTSPACE_"+sessionData.getAppType()));
         bonafide_header = sessionData1.getConfigMap().get("BONAFIDE_HEADER_"+sessionData.getAppType());
         bonafide_header_0 = sessionData1.getConfigMap().get("BONAFIDE_HEADER_0_"+sessionData.getAppType());
+        
+        image_pdf_bonafide_top_date_pos_y = sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_TOP_DATE_POS_Y") == null ? "50" : sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_TOP_DATE_POS_Y");
+        image_pdf_bonafide_top_certificate_text_pos_y = sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_TOP_CERTIFICATE_TEXT_POS_Y") == null ? "10" : sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_TOP_CERTIFICATE_TEXT_POS_Y");
+        image_pdf_bonafide_bottom_date_pos_y = sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_BOTTOM_DATE_POS_Y") == null ? "-25" : sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_BOTTOM_DATE_POS_Y");
+        image_pdf_bonafide_bottom_certificate_text_pos_y = sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_BOTTOM_CERTIFICATE_TEXT_POS_Y") == null ? "10" : sessionData1.getConfigMap().get("IMAGE_PDF_BONAFIDE_BOTTOM_CERTIFICATE_TEXT_POS_Y");
+        
         kumar = sessionData1.getConfigMap().get("KUMAR");
         kumari = sessionData1.getConfigMap().get("KUMARI");
         isMotherName = Boolean.parseBoolean(sessionData1.getConfigMap().get("MOTHER_NAME"));
@@ -391,7 +401,8 @@ public class BonafidePDF {
 						Paragraph paragraphDate = new Paragraph();
 						
 						if(pdf_header_bonafide_image_flag.equalsIgnoreCase("true")){
-							paragraphDate.setSpacingBefore(50);
+//							paragraphDate.setSpacingBefore(50);
+							paragraphDate.setSpacingBefore(Integer.parseInt(image_pdf_bonafide_top_date_pos_y));
 						}
 						else if(bonafide_header_3.equalsIgnoreCase("")) {
 							paragraphDate.setSpacingBefore(15);
@@ -416,7 +427,8 @@ public class BonafidePDF {
 							paragraphSubject.setSpacingAfter(15);
 						}
 						else {
-							paragraphSubject.setSpacingBefore(10);
+//							paragraphSubject.setSpacingBefore(10);
+							paragraphSubject.setSpacingBefore(Integer.parseInt(image_pdf_bonafide_top_certificate_text_pos_y));
 							paragraphSubject.setSpacingAfter(10);
 						}
 						paragraphSubject.add(chunkSubject);
@@ -887,7 +899,8 @@ public class BonafidePDF {
 							chunkDateOffice.setFont(fontClassBold1);
 							Paragraph paragraphDateOffice = new Paragraph();
 							if(pdf_header_bonafide_image_flag.equalsIgnoreCase("true")){
-								paragraphDateOffice.setSpacingBefore(-25);
+//								paragraphDateOffice.setSpacingBefore(-25);
+								paragraphDateOffice.setSpacingBefore(Integer.parseInt(image_pdf_bonafide_bottom_date_pos_y));
 							}
 							else if(bonafide_header_3.equalsIgnoreCase("")) {
 								paragraphDateOffice.setSpacingBefore(15);
@@ -911,7 +924,8 @@ public class BonafidePDF {
 								paragraphSubjectOffice.setSpacingAfter(15);
 							}
 							else {
-								paragraphSubjectOffice.setSpacingBefore(10);
+//								paragraphSubjectOffice.setSpacingBefore(10);
+								paragraphSubjectOffice.setSpacingBefore(Integer.parseInt(image_pdf_bonafide_bottom_certificate_text_pos_y));
 								paragraphSubjectOffice.setSpacingAfter(10);
 							}
 							paragraphSubjectOffice.add(chunkSubjectOffice);

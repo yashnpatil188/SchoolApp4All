@@ -5246,6 +5246,33 @@ public class Common {
 							}
 				        	field_value = "'"+field_value+"'";
 				            break;
+			         case "PEN" :
+			        	 field_name = "PEN";
+			        	 field_value = (int) Double.parseDouble(field_value) + "";
+				        	if (field_name.length() > 20) {
+								validateField = false;
+								writeToText(currentDirectory, fileName, charExceeded("PEN", field_value, 20)+" for Gr No. "+GR_NO);
+								continue;
+							} else if (checkComma(field_value) || !validateNumber(field_value)) {
+								validateField = false;
+								writeToText(currentDirectory, fileName, "Please enter valid PEN, for Gr No. "+GR_NO);
+								continue;
+							}
+				        	field_value = "'"+field_value+"'";
+				            break;
+			         case "APAAR_ID" :
+			        	 field_name = "APAARID";
+				        	if (field_name.length() > 20) {
+								validateField = false;
+								writeToText(currentDirectory, fileName, charExceeded("APAAR_ID", field_value, 20)+" for Gr No. "+GR_NO);
+								continue;
+							} else if (checkComma(field_value) || field_value.length() != 12) {
+								validateField = false;
+								writeToText(currentDirectory, fileName, "Please enter valid APAAR_ID, for Gr No. "+GR_NO);
+								continue;
+							}
+				        	field_value = "'"+field_value+"'";
+				            break;
 			         default :
 			            logger.error("Invalid value");
 			      }
@@ -5332,7 +5359,8 @@ public class Common {
 						String sql = "UPDATE hs_general_register SET "+field_name+" = "+field_value+" "
 								+ "where GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
 		
-						pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(sql);
+						pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(sql, 
+							    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 						pstm.execute();
 					}
 					
@@ -5341,32 +5369,38 @@ public class Common {
 							
 							updateAcademicToPrevious = "update class_allotment SET "+field_name+" = "+field_value+" "
 									+ "where GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 							
 							updateAcademicToPrevious = "update marks_entry SET "+field_name+" = "+field_value+" "
 									+ "where GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 							
 							updateAcademicToPrevious = "update result_data SET "+field_name+" = "+field_value+" "
 									+ "where GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 							
 							updateAcademicToPrevious = "update fees_data_mandatory SET "+field_name+" = "+field_value+" "
 									+ "where GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 							
 							updateAcademicToPrevious = "update fee_status SET "+field_name+" = "+field_value+" "
 									+ "where GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 							
 							updateAcademicToPrevious = "update student_subject SET "+field_name+" = "+field_value+" "
 									+ "where GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5380,7 +5414,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update attendance set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5392,7 +5427,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update class_allotment set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5404,7 +5440,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update fee_status set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5416,7 +5453,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update fees_data_mandatory set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5428,7 +5466,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update fees_data_optional set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5440,7 +5479,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update marks_entry set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5452,7 +5492,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update optional_allotment set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5464,7 +5505,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update optional_fee_allotment set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5476,7 +5518,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update result_data set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5488,7 +5531,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update sms_data set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5500,7 +5544,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update statement_data set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5512,7 +5557,8 @@ public class Common {
 						try{
 							updateAcademicToPrevious = "update student_subject set ACADEMIC_YEAR='"+previousYear+"' where "
 									+ "ACADEMIC_YEAR='"+academicYear+"' and GR_NO='"+GR_NO+"' and SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(updateAcademicToPrevious, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							pstm.execute();
 						}
 						catch (Exception e) {
@@ -5541,7 +5587,8 @@ public class Common {
 							
 							String findQuery = "SELECT DISTINCT "+field_name+" FROM "+sessionData.getDBName()+"."+"hs_general_register "
 									+ "where "+field_name+"="+field_value+" AND SECTION_NM='"+section_nm+"'";
-							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(findQuery);
+							pstm = (PreparedStatement) sessionData.getConnection().prepareStatement(findQuery, 
+								    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							resultSet = pstm.executeQuery();
 							if (!resultSet.last()) {
 								for(int k = 0; k < table_names.length; k++) {

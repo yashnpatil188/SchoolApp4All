@@ -105,6 +105,22 @@ public class FeeReceiptPDF {
 	        fee_receipt_copy = sessionData.getConfigMap().get("FEE_RECEIPT_COPY");
 	        fee_receipt_copy_array = fee_receipt_copy.split(",");
 	        
+	        if(sessionData.getAppType().equalsIgnoreCase("College")) {
+	        	collegeStream = " ("+sessionData.getSectionName()+")";
+	        }
+	        if(fee_receipt_copy_array.length == 3) {
+	        	academicText ="                       Acedamic Year : "+academic
+						+ "                                                         Acedamic Year : "+academic 
+						+ "                                                         Acedamic Year : "+academic;
+			}
+	        else if(fee_receipt_copy_array.length == 2) {
+				academicText ="                       Acedamic Year : "+academic
+						+ "                                                         Acedamic Year : "+academic;
+			}
+	        else if(fee_receipt_copy_array.length == 1) {
+				academicText ="                       Acedamic Year : "+academic;
+			}
+	        
 	        //image variables
 //	        PdfPTable tableOffice = new PdfPTable(4);
 	        
