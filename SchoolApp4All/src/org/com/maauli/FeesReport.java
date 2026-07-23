@@ -661,7 +661,7 @@ public class FeesReport extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
 				LinkedHashMap retStudentMap = new LinkedHashMap();
-				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", retStudentMap, section, "", "", "", "", false, "", "", false);
+				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", retStudentMap, section, "", "", "", "", false, "", "", "", false);
 			}
 		});
 		
@@ -2156,7 +2156,7 @@ public class FeesReport extends JFrame {
 				
 				frame.setVisible(false);
 				new FeesView(sessionData, grNoSel, stdSel, divSel, nameSel, rollNoSel, searchStudentMap, section, academicYearClass, 
-						optionalClass, feesHeadMap, maxFrequency, frequencyClass, subFrequencyClass, "", "", "", "", false);
+						optionalClass, feesHeadMap, maxFrequency, frequencyClass, subFrequencyClass, "", "", "", "", "", false);
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Fees Head with optional "+optionalClass+" for Std "+stdClass+" does not exist.");

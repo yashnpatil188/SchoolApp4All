@@ -178,7 +178,7 @@ public class FeesView extends JFrame {
     static double totalBalanceFromDB = 0;
     private static int startMonth = 0;
     private static String oldAcademicClass = "";
-    private static String oldStdClass = "";
+    private static String oldStdClass = "", oldDivClass = "";
     private static boolean headerRadioClass = false;
     private static String optionalFee = "";
     private static String receiptShortName = "";
@@ -186,7 +186,7 @@ public class FeesView extends JFrame {
     public FeesView(SessionData sessionData1, String retGr_no, String retStd, String retDiv, String retName, String retRollNo,
     		LinkedHashMap<String,LinkedHashMap<String, String>> retStudentMap, String sec, String academicYear, String category,
     		LinkedHashMap<String,LinkedHashMap<String, String>> retFeesHeadMap, String maxFrequency, String frequency, 
-    		String subFrequency, String contact1, String contact2, String oldAcademic, String oldStd, boolean headerRadio) {
+    		String subFrequency, String contact1, String contact2, String oldAcademic, String oldStd, String oldDiv, boolean headerRadio) {
 
     	System.gc();
     	sessionData = sessionData1;
@@ -198,6 +198,7 @@ public class FeesView extends JFrame {
     	oldAcademicClass = oldAcademic;
     	headerRadioClass = headerRadio;
     	oldStdClass = oldStd;
+    	oldDivClass = oldDiv;
     	frequencyClass = frequency;
     	subFrequencyClass = subFrequency;
     	maxFrequencyClass = Integer.parseInt(maxFrequency);
@@ -533,7 +534,7 @@ public class FeesView extends JFrame {
 
             	LinkedHashMap<String,LinkedHashMap<String, String>> studMap = new LinkedHashMap<String,LinkedHashMap<String, String>>();
             	frame.setVisible(false);
-                new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", studMap, section, "", categoryClass, frequencyClass, "", false, "", "", headerRadioClass);
+                new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", studMap, section, "", categoryClass, frequencyClass, "", false, "", "", "", headerRadioClass);
             }
         });
         
@@ -627,8 +628,8 @@ public class FeesView extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
-				new SearchFeeStudentNew(sessionData, "", stdClass, divClass, "", "", "", searchStudentMap, section, academicYearClass, categoryClass, 
-						frequencyClass, subFrequencyClass, false, oldAcademicClass, oldStdClass, headerRadioClass);
+				new SearchFeeStudentNew(sessionData, "", oldStdClass, oldDivClass, "", "", "", searchStudentMap, section, oldAcademicClass, categoryClass, 
+						frequencyClass, subFrequencyClass, false, oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 			}
 		});
 		
@@ -745,13 +746,13 @@ public class FeesView extends JFrame {
  		bottomBandItemHeight = bottomBandItemHeight + 30;
  		JLabel academicYear_label = new JLabel("Academic Year : "+academicYearClass);
  		academicYear_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));
- 		academicYear_label.setBounds(width, bottomBandItemHeight, 200, 50);
+ 		academicYear_label.setBounds(width, bottomBandItemHeight, 250, 50);
  		bottombandPanel.add(academicYear_label);
  		
  		width =  width + 200;
  		JLabel feeType_label = new JLabel("Fee Category : "+categoryClass);
  		feeType_label.setFont(new Font("Book Antiqua", Font.BOLD, 16));
- 		feeType_label.setBounds(width, bottomBandItemHeight, 200, 50);
+ 		feeType_label.setBounds(width+30, bottomBandItemHeight, 200, 50);
  		bottombandPanel.add(feeType_label);
  		
  		JSeparator jseparator = new JSeparator();
@@ -1560,7 +1561,7 @@ public class FeesView extends JFrame {
 									frame.setVisible(false);
 									new FeesView(sessionData, grNoClass, stdClass, divClass, nameClass, rollNoClass, searchStudentMap, section, academicYearClass, 
 											categoryClass, feesHeadMap, maxFrequencyClass+"", frequencyClass, subFrequencyClass, contact1Class, contact2Class, 
-											oldAcademicClass, oldStdClass, headerRadioClass);
+											oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 								}
 							} catch (Exception ex) {
 								logger.error("updateCountData Exception= " + ex);
@@ -2232,7 +2233,7 @@ public class FeesView extends JFrame {
         	frame.setVisible(false);
         	JOptionPane.showMessageDialog(null, "Fees Head with category "+categoryClass+" for Std "+stdClass+" does not exist.");
 			new SearchFeeStudentNew(sessionData, "", stdClass, divClass, "", "", "", searchStudentMap, section, academicYearClass, categoryClass, 
-					frequencyClass, subFrequencyClass, false, "", "", headerRadioClass);
+					frequencyClass, subFrequencyClass, false, "", "", "", headerRadioClass);
         }
         
         bottomBandItemHeight = bottomBandItemHeight + 30;
@@ -2599,7 +2600,7 @@ public class FeesView extends JFrame {
 						frame.setVisible(false);
 						new FeesView(sessionData, grNoClass, stdClass, divClass, nameClass, rollNoClass, searchStudentMap, section, academicYearClass, 
 								categoryClass, feesHeadMap, maxFrequencyClass+"", frequencyClass, subFrequencyClass, contact1Class, contact2Class, 
-								oldAcademicClass, oldStdClass, headerRadioClass);
+								oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 					}
 				}
 			} catch (Exception e) {
@@ -2753,7 +2754,7 @@ public class FeesView extends JFrame {
 						frame.setVisible(false);
 						new FeesView(sessionData, grNoClass, stdClass, divClass, nameClass, rollNoClass, searchStudentMap, section, academicYearClass, 
 								categoryClass, feesHeadMap, maxFrequencyClass+"", frequencyClass, subFrequencyClass, contact1Class, contact2Class, 
-								oldAcademicClass, oldStdClass, headerRadioClass);
+								oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "Concession "+concessionSelect+" not updated for Fee receipt "+receiptSel);

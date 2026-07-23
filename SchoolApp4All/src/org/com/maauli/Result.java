@@ -1837,7 +1837,8 @@ public class Result extends JFrame {
 					temp = str.split(delimiter);
 					String grNo = temp[0];
 					String rollNo = temp[1];
-					String name = temp[2] + " " + temp[3] + " " + temp[4];
+//					String name = temp[2] + " " + temp[3] + " " + temp[4];
+					String name = commonObj.setNameOrder(sessionData, "", temp[3], temp[2], temp[4]);
 					String percent = temp[5];
 					String progress = temp[7];
 					String result = temp[8];

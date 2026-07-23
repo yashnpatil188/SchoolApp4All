@@ -1049,7 +1049,7 @@ public class DBValidate {
 		String grDB = "", contactNo1 = "", contactNo2 = "";
 		String stdDB, divDB, originalLc = "", promoteStd = "", nextAcademic = "";
 		String rollNo = "";
-		String nameDB = "";
+		String nameDB = "", firstDB ="", lastDB = "", fatherDB = "";
 		String findQuery = "";
 		boolean findFlag = false;
 		String addToWhere = "";
@@ -1177,8 +1177,10 @@ public class DBValidate {
 				studentDetailsMap.put("std", stdDB);
 				divDB = resultSet.getString("PRESENT_DIV") == null ? " " : (resultSet.getString("PRESENT_DIV").trim());
 				studentDetailsMap.put("div", divDB);
-				nameDB = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
-						+ resultSet.getString("FATHER_NAME");
+				firstDB = resultSet.getString("FIRST_NAME");
+				lastDB = resultSet.getString("LAST_NAME");
+				fatherDB = resultSet.getString("FATHER_NAME");
+				nameDB = cm.setNameOrder(sessionData, "", firstDB, lastDB, fatherDB);
 				studentDetailsMap.put("name", nameDB);
 				rollNo = resultSet.getString("ROLL_NO") == null ? " " : (resultSet.getString("ROLL_NO").trim());
 				studentDetailsMap.put("rollNo", rollNo);
@@ -1216,7 +1218,7 @@ public class DBValidate {
 		String grDB = "", contactNo1 = "", contactNo2 = "";
 		String stdDB, divDB, originalLc = "", promoteStd = "", nextAcademic = "";
 		String rollNo = "";
-		String nameDB = "";
+		String nameDB = "", firstDB = "", lastDB = "", fatherDB = "";
 		String findQuery = "";
 		boolean findFlag = false;
 		String addToWhere = "";
@@ -1344,8 +1346,10 @@ public class DBValidate {
 				studentDetailsMap.put("std", stdDB);
 				divDB = resultSet.getString("DIV_1") == null ? " " : (resultSet.getString("DIV_1").trim());
 				studentDetailsMap.put("div", divDB);
-				nameDB = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
-						+ resultSet.getString("FATHER_NAME");
+				firstDB = resultSet.getString("FIRST_NAME");
+				lastDB = resultSet.getString("LAST_NAME");
+				fatherDB = resultSet.getString("FATHER_NAME");
+				nameDB = cm.setNameOrder(sessionData, "", firstDB, lastDB, fatherDB);
 				studentDetailsMap.put("name", nameDB);
 				rollNo = resultSet.getString("ROLL_NO") == null ? " " : (resultSet.getString("ROLL_NO").trim());
 				studentDetailsMap.put("rollNo", rollNo);
@@ -1741,7 +1745,7 @@ public class DBValidate {
 		logger.info("=========findStudentLC Query============");
 		String grDB = "";
 		String rollDB = "";
-		String nameDB = "";
+		String nameDB = "", firstDB = "", lastDB = "", fatherDB ="";
 		String findQuery = "";
 		String originalLCDB = "";
 		String duplicateLCDB = "";
@@ -1882,8 +1886,11 @@ public class DBValidate {
 			while (resultSet.next()) {
 				grDB = resultSet.getString("GR_NO");
 				rollDB = resultSet.getString("ROLL_NO") == null ? "1" : (resultSet.getString("ROLL_NO").trim());
-				nameDB = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
-						+ resultSet.getString("FATHER_NAME");
+				firstDB = resultSet.getString("FIRST_NAME");
+				lastDB = resultSet.getString("LAST_NAME");
+				fatherDB = resultSet.getString("FATHER_NAME");
+//				nameDB = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " " + resultSet.getString("FATHER_NAME");
+				nameDB = cm.setNameOrder(sessionData, "", firstDB, lastDB, fatherDB);
 				originalLCDB = resultSet.getString("ORIGINAL_LC") == null ? " "
 						: (resultSet.getString("ORIGINAL_LC").trim());
 				duplicateLCDB = resultSet.getString("DUPLICATE_LC") == null ? " "
@@ -3076,8 +3083,9 @@ public class DBValidate {
 					genderDB = " ";
 				}
 				studentDetailMap.put("gender", genderDB);
-				nameDB = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
-						+ resultSet.getString("FATHER_NAME");
+//				nameDB = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
+//						+ resultSet.getString("FATHER_NAME");
+				nameDB = cm.setNameOrder(sessionData, "", resultSet.getString("FIRST_NAME"), resultSet.getString("LAST_NAME"), resultSet.getString("FATHER_NAME"));
 				studentDetailMap.put("name", nameDB);
 				rollNoDB = resultSet.getString("ROLL_NO") == null ? "1" : (resultSet.getString("ROLL_NO").trim());
 				if (rollNoDB.equalsIgnoreCase("")) {
@@ -5839,7 +5847,7 @@ public class DBValidate {
 		selTitle = selTitle.replace(" ", "_");
 //		logger.info("selTitle == " + selTitle);
 		String grDB = "";
-		String nameDB = "";
+		String nameDB = "", firstDB = "", lastDB = "", fatherDB = "";
 		String findQuery = "";
 		String rollNoDB = "";
 		String grClassAllot = "";
@@ -5911,8 +5919,12 @@ public class DBValidate {
 
 			while (resultSet.next()) {
 				grDB = resultSet.getString("GR_NO");
-				nameDB = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
-						+ resultSet.getString("FATHER_NAME");
+				firstDB = resultSet.getString("FIRST_NAME");
+				lastDB = resultSet.getString("LAST_NAME");
+				fatherDB = resultSet.getString("FATHER_NAME");
+//				nameDB = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
+//						+ resultSet.getString("FATHER_NAME");
+				nameDB = cm.setNameOrder(sessionData, "",firstDB, lastDB, fatherDB);
 				rollNoDB = resultSet.getString("ROLL_NO") == null ? "1" : (resultSet.getString("ROLL_NO").trim());
 				if (rollNoDB.equalsIgnoreCase("")) {
 					rollNoDB = "1";
@@ -6441,8 +6453,7 @@ public class DBValidate {
 					rollNoDB = "1";
 				}
 				if (dataMap.get(grNoDB) == null) {
-					fetchMarksList.add(grNoDB + "|" + rollNoDB + "||" + lastNameDB + " " + firstNameDB + " "
-							+ fatherNameDB + "|||" + subjectDB);
+					fetchMarksList.add(grNoDB + "|" + rollNoDB + "||" + cm.setNameOrder(sessionData, "", firstNameDB, lastNameDB, fatherNameDB) + "|||" + subjectDB);
 				}
 				dataMap.put(grNoDB, grNoDB);
 				retFlag = true;
@@ -8588,6 +8599,9 @@ public class DBValidate {
 		List catDataList = new ArrayList();
 		String addToQuery = "";
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
+		
+		String nameOrderDisplay = cm.setNameOrder(sessionData,"HS_GENERAL_REGISTER","","","");
+		
 		if (!tillDate.equalsIgnoreCase("")) {
 			addToQuery = "OR DATE_LEAVING >= '" + tillDate + "'";
 		}
@@ -8617,7 +8631,8 @@ public class DBValidate {
 		}
 
 		try {
-			findQuery = "SELECT ROLL_NO,HS_GENERAL_REGISTER.PRESENT_STD,HS_GENERAL_REGISTER.PRESENT_DIV,HS_GENERAL_REGISTER.GR_NO, concat(HS_GENERAL_REGISTER.LAST_NAME,' ',HS_GENERAL_REGISTER.FIRST_NAME,' ',HS_GENERAL_REGISTER.FATHER_NAME) AS NAME, "
+			findQuery = "SELECT ROLL_NO,HS_GENERAL_REGISTER.PRESENT_STD,HS_GENERAL_REGISTER.PRESENT_DIV,HS_GENERAL_REGISTER.GR_NO, "
+					+ "concat("+nameOrderDisplay+") AS NAME, "
 					+ "HS_GENERAL_REGISTER.CATEGORY,HS_GENERAL_REGISTER.GENDER FROM " + sessionData.getDBName() + "."
 					+ "HS_GENERAL_REGISTER LEFT JOIN " + sessionData.getDBName() + "." + "CLASS_ALLOTMENT "
 					+ "ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
@@ -8704,6 +8719,7 @@ public class DBValidate {
 		String addToQuery = "";
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		String schoolName = sessionData.getConfigMap().get("BONAFIDE_HEADER_SCHOOL");
+		String nameOrderDisplay = cm.setNameOrder(sessionData,"HS_GENERAL_REGISTER","","","");
 
 		if (!tillDate.equalsIgnoreCase("")) {
 			addToQuery = "OR DATE_LEAVING >= '" + tillDate + "'";
@@ -8745,7 +8761,7 @@ public class DBValidate {
 
 			findQuery = "SELECT ROLL_NO,"
 					+ "HS_GENERAL_REGISTER.PRESENT_STD,HS_GENERAL_REGISTER.PRESENT_DIV,HS_GENERAL_REGISTER.GR_NO, "
-					+ "concat(HS_GENERAL_REGISTER.LAST_NAME,' ',HS_GENERAL_REGISTER.FIRST_NAME,' ',HS_GENERAL_REGISTER.FATHER_NAME) AS NAME, "
+					+ "concat("+nameOrderDisplay+") AS NAME, "
 					+ "HS_GENERAL_REGISTER.CATEGORY,HS_GENERAL_REGISTER.GENDER,ADHAAR_CARD,BANK,BANK_BRANCH,BANK_ACCOUNT,BANK_IFSC "
 					+ "FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER " + "LEFT JOIN "
 					+ sessionData.getDBName() + "." + "CLASS_ALLOTMENT "
@@ -8967,6 +8983,8 @@ public class DBValidate {
 		if (!tillDate.equalsIgnoreCase("")) {
 			endDate = tillDate.replace("/", "-");
 		}
+		String nameOrderDisplay = cm.setNameOrder(sessionData,"HS_GENERAL_REGISTER","","","");
+		
 		logger.info("std : " + std);
 		logger.info("div : " + div);
 		logger.info("academicYear : " + academicYear);
@@ -9003,7 +9021,7 @@ public class DBValidate {
 					+ "DATE(DATE_LEAVING) AS DATE_LEAVING_O,DATE(DUPLICATE_LC_DATE) AS DUPLICATE_LC_DATE_D,"
 					+ "DATE(TRIPLICATE_LC_DATE) AS TRIPLICATE_LC_DATE_T,ORIGINAL_LC,DUPLICATE_LC,TRIPLICATE_LC,ROLL_NO,"
 					+ "HS_GENERAL_REGISTER.GR_NO,HS_GENERAL_REGISTER.PRESENT_STD,HS_GENERAL_REGISTER.PRESENT_DIV, "
-					+ "concat(HS_GENERAL_REGISTER.LAST_NAME,' ',HS_GENERAL_REGISTER.FIRST_NAME,' ',HS_GENERAL_REGISTER.FATHER_NAME) AS NAME, "
+					+ "concat("+nameOrderDisplay+") AS NAME, "
 					+ "HS_GENERAL_REGISTER.CATEGORY,HS_GENERAL_REGISTER.GENDER FROM " + sessionData.getDBName() + "."
 					+ "HS_GENERAL_REGISTER " + "LEFT JOIN " + sessionData.getDBName() + "." + "CLASS_ALLOTMENT "
 					+ "ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
@@ -9210,6 +9228,7 @@ public class DBValidate {
 		List religionDataList = new ArrayList();
 		String addToQuery = "";
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
+		String nameOrderDisplay = cm.setNameOrder(sessionData,"HS_GENERAL_REGISTER","","","");
 		if (!tillDate.equalsIgnoreCase("")) {
 			addToQuery = "OR DATE_LEAVING >= '" + tillDate + "'";
 		}
@@ -9239,7 +9258,7 @@ public class DBValidate {
 		}
 
 		try {
-			findQuery = "SELECT ROLL_NO,HS_GENERAL_REGISTER.PRESENT_STD,HS_GENERAL_REGISTER.PRESENT_DIV,HS_GENERAL_REGISTER.GR_NO,concat(HS_GENERAL_REGISTER.LAST_NAME,' ',HS_GENERAL_REGISTER.FIRST_NAME,' ',HS_GENERAL_REGISTER.FATHER_NAME) AS NAME, "
+			findQuery = "SELECT ROLL_NO,HS_GENERAL_REGISTER.PRESENT_STD,HS_GENERAL_REGISTER.PRESENT_DIV,HS_GENERAL_REGISTER.GR_NO,concat("+nameOrderDisplay+") AS NAME, "
 					+ "HS_GENERAL_REGISTER.RELIGION,HS_GENERAL_REGISTER.GENDER FROM " + sessionData.getDBName() + "."
 					+ "HS_GENERAL_REGISTER LEFT JOIN " + sessionData.getDBName() + "." + "CLASS_ALLOTMENT "
 					+ "ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
@@ -9568,7 +9587,9 @@ public class DBValidate {
 				lastName = resultSet.getString("LAST_NAME") == null ? "-" : (resultSet.getString("LAST_NAME").trim());
 				fatherName = resultSet.getString("FATHER_NAME") == null ? "-"
 						: (resultSet.getString("FATHER_NAME").trim());
-				name = lastName + " " + firstName + " " + fatherName;
+//				name = lastName + " " + firstName + " " + fatherName;
+				name = cm.setNameOrder(sessionData, "",firstName, lastName, fatherName);
+				
 				mother_name = resultSet.getString("MOTHER_NAME") == null ? "-"
 						: (resultSet.getString("MOTHER_NAME").trim());
 				mother_tongue = resultSet.getString("MOTHER_TONGUE") == null ? "-"
@@ -10088,6 +10109,7 @@ public class DBValidate {
 				+ sessionData.getConfigMap().get("ACADEMIC_YEAR_START_" + sessionData.getDBName());
 		String acadEnd = (Integer.parseInt(academicYear.substring(0, 4)) + 1) + "-"
 				+ sessionData.getConfigMap().get("ACADEMIC_YEAR_END_" + sessionData.getDBName());
+		String nameOrderDisplay = cm.setNameOrder(sessionData,"HS_GENERAL_REGISTER","","","");
 
 		if (!tillDate.equalsIgnoreCase("")) {
 			addToQuery = "OR DATE_LEAVING <= '" + tillDate + "'";
@@ -10212,7 +10234,7 @@ public class DBValidate {
 
 			findQuery = "SELECT CLASS_ALLOTMENT.ROLL_NO,HS_GENERAL_REGISTER.GR_NO,HS_GENERAL_REGISTER.CAST,HS_GENERAL_REGISTER.BIRTH_PLACE,CLASS_ALLOTMENT.PRESENT_STD,CLASS_ALLOTMENT.PRESENT_DIV,HS_GENERAL_REGISTER.CATEGORY,"
 					+ "HS_GENERAL_REGISTER.DOB_WORDS,HS_GENERAL_REGISTER.LAST_SCHOOL,DATE_FORMAT(HS_GENERAL_REGISTER.DATE_ADMITTED,'%d/%m/%Y') AS DATE_ADMITTED,HS_GENERAL_REGISTER.ADHAAR_CARD,"
-					+ "concat(HS_GENERAL_REGISTER.LAST_NAME,' ',HS_GENERAL_REGISTER.FIRST_NAME,' ',HS_GENERAL_REGISTER.FATHER_NAME) AS NAME,"
+					+ "concat("+nameOrderDisplay+") AS NAME,"
 					+ "HS_GENERAL_REGISTER.GENDER,DATE_FORMAT(HS_GENERAL_REGISTER.DOB,'%d/%m/%Y') AS DOB, CLASS_ALLOTMENT.CREATED_DATE "
 					+ "FROM " + sessionData.getDBName() + "." + "CLASS_ALLOTMENT LEFT JOIN " + sessionData.getDBName()
 					+ "." + "HS_GENERAL_REGISTER ON " + "HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO "
@@ -10347,6 +10369,7 @@ public class DBValidate {
 		List generalDataList = new ArrayList();
 		List generalDataExcelList = new ArrayList();
 		String addToQuery = "";
+		String nameOrderDisplay = cm.setNameOrder(sessionData,"HS_GENERAL_REGISTER","","","");
 
 		logger.info("std : " + std);
 		logger.info("div : " + div);
@@ -10370,7 +10393,7 @@ public class DBValidate {
 		try {
 			findQuery = "SELECT CLASS_ALLOTMENT.ROLL_NO,HS_GENERAL_REGISTER.GR_NO,HS_GENERAL_REGISTER.CAST,HS_GENERAL_REGISTER.BIRTH_PLACE,CLASS_ALLOTMENT.PRESENT_STD,CLASS_ALLOTMENT.PRESENT_DIV,HS_GENERAL_REGISTER.CATEGORY,"
 					+ "HS_GENERAL_REGISTER.DOB_WORDS,HS_GENERAL_REGISTER.LAST_SCHOOL,DATE_FORMAT(HS_GENERAL_REGISTER.DATE_ADMITTED,'%d/%m/%Y') AS DATE_ADMITTED,HS_GENERAL_REGISTER.ADHAAR_CARD,"
-					+ "concat(HS_GENERAL_REGISTER.LAST_NAME,' ',HS_GENERAL_REGISTER.FIRST_NAME,' ',HS_GENERAL_REGISTER.FATHER_NAME) AS NAME,"
+					+ "concat("+nameOrderDisplay+") AS NAME,"
 					+ "HS_GENERAL_REGISTER.GENDER,DATE_FORMAT(HS_GENERAL_REGISTER.DOB,'%d/%m/%Y') AS DOB " + "FROM "
 					+ sessionData.getDBName() + "." + "CLASS_ALLOTMENT LEFT JOIN " + sessionData.getDBName() + "."
 					+ "HS_GENERAL_REGISTER ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
@@ -10958,7 +10981,8 @@ public class DBValidate {
 				fatherNameDB = resultSet.getString("FATHER_NAME") == null ? " "
 						: (resultSet.getString("FATHER_NAME").trim());
 				studentResultMap.put("fatherName", fatherNameDB);
-				studentResultMap.put("name", lastNameDB + " " + firstNameDB + " " + fatherNameDB);
+//				studentResultMap.put("name", lastNameDB + " " + firstNameDB + " " + fatherNameDB);
+				studentResultMap.put("name", cm.setNameOrder(sessionData, "", firstNameDB, lastNameDB, fatherNameDB));
 				semPercentDB = resultSet.getString(semester + "_PERCENT") == null ? "NA"
 						: (resultSet.getString(semester + "_PERCENT").trim());
 				studentResultMap.put("semPercent", semPercentDB);
@@ -11565,7 +11589,8 @@ public class DBValidate {
 				studentResultMap.put("lastName", lastNameDB);
 				studentResultMap.put("firstName", firstNameDB);
 				studentResultMap.put("fatherName", fatherNameDB);
-				studentResultMap.put("name", lastNameDB + " " + firstNameDB + " " + fatherNameDB);
+//				studentResultMap.put("name", lastNameDB + " " + firstNameDB + " " + fatherNameDB);
+				studentResultMap.put("name", cm.setNameOrder(sessionData, "", firstNameDB, lastNameDB, fatherNameDB));
 				studentResultMap.put("motherName", motherNameDB);
 				studentResultMap.put("contact1", contact1);
 				studentResultMap.put("contact2", contact2);
@@ -15752,7 +15777,7 @@ public class DBValidate {
 					contact2 = "0";
 				}
 
-				recordsNotInAttendanceList.add(rollNo + "|" + grNo + "|" + lastName + " " + firstName + " " + fatherName
+				recordsNotInAttendanceList.add(rollNo + "|" + grNo + "|" + cm.setNameOrder(sessionData, "",firstName, lastName, fatherName)
 						+ "|" + defaultStatus + "|" + contact1 + "|" + contact2);
 				findFlag = true;
 			}
@@ -16762,7 +16787,7 @@ public class DBValidate {
 		String findQuery = "";
 		String formGrList = "";
 		String genderDb = "";
-		String nameDb = "";
+		String nameDb = "", firstDB = "", lastDB = "", fatherDB = "";
 		String currentStdDb = "";
 		String currentDivDb = "";
 		String admittedStdDb = "";
@@ -16818,8 +16843,13 @@ public class DBValidate {
 			while (resultSet.next()) {
 				grDb = resultSet.getString("GR_NO");
 				grDb = cm.ifNullThenDash("" + grDb);
-				nameDb = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
-						+ resultSet.getString("FATHER_NAME");
+				firstDB = resultSet.getString("FIRST_NAME");
+				lastDB = resultSet.getString("LAST_NAME");
+				fatherDB = resultSet.getString("FATHER_NAME");
+//				nameDb = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
+//						+ resultSet.getString("FATHER_NAME");
+				nameDb = cm.setNameOrder(sessionData, "",firstDB, lastDB, fatherDB);
+				
 				motherNameDb = resultSet.getString("MOTHER_NAME");
 				motherNameDb = cm.ifNullThenDash("" + motherNameDb);
 				religionDb = resultSet.getString("RELIGION");
@@ -16919,7 +16949,7 @@ public class DBValidate {
 		String findQuery = "";
 		String formGrList = "";
 		String genderDb = "";
-		String nameDb = "";
+		String nameDb = "", firstDb = "", lastDb = "", fatherDb = "";
 		String currentStdDb = "";
 		String currentDivDb = "";
 		String academicYear = "";
@@ -16976,8 +17006,12 @@ public class DBValidate {
 			while (resultSet.next()) {
 				LinkedHashMap<String, String> studentDetails = new LinkedHashMap<String, String>();
 				grDb = resultSet.getString("GR_NO");
-				nameDb = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
-						+ resultSet.getString("FATHER_NAME");
+				firstDb = resultSet.getString("FIRST_NAME");
+				lastDb = resultSet.getString("LAST_NAME");
+				fatherDb = resultSet.getString("FATHER_NAME");
+//				nameDb = resultSet.getString("LAST_NAME") + " " + resultSet.getString("FIRST_NAME") + " "
+//						+ resultSet.getString("FATHER_NAME");
+				nameDb = cm.setNameOrder(sessionData, "",firstDb, lastDb, fatherDb);
 				motherNameDb = resultSet.getString("MOTHER_NAME");
 				motherNameDb = cm.ifNullThenDash("" + motherNameDb);
 				religionDb = resultSet.getString("RELIGION");
@@ -17822,7 +17856,7 @@ public class DBValidate {
 				lastName = resultSet.getString("LAST_NAME") == null ? "" : (resultSet.getString("LAST_NAME").trim());
 				fatherName = resultSet.getString("FATHER_NAME") == null ? ""
 						: (resultSet.getString("FATHER_NAME").trim());
-				name = lastName + " " + firstName + " " + fatherName;
+				name = cm.setNameOrder(sessionData, "",firstName, lastName, fatherName);
 				percent = resultSet.getString(percentColumn) == null ? " "
 						: (resultSet.getString(percentColumn).trim());
 				if (percent.contains("(")) {
@@ -17880,6 +17914,7 @@ public class DBValidate {
 				pre2 = "", mca2 = "", act2 = "", pro2 = "", oth2 = "", ora12 = "", wri12 = "", pra1 = "", wri1 = "",
 				examInitial = "", subject = "", sem = "", lis = "", spe = "", ass1 = "", itot = "", lis2 = "",
 				spe2 = "", ass12 = "", itot2 = "";
+		String nameOrderDisplay = cm.setNameOrder(sessionData, "MARKS_ENTRY", "", "", "");
 		boolean findFlag = false;
 		int stdInt = 0, academicStart = 0;
 		LinkedHashMap<String, LinkedHashMap<String, String>> marksDataMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
@@ -17922,7 +17957,7 @@ public class DBValidate {
 					continue;
 				}
 
-				findQuery = "select MARKS_ENTRY.ROLL_NO,MARKS_ENTRY.GR_NO,concat(MARKS_ENTRY.LAST_NAME,' ',MARKS_ENTRY.FIRST_NAME,' ',MARKS_ENTRY.FATHER_NAME) AS NAME,"
+				findQuery = "select MARKS_ENTRY.ROLL_NO,MARKS_ENTRY.GR_NO,concat("+nameOrderDisplay+") AS NAME,"
 						+ "MARKS_ENTRY." + subject + "_FOBT,MARKS_ENTRY." + subject + "_FDOB,MARKS_ENTRY." + subject
 						+ "_FORA,MARKS_ENTRY." + subject + "_FASS,MARKS_ENTRY." + subject + "_FWRI," + "MARKS_ENTRY."
 						+ subject + "_FPRA,MARKS_ENTRY." + subject + "_FPRE,MARKS_ENTRY." + subject
@@ -18852,7 +18887,7 @@ public class DBValidate {
 				lastName = resultSet.getString("LAST_NAME") == null ? "" : (resultSet.getString("LAST_NAME").trim());
 				fatherName = resultSet.getString("FATHER_NAME") == null ? ""
 						: (resultSet.getString("FATHER_NAME").trim());
-				name = lastName + " " + firstName + " " + fatherName;
+				name = cm.setNameOrder(sessionData, "", firstName, lastName, fatherName);
 
 				Set set = subjectMap.entrySet();
 				Iterator n = set.iterator();
@@ -19125,7 +19160,7 @@ public class DBValidate {
 				lastName = resultSet.getString("LAST_NAME") == null ? "" : (resultSet.getString("LAST_NAME").trim());
 				fatherName = resultSet.getString("FATHER_NAME") == null ? ""
 						: (resultSet.getString("FATHER_NAME").trim());
-				name = lastName + " " + firstName + " " + fatherName;
+				name = cm.setNameOrder(sessionData, "", firstName, lastName, fatherName);
 
 				if (rollNo.equalsIgnoreCase(""))
 					rollNo = "-";
@@ -19237,6 +19272,7 @@ public class DBValidate {
 		List generalDataExcelList = new ArrayList();
 		String addToQuery = "";
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
+		String nameOrderDisplay = cm.setNameOrder(sessionData, "MARKS_ENTRY", "", "", "");
 
 		if (exam.equalsIgnoreCase("Semester 1")) {
 			examInitial = "F";
@@ -19267,7 +19303,7 @@ public class DBValidate {
 		try {
 			maxSubMarks = findMaxMarks(sessionData, exam, type, std, subject, academicYear);
 
-			findQuery = "select ROLL_NO,GR_NO,concat(MARKS_ENTRY.LAST_NAME,' ',MARKS_ENTRY.FIRST_NAME,' ',MARKS_ENTRY.FATHER_NAME) AS NAME,"
+			findQuery = "select ROLL_NO,GR_NO,concat("+nameOrderDisplay+") AS NAME,"
 					+ subject + "_" + examInitial + "OBT," + subject + "_" + examInitial + "DOB," + subject + "_"
 					+ examInitial + "ORA," + subject + "_" + examInitial + "ASS," + subject + "_" + examInitial + "WRI,"
 					+ subject + "_" + examInitial + "PRA," + subject + "_" + examInitial + "PRE," + subject + "_"
@@ -19669,7 +19705,7 @@ public class DBValidate {
 						: (resultSetData.getString("FIRST_NAME").trim());
 				fatherName = resultSetData.getString("FATHER_NAME") == null ? "-"
 						: (resultSetData.getString("FATHER_NAME").trim());
-				name = lastName + " " + firstName + " " + fatherName;
+				name = cm.setNameOrder(sessionData, "", firstName, lastName, fatherName);
 				if (rollNo.equalsIgnoreCase(""))
 					rollNo = "-";
 				if (grNoDb.equalsIgnoreCase(""))
@@ -19969,7 +20005,7 @@ public class DBValidate {
 						: (resultSetData.getString("FIRST_NAME").trim());
 				fatherName = resultSetData.getString("FATHER_NAME") == null ? "-"
 						: (resultSetData.getString("FATHER_NAME").trim());
-				name = lastName + " " + firstName + " " + fatherName;
+				name = cm.setNameOrder(sessionData, "", firstName, lastName, fatherName);
 				if (rollNo.equalsIgnoreCase(""))
 					rollNo = "-";
 				if (grNoDb.equalsIgnoreCase(""))
@@ -20957,7 +20993,7 @@ public class DBValidate {
 				lastName = resultSet.getString("LAST_NAME") == null ? " " : (resultSet.getString("LAST_NAME").trim());
 				fatherName = resultSet.getString("FATHER_NAME") == null ? " "
 						: (resultSet.getString("FATHER_NAME").trim());
-				data = data + "|" + lastName + " " + firstName + " " + fatherName;
+				data = data + "|" + cm.setNameOrder(sessionData, "", firstName, lastName, fatherName);
 				dob = resultSet.getString("DOB") == null ? "-" : (resultSet.getString("DOB").trim());
 //				attSem1 = resultSet.getString("ATT_SEM1") == null ? "0/0" : (resultSet.getString("ATT_SEM1").trim());
 //				attSem2 = resultSet.getString("ATT_SEM2") == null ? "0/0" : (resultSet.getString("ATT_SEM2").trim());
@@ -24365,6 +24401,7 @@ public class DBValidate {
 				prevBalanceAmount = 0;
 		List<String> studentReportList = new ArrayList<String>();
 		String[] data = null, dataSplit = null;
+		String nameOrderDisplay = cm.setNameOrder(sessionData,"FEES_DATA_MANDATORY","","","");
 
 		try {
 
@@ -24404,7 +24441,7 @@ public class DBValidate {
 
 			ResultSet resultSetFeesData = null;
 			String query = "SELECT " + columnList
-					+ "FEES_DATA_MANDATORY.ROLL_NO,concat(FEES_DATA_MANDATORY.LAST_NAME,' ',FEES_DATA_MANDATORY.FIRST_NAME,' ',FEES_DATA_MANDATORY.FATHER_NAME) AS NAME "
+					+ "FEES_DATA_MANDATORY.ROLL_NO,concat("+nameOrderDisplay+") AS NAME "
 					+ "FROM " + sessionData.getDBName() + "." + tableName + " WHERE " + tableName + ".ACADEMIC_YEAR='"
 					+ academicYear + "' " + "AND " + tableName + ".SECTION_NM='" + sessionData.getSectionName() + "' "
 					+ whereCondition + " ORDER BY " + tableName + ".STD_1";
@@ -24710,6 +24747,7 @@ public class DBValidate {
 					prevBalanceAmount = 0;
 			List<String> feeCollectionReportList = new ArrayList<String>();
 			String[] data = null, dataSplit = null;
+			String nameOrderDisplay = cm.setNameOrder(sessionData,"FEES_DATA_MANDATORY","","","");
 		
 			try {
 		
@@ -24737,7 +24775,7 @@ public class DBValidate {
 		
 				ResultSet resultSetFeesData = null;
 				String query = "SELECT " + columnList
-						+ "FEES_DATA_MANDATORY.ROLL_NO,concat(FEES_DATA_MANDATORY.LAST_NAME,' ',FEES_DATA_MANDATORY.FIRST_NAME,' ',FEES_DATA_MANDATORY.FATHER_NAME) AS NAME "
+						+ "FEES_DATA_MANDATORY.ROLL_NO,concat("+nameOrderDisplay+") AS NAME "
 						+ "FROM " + sessionData.getDBName() + "." + tableName + " WHERE " + tableName + ".ACADEMIC_YEAR='"
 						+ academicYear + "' " + "AND " + tableName + ".SECTION_NM='" + sessionData.getSectionName() + "' "
 						+ whereCondition + " ORDER BY " + tableName + ".STD_1";
@@ -24983,6 +25021,7 @@ public class DBValidate {
 				prevBalanceAmount = 0;
 		List<String> studentReportList = new ArrayList<String>();
 		String[] data = null, dataSplit = null;
+		String nameOrderDisplay = cm.setNameOrder(sessionData,"CLASS_ALLOTMENT","","","");
 
 		try {
 			integerToAlphabetMap = cm.IntegerToAlphabet();
@@ -25013,7 +25052,7 @@ public class DBValidate {
 
 			ResultSet resultSetFeesData = null;
 			String query = "SELECT " + columnList
-					+ "CLASS_ALLOTMENT.ROLL_NO,concat(CLASS_ALLOTMENT.LAST_NAME,' ',CLASS_ALLOTMENT.FIRST_NAME,' ',CLASS_ALLOTMENT.FATHER_NAME) AS NAME "
+					+ "CLASS_ALLOTMENT.ROLL_NO,concat("+nameOrderDisplay+") AS NAME "
 					+ "FROM " + sessionData.getDBName() + "." + tableName + " LEFT JOIN " + sessionData.getDBName()
 					+ "." + "CLASS_ALLOTMENT ON " + tableName + ".GR_NO=CLASS_ALLOTMENT.GR_NO AND " + tableName
 					+ ".SECTION_NM=CLASS_ALLOTMENT.SECTION_NM  AND " + tableName
@@ -25588,6 +25627,7 @@ public class DBValidate {
 		LinkedHashMap<String, LinkedHashMap<String, String>> multiFeeHeadMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		boolean isOptional = false;
 		String optionalFee = "", optional = "", subFee = "", contact = "", optionFeeStr = "";
+		String nameOrderDisplay = cm.setNameOrder(sessionData,"FEES_DATA_MANDATORY","","","");
 
 		try {
 
@@ -25703,7 +25743,7 @@ public class DBValidate {
 
 			String query = "SELECT " + columnList + unpaidList + feesHeadColumn + totalAmmountList
 					+ "  AS TOTAL_AMOUNT,CONCESSION_AMOUNT,CONCESSION_PERCENT,PENALTY_AMOUNT,FEES_DATA_MANDATORY.GR_NO,"
-					+ "FEES_DATA_MANDATORY.ROLL_NO,concat(FEES_DATA_MANDATORY.LAST_NAME,' ',FEES_DATA_MANDATORY.FIRST_NAME,' ',FEES_DATA_MANDATORY.FATHER_NAME) AS NAME "
+					+ "FEES_DATA_MANDATORY.ROLL_NO,concat("+nameOrderDisplay+") AS NAME "
 					+ "FROM " + sessionData.getDBName() + "." + tableName + " WHERE " + tableName + ".ACADEMIC_YEAR='"
 					+ academicYear + "' " + "AND " + tableName + ".SECTION_NM='" + sessionData.getSectionName() + "' "
 					+ whereCondition + " " + "ORDER BY ROLL_NO * 1";
@@ -25876,6 +25916,8 @@ public class DBValidate {
 		LinkedHashMap<String, LinkedHashMap<String, String>> multiFeeHeadMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		boolean isOptional = false, isData = false;
 		String optionalFee = "", optional = "", subFee = "", contact = "";
+		String nameOrderDisplay = cm.setNameOrder(sessionData,"FEES_DATA_MANDATORY","","","");
+		
 
 		try {
 			freePayingData = getFreeStudentData(sessionData, academicYear, std, div, sessionData.getSectionName());
@@ -25990,7 +26032,7 @@ public class DBValidate {
 					+ "SUM(IF(CONCESSION_AMOUNT>=0, CONCESSION_AMOUNT, 0)) AS CONCESSION_AMOUNT,"
 					+ "SUM(IF(CONCESSION_PERCENT>=0, CONCESSION_PERCENT, 0)) AS CONCESSION_PERCENT,"
 					+ "SUM(IF(PENALTY_AMOUNT>=0, PENALTY_AMOUNT, 0)) AS PENALTY_AMOUNT,FEES_DATA_MANDATORY.GR_NO,"
-					+ "FEES_DATA_MANDATORY.ROLL_NO,concat(FEES_DATA_MANDATORY.LAST_NAME,' ',FEES_DATA_MANDATORY.FIRST_NAME,' ',FEES_DATA_MANDATORY.FATHER_NAME) AS NAME "
+					+ "FEES_DATA_MANDATORY.ROLL_NO,concat("+nameOrderDisplay+") AS NAME "
 					+ "FROM " + sessionData.getDBName() + "." + tableName + " WHERE " + tableName + ".ACADEMIC_YEAR='"
 					+ academicYear + "' " + "AND " + tableName + ".SECTION_NM='" + sessionData.getSectionName() + "' "
 					+ whereCondition + " " + "GROUP BY GR_NO,STD_1,DIV_1,ROLL_NO,NAME ORDER BY STD_1,DIV_1,GR_NO,ROLL_NO * 1";
@@ -26119,6 +26161,45 @@ public class DBValidate {
 			return studentReportList;
 		}
 		return studentReportList;
+	}
+	
+	//////Get list of academic years for defaulter student
+	public String getDefaulterYearList(SessionData sessionData,
+			String academic, String section, String category, String grStr) throws Exception {
+		
+		LinkedHashMap<String, LinkedHashMap<String, String>> feesHeadMapPrevYear = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+		List<String> defaulterList = new ArrayList<String>();
+		String previousAcademic = "", stdStr = "", divStr = "", academicYearStr = "";
+		
+		try {
+			
+			previousAcademic = cm.getPreviousYearFromSelected(sessionData,academic);
+			////////
+			String stdQuery = "SELECT GR_NO,PRESENT_STD,PRESENT_DIV,ROLL_NO FROM " + sessionData.getDBName() + "." + "CLASS_ALLOTMENT "
+					+ "WHERE ACADEMIC_YEAR='" + previousAcademic + "' " + "AND SECTION_NM='" + sessionData.getSectionName() + "' AND GR_NO="+grStr+"";
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(stdQuery);
+
+			while (resultSet.next()) {
+				stdStr = resultSet.getString("PRESENT_STD") == null ? "" : (resultSet.getString("PRESENT_STD").trim());
+				divStr = resultSet.getString("PRESENT_DIV") == null ? "" : (resultSet.getString("PRESENT_DIV").trim());
+				break;
+			}
+			////////
+	    	feesHeadMapPrevYear = getFeesHeadData(sessionData, previousAcademic, stdStr, section, category);
+	    	
+			defaulterList.addAll(getDefaulterFeeReport(sessionData, previousAcademic, "", "", "", 
+					feesHeadMapPrevYear, "DefaulterCheck", grStr));
+			
+			if(!defaulterList.isEmpty()) {
+				academicYearStr = previousAcademic + "_" + stdStr+ "_" +divStr;
+			}
+			
+		} catch (Exception e1) {
+			cm.logException(e1);
+		}
+		
+		return academicYearStr;
 	}
 
 	/////////// getConsolidateFeeReport////////////////////////////////////////

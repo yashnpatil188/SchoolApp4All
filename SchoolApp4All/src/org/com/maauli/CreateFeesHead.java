@@ -609,7 +609,7 @@ public class CreateFeesHead extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
 				LinkedHashMap retStudentMap = new LinkedHashMap();
-				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", retStudentMap, section, "", "", "", "", false, "", "", false);
+				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", retStudentMap, section, "", "", "", "", false, "", "", "", false);
 			}
 		});
 		

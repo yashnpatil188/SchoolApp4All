@@ -242,8 +242,10 @@ public class ResultGradePDF {
 				paragraph07b.setSpacingBefore(-16);
 				// paragraph07b.setSpacingAfter(-85);
 				//
+//				Chunk chunk07a = new Chunk(" "+
+//						studentData.get("lastName")+" "+studentData.get("firstName")+" "+studentData.get("fatherName")+"                          ");
 				Chunk chunk07a = new Chunk(" "+
-						studentData.get("lastName")+" "+studentData.get("firstName")+" "+studentData.get("fatherName")+"                          ");
+						commonLc.setNameOrder(sessionData,"", studentData.get("firstName")+"", studentData.get("lastName")+"", studentData.get("fatherName")+"")+"                          ");
 				Font font07a = FontFactory.getFont("TIMES_ROMAN");
 				font07a.setStyle(Font.BOLD);
 				if(!suid.equalsIgnoreCase("NA") && !suid.equalsIgnoreCase("")) {

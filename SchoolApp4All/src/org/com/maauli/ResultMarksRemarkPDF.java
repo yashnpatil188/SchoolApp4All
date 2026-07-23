@@ -295,9 +295,11 @@ public class ResultMarksRemarkPDF {
 				      cell7.setPaddingBottom(5.0f);
 				      table.addCell(cell7);
 			      }
-			      
+//			      
+//			      PdfPCell cell8 = new PdfPCell (new Paragraph (" "+
+//							studentData.get("lastName")+" "+studentData.get("firstName")+" "+studentData.get("fatherName")+"                          ", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
 			      PdfPCell cell8 = new PdfPCell (new Paragraph (" "+
-							studentData.get("lastName")+" "+studentData.get("firstName")+" "+studentData.get("fatherName")+"                          ", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+							studentData.get("name")+"                          ", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
 			      cell8.setColspan (6 + filterTableCount);
 			      cell8.setHorizontalAlignment (Element.ALIGN_CENTER);
 			      cell8.setPaddingBottom(5.0f);

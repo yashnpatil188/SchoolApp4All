@@ -1397,6 +1397,53 @@ public class Common {
 			return "";
 		}
 	}
+	
+	// ////////set name order//////////////////
+	public String setNameOrder(SessionData sessionData, String tableName, String firstName, String lastName, String middleName) {
+
+		try {			
+			String retNameOrderStr = "";
+			
+			// Splits by comma and handles optional surrounding whitespace
+	        String[] nameStr = sessionData.getConfigMap().get("NAME_ORDER").split("\\s*,\\s*");
+	        
+	        // Print the elements
+	        for (String name : nameStr) {
+	            //HS_GENERAL_REGISTER.LAST_NAME,' ',HS_GENERAL_REGISTER.FIRST_NAME,' ',HS_GENERAL_REGISTER.FATHER_NAME
+	        	//MARKS_ENTRY  / HS_GENERAL_REGISTER
+	            //First,Middle,Last
+	        	// cm.setNameOrder(sessionData, "MARKS_ENTRY", "", "", "");
+	        	//nameDB = cm.setNameOrder(sessionData, "", firstDB, lastDB, fatherDB);
+	        	//studentResultMap.put("name", cm.setNameOrder(sessionData, "", firstNameDB, lastNameDB, fatherNameDB));
+	        	if(firstName.equalsIgnoreCase("")) {
+	        		if(name.equalsIgnoreCase("First")) {
+		            	retNameOrderStr = retNameOrderStr + tableName+".FIRST_NAME,' ',";
+		            } else if(name.equalsIgnoreCase("Middle")) {
+		            	retNameOrderStr = retNameOrderStr + tableName+".FATHER_NAME,' ',";
+		            } else if(name.equalsIgnoreCase("Last")) {
+		            	retNameOrderStr = retNameOrderStr + tableName+".LAST_NAME,' ',";
+		            }
+	        	}
+	        	else {
+	        		if(name.equalsIgnoreCase("First")) {
+		            	retNameOrderStr = retNameOrderStr + firstName + " ";
+		            } else if(name.equalsIgnoreCase("Middle")) {
+		            	retNameOrderStr = retNameOrderStr + middleName + " ";
+		            } else if(name.equalsIgnoreCase("Last")) {
+		            	retNameOrderStr = retNameOrderStr + lastName + " ";
+		            }
+	        	}
+	        }
+	        if(firstName.equalsIgnoreCase("")) {
+	        	retNameOrderStr = retNameOrderStr.substring(0, retNameOrderStr.length()-5);
+	        }
+	        
+			return retNameOrderStr.trim();
+		} catch (Exception e) {
+			logException(e);
+			return "";
+		}
+	}
 
 	// ////////timeInMillis//////////////////
 	public String timeInMillis() {
@@ -1736,6 +1783,22 @@ public class Common {
 		try {
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.YEAR, 1);
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			return getAcademicYear(sessionData,sdf.format(cal.getTime()));
+		} catch (Exception e) {
+			logException(e);
+			return "";
+		}
+	}
+	
+	// ////////Get Next academic year from passed param/////////////////
+	public String getNextYearFromPassedAcademicYear(SessionData sessionData, String currAcademicYear) {
+
+		try {
+			String currentYear = getCurrentYear();
+			int yearDiff = Integer.parseInt(currentYear) - Integer.parseInt(currAcademicYear.substring(0,4));
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.YEAR, yearDiff-1);
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			return getAcademicYear(sessionData,sdf.format(cal.getTime()));
 		} catch (Exception e) {
@@ -3542,9 +3605,10 @@ public class Common {
 				LinkedHashMap studentData = new LinkedHashMap();
 				studentData = (LinkedHashMap) me.getValue();
 
+//				studentDetails = studentData.get("birthDate") + "|" + grNo + "|" + studentData.get("rollNo") + "|"
+//						+ studentData.get("lastName") + " " + studentData.get("firstName") + " " + studentData.get("fatherName");
 				studentDetails = studentData.get("birthDate") + "|" + grNo + "|" + studentData.get("rollNo") + "|"
-						+ studentData.get("lastName") + " " + studentData.get("firstName") + " "
-						+ studentData.get("fatherName");
+						+ studentData.get("name");
 
 				for (String item : subjectTitleList) {
 					if (!item.trim().equalsIgnoreCase("")) {
@@ -3693,9 +3757,14 @@ public class Common {
 				LinkedHashMap studentData = new LinkedHashMap();
 				studentData = (LinkedHashMap) me.getValue();
 
+//				studentDetails = studentData.get("birthDate") + "|" + grNo + "|" + studentData.get("rollNo") + "|"
+//						+ studentData.get("lastName") + " " + studentData.get("firstName") + " "
+//						+ studentData.get("fatherName");
+				
 				studentDetails = studentData.get("birthDate") + "|" + grNo + "|" + studentData.get("rollNo") + "|"
-						+ studentData.get("lastName") + " " + studentData.get("firstName") + " "
-						+ studentData.get("fatherName");
+						+ setNameOrder(sessionData, "", studentData.get("firstName")+"", studentData.get("lastName")+"", 
+								studentData.get("fatherName")+"");
+				
 
 				for (String item : subjectTitleList) {
 					String maxMarks = maxMarksMapOrder.get(item);

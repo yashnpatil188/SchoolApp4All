@@ -566,7 +566,7 @@ public class CreateSchoolHead extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
 				LinkedHashMap retStudentMap = new LinkedHashMap();
-				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", retStudentMap, sessionData.getSectionName(), "", "", "", "", false, "", "", false);
+				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", retStudentMap, sessionData.getSectionName(), "", "", "", "", false, "", "", "", false);
 			}
 		});
 		

@@ -164,13 +164,13 @@ public class SearchFeeStudent extends JFrame {
     private static int scrollHeight = 0;
     private static int startMonth = 0;
     private static String oldAcademicClass = "";
-    private static String oldStdClass = "";
+    private static String oldStdClass = "", oldDivClass = "";
     private static boolean headerRadioClass = false;
     
     public SearchFeeStudent(SessionData sessionData1, String retGr_no, String retStd, String retDiv, String retLastName,
 			String retFirstName, String retFatherName, LinkedHashMap<String,LinkedHashMap<String, String>> retStudentMap, String sec, 
 			String academicYear, String optional, String frequency, String subFrequency, boolean isAllSelected, 
-			String oldAcademic, String oldStd, boolean headerRadio) {
+			String oldAcademic, String oldStd, String oldDiv, boolean headerRadio) {
 
     	System.gc();
     	sessionData = sessionData1;
@@ -178,6 +178,7 @@ public class SearchFeeStudent extends JFrame {
     	oldAcademicClass = oldAcademic;
     	headerRadioClass = headerRadio;
     	oldStdClass = oldStd;
+    	oldDivClass = oldDiv;
     	isAllSelectedClass = isAllSelected;
     	studentFeeDetailsMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
     	selectedStudentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
@@ -1206,7 +1207,7 @@ public class SearchFeeStudent extends JFrame {
 				String firstName = firstName_text.getText();
 				String fatherName = fatherName_text.getText();
 				String std = (String) std_combo.getSelectedItem();
-				String oldStd = "";
+				String oldStd = "", oldDiv = "";
 				if(std.equalsIgnoreCase("Select") || !std_radio.isSelected()){
 					std = "";
 				}
@@ -1229,12 +1230,13 @@ public class SearchFeeStudent extends JFrame {
 					oldAcademic = academic;
 					academic = commonObj.getNextYear(sessionData, academic);
 					oldStd = std;
+					oldDiv = div;
 					std = commonObj.IntegerToRoman("a"+(commonObj.RomanToInteger(oldStd)+1));
 				}
 
 				submitAction(sessionData, gr_no, lastName, firstName, 
 			    		fatherName, std, div, academic, optional,
-			    		grRadio, nameRadio, stdRadio, frequency, subFrequency, oldAcademic, oldStd, headerRadioSel);
+			    		grRadio, nameRadio, stdRadio, frequency, subFrequency, oldAcademic, oldStd, oldDiv, headerRadioSel);
 			}
 
 		});
@@ -1260,17 +1262,18 @@ public class SearchFeeStudent extends JFrame {
 				boolean headerRadioSel = header_radio.isSelected();
 				
 				String oldAcademic = "";
-				String oldStd = "";
+				String oldStd = "", oldDiv = "";
 				if(admissionSel){
 					oldAcademic = academic;
 					academic = commonObj.getNextYear(sessionData, academic);
 					oldStd = std;
+					oldDiv = div;
 					std = commonObj.IntegerToRoman("a"+(commonObj.RomanToInteger(oldStd)+1));
 				}
 				
 				submitAction(sessionData, gr_no, lastName, firstName, 
 			    		fatherName, std, div, academic, optional,
-			    		grRadio, nameRadio, stdRadio, frequency, subFrequency, oldAcademic, oldStd, headerRadioSel);
+			    		grRadio, nameRadio, stdRadio, frequency, subFrequency, oldAcademic, oldStd, oldDiv, headerRadioSel);
               }
             }
         });
@@ -1379,7 +1382,7 @@ public class SearchFeeStudent extends JFrame {
 								
 								frame.setVisible(false);
 								new SearchFeeStudentNew(sessionData, "", stdClass, divClass, "", "", "", searchStudentMap, section, academicYearClass, 
-										optionalClass, frequencyClass, subFrequencyClass, isAllSelectedClass, oldAcademicClass, oldStdClass, headerRadioClass);
+										optionalClass, frequencyClass, subFrequencyClass, isAllSelectedClass, oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 							}
 							else{
 								JOptionPane.showMessageDialog(null, "Payment updation failed.");
@@ -1457,12 +1460,12 @@ public class SearchFeeStudent extends JFrame {
 				if(radioAllSel){
 					frame.setVisible(false);
 					new SearchFeeStudentNew(sessionData, "", stdClass, divClass, "", "", "", searchStudentMap, section, academicYearClass, 
-							optionalClass, frequencyClass, subFrequencyClass, radioAllSel, oldAcademicClass, oldStdClass, headerRadioClass);
+							optionalClass, frequencyClass, subFrequencyClass, radioAllSel, oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 				}
 				else{
 					frame.setVisible(false);
 					new SearchFeeStudentNew(sessionData, "", stdClass, divClass, "", "", "", searchStudentMap, section, academicYearClass, 
-							optionalClass, frequencyClass, subFrequencyClass, radioAllSel, oldAcademicClass, oldStdClass, headerRadioClass);
+							optionalClass, frequencyClass, subFrequencyClass, radioAllSel, oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 				}
 			}
 		});
@@ -2173,7 +2176,7 @@ public class SearchFeeStudent extends JFrame {
     private static void submitAction(SessionData sessionData, String gr_no, String lastName, String firstName, 
     		String fatherName, String std, String div, String academic, String optional,
     		boolean grRadio, boolean name_radio, boolean std_radio, String frequency, 
-    		String subFrequency, String oldAcademic, String oldStd, boolean headerRadioSel){
+    		String subFrequency, String oldAcademic, String oldStd, String oldDiv, boolean headerRadioSel){
     	
     	boolean validateFields = true;
     	String mandatory = "mandatory";
@@ -2249,12 +2252,12 @@ public class SearchFeeStudent extends JFrame {
 				if (listSize > 0) {
 					frame.setVisible(false);
 					new SearchFeeStudentNew(sessionData, gr_no, std, div, lastName, firstName, fatherName, studentMap, section, academic, optional, 
-							frequency, subFrequency, false, oldAcademic, oldStd, headerRadioSel);
+							frequency, subFrequency, false, oldAcademic, oldStd, oldDiv, headerRadioSel);
 				} else {
 					JOptionPane.showMessageDialog(null, "No data found");
 						frame.setVisible(false);
 						new SearchFeeStudentNew(sessionData, gr_no, std, div, lastName, firstName, fatherName, studentMap, section, academic, optional, 
-								frequency, subFrequency, false, oldAcademic, oldStd, headerRadioSel);
+								frequency, subFrequency, false, oldAcademic, oldStd, oldDiv, headerRadioSel);
 
 				}
 
@@ -2263,7 +2266,7 @@ public class SearchFeeStudent extends JFrame {
 				JOptionPane.showMessageDialog(null, "Try Update Name in Fees Data on Help page");
 				frame.setVisible(false);
 				LinkedHashMap<String,LinkedHashMap<String, String>> studentMapEmpty =  new LinkedHashMap<>();
-				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", studentMapEmpty, section, "", "", "", "", false, oldAcademic, oldStd, headerRadioClass);
+				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", studentMapEmpty, section, "", "", "", "", false, oldAcademic, oldStd, oldDiv, headerRadioClass);
 			}
 		}
 	}
@@ -2305,7 +2308,7 @@ public class SearchFeeStudent extends JFrame {
 						frame.setVisible(false);
 						new FeesView(sessionData, grNoSel, stdSel, divSel, nameSel, rollNoSel, searchStudentMap, section, academicYearClass, 
 								optionalClass, feesHeadMap, maxFrequency, frequencyClass, subFrequencyClass, contact1, contact2, 
-								oldAcademicClass, oldStdClass, headerRadioClass);
+								oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 					}
 					else{
 						JOptionPane.showMessageDialog(null, "Please unselect checkbox Admission for next year and submit again.");
@@ -2314,7 +2317,7 @@ public class SearchFeeStudent extends JFrame {
 				else{
 					frame.setVisible(false);
 					new FeesView(sessionData, grNoSel, stdSel, divSel, nameSel, rollNoSel, searchStudentMap, section, academicYearClass, 
-							optionalClass, feesHeadMap, maxFrequency, frequencyClass, subFrequencyClass, contact1, contact2, "", "", headerRadioClass);
+							optionalClass, feesHeadMap, maxFrequency, frequencyClass, subFrequencyClass, contact1, contact2, "", "", "", headerRadioClass);
 				}
 			}
 			else{

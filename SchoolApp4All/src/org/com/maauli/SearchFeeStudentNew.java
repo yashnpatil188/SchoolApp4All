@@ -169,7 +169,7 @@ public class SearchFeeStudentNew extends JFrame {
     private static int scrollHeight = 0;
     private static int startMonth = 0;
     private static String oldAcademicClass = "";
-    private static String oldStdClass = "";
+    private static String oldStdClass = "", oldDivClass = "";
     private static boolean headerRadioClass = false;
     private static String feeCategory = "";
     private static String receiptShortName = "";
@@ -177,7 +177,7 @@ public class SearchFeeStudentNew extends JFrame {
     public SearchFeeStudentNew(SessionData sessionData1, String retGr_no, String retStd, String retDiv, String retLastName,
 			String retFirstName, String retFatherName, LinkedHashMap<String,LinkedHashMap<String, String>> retStudentMap, String sec, 
 			String academicYear, String category, String frequency, String subFrequency, boolean isAllSelected, 
-			String oldAcademic, String oldStd, boolean headerRadio) {
+			String oldAcademic, String oldStd, String oldDiv,  boolean headerRadio) {
 
     	System.gc();
     	sessionData = sessionData1;
@@ -186,6 +186,7 @@ public class SearchFeeStudentNew extends JFrame {
     	oldAcademicClass = oldAcademic;
     	headerRadioClass = headerRadio;
     	oldStdClass = oldStd;
+    	oldDivClass = oldDiv;
     	isAllSelectedClass = isAllSelected;
     	studentFeeDetailsMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
     	selectedStudentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
@@ -662,7 +663,7 @@ public class SearchFeeStudentNew extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
 				LinkedHashMap retStudentMap = new LinkedHashMap();
-				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", retStudentMap, section, "", "", "", "", false, "", "", false);
+				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", retStudentMap, section, "", "", "", "", false, "", "", "", false);
 			}
 		});
 		
@@ -974,7 +975,7 @@ public class SearchFeeStudentNew extends JFrame {
  		
  		final JCheckBox admissionJCheckBox  = new JCheckBox();
  		admissionJCheckBox.setBorder(null);
- 		if(!oldAcademicClass.equalsIgnoreCase("")){
+ 		if(!oldAcademicClass.equalsIgnoreCase("") && !oldAcademicClass.equalsIgnoreCase(academicYearClass)){
  			admissionJCheckBox.setSelected(true);
 		}
  		admissionJCheckBox.setBounds(690, bottomBandItemHeight+21, 13, 13);
@@ -1216,7 +1217,7 @@ public class SearchFeeStudentNew extends JFrame {
 				String firstName = firstName_text.getText();
 				String fatherName = fatherName_text.getText();
 				String std = (String) std_combo.getSelectedItem();
-				String oldStd = "";
+				String oldStd = "", oldDiv = "";
 				if(std.equalsIgnoreCase("Select") || !std_radio.isSelected()){
 					std = "";
 				}
@@ -1237,14 +1238,15 @@ public class SearchFeeStudentNew extends JFrame {
 				String oldAcademic = "";
 				if(admissionSel){
 					oldAcademic = academic;
-					academic = commonObj.getNextYear(sessionData, academic);
+					academic = commonObj.getNextYearFromPassedAcademicYear(sessionData, academic);
 					oldStd = std;
+					oldDiv = div;
 					std = commonObj.IntegerToRoman("a"+(commonObj.RomanToInteger(oldStd)+1));
 				}
 
 				submitAction(sessionData, gr_no, lastName, firstName, 
 			    		fatherName, std, div, academic, category,
-			    		grRadio, nameRadio, stdRadio, frequency, subFrequency, oldAcademic, oldStd, headerRadioSel);
+			    		grRadio, nameRadio, stdRadio, frequency, subFrequency, oldAcademic, oldStd, oldDiv, headerRadioSel);
 			}
 
 		});
@@ -1271,17 +1273,18 @@ public class SearchFeeStudentNew extends JFrame {
 				boolean headerRadioSel = header_radio.isSelected();
 				
 				String oldAcademic = "";
-				String oldStd = "";
+				String oldStd = "", oldDiv = "";
 				if(admissionSel){
 					oldAcademic = academic;
 					academic = commonObj.getNextYear(sessionData, academic);
 					oldStd = std;
+					oldDiv = div;
 					std = commonObj.IntegerToRoman("a"+(commonObj.RomanToInteger(oldStd)+1));
 				}
 				
 				submitAction(sessionData, gr_no, lastName, firstName, 
 			    		fatherName, std, div, academic, category,
-			    		grRadio, nameRadio, stdRadio, frequency, subFrequency, oldAcademic, oldStd, headerRadioSel);
+			    		grRadio, nameRadio, stdRadio, frequency, subFrequency, oldAcademic, oldStd, oldDiv, headerRadioSel);
               }
             }
         });
@@ -1394,7 +1397,7 @@ public class SearchFeeStudentNew extends JFrame {
 								
 								frame.setVisible(false);
 								new SearchFeeStudentNew(sessionData, "", stdClass, divClass, "", "", "", searchStudentMap, section, academicYearClass, 
-										categoryClass, frequencyClass, subFrequencyClass, isAllSelectedClass, oldAcademicClass, oldStdClass, headerRadioClass);
+										categoryClass, frequencyClass, subFrequencyClass, isAllSelectedClass, oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 							}
 							else{
 								JOptionPane.showMessageDialog(null, "Payment updation failed.");
@@ -1472,12 +1475,12 @@ public class SearchFeeStudentNew extends JFrame {
 				if(radioAllSel){
 					frame.setVisible(false);
 					new SearchFeeStudentNew(sessionData, "", stdClass, divClass, "", "", "", searchStudentMap, section, academicYearClass, 
-							categoryClass, frequencyClass, subFrequencyClass, radioAllSel, oldAcademicClass, oldStdClass, headerRadioClass);
+							categoryClass, frequencyClass, subFrequencyClass, radioAllSel, oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 				}
 				else{
 					frame.setVisible(false);
 					new SearchFeeStudentNew(sessionData, "", stdClass, divClass, "", "", "", searchStudentMap, section, academicYearClass, 
-							categoryClass, frequencyClass, subFrequencyClass, radioAllSel, oldAcademicClass, oldStdClass, headerRadioClass);
+							categoryClass, frequencyClass, subFrequencyClass, radioAllSel, oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 				}
 			}
 		});
@@ -1760,8 +1763,37 @@ public class SearchFeeStudentNew extends JFrame {
 						String divSel = div_labels[m].getText();
 						String contact1Sel = contactNo1_labels[m].getText();
 						String contact2Sel = contactNo2_labels[m].getText();
+						
+						String defaulterYear = "", std = stdSel, div = divSel, academicYear = academicYearClass, defaulterYearStr = "";
 
-						payAction(rollNoSel, grNoSel, nameSel, stdSel, divSel, contact1Sel, contact2Sel, oldAcademicClass, oldStdClass, false);
+						try {
+							JFrame f = new JFrame("Fee defaulter check in progress for GR "+grNoSel+". Please Don't Close");
+							f.setBounds(screenWidth/2 - 270, screenHeight/2, 90, 50);
+						    f.setSize(600, 0);
+						    f.setResizable(false);
+						    f.setVisible(true);
+						    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						    
+							for(int i = 0; i < 10; i++) {
+								defaulterYear = dbValidate.getDefaulterYearList(sessionData, academicYear, section, categoryClass, grNoSel);
+								if(defaulterYear.equalsIgnoreCase("")) {
+									break;
+								}
+								academicYear = defaulterYear.substring(0, 7);
+								std = defaulterYear.substring(8, defaulterYear.lastIndexOf("_"));
+								div = defaulterYear.substring(defaulterYear.lastIndexOf("_")+1);
+								defaulterYearStr = defaulterYearStr + academicYear +",";
+							}
+							defaulterYearStr = defaulterYearStr.substring(0, defaulterYearStr.length()-1);
+							f.setVisible(false);
+							
+							JOptionPane.showMessageDialog(null, "Fee defaulter in academic year: "+defaulterYearStr);
+						} catch (Exception e1) {
+							commonObj.logException(e1);
+						}
+
+						payAction(rollNoSel, grNoSel, nameSel, std, div, contact1Sel, contact2Sel, academicYear, stdSel, divSel, defaulterList.contains(grNoSel));
+//						payAction(rollNoSel, grNoSel, nameSel, stdSel, divSel, contact1Sel, contact2Sel, oldAcademicClass, oldStdClass, oldDivClass, defaulterList.contains(grNoSel));
 					}
 				});
 	            
@@ -1775,8 +1807,34 @@ public class SearchFeeStudentNew extends JFrame {
 						String divSel = div_labels[m].getText();
 						String contact1Sel = contactNo1_labels[m].getText();
 						String contact2Sel = contactNo2_labels[m].getText();
+						String defaulterYear = "", std = stdSel, div = divSel, academicYear = academicYearClass, defaulterYearStr = "";
 
-						payAction(rollNoSel, grNoSel, nameSel, stdSel, divSel, contact1Sel, contact2Sel, oldAcademicClass, oldStdClass, true);
+						try {
+							JFrame f = new JFrame("Fee defaulter check in progress for GR "+grNoSel+". Please Don't Close");
+							f.setBounds(screenWidth/2 - 270, screenHeight/2, 90, 50);
+						    f.setSize(600, 0);
+						    f.setResizable(false);
+						    f.setVisible(true);
+						    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						    
+							for(int i = 0; i < 10; i++) {
+								defaulterYear = dbValidate.getDefaulterYearList(sessionData, academicYear, section, categoryClass, grNoSel);
+								if(defaulterYear.equalsIgnoreCase("")) {
+									break;
+								}
+								academicYear = defaulterYear.substring(0, 7);
+								std = defaulterYear.substring(8, defaulterYear.lastIndexOf("_"));
+								div = defaulterYear.substring(defaulterYear.lastIndexOf("_")+1);
+								defaulterYearStr = defaulterYearStr + academicYear +",";
+							}
+							defaulterYearStr = defaulterYearStr.substring(0, defaulterYearStr.length()-1);
+							f.setVisible(false);
+							
+							JOptionPane.showMessageDialog(null, "Fee defaulter in academic year: "+defaulterYearStr);
+						} catch (Exception e1) {
+							commonObj.logException(e1);
+						}
+						payAction(rollNoSel, grNoSel, nameSel, std, div, contact1Sel, contact2Sel, academicYear, stdSel, divSel, true);
 					}
 				});
 	            
@@ -2031,7 +2089,7 @@ public class SearchFeeStudentNew extends JFrame {
 						String contact1Sel = contactNo1_labels[m].getText();
 						String contact2Sel = contactNo2_labels[m].getText();
 
-						payAction(rollNoSel, grNoSel, nameSel, stdSel, divSel, contact1Sel, contact2Sel, oldAcademicClass, oldStdClass, false);
+						payAction(rollNoSel, grNoSel, nameSel, stdSel, divSel, contact1Sel, contact2Sel, oldAcademicClass, oldStdClass, oldDivClass, defaulterList.contains(grNoSel));
 	                  }
 	                }
 	            });
@@ -2274,7 +2332,7 @@ public class SearchFeeStudentNew extends JFrame {
     private static void submitAction(SessionData sessionData, String gr_no, String lastName, String firstName, 
     		String fatherName, String std, String div, String academic, String category,
     		boolean grRadio, boolean name_radio, boolean std_radio, String frequency, 
-    		String subFrequency, String oldAcademic, String oldStd, boolean headerRadioSel){
+    		String subFrequency, String oldAcademic, String oldStd, String oldDiv, boolean headerRadioSel){
     	
     	boolean validateFields = true;
     	String mandatory = "mandatory";
@@ -2347,7 +2405,7 @@ public class SearchFeeStudentNew extends JFrame {
 				if (listSize > 0) {
 					frame.setVisible(false);
 					new SearchFeeStudentNew(sessionData, gr_no, std, div, lastName, firstName, fatherName, studentMap, section, academic, category, 
-							frequency, subFrequency, false, oldAcademic, oldStd, headerRadioSel);
+							frequency, subFrequency, false, oldAcademic, oldStd, oldDiv, headerRadioSel);
 				} else {
 					// dataPanel.repaint(0, 0, 500, 5);
 					JOptionPane.showMessageDialog(null, "No data found");
@@ -2368,7 +2426,7 @@ public class SearchFeeStudentNew extends JFrame {
 					}
 					frame.setVisible(false);
 					new SearchFeeStudentNew(sessionData, gr_no, std, div, lastName, firstName, fatherName, studentMap, section, academic, category, 
-						frequency, subFrequency, false, oldAcademic, oldStd, headerRadioSel);
+						frequency, subFrequency, false, oldAcademic, oldStd, oldDiv, headerRadioSel);
 
 				}
 
@@ -2377,20 +2435,22 @@ public class SearchFeeStudentNew extends JFrame {
 				JOptionPane.showMessageDialog(null, "Try Update Name in Fees Data on Help Page");
 				frame.setVisible(false);
 				LinkedHashMap<String,LinkedHashMap<String, String>> studentMapEmpty =  new LinkedHashMap<>();
-				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", studentMapEmpty, section, "", "", "", "", false, oldAcademic, oldStd, headerRadioClass);
+				new SearchFeeStudentNew(sessionData, "", "", "", "", "", "", studentMapEmpty, section, "", "", "", "", false, oldAcademic, oldStd, oldDiv, headerRadioClass);
 			}
 		}
 	}
     
     private static void payAction(String rollNoSel, String grNoSel, String nameSel, String stdSel, String divSel, 
-    		String contact1, String contact2, String oldAcademic, String oldStd, boolean isDefaulter){
+    		String contact1, String contact2, String oldAcademic, String oldStd, String oldDiv, boolean isDefaulter){
     	try {
     		int reply = 0;
-    		String academicYearPay = academicYearClass;
+    		String academicYearPay = oldAcademic;
+    		oldAcademicClass = academicYearClass;
 			LinkedHashMap<String, LinkedHashMap<String, String>> feesHeadMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 			
 			if(isDefaulter) {
-				academicYearPay = commonObj.getPreviousYearFromSelected(sessionData, academicYearPay);
+//				academicYearPay = commonObj.getPreviousYearFromSelected(sessionData, academicYearPay);
+				JOptionPane.showMessageDialog(null, nameSel+" is a fee defaulter. Click OK to pay "+oldAcademic+" fee.\n Click Defaulter to pay fee for previous years.");
 			}
 			
 			if(dbValidate.connectDatabase(sessionData)){
@@ -2424,7 +2484,7 @@ public class SearchFeeStudentNew extends JFrame {
 						frame.setVisible(false);
 						new FeesView(sessionData, grNoSel, stdSel, divSel, nameSel, rollNoSel, searchStudentMap, section, academicYearPay, 
 								categoryClass, feesHeadMap, maxFrequency, frequencyClass, subFrequencyClass, contact1, contact2, 
-								oldAcademicClass, oldStdClass, headerRadioClass);
+								oldAcademicClass, oldStdClass, oldDivClass, headerRadioClass);
 					}
 					else{
 						JOptionPane.showMessageDialog(null, "Please unselect checkbox Admission for next year and submit again.");
@@ -2433,7 +2493,8 @@ public class SearchFeeStudentNew extends JFrame {
 				else{
 					frame.setVisible(false);
 					new FeesView(sessionData, grNoSel, stdSel, divSel, nameSel, rollNoSel, searchStudentMap, section, academicYearPay, 
-							categoryClass, feesHeadMap, maxFrequency, frequencyClass, subFrequencyClass, contact1, contact2, "", "", headerRadioClass);
+							categoryClass, feesHeadMap, maxFrequency, frequencyClass, subFrequencyClass, contact1, contact2, 
+							oldAcademicClass, oldStd, oldDiv, headerRadioClass);
 				}
 			}
 			else{

@@ -2189,7 +2189,7 @@ public class AdmissionFormNew extends JFrame {
 //									String maxFrequency = frequencyList.get(frequencyList.size() - 1).toString();
 									new FeesView(sessionData, gr_no, presentStd, presentDiv, lastName+" "+firstName+" "+fatherName, 
 											"1", studentMap, section, academicSel, 
-											"", feesHeadMap, frequencyList.get(frequencyList.size() - 1)+"", "Part Pay", "", contact1, contact2, "", "", false);
+											"", feesHeadMap, frequencyList.get(frequencyList.size() - 1)+"", "Part Pay", "", contact1, contact2, "", "", "", false);
 								}else{
 									frame.setVisible(false);
 									new AdmissionFormNew(sessionData, section, user_name, user_role,"ADMISSION","", foundStudentList);
