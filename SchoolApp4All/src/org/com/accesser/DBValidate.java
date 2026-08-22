@@ -5,29 +5,26 @@ import static java.util.stream.Collectors.toMap;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,19 +36,10 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.commons.dbcp.BasicDataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.sql.DataSource;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.util.SystemOutLogger;
 import org.com.maauli.BackupExcel;
 import org.com.maauli.CSVToExcelConverter;
 import org.com.maauli.Common;
@@ -62,13 +50,8 @@ import org.com.maauli.CreateExcelStatB;
 import org.com.maauli.CreateGradeClassExcel;
 import org.com.maauli.CreateMarksGradeExcel;
 import org.com.maauli.MarksEntryTemplateExcel;
-import org.com.maauli.ResultGradePDF;
 import org.com.maauli.ResultUnitTestPDF;
 import org.com.security.EncryptDecryptStr;
-//import com.mysql.jdbc.PreparedStatement;
-import java.util.Collections;
-import static java.util.stream.Collectors.*;
-import static java.util.Map.Entry.*;
 
 public class DBValidate {
 
@@ -254,7 +237,7 @@ public class DBValidate {
 	///check active connections in mysql///
 	public boolean getSQLActiveConnectionsCount(SessionData sessionData)
 			throws Exception {
-		String variableName = "", countOfConnections = "", maxConnections = "", value = "";
+		String variableName = "", countOfConnections = "", maxConnections = "";
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("show variables like 'max_connections'");//get max sql connections
@@ -369,7 +352,6 @@ public class DBValidate {
 		boolean validateStatusFlag = false;
 		try {
 			String userDB = "";
-			String roleDB = "";
 			String userStatusDB = "";
 			String query = "";
 
@@ -383,7 +365,6 @@ public class DBValidate {
 
 			while (resultSet.next()) {
 				userDB = resultSet.getString("USERNAME");
-				roleDB = resultSet.getString("ROLE");
 				userStatusDB = resultSet.getString("USER_STATUS");
 				if (userStatusDB.equalsIgnoreCase("NEW")) {
 					validateStatusFlag = true;
@@ -401,7 +382,6 @@ public class DBValidate {
 
 		boolean checkGrNo = false;
 		try {
-			String userDB = "";
 			String user_gr_no = "";
 			String query = "SELECT GR_NO FROM " + sessionData.getDBName() + "." + tableName + " WHERE GR_NO='"
 					+ gr_no.trim() + "' AND SECTION_NM='" + section + "'";
@@ -698,9 +678,6 @@ public class DBValidate {
 			logger.info("Edit Form");
 			long c1 = 0;
 			long c2 = 0;
-//			String admittedYear = cm.getAcademicYear(sessionData,date_admitted);
-			String dateToday = cm.getCurrentDate();
-//			String currentAcademicYear = cm.getAcademicYear(sessionData,dateToday);
 
 			try {
 				logger.info("contact1----" + contact1);
@@ -1018,11 +995,10 @@ public class DBValidate {
 			String round = "";
 			String updateQuery = "UPDATE " + sessionData.getDBName() + "."
 					+ "optional_fee_allotment SET OPTIONAL_FEE =";
-			Set setsc = studentMap.entrySet();
-			Iterator isc = setsc.iterator();
-			int i = 0;
+			Set<Entry<String, LinkedHashMap<String, String>>> setsc = studentMap.entrySet();
+			Iterator<Entry<String, LinkedHashMap<String, String>>> isc = setsc.iterator();
 			while (isc.hasNext()) {
-				Map.Entry me = (Map.Entry) isc.next();
+				Entry<String, LinkedHashMap<String, String>> me = isc.next();
 
 				String grNo = me.getKey().toString();
 				String optFee = ((LinkedHashMap<?, ?>) studentMap.get(me.getKey())).get("optional_fee").toString();
@@ -1051,7 +1027,6 @@ public class DBValidate {
 		String rollNo = "";
 		String nameDB = "", firstDB ="", lastDB = "", fatherDB = "";
 		String findQuery = "";
-		boolean findFlag = false;
 		String addToWhere = "";
 		LinkedHashMap<String, LinkedHashMap<String, String>> studentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		logger.info("=========findStudent Query============");
@@ -1192,7 +1167,6 @@ public class DBValidate {
 				contactNo2 = resultSet.getString("CONTACT_2") == null ? "" : (resultSet.getString("CONTACT_2").trim());
 				studentDetailsMap.put("contactNo2", contactNo2);
 				studentMap.put(grDB, studentDetailsMap);
-				findFlag = true;
 			}
 
 			try {
@@ -1220,7 +1194,6 @@ public class DBValidate {
 		String rollNo = "";
 		String nameDB = "", firstDB = "", lastDB = "", fatherDB = "";
 		String findQuery = "";
-		boolean findFlag = false;
 		String addToWhere = "";
 		LinkedHashMap<String, LinkedHashMap<String, String>> studentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		logger.info("=========findFeeStudent Query============");
@@ -1361,7 +1334,6 @@ public class DBValidate {
 				contactNo2 = resultSet.getString("CONTACT_2") == null ? "" : (resultSet.getString("CONTACT_2").trim());
 				studentDetailsMap.put("contactNo2", contactNo2);
 				studentMap.put(grDB, studentDetailsMap);
-				findFlag = true;
 			}
 
 			try {
@@ -1604,10 +1576,10 @@ public class DBValidate {
 			String hobbiesDB = "", penDB = "", apaarDB = "";
 			String admittedStdBranch = "";
 
-			Set set = grMap.entrySet();
-			Iterator i = set.iterator();
+			Set<Entry<String, String>> set = grMap.entrySet();
+			Iterator<Entry<String, String>> i = set.iterator();
 			while (i.hasNext()) {
-				Map.Entry me = (Map.Entry) i.next();
+				Entry<String, String> me = i.next();
 				grList = grList + ",'" + me.getKey() + "'";
 			}
 			grList = grList.substring(1);
@@ -1766,8 +1738,8 @@ public class DBValidate {
 			lcTypeDB = " AND DUPLICATE_LC IS NOT NULL";
 		}
 		if (!academicYear.equalsIgnoreCase("")) {
-			addToQuery = " AND HS_GENERAL_REGISTER.ACADEMIC_YEAR = '" + academicYear
-					+ "' AND HS_GENERAL_REGISTER.SECTION_NM='" + section + "'";
+			addToQuery = " AND CLASS_ALLOTMENT.ACADEMIC_YEAR = '" + academicYear
+					+ "' AND CLASS_ALLOTMENT.SECTION_NM='" + section + "'";
 		}
 		logger.info("addToQuery == " + addToQuery + lcTypeDB);
 		try {
@@ -1787,8 +1759,9 @@ public class DBValidate {
 						+ "UPPER(HS_GENERAL_REGISTER.LAST_NAME) AS LAST_NAME, UPPER(HS_GENERAL_REGISTER.FIRST_NAME) AS FIRST_NAME , UPPER(HS_GENERAL_REGISTER.FATHER_NAME) AS FATHER_NAME"
 						+ " FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "."
-						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE HS_GENERAL_REGISTER.GR_NO IN ("
-						+ grListForIn.trim() + ") " + addToQuery
+						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
+//						+ "AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR "
+						+ "WHERE CLASS_ALLOTMENT.GR_NO IN ("+ grListForIn.trim() + ") " + addToQuery
 						+ " AND ORIGINAL_LC IS NOT NULL ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
 				logger.info("findLcQuery 1 : " + findQuery);
 			} else if (!gr.trim().equalsIgnoreCase("")) {
@@ -1797,7 +1770,9 @@ public class DBValidate {
 						+ "UPPER(HS_GENERAL_REGISTER.LAST_NAME) AS LAST_NAME, UPPER(HS_GENERAL_REGISTER.FIRST_NAME) AS FIRST_NAME , UPPER(HS_GENERAL_REGISTER.FATHER_NAME) AS FATHER_NAME"
 						+ " FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "."
-						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE HS_GENERAL_REGISTER.GR_NO='"
+						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
+//						+ "AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR "
+						+ "WHERE CLASS_ALLOTMENT.GR_NO='"
 						+ gr.trim() + "' " + addToQuery + lcTypeDB + " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
 				logger.info("findLcQuery 1 : " + findQuery);
 			} else if (!last.trim().equalsIgnoreCase("") && !first.trim().equalsIgnoreCase("")
@@ -1807,7 +1782,9 @@ public class DBValidate {
 						+ "UPPER(DUPLICATE_LC) AS DUPLICATE_LC, UPPER(HS_GENERAL_REGISTER.FIRST_NAME) AS FIRST_NAME , UPPER(HS_GENERAL_REGISTER.FATHER_NAME) AS FATHER_NAME"
 						+ " FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "."
-						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE UPPER (HS_GENERAL_REGISTER.LAST_NAME) LIKE UPPER('%"
+						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
+//						+ "AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR "
+						+ "WHERE UPPER (HS_GENERAL_REGISTER.LAST_NAME) LIKE UPPER('%"
 						+ last.trim() + "%') AND " + "UPPER (HS_GENERAL_REGISTER.FIRST_NAME) LIKE UPPER('%"
 						+ first.trim() + "%') AND UPPER(HS_GENERAL_REGISTER.FATHER_NAME) LIKE UPPER('%" + middle.trim()
 						+ "%')" + "" + addToQuery + lcTypeDB + " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
@@ -1818,7 +1795,9 @@ public class DBValidate {
 						+ "UPPER(DUPLICATE_LC) AS DUPLICATE_LC, UPPER(HS_GENERAL_REGISTER.FIRST_NAME) AS FIRST_NAME , UPPER(HS_GENERAL_REGISTER.FATHER_NAME) AS FATHER_NAME"
 						+ " FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "."
-						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE UPPER(HS_GENERAL_REGISTER.LAST_NAME) LIKE UPPER('%"
+						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
+//						+ "AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR "
+						+ "WHERE UPPER(HS_GENERAL_REGISTER.LAST_NAME) LIKE UPPER('%"
 						+ last.trim() + "%') AND " + " UPPER(HS_GENERAL_REGISTER.FIRST_NAME) LIKE UPPER('%"
 						+ first.trim() + "%')" + addToQuery + lcTypeDB + " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
 				logger.info("findLcQuery 3 : " + findQuery);
@@ -1828,7 +1807,9 @@ public class DBValidate {
 						+ "UPPER(DUPLICATE_LC) AS DUPLICATE_LC, UPPER(HS_GENERAL_REGISTER.FIRST_NAME) AS FIRST_NAME , UPPER(HS_GENERAL_REGISTER.FATHER_NAME) AS FATHER_NAME"
 						+ " FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "."
-						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE UPPER(HS_GENERAL_REGISTER.FIRST_NAME) LIKE UPPER('%"
+						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
+//						+ "AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR "
+						+ "WHERE UPPER(HS_GENERAL_REGISTER.FIRST_NAME) LIKE UPPER('%"
 						+ first.trim() + "%')" + addToQuery + lcTypeDB + " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
 				logger.info("findLcQuery 4 : " + findQuery);
 			} else if (!last.trim().equalsIgnoreCase("")) {
@@ -1837,7 +1818,9 @@ public class DBValidate {
 						+ "UPPER(DUPLICATE_LC) AS DUPLICATE_LC, UPPER(HS_GENERAL_REGISTER.FIRST_NAME) AS FIRST_NAME , UPPER(HS_GENERAL_REGISTER.FATHER_NAME) AS FATHER_NAME"
 						+ " FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "."
-						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE UPPER (HS_GENERAL_REGISTER.LAST_NAME) LIKE UPPER ('%"
+						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
+//						+ "AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR "
+						+ "WHERE UPPER (HS_GENERAL_REGISTER.LAST_NAME) LIKE UPPER ('%"
 						+ last.trim() + "%')" + addToQuery + lcTypeDB + " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
 				logger.info("findLcQuery 5 : " + findQuery);
 			} else if (!middle.trim().equalsIgnoreCase("")) {
@@ -1846,19 +1829,21 @@ public class DBValidate {
 						+ "UPPER(DUPLICATE_LC) AS DUPLICATE_LC, UPPER(HS_GENERAL_REGISTER.FIRST_NAME) AS FIRST_NAME , UPPER(HS_GENERAL_REGISTER.FATHER_NAME) AS FATHER_NAME"
 						+ " FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "."
-						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE UPPER(HS_GENERAL_REGISTER.FATHER_NAME) LIKE UPPER('%"
+						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
+//						+ "AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR "
+						+ "WHERE UPPER(HS_GENERAL_REGISTER.FATHER_NAME) LIKE UPPER('%"
 						+ middle.trim() + "%')" + addToQuery + lcTypeDB + " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
 				logger.info("findLcQuery 6 : " + findQuery);
 			} else if (!std.trim().equalsIgnoreCase("") && !div.trim().equalsIgnoreCase("")
 					&& !div.trim().equalsIgnoreCase("Select")) {
-				findQuery = "SELECT CLASS_ALLOTMENT.ROLL_NO AS ROLL_NO,DATE_LEAVING,UPPER(HS_GENERAL_REGISTER.GR_NO) AS GR_NO, UPPER(ORIGINAL_LC) AS ORIGINAL_LC, UPPER(HS_GENERAL_REGISTER.LAST_NAME) AS LAST_NAME, "
+				findQuery = "SELECT DISTINCT CLASS_ALLOTMENT.ROLL_NO AS ROLL_NO,DATE_LEAVING,UPPER(HS_GENERAL_REGISTER.GR_NO) AS GR_NO, UPPER(ORIGINAL_LC) AS ORIGINAL_LC, UPPER(HS_GENERAL_REGISTER.LAST_NAME) AS LAST_NAME, "
 						+ "DATE_FORMAT(ORIGINAL_LC_DATE, '%d-%m-%Y') AS ORIGINAL_LC_DATE, DATE_FORMAT(DUPLICATE_LC_DATE, '%d-%m-%Y') AS DUPLICATE_LC_DATE, UPPER(TRIPLICATE_LC) AS TRIPLICATE_LC, DATE_FORMAT(TRIPLICATE_LC_DATE, '%d-%m-%Y') AS TRIPLICATE_LC_DATE, "
 						+ "UPPER(DUPLICATE_LC) AS DUPLICATE_LC, UPPER(HS_GENERAL_REGISTER.FIRST_NAME) AS FIRST_NAME , UPPER(HS_GENERAL_REGISTER.FATHER_NAME) AS FATHER_NAME "
 						+ "FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "."
-						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE "
-						+ "HS_GENERAL_REGISTER.PRESENT_STD = '" + std.trim()
-						+ "' AND HS_GENERAL_REGISTER.PRESENT_DIV = '" + div.trim() + "'" + addToQuery + lcTypeDB
+						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
+//						+ "AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR "
+						+ "WHERE CLASS_ALLOTMENT.PRESENT_STD = '" + std.trim() + "' AND CLASS_ALLOTMENT.PRESENT_DIV = '" + div.trim() + "'" + addToQuery + lcTypeDB
 						+ " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
 				logger.info("findLcQuery 7 : " + findQuery);
 			} else if (!std.trim().equalsIgnoreCase("")) {
@@ -1867,8 +1852,9 @@ public class DBValidate {
 						+ "UPPER(DUPLICATE_LC) AS DUPLICATE_LC, UPPER(HS_GENERAL_REGISTER.FIRST_NAME) AS FIRST_NAME , UPPER(HS_GENERAL_REGISTER.FATHER_NAME) AS FATHER_NAME"
 						+ " FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "."
-						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE PRESENT_STD = '"
-						+ std.trim() + "'" + addToQuery + lcTypeDB + " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
+						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
+//						+ "AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR "
+						+ "WHERE PRESENT_STD = '"+ std.trim() + "'" + addToQuery + lcTypeDB + " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
 				logger.info("findLcQuery 8 : " + findQuery);
 			} else if (!academicYear.equalsIgnoreCase("")) {
 				findQuery = "SELECT CLASS_ALLOTMENT.ROLL_NO AS ROLL_NO,DATE_LEAVING,UPPER(HS_GENERAL_REGISTER.GR_NO) AS GR_NO, UPPER(ORIGINAL_LC) AS ORIGINAL_LC, UPPER(HS_GENERAL_REGISTER.LAST_NAME) AS LAST_NAME, "
@@ -1876,8 +1862,9 @@ public class DBValidate {
 						+ "UPPER(DUPLICATE_LC) AS DUPLICATE_LC, UPPER(HS_GENERAL_REGISTER.FIRST_NAME) AS FIRST_NAME , UPPER(HS_GENERAL_REGISTER.FATHER_NAME) AS FATHER_NAME"
 						+ " FROM " + sessionData.getDBName() + "." + "HS_GENERAL_REGISTER LEFT JOIN "
 						+ sessionData.getDBName() + "."
-						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR WHERE ACADEMIC_YEAR = '"
-						+ academicYear + "'" + lcTypeDB + " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
+						+ "CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO=CLASS_ALLOTMENT.GR_NO AND HS_GENERAL_REGISTER.SECTION_NM=CLASS_ALLOTMENT.SECTION_NM "
+//						+ "AND HS_GENERAL_REGISTER.ACADEMIC_YEAR=CLASS_ALLOTMENT.ACADEMIC_YEAR "
+						+ "WHERE ACADEMIC_YEAR = '"+ academicYear + "'" + lcTypeDB + " ORDER BY ROLL_NO * 1, ORIGINAL_LC ASC";
 				logger.info("findLcQuery 9 : " + findQuery);
 			}
 			statement = connection.createStatement();
@@ -1929,11 +1916,9 @@ public class DBValidate {
 		String nameDB = "";
 		String findQuery = "";
 		String lcTypeDB = "";
-		boolean findFlag = false;
 		ResultSet resultSetSms = null;
 		String addToQuery = "";
-		LinkedHashMap retStudentMap = new LinkedHashMap();
-		LinkedHashMap smsStatusMap = new LinkedHashMap();
+		LinkedHashMap<String, LinkedHashMap<String, String>> retStudentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		String grListFromResult = "";
 		int daysCheckStatus = Integer.parseInt(sessionData.getConfigMap().get("DAYS_STATUS_CHECK"));
 
@@ -2085,7 +2070,6 @@ public class DBValidate {
 				contact2DB = resultSet.getString("CONTACT_2") == null ? " " : (resultSet.getString("CONTACT_2").trim());
 				studentDetailsMap.put("contact2", contact2DB);
 				retStudentMap.put(grDB, studentDetailsMap);
-				findFlag = true;
 			}
 
 			String grStatus = "";
@@ -2112,20 +2096,20 @@ public class DBValidate {
 				}
 				grListProcessed = grListProcessed + "," + grStatus;
 				phone = resultSetSms.getString("PHONE");
-				((LinkedHashMap) retStudentMap.get(grStatus)).put("phone", phone);
+				(retStudentMap.get(grStatus)).put("phone", phone);
 				sender = resultSetSms.getString("SENDER");
-				((LinkedHashMap) retStudentMap.get(grStatus)).put("sender", sender);
+				(retStudentMap.get(grStatus)).put("sender", sender);
 				status = resultSetSms.getString("STATUS");
-				((LinkedHashMap) retStudentMap.get(grStatus)).put("status", status);
+				(retStudentMap.get(grStatus)).put("status", status);
 				messageId = resultSetSms.getString("MESSAGE_ID");
-				((LinkedHashMap) retStudentMap.get(grStatus)).put("messageId", messageId);
+				(retStudentMap.get(grStatus)).put("messageId", messageId);
 				message = resultSetSms.getString("MESSAGE") == null ? "" : (resultSetSms.getString("MESSAGE").trim());
-				((LinkedHashMap) retStudentMap.get(grStatus)).put("message", message);
+				(retStudentMap.get(grStatus)).put("message", message);
 				messageType = resultSetSms.getString("TYPE") == null ? "" : (resultSetSms.getString("TYPE").trim());
-				((LinkedHashMap) retStudentMap.get(grStatus)).put("messageType", messageType);
+				(retStudentMap.get(grStatus)).put("messageType", messageType);
 				smsDate = resultSetSms.getString("SCHEDULED_DATE") == null ? ""
 						: (resultSetSms.getString("SCHEDULED_DATE").trim());
-				((LinkedHashMap) retStudentMap.get(grStatus)).put("smsDate", smsDate);
+				(retStudentMap.get(grStatus)).put("smsDate", smsDate);
 				if (!status.equalsIgnoreCase("DELIVERED") && !status.equalsIgnoreCase("DELIVRD")) {
 					int daysLeft = 0;
 					SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -2146,7 +2130,7 @@ public class DBValidate {
 					if (status.contains("Exception")) {
 						status = "Check Failed";
 					}
-					((LinkedHashMap) retStudentMap.get(grStatus)).put("status", status);
+					(retStudentMap.get(grStatus)).put("status", status);
 				}
 			}
 
@@ -2167,7 +2151,6 @@ public class DBValidate {
 		logger.info("=========findSmsReport Query============");
 		String grDB = "";
 		String contact1DB = "";
-		String contact2DB = "";
 		String rollDB = "";
 		String nameDB = "";
 		String findQuery = "";
@@ -2177,11 +2160,9 @@ public class DBValidate {
 		String message = "";
 		String messageType = "";
 		String smsDate = "";
-		boolean findFlag = false;
 		ResultSet resultSetSms = null;
 		String addToQuery = "";
-		LinkedHashMap retStudentMap = new LinkedHashMap();
-		LinkedHashMap smsStatusMap = new LinkedHashMap();
+		LinkedHashMap<String, LinkedHashMap<String, String>> retStudentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		String grListFromResult = "";
 		int daysCheckStatus = Integer.parseInt(sessionData.getConfigMap().get("DAYS_STATUS_CHECK"));
 
@@ -2297,60 +2278,11 @@ public class DBValidate {
 							status = status + " *";
 						updateSmsDeliveryStatus(sessionData, gr, status, messageId, section, "");
 					}
-					/*
-					 * int daysLeft = 0; SimpleDateFormat formatter = new
-					 * SimpleDateFormat("dd/MM/yyyy HH:mm"); Date todayDate =
-					 * formatter.parse(cm.getCurrentDateInHHmm().toString()); Date expiryDate =
-					 * formatter.parse(cm.dateFormatFromyyyymmddhhmmToddmmyyyyhhmm(smsDate));
-					 * daysLeft = cm.daysBetween(expiryDate, todayDate); if(daysLeft > 0 && daysLeft
-					 * <= daysCheckStatus){ status = cm.checkHSPDeliveryStatus(sessionData, status,
-					 * messageId, contact1DB, messageType, "", section); } else if(daysLeft < 0){
-					 * status = "SUBMITTED"; } else{ if(!status.contains("*")) status = status +
-					 * " *"; updateSmsDeliveryStatus(sessionData, gr, status, messageId, section,
-					 * ""); }
-					 */
-//					status = cm.checkHSPDeliveryStatus(sessionData, status, messageId, contact1DB, messageType, "", section);
 					studentDetailsMap.put("status", status);
 				}
 				retStudentMap.put(grDB + "_" + i, studentDetailsMap);
-				findFlag = true;
 				i++;
 			}
-
-			/*
-			 * String grStatus = ""; String phone = ""; String sender = ""; String status =
-			 * ""; String messageId = ""; String message = ""; String messageType = "";
-			 * String grListProcessed = ""; String smsDate = ""; grListFromResult =
-			 * grListFromResult.substring(1);
-			 * 
-			 * String smsStatusQuery =
-			 * "select * from "+sessionData.getDBName()+"."+"sms_data where gr_no in (" +
-			 * grListFromResult.trim() + ") order by CREATED_DATE DESC"; statement =
-			 * connection.createStatement(); resultSetSms =
-			 * statement.executeQuery(smsStatusQuery);
-			 * 
-			 * while (resultSetSms.next()) { // LinkedHashMap smsDetailsMap = new
-			 * LinkedHashMap(); grStatus = resultSetSms.getString("GR_NO");
-			 * if(grListProcessed.contains(grStatus)){ continue; } grListProcessed =
-			 * grListProcessed + "," + grStatus; phone = resultSetSms.getString("PHONE");
-			 * ((LinkedHashMap)retStudentMap.get(grStatus)).put("phone",phone); sender =
-			 * resultSetSms.getString("SENDER");
-			 * ((LinkedHashMap)retStudentMap.get(grStatus)).put("sender",sender); status =
-			 * resultSetSms.getString("STATUS");
-			 * ((LinkedHashMap)retStudentMap.get(grStatus)).put("status",status); messageId
-			 * = resultSetSms.getString("MESSAGE_ID");
-			 * ((LinkedHashMap)retStudentMap.get(grStatus)).put("messageId",messageId);
-			 * message = resultSetSms.getString("MESSAGE") == null ? "":
-			 * (resultSetSms.getString("MESSAGE").trim());
-			 * ((LinkedHashMap)retStudentMap.get(grStatus)).put("message",message);
-			 * messageType = resultSetSms.getString("TYPE") == null ? "":
-			 * (resultSetSms.getString("TYPE").trim());
-			 * ((LinkedHashMap)retStudentMap.get(grStatus)).put("messageType",messageType);
-			 * smsDate = resultSetSms.getString("SCHEDULED_DATE") == null ? "":
-			 * (resultSetSms.getString("SCHEDULED_DATE").trim());
-			 * ((LinkedHashMap)retStudentMap.get(grStatus)).put("smsDate",smsDate); }
-			 */
-
 		} catch (Exception e) {
 			cm.logException(e);
 		} finally {
@@ -2409,8 +2341,6 @@ public class DBValidate {
 		String mother_tongue = "";
 		String medium = "";
 		String admittedStdBranch = "";
-//		String remark1Db = "";
-		boolean findFlag = false;
 		List<String> studentLCList = new ArrayList<String>();
 		LinkedHashMap<String, String> grMap = new LinkedHashMap<String, String>();
 
@@ -2569,7 +2499,6 @@ public class DBValidate {
 						+ lcIssueCountDb + "|" + admittedStdDb + "|" + suidDb + "|" + subCasteDb + "|" + talukaDb + "|"
 						+ districtDb + "|" + stateDb + "|" + countryDb + "|" + adhaarCardDb + "|" + mother_tongue + "|"
 						+ medium + "|" + admittedStdBranch + "|" + penDb + "|" + apaarDb);
-				findFlag = true;
 			}
 		} catch (Exception e) {
 			cm.logException(e);
@@ -2649,7 +2578,7 @@ public class DBValidate {
 
 			while (resultSet.next()) {
 				dataDb = resultSet.getString("DATA_COUNT");
-				if (cm.validateNumber(dataDb)) {
+				if (Common.validateNumber(dataDb)) {
 					dataCountDb = Integer.parseInt(dataDb);
 				}
 			}
@@ -2694,8 +2623,8 @@ public class DBValidate {
 
 		logger.info("=======inside updateLC========");
 		int lcCount = 0, dupLcCount = 0, tripLcCount = 0;
-		List lcPdfList = new ArrayList();
-		List passLcPdfList = new ArrayList();
+		List<String> lcPdfList = new ArrayList<>();
+		List<String> passLcPdfList = new ArrayList<>();
 		String updateLc = "";
 		String retProgress = progress;
 		boolean lc_count_db = Boolean.parseBoolean(sessionData.getConfigMap().get("LC_COUNT_DB"));
@@ -2722,75 +2651,28 @@ public class DBValidate {
 				logger.info("========" + i + "===============");
 				StringTokenizer st1 = new StringTokenizer(lcPdfList.get(i).toString(), "|");
 
-				List<String> LCDetaillist = new ArrayList();
+				List<String> LCDetaillist = new ArrayList<>();
 				while (st1.hasMoreTokens()) {
 					LCDetaillist.add(st1.nextToken());
 				}
 				logger.info("==outside while=====");
 				String grDb = LCDetaillist.get(0);
 				String origLcDb = LCDetaillist.get(1);
-				String nameDb = LCDetaillist.get(2);
-				String motherNameDb = LCDetaillist.get(3);
-				String nationalityDb = LCDetaillist.get(4);
-				String religionDb = LCDetaillist.get(5);
-				String castDb = LCDetaillist.get(6);
-				String dobDb = LCDetaillist.get(7);
-				String dobWordsDb = LCDetaillist.get(8);
-				String lastSchoolDb = LCDetaillist.get(9);
-				String dateAdmittedDb = LCDetaillist.get(10);
-				String dateLeavingDb = LCDetaillist.get(13);
 				String leavingStdDb = LCDetaillist.get(14);
 				String duplicateLcDb = LCDetaillist.get(17);
 				String originalLcDateDb = LCDetaillist.get(18);
-				String duplicateLcDateDb = LCDetaillist.get(19);
 				String studyingSinceDb = LCDetaillist.get(20);
 				String currentStdDb = LCDetaillist.get(21);
-				String birthPlaceDb = LCDetaillist.get(22);
 				String feeStatusDb = LCDetaillist.get(23);
 				if (feeStatus.equalsIgnoreCase("From Fee Status")) {
 					feeStatus = feeStatusDb;
 				}
 				String triplicateLcDb = LCDetaillist.get(24);
-				String triplicateLcDateDb = LCDetaillist.get(25);
-				String lcIssueCount1Db = LCDetaillist.get(26);
-
-				String progressDb = "";
-				String conductDb = "";
-				String reasonDb = "";
-				String remarkDb = "";
-				String remark1Db = "";
-				String mediumDb = "";
 
 				if (!conduct.equalsIgnoreCase("")) {
-					progressDb = progress;
-					conductDb = conduct;
-					reasonDb = reason;
-					remarkDb = remark;
-					remark1Db = remark2;
-					mediumDb = medium;
 				} else {
-					progressDb = LCDetaillist.get(11);
-					conductDb = LCDetaillist.get(12);
-					reasonDb = LCDetaillist.get(15);
-					remarkDb = LCDetaillist.get(16);
-					remark1Db = LCDetaillist.get(23);
-					mediumDb = LCDetaillist.get(36);
 				}
-
-				/*
-				 * if (origLcDb.equalsIgnoreCase("") || origLcDb.equalsIgnoreCase("NA") ||
-				 * origLcDb.equalsIgnoreCase("null") || origLcDb == null) { lcCount = lcCount +
-				 * 1; origLcDb = String.format("%03d", lcCount); } else if
-				 * (duplicateLcDb.equalsIgnoreCase("") || duplicateLcDb.equalsIgnoreCase("NA")
-				 * || duplicateLcDb.equalsIgnoreCase("null") || duplicateLcDb == null) {
-				 * dupLcCount = dupLcCount + 1; duplicateLcDb = String.format("%03d",
-				 * dupLcCount); } else if (triplicateLcDb.equalsIgnoreCase("") ||
-				 * triplicateLcDb.equalsIgnoreCase("NA") ||
-				 * triplicateLcDb.equalsIgnoreCase("null") || triplicateLcDb == null) {
-				 * tripLcCount = tripLcCount + 1; triplicateLcDb = String.format("%03d",
-				 * tripLcCount); }
-				 */
-
+				
 				if (leavingStdDb.equalsIgnoreCase("") || leavingStdDb.equalsIgnoreCase("null")
 						|| leavingStdDb == null) {
 					String latestAcad = getLatestAcademicYear(sessionData, grDb);
@@ -2799,10 +2681,10 @@ public class DBValidate {
 				}
 
 				if (issueDate.contains("-")) {
-					issueDate = cm.MM_ddlmmlyyyy(issueDate);
+					issueDate = Common.MM_ddlmmlyyyy(issueDate);
 				}
 				if (originalLcDateDb.contains("-")) {
-					originalLcDateDb = cm.MM_ddlmmlyyyy(originalLcDateDb);
+					originalLcDateDb = Common.MM_ddlmmlyyyy(originalLcDateDb);
 				}
 
 				if (retProgress.equalsIgnoreCase("Based on Result")) {
@@ -2920,9 +2802,8 @@ public class DBValidate {
 		String attendanceColumn = "";
 		int present = 0;
 		int total = 0;
-		boolean findFlag = false;
-		List studentList = new ArrayList();
-		LinkedHashMap studentMap = new LinkedHashMap();
+		List<String> studentList = new ArrayList<>();
+		LinkedHashMap<String, LinkedHashMap<String, String>> studentMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		LinkedHashMap<String, String> leftStudentMap = new LinkedHashMap<String, String>();
 
 		
@@ -3072,7 +2953,7 @@ public class DBValidate {
 			logger.info("Time after executing findClassAllotList query :: "+cm.getCurrentTimeStamp());
 
 			while (resultSet.next()) {
-				LinkedHashMap studentDetailMap = new LinkedHashMap();
+				LinkedHashMap<String, String> studentDetailMap = new LinkedHashMap<String, String>();
 				grDB = resultSet.getString("GR_NO");
 				if(leftStudentMap.get(grDB) != null) {
 					continue;
@@ -3143,7 +3024,6 @@ public class DBValidate {
 					}
 					studentList.add(rollNoDB + "|" + grDB + "|" + nameDB + "|" + attendanceDB);
 				}
-				findFlag = true;
 			}
 			
 			logger.info("Time after getting findClassAllotList data :: "+cm.getCurrentTimeStamp());
@@ -3171,7 +3051,6 @@ public class DBValidate {
 		String rollNoDB = "";
 		String presentDivDb = "";
 		String presentStdDb = "";
-		String previousDivDb = "";
 		String remarkDivDb = "";
 		String addYearToQuery = "";
 		String addRollToQuery = "";
@@ -3179,8 +3058,7 @@ public class DBValidate {
 		String attendanceColumn = "";
 		int present = 0;
 		int total = 0;
-		boolean findFlag = false;
-		List studentList = new ArrayList();
+		List<String> studentList = new ArrayList<>();
 
 		if (!academicYear.equalsIgnoreCase("") && !academicYear.equalsIgnoreCase("Year")) {
 			addYearToQuery = " AND CLASS_ALLOTMENT.SECTION_NM='" + section + "' AND CLASS_ALLOTMENT.ACADEMIC_YEAR = '"
@@ -3331,8 +3209,6 @@ public class DBValidate {
 						: (resultSet.getString("PRESENT_STD").trim());
 				presentDivDb = resultSet.getString("PRESENT_DIV") == null ? ""
 						: (resultSet.getString("PRESENT_DIV").trim());
-				previousDivDb = resultSet.getString("PREVIOUS_DIV") == null ? ""
-						: (resultSet.getString("PREVIOUS_DIV").trim());
 				remarkDivDb = resultSet.getString("REMARK_0") == null ? "" : (resultSet.getString("REMARK_0").trim());
 
 				if (!isAttendance) {
@@ -3363,7 +3239,6 @@ public class DBValidate {
 					}
 					studentList.add(rollNoDB + "|" + grDB + "|" + nameDB + "|" + attendanceDB);
 				}
-				findFlag = true;
 			}
 		} catch (Exception e) {
 			cm.logException(e);
@@ -3384,9 +3259,6 @@ public class DBValidate {
 		String findQuery = "";
 		String rollNoDB = "";
 		String presentDivDb = "";
-		String presentStdDb = "";
-		String previousDivDb = "";
-		String remarkDivDb = "";
 		String firstNameDb = "";
 		String lastNameDb = "";
 		String fatherNameDb = "";
@@ -3396,23 +3268,9 @@ public class DBValidate {
 		String previousYear = "";
 		int intPromoteStd = 0;
 		String promoteStd = "";
-		boolean findFlag = false;
-//		List studentList = new ArrayList();
 		LinkedHashMap<String, String> studentMap = new LinkedHashMap<String, String>();
 
-		/*
-		 * //to get current year Calendar calCurrent = Calendar.getInstance(); String
-		 * currentYear = calCurrent.get(Calendar.YEAR)+"";
-		 * 
-		 * //to get previous year Calendar calPrevious = Calendar.getInstance();
-		 * previousYear = (calPrevious.get(Calendar.YEAR)-1)+""; previousYear =
-		 * previousYear.trim() +"-"+ currentYear.substring(2,4).trim();
-		 * 
-		 * promoteYear = currentYear.trim() + "-" +
-		 * (Integer.parseInt(currentYear.substring(2,4).trim())+1);
-		 */
-
-		promoteYear = cm.getAcademicYear(sessionData,cm.getCurrentDate());
+		promoteYear = Common.getAcademicYear(sessionData,Common.getCurrentDate());
 
 		String previousYearDate = "";
 		Calendar cal = Calendar.getInstance();
@@ -3420,7 +3278,7 @@ public class DBValidate {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		previousYearDate = sdf.format(cal.getTime());
-		previousYear = cm.getAcademicYear(sessionData,previousYearDate);
+		previousYear = Common.getAcademicYear(sessionData,previousYearDate);
 
 		intPromoteStd = cm.RomanToInteger(std) + 1;
 		promoteStd = cm.IntegerToRoman("a" + intPromoteStd);
@@ -3480,15 +3338,8 @@ public class DBValidate {
 					if (rollNoDB.equalsIgnoreCase("")) {
 						rollNoDB = "1";
 					}
-					presentStdDb = resultSet.getString("PRESENT_STD") == null ? " "
-							: (resultSet.getString("PRESENT_STD").trim());
 					presentDivDb = resultSet.getString("PRESENT_DIV") == null ? " "
 							: (resultSet.getString("PRESENT_DIV").trim());
-					previousDivDb = resultSet.getString("PREVIOUS_DIV") == null ? " "
-							: (resultSet.getString("PREVIOUS_DIV").trim());
-					remarkDivDb = resultSet.getString("REMARK_0") == null ? " "
-							: (resultSet.getString("REMARK_0").trim());
-
 					if (lastNameDb.equalsIgnoreCase("")) {
 						lastNameDb = " ";
 					}
@@ -3501,11 +3352,6 @@ public class DBValidate {
 
 					studentMap.put(grDB, nameDB + "|" + grDB + "|" + rollNoDB + "|" + promoteStd + "|" + presentDivDb
 							+ "|" + lastNameDb + "|" + firstNameDb + "|" + fatherNameDb);
-					// studentList.add(nameDB + "|" + grDB + "|" + presentStdDb + "|" + presentDivDb
-					// + "|" + lastNameDb + "|" + firstNameDb + "|" + fatherNameDb);
-					// logger.info("grDB=" + grDB);
-					// logger.info("nameDB=" + nameDB);
-					findFlag = true;
 				}
 			}
 		} catch (Exception e) {
@@ -3523,19 +3369,18 @@ public class DBValidate {
 		logger.info("=======inside promoteClass========");
 
 		try {
-			String modifiedBy = "";
 			String promoteClass = "";
 			String updateHSDiv = "";
 			String updateOptionalDiv = "";
 			String updateMarksDiv = "";
 
-			Set set = studentList.entrySet();
-			Iterator i = set.iterator();
+			Set<Map.Entry<String, String>> set = studentList.entrySet();
+			Iterator<Map.Entry<String, String>> i = set.iterator();
 
 			connectDatabase(sessionData);
 //			connection.setAutoCommit(false);
 			while (i.hasNext()) {
-				Map.Entry me = (Map.Entry) i.next();
+				Map.Entry<String, String> me = i.next();
 				String studentDetail = me.getValue().toString();
 				int tokenSize = 0;
 				int n = 0;
@@ -3547,7 +3392,6 @@ public class DBValidate {
 					n++;
 				}
 
-				String name = studentDetails[0];
 				final String grNo = studentDetails[1];
 				String roll = studentDetails[2];
 				String presentStd = studentDetails[3];
@@ -3630,7 +3474,7 @@ public class DBValidate {
 	}
 
 	// /////Update Class Allotment///////////////////////////////////
-	public boolean updateClass(SessionData sessionData, LinkedHashMap studentMap, String section, String academic,
+	public boolean updateClass(SessionData sessionData, LinkedHashMap<String, LinkedHashMap<String, String>> studentMap, String section, String academic,
 			String allomentType) throws Exception {
 
 		logger.info("=======inside updateClass========");
@@ -3646,24 +3490,20 @@ public class DBValidate {
 			String presentDiv = "";
 			String previousDiv = "";
 			String remark = "";
-			String gender = "";
-
 			connectDatabase(sessionData);
-			List<List<String>> l = new ArrayList<List<String>>(studentMap.keySet());
+			List<String> l = new ArrayList<>(studentMap.keySet());
 			for (int i = 0; i < studentMap.size(); i++) {
 				if (allomentType.equalsIgnoreCase("Manual Roll No.")) {
-					rollNo = ((LinkedHashMap) studentMap.get(l.get(i))).get("rollNo").toString();
-					grNo = ((LinkedHashMap) studentMap.get(l.get(i))).get("gr").toString();
-					presentDiv = ((LinkedHashMap) studentMap.get(l.get(i))).get("newDiv").toString();
-					remark = ((LinkedHashMap) studentMap.get(l.get(i))).get("status").toString();
-					gender = ((LinkedHashMap) studentMap.get(l.get(i))).get("gender").toString();
+					rollNo = (studentMap.get(l.get(i))).get("rollNo").toString();
+					grNo = (studentMap.get(l.get(i))).get("gr").toString();
+					presentDiv = (studentMap.get(l.get(i))).get("newDiv").toString();
+					remark = (studentMap.get(l.get(i))).get("status").toString();
 				} else {
-					rollNo = ((LinkedHashMap) studentMap.get(l.get(i))).get("rollNo").toString();
-					grNo = ((LinkedHashMap) studentMap.get(l.get(i))).get("gr").toString();
-					previousDiv = ((LinkedHashMap) studentMap.get(l.get(i))).get("presentDiv").toString();
-					presentDiv = ((LinkedHashMap) studentMap.get(l.get(i))).get("newDiv").toString();
-					remark = ((LinkedHashMap) studentMap.get(l.get(i))).get("status").toString();
-					gender = ((LinkedHashMap) studentMap.get(l.get(i))).get("gender").toString();
+					rollNo = (studentMap.get(l.get(i))).get("rollNo").toString();
+					grNo = (studentMap.get(l.get(i))).get("gr").toString();
+					previousDiv = (studentMap.get(l.get(i))).get("presentDiv").toString();
+					presentDiv = (studentMap.get(l.get(i))).get("newDiv").toString();
+					remark = (studentMap.get(l.get(i))).get("status").toString();
 				}
 
 				if (previousDiv.equalsIgnoreCase("")) {
@@ -3767,15 +3607,11 @@ public class DBValidate {
 		String firstDB = "";
 		String fatherDB = "";
 		String findQuery = "";
-		String rollNoDB = "";
-		String presentDivDb = "";
-		String presentStdDb = "";
 		String addYearToQuery = "";
 		String addRollToQuery = "";
 		String previous_year = (Integer.parseInt(academicYear.substring(0, 4)) - 1) + "-"
 				+ (Integer.parseInt(academicYear.substring(5, 7)) - 1);
-		boolean findFlag = false;
-		List studentList = new ArrayList();
+		List<String> studentList = new ArrayList<>();
 
 		/// remove insertSectionCoulmn once added to all schools and updated create
 		/// table query
@@ -4040,9 +3876,6 @@ public class DBValidate {
 									+ term_fee + "|" + annual_income + "|" + rural_urban + "|" + income_certificate
 									+ "|" + no_child + "|" + working_days + "|" + attended_days + "|" + suid);
 				}
-				// logger.info("grDB=" + grDB);
-				// logger.info("nameDB=" + nameDB);
-				findFlag = true;
 			}
 		} catch (Exception e) {
 			cm.logException(e);
@@ -4088,12 +3921,11 @@ public class DBValidate {
 
 	// /////////Find Subject list////////////////////////////////////////
 	public LinkedHashMap<String, LinkedHashMap<String, String>> findNewSubList(SessionData sessionData,
-			String academicYear, String std, LinkedHashMap subjectMap) throws Exception {
+			String academicYear, String std, LinkedHashMap<String, LinkedHashMap<String, String>> subjectMap) throws Exception {
 
 		logger.info("=========findNewSubList Query============");
 		String findQuery = "";
 		String subDB = "";
-		String stdDB = "";
 		String subTitleDB = "";
 		String optionDB = "";
 		String gradeDB = "";
@@ -4112,9 +3944,8 @@ public class DBValidate {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(findQuery);
 			while (resultSet.next()) {
-				LinkedHashMap subMaxMinMap = new LinkedHashMap();
+				LinkedHashMap<String, String> subMaxMinMap = new LinkedHashMap<String, String>();
 				subDB = resultSet.getString("SUBJECT_NAME");
-				stdDB = resultSet.getString("STD_1");
 				subTitleDB = resultSet.getString("SUBJECT_TITLE");
 				optionDB = resultSet.getString("OPTIONAL");
 				gradeDB = resultSet.getString("MARKS_GRADE");
@@ -4196,19 +4027,15 @@ public class DBValidate {
 	}
 
 	// /////////Find Subject order map////////////////////////////////////////
-	public LinkedHashMap<String, LinkedHashMap<String, String>> findSubjectOrderMap(SessionData sessionData,
+	public LinkedHashMap<String, String> findSubjectOrderMap(SessionData sessionData,
 			String academicYear, String std) throws Exception {
 
 		logger.info("=========findSubjectOrderMap Query============");
 		String findQuery = "";
 		String subDB = "";
-		String stdDB = "";
-		String subTitleDB = "";
-		String optionDB = "";
-		String gradeDB = "";
 		boolean findFlag = false;
 		String order_no = "";
-		LinkedHashMap subjectOrderMap = new LinkedHashMap();
+		LinkedHashMap<String, String> subjectOrderMap = new LinkedHashMap<String, String>();
 		try {
 
 			findQuery = "SELECT * FROM " + sessionData.getDBName() + "." + "SUBJECT WHERE STD_1='" + std + "' "
@@ -4296,7 +4123,7 @@ public class DBValidate {
 		String subNameDB = "";
 		String groupNameDB = "";
 		boolean findFlag = false;
-		TreeMap tm = new TreeMap();
+		TreeMap<String, String> tm = new TreeMap<String, String>();
 
 		try {
 			findQuery = "SELECT * FROM " + sessionData.getDBName() + "." + "SUBJECT WHERE STD_1 = '" + std + "' AND "
@@ -4394,7 +4221,6 @@ public class DBValidate {
 		String mainHead = "";
 		String addHead = "";
 		String shortName = "";
-		boolean findFlag = false;
 		LinkedHashMap<String, LinkedHashMap<String, String>> headerMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
 		try {
@@ -4413,7 +4239,6 @@ public class DBValidate {
 				shortName = resultSet.getString("SHORT_NAME");
 				headerDetails.put("shortName", shortName);
 				headerMap.put(shortName, headerDetails);
-				findFlag = true;
 			}
 		} catch (Exception e) {
 			cm.logException(e);
@@ -4426,7 +4251,6 @@ public class DBValidate {
 			String academic, String std, String feeHead) throws Exception {
 
 		String findQuery = "", fees_name = "", sub_fees_name = "", amount = "", condition = "";
-		boolean findFlag = false;
 		LinkedHashMap<String, LinkedHashMap<String, String>> headerMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
 		try {
@@ -4451,7 +4275,6 @@ public class DBValidate {
 				amount = resultSet.getString("AMOUNT");
 				headerDetails.put("amount", amount);
 				headerMap.put(sub_fees_name, headerDetails);
-				findFlag = true;
 			}
 		} catch (Exception e) {
 			cm.logException(e);
@@ -4576,9 +4399,7 @@ public class DBValidate {
 				logger.info("findSubQuery before dbConn == " + findSubQuery);
 				statement = connection.createStatement();
 				resultSet = statement.executeQuery(findSubQuery);
-				String subNameDB = "";
 				while (resultSet.next()) {
-					subNameDB = resultSet.getString("SUBJECT_NAME");
 					validateSubject = true;
 				}
 
@@ -4774,7 +4595,6 @@ public class DBValidate {
 
 		logger.info("=========insertColumn Query============");
 		String insertQuery = "";
-		String coulmnDb = "";
 		boolean retFlag = false;
 
 		try {
@@ -4902,19 +4722,19 @@ public class DBValidate {
 	}
 
 	// /////////////updateSubMaxMin///////////////////////////////
-	public boolean updateSubMaxMin(SessionData sessionData, LinkedHashMap subMaxMinMap, String academic, String std,
+	public boolean updateSubMaxMin(SessionData sessionData, LinkedHashMap<String, LinkedHashMap<String, String>> subMaxMinMap, String academic, String std,
 			String semester) throws Exception {
 
 		logger.info("=======inside updateSubMaxMin========");
 		try {
 
-			Set set1 = subMaxMinMap.entrySet();
-			Iterator m = set1.iterator();
+			Set<Entry<String, LinkedHashMap<String, String>>> set1 = subMaxMinMap.entrySet();
+			Iterator<Entry<String, LinkedHashMap<String, String>>> m = set1.iterator();
 
 			while (m.hasNext()) {
-				Map.Entry me = (Map.Entry) m.next();
-				LinkedHashMap subjectMaxMap = new LinkedHashMap();
-				subjectMaxMap = (LinkedHashMap) me.getValue();
+				Entry<String, LinkedHashMap<String, String>> me = m.next();
+				LinkedHashMap<String, String> subjectMaxMap = new LinkedHashMap<String, String>();
+				subjectMaxMap = me.getValue();
 
 				String updateSubMaxMin = "";
 				String subject = subjectMaxMap.get("subject_name").toString();
@@ -4958,8 +4778,6 @@ public class DBValidate {
 						: (subjectMaxMap.get("sem1_listen").toString());
 				String sem1Speak = subjectMaxMap.get("sem1_speak") == null ? "0"
 						: (subjectMaxMap.get("sem1_speak").toString());
-				String sem1Assign1 = subjectMaxMap.get("sem1_assign1") == null ? "0"
-						: (subjectMaxMap.get("sem1_assign1").toString());
 				String sem1InTot = subjectMaxMap.get("sem1_intot") == null ? "0"
 						: (subjectMaxMap.get("sem1_intot").toString());
 
@@ -5546,8 +5364,8 @@ public class DBValidate {
 
 		String orderNo = "";
 		boolean findFlag = false;
-		List subMaxMinList = new ArrayList();
-		LinkedHashMap subjectMap = new LinkedHashMap();
+		List<String> subMaxMinList = new ArrayList<>();
+		LinkedHashMap<String, LinkedHashMap<String, String>> subjectMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
 		try {
 			findQuery = "SELECT * FROM " + sessionData.getDBName() + "." + "SUBJECT_ALLOTMENT LEFT JOIN "
@@ -5562,7 +5380,7 @@ public class DBValidate {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(findQuery);
 			while (resultSet.next()) {
-				LinkedHashMap subMaxMinMap = new LinkedHashMap();
+				LinkedHashMap<String, String> subMaxMinMap = new LinkedHashMap<String, String>();
 				sub = resultSet.getString("SUBJECT_NAME") == null ? "0" : (resultSet.getString("SUBJECT_NAME").trim());
 				subMaxMinMap.put("subject_name", sub);
 				subMaxMinMap.put("subject_status", "old");
@@ -5574,217 +5392,217 @@ public class DBValidate {
 				subMaxMinMap.put("marks_grade", marks_Grade);
 				optional = resultSet.getString("OPTIONAL") == null ? "0" : (resultSet.getString("OPTIONAL").trim());
 				subMaxMinMap.put("optional", optional);
-				sem1Dobs = resultSet.getString("SEM1_DOBS").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM1_DOBS").trim());
+				sem1Dobs = resultSet.getString("SEM1_DOBS") == null ? "0" : (resultSet.getString("SEM1_DOBS").trim());
 				subMaxMinMap.put("sem1_dobs", sem1Dobs);
-				sem1Obt = resultSet.getString("SEM1_OBT").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM1_OBT").trim());
+				sem1Obt = resultSet.getString("SEM1_OBT") == null ? "0" : (resultSet.getString("SEM1_OBT").trim());
 				subMaxMinMap.put("sem1_obt", sem1Obt);
-				sem1Oral = resultSet.getString("SEM1_ORAL").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM1_ORAL").trim());
+				sem1Oral = resultSet.getString("SEM1_ORAL") == null ? "0" : (resultSet.getString("SEM1_ORAL").trim());
 				subMaxMinMap.put("sem1_oral", sem1Oral);
-				sem1Assign = resultSet.getString("SEM1_ASSIGN").equalsIgnoreCase("null") ? "0"
+				sem1Assign = resultSet.getString("SEM1_ASSIGN") == null ? "0"
 						: (resultSet.getString("SEM1_ASSIGN").trim());
 				subMaxMinMap.put("sem1_assign", sem1Assign);
-				sem1Write = resultSet.getString("SEM1_WRITE").equalsIgnoreCase("null") ? "0"
+				sem1Write = resultSet.getString("SEM1_WRITE") == null ? "0"
 						: (resultSet.getString("SEM1_WRITE").trim());
 				subMaxMinMap.put("sem1_write", sem1Write);
-				sem1Pract = resultSet.getString("SEM1_PRACT").equalsIgnoreCase("null") ? "0"
+				sem1Pract = resultSet.getString("SEM1_PRACT") == null ? "0"
 						: (resultSet.getString("SEM1_PRACT").trim());
 				subMaxMinMap.put("sem1_pract", sem1Pract);
-				sem1Activity = resultSet.getString("SEM1_ACTIVITY").equalsIgnoreCase("null") ? "0"
+				sem1Activity = resultSet.getString("SEM1_ACTIVITY") == null ? "0"
 						: (resultSet.getString("SEM1_ACTIVITY").trim());
 				subMaxMinMap.put("sem1_act", sem1Activity);
-				sem1Pres = resultSet.getString("SEM1_PRES").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM1_PRES").trim());
+				sem1Pres = resultSet.getString("SEM1_PRES") == null ? "0" : (resultSet.getString("SEM1_PRES").trim());
 				subMaxMinMap.put("sem1_pres", sem1Pres);
-				sem1Mcap = resultSet.getString("SEM1_MCAP").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM1_MCAP").trim());
+				sem1Mcap = resultSet.getString("SEM1_MCAP") == null ? "0" : (resultSet.getString("SEM1_MCAP").trim());
 				subMaxMinMap.put("sem1_mcap", sem1Mcap);
-				sem1Project = resultSet.getString("SEM1_PROJECT").equalsIgnoreCase("null") ? "0"
+				sem1Project = resultSet.getString("SEM1_PROJECT") == null ? "0"
 						: (resultSet.getString("SEM1_PROJECT").trim());
 				subMaxMinMap.put("sem1_project", sem1Project);
-				sem1Other = resultSet.getString("SEM1_OTHER").equalsIgnoreCase("null") ? "0"
+				sem1Other = resultSet.getString("SEM1_OTHER") == null ? "0"
 						: (resultSet.getString("SEM1_OTHER").trim());
 				subMaxMinMap.put("sem1_other", sem1Other);
-				sem1Oral1 = resultSet.getString("SEM1_ORAL1").equalsIgnoreCase("null") ? "0"
+				sem1Oral1 = resultSet.getString("SEM1_ORAL1") == null ? "0"
 						: (resultSet.getString("SEM1_ORAL1").trim());
 				subMaxMinMap.put("sem1_oral1", sem1Oral1);
-				sem1Pract1 = resultSet.getString("SEM1_PRACT1").equalsIgnoreCase("null") ? "0"
+				sem1Pract1 = resultSet.getString("SEM1_PRACT1") == null ? "0"
 						: (resultSet.getString("SEM1_PRACT1").trim());
 				subMaxMinMap.put("sem1_pract1", sem1Pract1);
-				sem1Write1 = resultSet.getString("SEM1_WRITE1").equalsIgnoreCase("null") ? "0"
+				sem1Write1 = resultSet.getString("SEM1_WRITE1") == null ? "0"
 						: (resultSet.getString("SEM1_WRITE1").trim());
 				subMaxMinMap.put("sem1_write1", sem1Write1);
-				sem1Speak = resultSet.getString("SEM1_SPEAK").equalsIgnoreCase("null") ? "0"
+				sem1Speak = resultSet.getString("SEM1_SPEAK") == null ? "0"
 						: (resultSet.getString("SEM1_SPEAK").trim());
 				subMaxMinMap.put("sem1_speak", sem1Speak);
-				sem1Listen = resultSet.getString("SEM1_LISTEN").equalsIgnoreCase("null") ? "0"
+				sem1Listen = resultSet.getString("SEM1_LISTEN") == null ? "0"
 						: (resultSet.getString("SEM1_LISTEN").trim());
 				subMaxMinMap.put("sem1_listen", sem1Listen);
-				sem1Assign1 = resultSet.getString("SEM1_ASSIGN1").equalsIgnoreCase("null") ? "0"
+				sem1Assign1 = resultSet.getString("SEM1_ASSIGN1") == null ? "0"
 						: (resultSet.getString("SEM1_ASSIGN1").trim());
 				subMaxMinMap.put("sem1_assign1", sem1Assign1);
-				sem1InTot = resultSet.getString("SEM1_INTOT").equalsIgnoreCase("null") ? "0"
+				sem1InTot = resultSet.getString("SEM1_INTOT") == null ? "0"
 						: (resultSet.getString("SEM1_INTOT").trim());
 				subMaxMinMap.put("sem1_intot", sem1InTot);
 
-				sem2Pres = resultSet.getString("SEM2_PRES").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM2_PRES").trim());
+				sem2Pres = resultSet.getString("SEM2_PRES") == null ? "0" : (resultSet.getString("SEM2_PRES").trim());
 				subMaxMinMap.put("sem2_pres", sem2Pres);
-				sem2Mcap = resultSet.getString("SEM2_MCAP").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM2_MCAP").trim());
+				sem2Mcap = resultSet.getString("SEM2_MCAP") == null ? "0" : (resultSet.getString("SEM2_MCAP").trim());
 				subMaxMinMap.put("sem2_mcap", sem2Mcap);
-				sem2Dobs = resultSet.getString("SEM2_DOBS").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM2_DOBS").trim());
+				sem2Dobs = resultSet.getString("SEM2_DOBS") == null ? "0" : (resultSet.getString("SEM2_DOBS").trim());
 				subMaxMinMap.put("sem2_dobs", sem2Dobs);
-				sem2Obt = resultSet.getString("SEM2_OBT").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM2_OBT").trim());
+				sem2Obt = resultSet.getString("SEM2_OBT") == null ? "0" : (resultSet.getString("SEM2_OBT").trim());
 				subMaxMinMap.put("sem2_obt", sem2Obt);
-				sem2Oral = resultSet.getString("SEM2_ORAL").equalsIgnoreCase("null") ? "0" : (resultSet.getString("SEM2_ORAL").trim());
+				sem2Oral = resultSet.getString("SEM2_ORAL") == null ? "0" : (resultSet.getString("SEM2_ORAL").trim());
 				subMaxMinMap.put("sem2_oral", sem2Oral);
-				sem2Assign = resultSet.getString("SEM2_ASSIGN").equalsIgnoreCase("null") ? "0"
+				sem2Assign = resultSet.getString("SEM2_ASSIGN") == null ? "0"
 						: (resultSet.getString("SEM2_ASSIGN").trim());
 				subMaxMinMap.put("sem2_assign", sem2Assign);
-				sem2Write = resultSet.getString("SEM2_WRITE").equalsIgnoreCase("null") ? "0"
+				sem2Write = resultSet.getString("SEM2_WRITE") == null ? "0"
 						: (resultSet.getString("SEM2_WRITE").trim());
 				subMaxMinMap.put("sem2_write", sem2Write);
-				sem2Pract = resultSet.getString("SEM2_PRACT").equalsIgnoreCase("null") ? "0"
+				sem2Pract = resultSet.getString("SEM2_PRACT") == null ? "0"
 						: (resultSet.getString("SEM2_PRACT").trim());
 				subMaxMinMap.put("sem2_pract", sem2Pract);
-				sem2Activity = resultSet.getString("SEM2_ACTIVITY").equalsIgnoreCase("null") ? "0"
+				sem2Activity = resultSet.getString("SEM2_ACTIVITY") == null ? "0"
 						: (resultSet.getString("SEM2_ACTIVITY").trim());
 				subMaxMinMap.put("sem2_act", sem2Activity);
-				sem2Project = resultSet.getString("SEM2_PROJECT").equalsIgnoreCase("null") ? "0"
+				sem2Project = resultSet.getString("SEM2_PROJECT") == null ? "0"
 						: (resultSet.getString("SEM2_PROJECT").trim());
 				subMaxMinMap.put("sem2_project", sem2Project);
-				sem2Other = resultSet.getString("SEM2_OTHER").equalsIgnoreCase("null") ? "0"
+				sem2Other = resultSet.getString("SEM2_OTHER") == null ? "0"
 						: (resultSet.getString("SEM2_OTHER").trim());
 				subMaxMinMap.put("sem2_other", sem2Other);
-				sem2Oral1 = resultSet.getString("SEM2_ORAL1").equalsIgnoreCase("null") ? "0"
+				sem2Oral1 = resultSet.getString("SEM2_ORAL1") == null ? "0"
 						: (resultSet.getString("SEM2_ORAL1").trim());
 				subMaxMinMap.put("sem2_oral1", sem2Oral1);
-				sem2Pract1 = resultSet.getString("SEM2_PRACT1").equalsIgnoreCase("null") ? "0"
+				sem2Pract1 = resultSet.getString("SEM2_PRACT1") == null ? "0"
 						: (resultSet.getString("SEM2_PRACT1").trim());
 				subMaxMinMap.put("sem2_pract1", sem2Pract1);
-				sem2Write1 = resultSet.getString("SEM2_WRITE1").equalsIgnoreCase("null") ? "0"
+				sem2Write1 = resultSet.getString("SEM2_WRITE1") == null ? "0"
 						: (resultSet.getString("SEM2_WRITE1").trim());
 				subMaxMinMap.put("sem2_write1", sem2Write1);
-				sem2Speak = resultSet.getString("SEM2_SPEAK").equalsIgnoreCase("null") ? "0"
+				sem2Speak = resultSet.getString("SEM2_SPEAK") == null ? "0"
 						: (resultSet.getString("SEM2_SPEAK").trim());
 				subMaxMinMap.put("sem2_speak", sem2Speak);
-				sem2Listen = resultSet.getString("SEM2_LISTEN").equalsIgnoreCase("null") ? "0"
+				sem2Listen = resultSet.getString("SEM2_LISTEN") == null ? "0"
 						: (resultSet.getString("SEM2_LISTEN").trim());
 				subMaxMinMap.put("sem2_listen", sem2Listen);
-				sem2Assign1 = resultSet.getString("SEM2_ASSIGN1").equalsIgnoreCase("null") ? "0"
+				sem2Assign1 = resultSet.getString("SEM2_ASSIGN1") == null ? "0"
 						: (resultSet.getString("SEM2_ASSIGN1").trim());
 				subMaxMinMap.put("sem2_assign1", sem2Assign1);
-				sem2InTot = resultSet.getString("SEM2_INTOT").equalsIgnoreCase("null") ? "0"
+				sem2InTot = resultSet.getString("SEM2_INTOT") == null ? "0"
 						: (resultSet.getString("SEM2_INTOT").trim());
 				subMaxMinMap.put("sem2_intot", sem2InTot);
 
-				sem1DobsCt = resultSet.getString("SEM1_DOBS_CT").equalsIgnoreCase("null") ? "0"
+				sem1DobsCt = resultSet.getString("SEM1_DOBS_CT") == null ? "0"
 						: (resultSet.getString("SEM1_DOBS_CT").trim());
 				subMaxMinMap.put("sem1_dobs_ct", sem1DobsCt);
-				sem1ObtCt = resultSet.getString("SEM1_OBT_CT").equalsIgnoreCase("null") ? "0"
+				sem1ObtCt = resultSet.getString("SEM1_OBT_CT") == null ? "0"
 						: (resultSet.getString("SEM1_OBT_CT").trim());
 				subMaxMinMap.put("sem1_obt_ct", sem1ObtCt);
-				sem1OralCt = resultSet.getString("SEM1_ORAL_CT").equalsIgnoreCase("null") ? "0"
+				sem1OralCt = resultSet.getString("SEM1_ORAL_CT") == null ? "0"
 						: (resultSet.getString("SEM1_ORAL_CT").trim());
 				subMaxMinMap.put("sem1_oral_ct", sem1OralCt);
-				sem1AssignCt = resultSet.getString("SEM1_ASSIGN_CT").equalsIgnoreCase("null") ? "0"
+				sem1AssignCt = resultSet.getString("SEM1_ASSIGN_CT") == null ? "0"
 						: (resultSet.getString("SEM1_ASSIGN_CT").trim());
 				subMaxMinMap.put("sem1_assign_ct", sem1AssignCt);
-				sem1WriteCt = resultSet.getString("SEM1_WRITE_CT").equalsIgnoreCase("null") ? "0"
+				sem1WriteCt = resultSet.getString("SEM1_WRITE_CT") == null ? "0"
 						: (resultSet.getString("SEM1_WRITE_CT").trim());
 				subMaxMinMap.put("sem1_write_ct", sem1WriteCt);
-				sem1PractCt = resultSet.getString("SEM1_PRACT_CT").equalsIgnoreCase("null") ? "0"
+				sem1PractCt = resultSet.getString("SEM1_PRACT_CT") == null ? "0"
 						: (resultSet.getString("SEM1_PRACT_CT").trim());
 				subMaxMinMap.put("sem1_pract_ct", sem1PractCt);
-				sem1ActivityCt = resultSet.getString("SEM1_ACTIVITY_CT").equalsIgnoreCase("null") ? "0"
+				sem1ActivityCt = resultSet.getString("SEM1_ACTIVITY_CT") == null ? "0"
 						: (resultSet.getString("SEM1_ACTIVITY_CT").trim());
 				subMaxMinMap.put("sem1_act_ct", sem1ActivityCt);
-				sem1PresCt = resultSet.getString("SEM1_PRES_CT").equalsIgnoreCase("null") ? "0"
+				sem1PresCt = resultSet.getString("SEM1_PRES_CT") == null ? "0"
 						: (resultSet.getString("SEM1_PRES_CT").trim());
 				subMaxMinMap.put("sem1_pres_ct", sem1PresCt);
-				sem1McapCt = resultSet.getString("SEM1_MCAP_CT").equalsIgnoreCase("null") ? "0"
+				sem1McapCt = resultSet.getString("SEM1_MCAP_CT") == null ? "0"
 						: (resultSet.getString("SEM1_MCAP_CT").trim());
 				subMaxMinMap.put("sem1_mcap_ct", sem1McapCt);
-				sem1ProjectCt = resultSet.getString("SEM1_PROJECT_CT").equalsIgnoreCase("null") ? "0"
+				sem1ProjectCt = resultSet.getString("SEM1_PROJECT_CT") == null ? "0"
 						: (resultSet.getString("SEM1_PROJECT_CT").trim());
 				subMaxMinMap.put("sem1_project_ct", sem1ProjectCt);
-				sem1OtherCt = resultSet.getString("SEM1_OTHER_CT").equalsIgnoreCase("null") ? "0"
+				sem1OtherCt = resultSet.getString("SEM1_OTHER_CT") == null ? "0"
 						: (resultSet.getString("SEM1_OTHER_CT").trim());
 				subMaxMinMap.put("sem1_other_ct", sem1OtherCt);
-				sem1Oral1Ct = resultSet.getString("SEM1_ORAL1_CT").equalsIgnoreCase("null") ? "0"
+				sem1Oral1Ct = resultSet.getString("SEM1_ORAL1_CT") == null ? "0"
 						: (resultSet.getString("SEM1_ORAL1_CT").trim());
 				subMaxMinMap.put("sem1_oral1_ct", sem1Oral1Ct);
-				sem1Pract1Ct = resultSet.getString("SEM1_PRACT1_CT").equalsIgnoreCase("null") ? "0"
+				sem1Pract1Ct = resultSet.getString("SEM1_PRACT1_CT") == null ? "0"
 						: (resultSet.getString("SEM1_PRACT1_CT").trim());
 				subMaxMinMap.put("sem1_pract1_ct", sem1Pract1Ct);
-				sem1Write1Ct = resultSet.getString("SEM1_WRITE1_CT").equalsIgnoreCase("null") ? "0"
+				sem1Write1Ct = resultSet.getString("SEM1_WRITE1_CT") == null ? "0"
 						: (resultSet.getString("SEM1_WRITE1_CT").trim());
 				subMaxMinMap.put("sem1_write1_ct", sem1Write1Ct);
-				sem1SpeakCt = resultSet.getString("SEM1_SPEAK_CT").equalsIgnoreCase("null") ? "0"
+				sem1SpeakCt = resultSet.getString("SEM1_SPEAK_CT") == null ? "0"
 						: (resultSet.getString("SEM1_SPEAK_CT").trim());
 				subMaxMinMap.put("sem1_speak_ct", sem1SpeakCt);
-				sem1ListenCt = resultSet.getString("SEM1_LISTEN_CT").equalsIgnoreCase("null") ? "0"
+				sem1ListenCt = resultSet.getString("SEM1_LISTEN_CT") == null ? "0"
 						: (resultSet.getString("SEM1_LISTEN_CT").trim());
 				subMaxMinMap.put("sem1_listen_ct", sem1ListenCt);
-				sem1Assign1Ct = resultSet.getString("SEM1_ASSIGN1_CT").equalsIgnoreCase("null") ? "0"
+				sem1Assign1Ct = resultSet.getString("SEM1_ASSIGN1_CT") == null ? "0"
 						: (resultSet.getString("SEM1_ASSIGN1_CT").trim());
 				subMaxMinMap.put("sem1_assign1_ct", sem1Assign1Ct);
-				sem1InTotCt = resultSet.getString("SEM1_INTOT_CT").equalsIgnoreCase("null") ? "0"
+				sem1InTotCt = resultSet.getString("SEM1_INTOT_CT") == null ? "0"
 						: (resultSet.getString("SEM1_INTOT_CT").trim());
 				subMaxMinMap.put("sem1_intot_ct", sem1InTotCt);
 
-				sem2ProjectCt = resultSet.getString("SEM2_PROJECT_CT").equalsIgnoreCase("null") ? "0"
+				sem2ProjectCt = resultSet.getString("SEM2_PROJECT_CT") == null ? "0"
 						: (resultSet.getString("SEM2_PROJECT_CT").trim());
 				subMaxMinMap.put("sem2_project_ct", sem2ProjectCt);
-				sem2OtherCt = resultSet.getString("SEM2_OTHER_CT").equalsIgnoreCase("null") ? "0"
+				sem2OtherCt = resultSet.getString("SEM2_OTHER_CT") == null ? "0"
 						: (resultSet.getString("SEM2_OTHER_CT").trim());
 				subMaxMinMap.put("sem2_other_ct", sem2OtherCt);
-				sem2Oral1Ct = resultSet.getString("SEM2_ORAL1_CT").equalsIgnoreCase("null") ? "0"
+				sem2Oral1Ct = resultSet.getString("SEM2_ORAL1_CT") == null ? "0"
 						: (resultSet.getString("SEM2_ORAL1_CT").trim());
 				subMaxMinMap.put("sem2_oral1_ct", sem2Oral1Ct);
-				sem2Pract1Ct = resultSet.getString("SEM2_PRACT1_CT").equalsIgnoreCase("null") ? "0"
+				sem2Pract1Ct = resultSet.getString("SEM2_PRACT1_CT") == null ? "0"
 						: (resultSet.getString("SEM2_PRACT1_CT").trim());
 				subMaxMinMap.put("sem2_pract1_ct", sem2Pract1Ct);
-				sem2Write1Ct = resultSet.getString("SEM2_WRITE1_CT").equalsIgnoreCase("null") ? "0"
+				sem2Write1Ct = resultSet.getString("SEM2_WRITE1_CT") == null ? "0"
 						: (resultSet.getString("SEM2_WRITE1_CT").trim());
 				subMaxMinMap.put("sem2_write1_ct", sem2Write1Ct);
-				sem2PresCt = resultSet.getString("SEM2_PRES_CT").equalsIgnoreCase("null") ? "0"
+				sem2PresCt = resultSet.getString("SEM2_PRES_CT") == null ? "0"
 						: (resultSet.getString("SEM2_PRES_CT").trim());
 				subMaxMinMap.put("sem2_pres_ct", sem2PresCt);
-				sem2McapCt = resultSet.getString("SEM2_MCAP_CT").equalsIgnoreCase("null") ? "0"
+				sem2McapCt = resultSet.getString("SEM2_MCAP_CT") == null ? "0"
 						: (resultSet.getString("SEM2_MCAP_CT").trim());
 				subMaxMinMap.put("sem2_mcap_ct", sem2McapCt);
-				sem2DobsCt = resultSet.getString("SEM2_DOBS_CT").equalsIgnoreCase("null") ? "0"
+				sem2DobsCt = resultSet.getString("SEM2_DOBS_CT") == null ? "0"
 						: (resultSet.getString("SEM2_DOBS_CT").trim());
 				subMaxMinMap.put("sem2_dobs_ct", sem2DobsCt);
-				sem2ObtCt = resultSet.getString("SEM2_OBT_CT").equalsIgnoreCase("null") ? "0"
+				sem2ObtCt = resultSet.getString("SEM2_OBT_CT") == null ? "0"
 						: (resultSet.getString("SEM2_OBT_CT").trim());
 				subMaxMinMap.put("sem2_obt_ct", sem2ObtCt);
-				sem2OralCt = resultSet.getString("SEM2_ORAL_CT").equalsIgnoreCase("null") ? "0"
+				sem2OralCt = resultSet.getString("SEM2_ORAL_CT") == null ? "0"
 						: (resultSet.getString("SEM2_ORAL_CT").trim());
 				subMaxMinMap.put("sem2_oral_ct", sem2OralCt);
-				sem2AssignCt = resultSet.getString("SEM2_ASSIGN_CT").equalsIgnoreCase("null") ? "0"
+				sem2AssignCt = resultSet.getString("SEM2_ASSIGN_CT") == null ? "0"
 						: (resultSet.getString("SEM2_ASSIGN_CT").trim());
 				subMaxMinMap.put("sem2_assign_ct", sem2AssignCt);
-				sem2WriteCt = resultSet.getString("SEM2_WRITE_CT").equalsIgnoreCase("null") ? "0"
+				sem2WriteCt = resultSet.getString("SEM2_WRITE_CT") == null ? "0"
 						: (resultSet.getString("SEM2_WRITE_CT").trim());
 				subMaxMinMap.put("sem2_write_ct", sem2WriteCt);
-				sem2PractCt = resultSet.getString("SEM2_PRACT_CT").equalsIgnoreCase("null") ? "0"
+				sem2PractCt = resultSet.getString("SEM2_PRACT_CT") == null ? "0"
 						: (resultSet.getString("SEM2_PRACT_CT").trim());
 				subMaxMinMap.put("sem2_pract_ct", sem2PractCt);
-				sem2ActivityCt = resultSet.getString("SEM2_ACTIVITY_CT").equalsIgnoreCase("null") ? "0"
+				sem2ActivityCt = resultSet.getString("SEM2_ACTIVITY_CT") == null ? "0"
 						: (resultSet.getString("SEM2_ACTIVITY_CT").trim());
 				subMaxMinMap.put("sem2_act_ct", sem2ActivityCt);
-				sem2SpeakCt = resultSet.getString("SEM2_SPEAK_CT").equalsIgnoreCase("null") ? "0"
+				sem2SpeakCt = resultSet.getString("SEM2_SPEAK_CT") == null ? "0"
 						: (resultSet.getString("SEM2_SPEAK_CT").trim());
 				subMaxMinMap.put("sem2_speak_ct", sem2SpeakCt);
-				sem2ListenCt = resultSet.getString("SEM2_LISTEN_CT").equalsIgnoreCase("null") ? "0"
+				sem2ListenCt = resultSet.getString("SEM2_LISTEN_CT") == null ? "0"
 						: (resultSet.getString("SEM2_LISTEN_CT").trim());
 				subMaxMinMap.put("sem2_listen_ct", sem2ListenCt);
-				sem2Assign1Ct = resultSet.getString("SEM2_ASSIGN1_CT").equalsIgnoreCase("null") ? "0"
+				sem2Assign1Ct = resultSet.getString("SEM2_ASSIGN1_CT") == null ? "0"
 						: (resultSet.getString("SEM2_ASSIGN1_CT").trim());
 				subMaxMinMap.put("sem2_assign1_ct", sem2Assign1Ct);
-				sem2InTotCt = resultSet.getString("SEM2_INTOT_CT").equalsIgnoreCase("null") ? "0"
+				sem2InTotCt = resultSet.getString("SEM2_INTOT_CT") == null ? "0"
 						: (resultSet.getString("SEM2_INTOT_CT").trim());
 				subMaxMinMap.put("sem2_intot_ct", sem2InTotCt);
 
-				orderNo = resultSet.getString("ORDER_NO").equalsIgnoreCase("null") ? "0" : (resultSet.getString("ORDER_NO").trim());
+				orderNo = resultSet.getString("ORDER_NO") == null ? "0" : (resultSet.getString("ORDER_NO").trim());
 				subMaxMinMap.put("order_no", orderNo);
 				subjectMap.put(sub, subMaxMinMap);
 
@@ -5804,12 +5622,8 @@ public class DBValidate {
 		logger.info("=========findSubListClassAllot Query============");
 		String findQuery = "";
 		String subDB = "";
-		String stdDB = "";
-		String subTitleDB = "";
-		String optionDB = "";
-		String gradeDB = "";
 		boolean findFlag = false;
-		List subList = new ArrayList();
+		List<String> subList = new ArrayList<>();
 
 		try {
 			findQuery = "SELECT SUBJECT_NAME FROM " + sessionData.getDBName() + "." + "SUJECT_ALLOTMENT WHERE STD='"
@@ -5854,13 +5668,9 @@ public class DBValidate {
 		String rollClassAllot = "";
 		String suidClassAllot = "";
 		String optAlloted = "Select";
-		String presentStdDb = "";
 		String optionalSubjDb = "";
 		String insertOptionalAllot = "";
-		boolean findFlag = false;
-		List studentList = new ArrayList();
-		List subTitleList = new ArrayList();
-
+		List<String> studentList = new ArrayList<>();
 		try {
 			connectDatabase(sessionData);
 
@@ -5894,7 +5704,7 @@ public class DBValidate {
 				statement.executeUpdate(insertOptionalAllot);
 			}
 			//
-			List subjectList = new ArrayList();
+			List<String> subjectList = new ArrayList<>();
 			subjectList = findSubjectAndTitle(sessionData, std, selTitle, "YES", academicYear);
 			String[] optionalSubjDbList;
 			String optionalSubjectStr = "";
@@ -5955,7 +5765,6 @@ public class DBValidate {
 				}
 
 				studentList.add(nameDB + "|" + grDB + "||" + rollNoDB + "|||" + optAlloted + "||||" + optionalSubjDb);
-				findFlag = true;
 			}
 		} catch (Exception e) {
 			cm.logException(e);
@@ -6020,29 +5829,18 @@ public class DBValidate {
 
 		logger.info("=======inside updateStudentSubAllot========");
 		try {
-			boolean allotCompulsorySubFlag = false;
-//			logger.info("academic == " + academic);
-//			logger.info("std == " + std);
-//			logger.info("div == " + div);
-//			logger.info("updateAllSubTitle == " + updateAllSubTitle);
 			selTitle = selTitle.replace(" ", "_");
-//			logger.info("selTitle == " + selTitle);
 			String optional = "";
 			connectDatabase(sessionData);
 
 			String[] studentArray = new String[studentList.size()];
 			studentArray = (String[]) studentList.toArray(studentArray);
-//			logger.info("studentArray === " + studentArray.length);
 
 			for (int k = 0; k < studentArray.length; k++) {
 				String updateSubStudAllot = "";
-//				logger.info("subject detail before update == " + studentArray[k].toString());
-				String studentName = studentArray[k].substring(0, studentArray[k].indexOf("|"));
 				String grNo = studentArray[k].substring(studentArray[k].indexOf("|") + 1,
 						studentArray[k].indexOf("||"));
-				String rollNo = studentArray[k].substring(studentArray[k].indexOf("||") + 2,
-						studentArray[k].indexOf("|||"));
-//				String subTitle = subTitle = studentArray[k].substring(studentArray[k].lastIndexOf("|||") + 3);
+				//				String subTitle = subTitle = studentArray[k].substring(studentArray[k].lastIndexOf("|||") + 3);
 				String subTitle = studentArray[k].substring(studentArray[k].indexOf("|||") + 3,
 						studentArray[k].indexOf("||||"));
 				String optSubjects = studentArray[k].substring(studentArray[k].lastIndexOf("||||") + 4);
@@ -6090,22 +5888,16 @@ public class DBValidate {
 
 		logger.info("=======inside updateStudentSubAllot========");
 		try {
-//			logger.info("academic == " + academic);
-//			logger.info("std == " + std);
-//			logger.info("div == " + div);
-			String optional = "";
 			String compulsoryQuery = "";
 
-			List subjectList = new ArrayList();
+			List<String> subjectList = new ArrayList<>();
 			subjectList = findSubjectAndTitle(sessionData, std, selTitle, "NO", academic);
 
 			String[] subjectArray = new String[subjectList.size()];
 			subjectArray = (String[]) subjectList.toArray(subjectArray);
-//			logger.info("subjectArray === " + subjectArray.length);
 
 			compulsoryQuery = "UPDATE CLASS_ALLOTMENT SET ";
 			for (int j = 0; j < subjectArray.length; j++) {
-//				logger.info("subjectArray == " + subjectArray[j].toString());
 				String sub = subjectArray[j];
 
 				if (j == subjectArray.length - 1) {
@@ -6118,7 +5910,6 @@ public class DBValidate {
 			compulsoryQuery = compulsoryQuery + " WHERE ACADEMIC_YEAR='" + academic.trim() + "' AND PRESENT_STD='" + std
 					+ "' AND SECTION_NM='" + section + "'";
 
-//			logger.info("compulsoryQuery query===>" + compulsoryQuery);
 			statement = connection.createStatement();
 			int retcompulsoryQuery = statement.executeUpdate(compulsoryQuery);
 
@@ -6146,10 +5937,7 @@ public class DBValidate {
 		logger.info("=========findSubjectAndTitle Query============");
 		String findQuery = "";
 		String subject = "";
-		String subjectTitle = "";
-		List subjectList = new ArrayList();
-		boolean retFlag = false;
-
+		List<String> subjectList = new ArrayList<>();
 		try {
 			if (optional.equalsIgnoreCase("YES")) {
 				findQuery = "select SUBJECT_NAME FROM " + sessionData.getDBName() + "."
@@ -6171,7 +5959,6 @@ public class DBValidate {
 			while (resultSet.next()) {
 				subject = resultSet.getString("SUBJECT_NAME");
 				subjectList.add(subject);
-				retFlag = true;
 			}
 		} catch (Exception e) {
 			cm.logException(e);
@@ -6192,16 +5979,11 @@ public class DBValidate {
 		logger.info("=========findSubjectList Query============");
 		String findQuery = "";
 		String subject = "";
-		String subjectTitle = "";
-		String optional = "";
-		List subjectList = new ArrayList();
-		boolean retFlag = false;
-
+		List<String> subjectList = new ArrayList<>();
 		try {
 			findQuery = "SELECT DISTINCT SUBJECT_NAME FROM " + sessionData.getDBName() + "."
 					+ "SUBJECT WHERE STD_1 = '" + std + "' " + "AND ACADEMIC_YEAR='" + academicYear
 					+ "' AND (SECTION_NM='" + sessionData.getSectionName() + "')";
-//			logger.info("findSubjectList query == " + findQuery);
 
 			connectDatabase(sessionData);
 			statement = connection.createStatement();
@@ -6210,9 +5992,7 @@ public class DBValidate {
 			while (resultSet.next()) {
 				subject = resultSet.getString("SUBJECT_NAME");
 				subjectList.add(subject);
-				retFlag = true;
 			}
-//			logger.info("subjectList size : " + subjectList.size());
 		} catch (Exception e) {
 			cm.logException(e);
 		}
@@ -6307,8 +6087,6 @@ public class DBValidate {
 
 		logger.info("=========findMarksEntryList Query============");
 		String findQuery = "";
-		String insertQuery = "";
-		String findMarksQuery = "";
 		String findSubjectQuery = "";
 		String subjectTitle = "";
 		String subjectName = "";
@@ -6319,15 +6097,11 @@ public class DBValidate {
 		String lastNameDB = "";
 		String firstNameDB = "";
 		String fatherNameDB = "";
-		String stdDB = "";
-		String divDB = "";
 		String subjectDB = "";
-		TreeMap fetchSubjectList = new TreeMap();
-		TreeMap fetchSubjectTitleList = new TreeMap();
-		List fetchNewStudList = new ArrayList();
-		List fetchMarksList = new ArrayList();
+		TreeMap<String, String> fetchSubjectList = new TreeMap<String, String>();
+		TreeMap<String, String> fetchSubjectTitleList = new TreeMap<String, String>();
+		List<String> fetchMarksList = new ArrayList<>();
 		String subjectColumn = "";
-		boolean retFlag = false;
 		TreeMap<String, String> studentLCMap = new TreeMap<String, String>();
 		LinkedHashMap<String, String> dataMap = new LinkedHashMap<String, String>();
 
@@ -6416,8 +6190,6 @@ public class DBValidate {
 						: (resultSet.getString("FIRST_NAME").trim());
 				fatherNameDB = resultSet.getString("FATHER_NAME") == null ? ""
 						: (resultSet.getString("FATHER_NAME").trim());
-				stdDB = resultSet.getString("STD_1") == null ? "" : (resultSet.getString("STD_1").trim());
-				divDB = resultSet.getString("DIV_1") == null ? "" : (resultSet.getString("DIV_1").trim());
 				lcDate = studentLCMap.get(grNoDB);
 				// Check for final class allotment date
 				if (lcDate != null
@@ -6430,14 +6202,14 @@ public class DBValidate {
 						&& cm.isDateBetween(sessionData.getConfigMap().get("ACADEMIC_START_DATE"),
 								sessionData.getConfigMap().get("FINAL_CLASS_ALLOTMENT_DATE"),
 								lcDate.substring(lcDate.indexOf("|") + 1))
-						&& cm.getAcademicYear(sessionData,sessionData.getConfigMap().get("FINAL_CLASS_ALLOTMENT_DATE"))
+						&& Common.getAcademicYear(sessionData,sessionData.getConfigMap().get("FINAL_CLASS_ALLOTMENT_DATE"))
 								.equalsIgnoreCase(academicDB)) {
 					continue;
 				} else if (lcDate != null && sessionData.getConfigMap().get("FINAL_CLASS_ALLOTMENT_DATE") != null
 						&& cm.isDateBetween(sessionData.getConfigMap().get("ACADEMIC_START_DATE"),
 								sessionData.getConfigMap().get("FINAL_CLASS_ALLOTMENT_DATE"),
 								lcDate.substring(lcDate.indexOf("|") + 1))
-						&& cm.getAcademicYear(sessionData,sessionData.getConfigMap().get("FINAL_CLASS_ALLOTMENT_DATE"))
+						&& Common.getAcademicYear(sessionData,sessionData.getConfigMap().get("FINAL_CLASS_ALLOTMENT_DATE"))
 								.equalsIgnoreCase(academicDB)) {
 					continue;
 				}
@@ -6456,7 +6228,6 @@ public class DBValidate {
 					fetchMarksList.add(grNoDB + "|" + rollNoDB + "||" + cm.setNameOrder(sessionData, "", firstNameDB, lastNameDB, fatherNameDB) + "|||" + subjectDB);
 				}
 				dataMap.put(grNoDB, grNoDB);
-				retFlag = true;
 			}
 			// /////////end of fetch student list from marks
 			// entry/////////////////////////////////////////////////////////////////
@@ -6474,36 +6245,21 @@ public class DBValidate {
 		logger.info("=========findMarksEntryTemplate Query============");
 		resultSet = connection.getMetaData().getCatalogs();
 		ResultSet resultSetColumn = connection.getMetaData().getCatalogs();
-		String databaseName = sessionData.getDBName();
-		String dateToday = cm.getCurrentDate().toLowerCase();
-		List tableColumnList = new ArrayList();
-		List emptyList = new ArrayList();
+		String dateToday = Common.getCurrentDate().toLowerCase();
+		List<String> tableColumnList = new ArrayList<>();
+		List<String> emptyList = new ArrayList<>();
 
 		String subType = "";
-		String findQuery = "";
-		String insertQuery = "";
 		String findMarksQuery = "";
 		String findSubjectQuery = "";
 		String subjectTitle = "";
 		String subjectName = "";
 		String optional = "";
-		String academicDB = "";
-		String grNoDB = "";
-		String rollNoDB = "";
-		String lastNameDB = "";
-		String firstNameDB = "";
-		String fatherNameDB = "";
-		String stdDB = "";
-		String divDB = "";
-		String subjectDB = "";
 		String queryCondition = "";
-		LinkedHashMap fetchSubjectList = new LinkedHashMap();
-		LinkedHashMap fetchSubjectTitleList = new LinkedHashMap();
-		LinkedHashMap subjectMaxMarksMap = new LinkedHashMap();
-		List fetchNewStudList = new ArrayList();
-		List fetchMarksList = new ArrayList();
+		LinkedHashMap<String, String> fetchSubjectList = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> fetchSubjectTitleList = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, LinkedHashMap<String, String>> subjectMaxMarksMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		String subjectColumn = "";
-		boolean retFlag = false;
 		String examInitial = "";
 		if (exam.equalsIgnoreCase("Semester 1")) {
 			examInitial = "sem1";
@@ -6561,12 +6317,12 @@ public class DBValidate {
 				if (type.equalsIgnoreCase("Remark")) {
 					maxMarks = " | | | |Remarks| | ";
 				}
-				Set set = fetchSubjectList.entrySet();
-				Iterator i = set.iterator();
+				Set<Map.Entry<String, String>> set = fetchSubjectList.entrySet();
+				Iterator<Map.Entry<String, String>> i = set.iterator();
 				while (i.hasNext()) {
-					Map.Entry me = (Map.Entry) i.next();
-					LinkedHashMap individualMaxMarksMap = new LinkedHashMap();
-					individualMaxMarksMap = (LinkedHashMap) subjectMaxMarksMap.get(me.getKey());
+					Map.Entry<String, String> me = i.next();
+					LinkedHashMap<String, String> individualMaxMarksMap = new LinkedHashMap<String, String>();
+					individualMaxMarksMap = subjectMaxMarksMap.get(me.getKey());
 
 					if (!type.equalsIgnoreCase("") && !type.equalsIgnoreCase("All")) {
 						columnName = columnName + "|" + me.getKey() + "_" + type;
@@ -6757,24 +6513,19 @@ public class DBValidate {
 		String sub19 = subject + "_" + examType + "ITOT";
 
 		String sub1Db, sub2Db, sub3Db, sub4Db, sub5Db, sub6Db, sub7Db, sub8Db, sub9Db, sub10Db, sub11Db, sub12Db,
-				sub13Db, sub14Db, sub15Db, sub16Db, sub17Db, sub18Db, sub19Db = "";
+				sub13Db, sub14Db, sub16Db, sub17Db, sub18Db, sub19Db = "";
 		String gr_no = "";
-		TreeMap studentMap = new TreeMap();
-		TreeMap subjectGroupList = new TreeMap();
+		TreeMap<String, String> studentMap = new TreeMap<String, String>();
 		String studentListQuery = "";
 		String subjectTotalName = subject + "_" + examType + "TOT";
 		String subjectSem = "";
-		double convertMarksTo = 0.0;
-		double convertRatio = 1.0;
 		double totalAfterConversion = 0.0;
-		LinkedHashMap subjectConvertMap = new LinkedHashMap();
+		LinkedHashMap<String, LinkedHashMap<String, String>> subjectConvertMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		String remarkList = "";
 		boolean isValid = false;
 		String[] remList;
 
 		subjectConvertMap.putAll(findSubMaxMinList(sessionData, academic, std));
-		subjectGroupList = fetchSubjectGroupList(sessionData, std, academic);
-
 		if (examType.equalsIgnoreCase("F")) {
 			subjectSem = "SEM1";
 		} else if (examType.equalsIgnoreCase("S")) {
@@ -7388,12 +7139,10 @@ public class DBValidate {
 		String subjectMarksToUpdate = "", subjectFromMaxMap = "", subjectTitleFromMaxMap = "", examTypeFromMap = "",
 				columnName = "", columnNameTot = "";
 		double absentForMarks = 0.0;
-		LinkedHashMap examTypeMap = new LinkedHashMap<>();
-		LinkedHashMap marksWhenMap = new LinkedHashMap<>();
-		LinkedHashMap totalWhenMap = new LinkedHashMap<>();
+		LinkedHashMap<String, String> examTypeMap = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> marksWhenMap = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> totalWhenMap = new LinkedHashMap<String, String>();
 
-		double convertMarksTo = 0.0;
-		double convertRatio = 1.0;
 		double totalAfterConversion = 0.0;
 
 		try {
@@ -7414,16 +7163,19 @@ public class DBValidate {
 			String grNo = grMarksDataMap.get("grNo");
 			String optionalSubject = studentOptSubAllotMap.get(grNo).get("optionalSubject");
 
-			Set set = maxSubMarks.entrySet();
-			Iterator imaxSubMarks = set.iterator();
+			Set<Entry<String,LinkedHashMap<String,String>>> set = maxSubMarks.entrySet();
+
+			Iterator<Entry<String, LinkedHashMap<String, String>>> imaxSubMarks = set.iterator();
+
 			while (imaxSubMarks.hasNext()) {
-				LinkedHashMap subjectMaxMarksMap = new LinkedHashMap();
-				LinkedHashMap subjectTypeMaxMarksMap = new LinkedHashMap();
+				LinkedHashMap<String, LinkedHashMap<String, String>> subjectMaxMarksMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+				LinkedHashMap<String, String> subjectTypeMaxMarksMap = new LinkedHashMap<String, String>();
 				boolean skipFlag = false;
-				Map.Entry me = (Map.Entry) imaxSubMarks.next();
+				Entry<String, LinkedHashMap<String, String>> me = imaxSubMarks.next();
+
 				subjectFromMaxMap = me.getKey().toString();
-				subjectMaxMarksMap.put(subjectFromMaxMap, (LinkedHashMap) me.getValue());
-				subjectTypeMaxMarksMap = (LinkedHashMap) me.getValue();
+				subjectMaxMarksMap.put(subjectFromMaxMap, me.getValue());
+				subjectTypeMaxMarksMap =  me.getValue();
 				subjectTitleFromMaxMap = (String) subjectTypeMaxMarksMap.get("subject_title");
 
 				// check if student selected optional subject
@@ -7497,18 +7249,21 @@ public class DBValidate {
 
 			String updateSubMarksQuery = "";
 
-			Set setMarksWhenMap = marksWhenMap.entrySet();
-			Iterator imarksWhenMap = setMarksWhenMap.iterator();
+			Set<Map.Entry<String, String>> setMarksWhenMap = marksWhenMap.entrySet();
+			Iterator<Map.Entry<String, String>> imarksWhenMap = setMarksWhenMap.iterator();
+
 			while (imarksWhenMap.hasNext()) {
-				Map.Entry me = (Map.Entry) imarksWhenMap.next();
+				Map.Entry<String, String> me = imarksWhenMap.next();
+
 				updateSubMarksQuery = updateSubMarksQuery + " " + me.getKey().toString() + " = CASE " + me.getValue();
 				updateSubMarksQuery = updateSubMarksQuery + " ELSE " + me.getKey() + " END,";
 			}
 
-			Set setTotalWhenMap = totalWhenMap.entrySet();
-			Iterator itotalWhenMap = setTotalWhenMap.iterator();
+			Set<Entry<String, String>> setTotalWhenMap = totalWhenMap.entrySet();
+			Iterator<Entry<String, String>> itotalWhenMap = setTotalWhenMap.iterator();
 			while (itotalWhenMap.hasNext()) {
-				Map.Entry me = (Map.Entry) itotalWhenMap.next();
+				Map.Entry<String, String> me = itotalWhenMap.next();
+
 				updateSubMarksQuery = updateSubMarksQuery + " " + me.getKey().toString() + " = CASE " + me.getValue();
 				updateSubMarksQuery = updateSubMarksQuery + " ELSE " + me.getKey() + " END,";
 			}
@@ -7534,7 +7289,7 @@ public class DBValidate {
 	public TreeMap<String, String> getMaxMarksForSubject(SessionData sessionData, String subjectName, String std,
 			String academic, String semester) throws Exception {
 
-		TreeMap tm = new TreeMap();
+		TreeMap<String, String> tm = new TreeMap<String, String>();
 		String query = "";
 		String dob, obt, ora, ass, wri, pra, pre, mca, act, pro, oth, ora1, pra1, wri1, lis, spe, ass1, itot = "";
 
@@ -7616,7 +7371,6 @@ public class DBValidate {
 		String maxMarks = "";
 		Map<String, String> maxMarksMapOrder = new LinkedHashMap<String, String>();
 		boolean result_final_pdf_std_flag = Boolean.parseBoolean(sessionData.getConfigMap().get("RESULT_FINAL_PDF_"+std.replaceAll(" ", "_")));
-		int stdInt = cm.RomanToInteger(std);
 		try {
 			///// get subject title max marks///////////////
 			String maxMarksQuery = "";
@@ -7818,7 +7572,7 @@ public class DBValidate {
 				}
 				if (semester.equalsIgnoreCase("FINAL")) {
 					double marksDivisor = cm.getConvertMarksForDivisor(Double.parseDouble(maxMarks), 0, false);
-					marksDivisor = cm.roundUp(marksDivisor);
+					marksDivisor = Common.roundUp(marksDivisor);
 					maxMarks = (int) (Integer.parseInt(maxMarks) / (Integer.parseInt(maxMarks) / marksDivisor)) + "";
 					
 					if(maxMarksMapOrder.get(subjectTitle) != null) {
@@ -8180,7 +7934,8 @@ public class DBValidate {
 
 				String findQuery = "SELECT GENDER,DATE_FORMAT(DOB,'%d-%m-%Y') AS DOB FROM " + sessionData.getDBName()
 						+ "." + "HS_GENERAL_REGISTER WHERE GR_NO = '" + gr + "' AND SECTION_NM='"
-						+ sessionData.getSectionName() + "' AND ACADEMIC_YEAR='" + academic + "'";
+						+ sessionData.getSectionName() + "'";
+//				+ sessionData.getSectionName() + "' AND ACADEMIC_YEAR='" + academic + "'";
 				// logger.info("find genderDOB query == "+findQuery);
 
 				statement = connection.createStatement();
@@ -8587,16 +8342,13 @@ public class DBValidate {
 		String findQuery = "";
 		String catTypeDB = "";
 		String genderDB = "";
-		int srNo = 0;
 		String grNo = "";
 		String rollNo = "";
 		String presentStd = "";
 		String presentDiv = "";
 		String name = "";
-		String totalDB = "";
 		String queryCondition = "";
-		boolean findFlag = false;
-		List catDataList = new ArrayList();
+		List<String> catDataList = new ArrayList<>();
 		String addToQuery = "";
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		
@@ -8661,11 +8413,8 @@ public class DBValidate {
 				if (genderDB.equalsIgnoreCase("")) {
 					genderDB = " ";
 				}
-				srNo++;
-
 				catDataList.add(rollNo + "|" + grNo + "|" + name + "|" + catTypeDB + "|" + genderDB + "|" + presentStd
 						+ "-" + presentDiv);
-				findFlag = true;
 			}
 			if (!print.equalsIgnoreCase("")) {
 				if (div.equalsIgnoreCase("")) {
@@ -8697,13 +8446,10 @@ public class DBValidate {
 		int stdInt = 0;
 		int count = 0;
 		String grNo = "";
-		String rollNo = "";
 		String presentStd = "", adhaar_card = "", bank = "", bank_branch = "", bank_account = "", bank_ifsc;
 		String presentDiv = "", passFail = "", percentage = "";
 		String name = "";
-		String totalDB = "";
 		String queryCondition = "";
-		boolean findFlag = false;
 		Map<Integer, Integer> stdCount = new TreeMap<Integer, Integer>();
 		Map<Integer, String> savitri_sc = new TreeMap<Integer, String>();
 		Map<Integer, String> savitri_vjnt_sbc = new TreeMap<Integer, String>();
@@ -8717,7 +8463,6 @@ public class DBValidate {
 		LinkedHashMap<String, LinkedHashMap<String, String>> resultMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
 		String addToQuery = "";
-		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		String schoolName = sessionData.getConfigMap().get("BONAFIDE_HEADER_SCHOOL");
 		String nameOrderDisplay = cm.setNameOrder(sessionData,"HS_GENERAL_REGISTER","","","");
 
@@ -8746,7 +8491,7 @@ public class DBValidate {
 
 		try {
 			resultQuery = "SELECT GR_NO,FINAL_PERCENT,FINAL_RESULT FROM RESULT_DATA WHERE "
-					+ "RESULT_DATA.ACADEMIC_YEAR = '" + cm.getPreviousYear(sessionData,academicYear)
+					+ "RESULT_DATA.ACADEMIC_YEAR = '" + Common.getPreviousYear(sessionData,academicYear)
 					+ "' AND RESULT_DATA.SECTION_NM='" + section + "' ORDER BY FINAL_PERCENT DESC";
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(resultQuery);
@@ -8825,7 +8570,6 @@ public class DBValidate {
 //			savitri_sc.add("SR NO.|GR No.|STUDENT NAME|CATEGORY (CASTE)|CLASS|PASS/FAIL|PERCENTAGE|ATTENDANCE|AADHAR NO.|BANK NAME|BRANCH|IFSC CODE|A/C NO|AMOUNT");
 
 			while (resultSet.next()) {
-				rollNo = resultSet.getString("ROLL_NO") == null ? " " : (resultSet.getString("ROLL_NO").trim());
 				grNo = resultSet.getString("GR_NO") == null ? " " : (resultSet.getString("GR_NO").trim());
 				name = resultSet.getString("NAME") == null ? " " : (resultSet.getString("NAME").trim());
 				catTypeDB = resultSet.getString("CATEGORY") == null ? " " : (resultSet.getString("CATEGORY").trim());
@@ -8919,8 +8663,6 @@ public class DBValidate {
 									+ " |" + passFail + "|" + percentage + "| |" + adhaar_card + " |" + bank + " |"
 									+ bank_branch + " |" + bank_ifsc + " |" + bank_account + " | ");
 				}
-
-				findFlag = true;
 			}
 			scholarshipMap.put("SAVITRI_SC", savitri_sc);
 			scholarshipMap.put("SAVITRI_VJNT_SBC", savitri_vjnt_sbc);
@@ -8966,15 +8708,11 @@ public class DBValidate {
 		String triplicate_lc = "";
 		String presentStd = "";
 		String presentDiv = "";
-		int srNo = 0;
 		String grNo = "";
 		String rollNo = "";
 		String name = "";
-		String totalDB = "";
 		String queryCondition = "";
-		boolean findFlag = false;
-		List catDataList = new ArrayList();
-		String addToQuery = "";
+		List<String> catDataList = new ArrayList<>();
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		String startDate = sessionData.getConfigMap().get("ACADEMIC_YEAR_START_" + sessionData.getDBName());
 		startDate = academicYear.substring(0, 4) + "-" + startDate;// yyyy-mm-dd
@@ -9045,7 +8783,7 @@ public class DBValidate {
 						: (resultSet.getString("DATE_LEAVING_O").trim());
 				original_lc = resultSet.getString("ORIGINAL_LC") == null ? " "
 						: (resultSet.getString("ORIGINAL_LC").trim());
-				original_lc = original_lc + "/" + cm.getAcademicYear(sessionData,date_leaving);
+				original_lc = original_lc + "/" + Common.getAcademicYear(sessionData,date_leaving);
 				if (date_leaving.equalsIgnoreCase("")) {
 					date_leaving = " ";
 				}
@@ -9069,7 +8807,7 @@ public class DBValidate {
 						: (resultSet.getString("DUPLICATE_LC").trim());
 				if (!duplicate_date.equalsIgnoreCase(" ") && !duplicate_date.equalsIgnoreCase("")
 						&& !duplicate_date.equalsIgnoreCase("null")) {
-					duplicate_lc = duplicate_lc + "/" + cm.getAcademicYear(sessionData,duplicate_date);
+					duplicate_lc = duplicate_lc + "/" + Common.getAcademicYear(sessionData,duplicate_date);
 					duplicate_date_d = cm.dateFormatFromyyyymmddToddmmyyyy(duplicate_date_d);
 					catDataList.add(rollNo + "|" + grNo + "|" + name + "|" + duplicate_lc + " (Duplicate)|"
 							+ duplicate_date + "|" + presentStd + "-" + presentDiv);
@@ -9083,14 +8821,11 @@ public class DBValidate {
 						: (resultSet.getString("TRIPLICATE_LC").trim());
 				if (!triplicate_date.equalsIgnoreCase(" ") && !triplicate_date.equalsIgnoreCase("")
 						&& !triplicate_date.equalsIgnoreCase("null")) {
-					triplicate_lc = triplicate_lc + "/" + cm.getAcademicYear(sessionData,triplicate_date);
+					triplicate_lc = triplicate_lc + "/" + Common.getAcademicYear(sessionData,triplicate_date);
 					triplicate_date_t = cm.dateFormatFromyyyymmddToddmmyyyy(triplicate_date_t);
 					catDataList.add(rollNo + "|" + grNo + "|" + name + "|" + triplicate_lc + " (Triplicate)|"
 							+ triplicate_date + "|" + presentStd + "-" + presentDiv);
 				}
-
-				srNo++;
-				findFlag = true;
 			}
 
 			if (!print.equalsIgnoreCase("")) {
@@ -9122,8 +8857,7 @@ public class DBValidate {
 		String femaleDB = "";
 		String totalDB = "";
 		String queryCondition = "";
-		boolean findFlag = false;
-		List catDataList = new ArrayList();
+		List<String> catDataList = new ArrayList<>();
 		String addToQuery = "";
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		if (secName.contains("Section")) {
@@ -9199,7 +8933,6 @@ public class DBValidate {
 					catTypeDB = "NO RELIGION";
 				}
 				catDataList.add(catTypeDB + "|" + maleDB + "||" + femaleDB + "|||" + totalDB);
-				findFlag = true;
 			}
 
 		} catch (Exception e) {
@@ -9218,14 +8951,11 @@ public class DBValidate {
 		String genderDB = "";
 		String presentStd = "";
 		String presentDiv = "";
-		int srNo = 0;
 		String grNo = "";
 		String rollNo = "";
 		String name = "";
-		String totalDB = "";
 		String queryCondition = "";
-		boolean findFlag = false;
-		List religionDataList = new ArrayList();
+		List<String> religionDataList = new ArrayList<>();
 		String addToQuery = "";
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		String nameOrderDisplay = cm.setNameOrder(sessionData,"HS_GENERAL_REGISTER","","","");
@@ -9289,11 +9019,8 @@ public class DBValidate {
 				if (genderDB.equalsIgnoreCase("")) {
 					genderDB = " ";
 				}
-				srNo++;
-
 				religionDataList.add(rollNo + "|" + grNo + "|" + name + "|" + religionTypeDB + "|" + genderDB + "|"
 						+ presentStd + "-" + presentDiv);
-				findFlag = true;
 			}
 
 			if (!print.equalsIgnoreCase("")) {
@@ -9326,8 +9053,7 @@ public class DBValidate {
 		String femaleDB = "";
 		String totalDB = "";
 		String queryCondition = "";
-		boolean findFlag = false;
-		List catDataList = new ArrayList();
+		List<String> catDataList = new ArrayList<>();
 		String addToQuery = "";
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		if (secName.contains("Section")) {
@@ -9336,7 +9062,7 @@ public class DBValidate {
 		if (!tillDate.equalsIgnoreCase("")) {
 			addToQuery = "OR DATE_LEAVING >= '" + tillDate + "'";
 		}
-		TreeMap<Integer, String> sortRoman = new TreeMap();
+		TreeMap<Integer, String> sortRoman = new TreeMap<Integer, String>();
 
 		logger.info("std : " + std);
 		logger.info("div : " + div);
@@ -9452,16 +9178,16 @@ public class DBValidate {
 							stdDb + " " + divDb + "|" + maleDB + "|" + femaleDB + "|" + totalDB);
 //					catDataList.add(stdDb +" "+ divDb + "|" + maleDB + "|" + femaleDB + "|" + totalDB);
 				}
-				findFlag = true;
 				i++;
 			}
-			Set set = sortRoman.entrySet();
+			Set<Entry<Integer, String>> set = sortRoman.entrySet();
 			// Get an iterator
-			Iterator j = set.iterator();
+			Iterator<Entry<Integer, String>> j = set.iterator();
 			// Display elements
 			while (j.hasNext()) {
-				Map.Entry me = (Map.Entry) j.next();
-				catDataList.add(me.getValue());
+				Entry<Integer, String> me = j.next();
+
+				catDataList.add((String) me.getValue());
 			}
 
 			if (!print.equalsIgnoreCase("")) {
@@ -9488,8 +9214,6 @@ public class DBValidate {
 
 		logger.info("=========generalPrintList Query============");
 		String findQuery = "";
-		String generalTypeDB = "";
-		int srNo = 0;
 		String name = "";
 		String firstName = "";
 		String lastName = "";
@@ -9519,9 +9243,8 @@ public class DBValidate {
 		String studentId = "", pen = "", apaarid = "";
 		String queryCondition = "";
 		String residential_address = "", permanent_address = "", paying_free = "";
-		boolean findFlag = false;
-		List generalDataList = new ArrayList();
-		List generalDataExcelList = new ArrayList();
+		List<String> generalDataList = new ArrayList<>();
+		List<String> generalDataExcelList = new ArrayList<>();
 		String addToQuery = "";
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		if (!tillDate.equalsIgnoreCase("")) {
@@ -9710,7 +9433,6 @@ public class DBValidate {
 						+ presentDiv + "|" + permanent_address + "|" + residential_address + "|" + religion + "|"
 						+ taluka + "|" + district + "|" + state + "|" + country + "|" + studentId + "|" + paying_free 
 						+ "|" + pen + "|" + apaarid);
-				findFlag = true;
 			}
 
 			if (!print.equalsIgnoreCase("")) {
@@ -9738,10 +9460,7 @@ public class DBValidate {
 
 		logger.info("=========abFormPrintList Query============");
 		String findQuery = "";
-		String generalTypeDB = "";
 		String place_of_pupil = sessionData.getConfigMap().get("PLACE_OF_PUPIL");
-		String conduct = sessionData.getConfigMap().get("CONDUCT_OF_PUPIL");
-		String progress = sessionData.getConfigMap().get("PROGRESS_OF_PUPIL");
 		String secName = sessionData.getConfigMap().get(section.toUpperCase() + "_SEC");
 		String addToQuery = "", addToStudentTypeQuery = "";
 		if (secName.contains("Section")) {
@@ -9778,27 +9497,16 @@ public class DBValidate {
 		String suid = "";
 		String cast = "";
 		String date_admitted = "";
-		String birthPlace = "";
-		String dobWords = "";
-		String lastSchoolAttended = "";
-		String dateOfAdmission = "";
-		String adhaarCard = "";
-		String grNo = "";
-		String dob = "";
-		String category = "";
 		String genderClass = "";
-		String presentStd = "";
-		String presentDiv = "";
 		String queryCondition = "";
 		String yearStart = academicYear.substring(0, 4);
 		String yearEnd = "" + (Integer.parseInt(yearStart) + 1);
-		boolean findFlag = false;
-		List generalDataList = new ArrayList();
-		List generalDataExcelList = new ArrayList();
+		List<String> generalDataList = new ArrayList<>();
+		List<String> generalDataExcelList = new ArrayList<>();
 		String divHead = "";
 		String stdHead = "";
 		String stdDivInteger = "";
-		TreeMap<String, String> sortStd = new TreeMap();
+		TreeMap<String, String> sortStd = new TreeMap<String, String>();
 		LinkedHashMap<String, String> grMap = new LinkedHashMap<String, String>();
 
 		String acadStart = yearStart + "-" + sessionData.getConfigMap().get("ACADEMIC_YEAR_START_" + sessionData.getDBName());
@@ -10034,17 +9742,18 @@ public class DBValidate {
 									+ tuition_fee + "|" + adm_fee + "|" + term_fee + "|" + tuition_fee + "|" + adm_fee
 									+ "|" + term_fee + "|" + totalFee + "| | ");
 				}
-				findFlag = true;
 			}
 
-			Set set = sortStd.entrySet();
+			Set<Entry<String, String>> set = sortStd.entrySet();
+			
 			// Get an iterator
-			Iterator i = set.iterator();
+			Iterator<Entry<String, String>> i = set.iterator();
 			// Display elements
 			String value = "";
 			int j = 1;
 			while (i.hasNext()) {
-				Map.Entry me = (Map.Entry) i.next();
+				Map.Entry<String, String> me = i.next();
+
 				value = me.getValue().toString();
 				generalDataExcelList.add(j + "|" + value.substring(value.indexOf("|")));
 				j++;
@@ -10075,8 +9784,6 @@ public class DBValidate {
 
 		logger.info("=========newAdmissionList Query============");
 		String findQuery = "";
-		String generalTypeDB = "";
-		int srNo = 0;
 		String name = "";
 		String rollNo = "";
 		String cast = "";
@@ -10085,22 +9792,21 @@ public class DBValidate {
 		String lastSchoolAttended = "";
 		String dateOfAdmission = "";
 		String adhaarCard = "";
-		String grNo = "", receiptNo = "", receiptStr = "", receiptAcademicStr = "", studentReceiptNo = "";
+		String grNo = "", receiptNo = "", receiptStr = "", receiptAcademicStr = "";
 		String dob = "";
 		String gender = "";
 		String category = "";
 		String presentStd = "";
 		String presentDiv = "";
 		String queryCondition = "", feeCondition = "";
-		boolean findFlag = false;
 		int frequencyInt = 0, k = 0, feeListLength = 0;
 		String[] feeHeadList = null, bankDetails = null, dataSplit = null;
 		int startMonth = Integer.parseInt(sessionData.getConfigMap().get("ACADEMIC_START_MONTH"));
-		List generalDataList = new ArrayList();
-		List feeReceiptAdded = new ArrayList();
+		List<String> generalDataList = new ArrayList<>();
+		List<String> feeReceiptAdded = new ArrayList<String>();
 		LinkedHashMap<String, String> grAddedToMap = new LinkedHashMap<String, String>();
-		List generalDataExcelList = new ArrayList();
-		String addToQuery = "", feesHead = "", feesHeadStr = "", feesHeadColumn = "", feesHeadCatStr = "";
+		List<String> generalDataExcelList = new ArrayList<>();
+		String feesHead = "", feesHeadStr = "", feesHeadColumn = "", feesHeadCatStr = "";
 		LinkedHashMap<String, LinkedHashMap<String, String>> feesHeadMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		LinkedHashMap<String, String> feesReceiptAdmissionMap = new LinkedHashMap<String, String>();
 		LinkedHashMap<String, String> feesReceiptAcademicMap = new LinkedHashMap<String, String>();
@@ -10112,14 +9818,14 @@ public class DBValidate {
 		String nameOrderDisplay = cm.setNameOrder(sessionData,"HS_GENERAL_REGISTER","","","");
 
 		if (!tillDate.equalsIgnoreCase("")) {
-			addToQuery = "OR DATE_LEAVING <= '" + tillDate + "'";
 		}
 
 		feesHeadMap = getFeesHeadData(sessionData, academicYear, std, section, "");
-		Set set = feesHeadMap.entrySet();
-		Iterator j = set.iterator();
+		Set<Entry<String, LinkedHashMap<String, String>>> set = feesHeadMap.entrySet();
+		Iterator<Entry<String, LinkedHashMap<String, String>>> j = set.iterator();
 		while (j.hasNext()) {
-			Map.Entry me = (Map.Entry) j.next();
+			Entry<String, LinkedHashMap<String, String>> me = j.next();
+
 			feesHead = me.getKey().toString();
 
 			frequencyInt = cm
@@ -10311,7 +10017,6 @@ public class DBValidate {
 					presentDiv = "-";
 
 				if (feesReceiptAdmissionMap.get(grNo) != null) {
-					studentReceiptNo = feesReceiptAdmissionMap.get(grNo);
 				}
 				generalDataList.add(
 						presentStd + " " + presentDiv + "|" + grNo + "|" + name + "|" + gender + "|" + dateOfAdmission);
@@ -10320,8 +10025,6 @@ public class DBValidate {
 								+ "|" + cast + "|" + category + "|" + cm.revertCommaApostrophy(lastSchoolAttended) + "|"
 								+ dateOfAdmission + "|" + adhaarCard + "|" + presentStd + "|" + presentDiv + "|"
 								+ feesReceiptAdmissionMap.get(grNo) + "|" + feesReceiptAcademicMap.get(grNo));
-				findFlag = true;
-				studentReceiptNo = "";
 			}
 
 			if (!print.equalsIgnoreCase("")) {
@@ -13286,11 +12989,11 @@ public class DBValidate {
 		boolean resultUpdateFlag = false;
 		TreeMap subjectOptionMap = new TreeMap();
 		Map<String, String> subjectOptionMapOrder = new LinkedHashMap<String, String>();
-		TreeMap subjectTitleMap = new TreeMap();
+		TreeMap<String, String> subjectTitleMap = new TreeMap<String, String>();
 		Map<String, String> compSubjectMap = new HashMap<String, String>();
 		TreeMap subjectDetailMap = new TreeMap();
 		TreeMap marskInAscending = new TreeMap();//// sort grace required
-		TreeMap subjectGroupMap = new TreeMap();
+		TreeMap<String, String> subjectGroupMap = new TreeMap<String, String>();
 		TreeMap subjectGroupCount = new TreeMap();
 		TreeMap studentMarksMap = new TreeMap();
 		Map<String, String> studentMarksMapOrder = new LinkedHashMap<String, String>();
@@ -13298,7 +13001,7 @@ public class DBValidate {
 		TreeMap maxMarksMap = new TreeMap();
 		Map<String, String> maxMarksMapOrder = new LinkedHashMap<String, String>();
 		LinkedHashMap<String, Double> subjectSemMap = new LinkedHashMap<String, Double>();
-		TreeMap subjectMarksMap = new TreeMap();
+		TreeMap<String, String> subjectMarksMap = new TreeMap<String, String>();
 		TreeMap studentMarksFinalMap = new TreeMap();
 		TreeMap<String, String> studentLCMap = new TreeMap<String, String>();
 //		List<String> studentResultFinal = new ArrayList<String>();
@@ -13786,7 +13489,7 @@ public class DBValidate {
 			//////// get marks list//////////////////////
 
 			/// get student GR list ////////////
-			List studentList = new ArrayList();
+			List<String> studentList = new ArrayList<String>();
 			String studentQuery = "SELECT GR_NO FROM " + sessionData.getDBName() + "." + "MARKS_ENTRY WHERE STD_1='"
 					+ std + "' AND DIV_1='" + div + "' AND ACADEMIC_YEAR='" + academic + "' AND SECTION_NM='"
 					+ sessionData.getSectionName() + "'";
@@ -15197,8 +14900,8 @@ public class DBValidate {
 		LinkedHashMap subjectTitleMap = new LinkedHashMap();
 		LinkedHashMap subjectMap = new LinkedHashMap();
 		LinkedHashMap studentMap = new LinkedHashMap();
-		LinkedHashMap optionalMap = new LinkedHashMap();
-		LinkedHashMap optionalAllotmentMap = new LinkedHashMap();
+		LinkedHashMap<String, String> optionalMap = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> optionalAllotmentMap = new LinkedHashMap<String, String>();
 		String semester = "";
 		String subject_name = "";
 		String optional = "";
@@ -16607,7 +16310,7 @@ public class DBValidate {
 		String statusCount = "";
 		String fromDateReport = cm.dateFormat_yyyymmdd(fromDate);
 		String toDateReport = cm.dateFormat_yyyymmdd(toDate);
-		List grForReport = new ArrayList();
+		List<String> grForReport = new ArrayList<String>();
 		List attendanceReport = new ArrayList();
 		TreeMap<Integer, String> tm = new TreeMap();
 
@@ -23911,6 +23614,66 @@ public class DBValidate {
 		
 		return true;
 	}
+	
+	////get data mismatch from class_allotment///
+	public boolean getDataMismatchFromGeneralRegister(SessionData sessionData) throws Exception {
+
+		String gr = "", academicYear = "", std = "", div = "", query = "", currentAcademicYear = "", failedGr = "";
+		ResultSet mismatchData = null;
+		Boolean updateSuccessful;
+		
+		currentAcademicYear = cm.getAcademicYear(sessionData, cm.getCurrentDate());
+
+		query = "SELECT HS_GENERAL_REGISTER.GR_NO AS HS_GR_NO,HS_GENERAL_REGISTER.PRESENT_STD AS HS_STD,"
+				+ "HS_GENERAL_REGISTER.PRESENT_DIV AS HS_DIV,HS_GENERAL_REGISTER.ACADEMIC_YEAR AS HS_ACADEMIC,"
+				+ "CLASS_ALLOTMENT.GR_NO,CLASS_ALLOTMENT.PRESENT_STD,CLASS_ALLOTMENT.PRESENT_DIV,CLASS_ALLOTMENT.ACADEMIC_YEAR "
+				+ "FROM "+sessionData.getDBName()+".HS_GENERAL_REGISTER INNER JOIN CLASS_ALLOTMENT ON HS_GENERAL_REGISTER.GR_NO = CLASS_ALLOTMENT.GR_NO "
+				+ "WHERE HS_GENERAL_REGISTER.ACADEMIC_YEAR <> CLASS_ALLOTMENT.ACADEMIC_YEAR "
+				+ "AND CLASS_ALLOTMENT.ACADEMIC_YEAR = '"+currentAcademicYear+"' AND CLASS_ALLOTMENT.SECTION_NM='"+sessionData.getSectionName()+"'";
+
+		statement = connection.createStatement();
+		mismatchData = statement.executeQuery(query);
+		
+		while (mismatchData.next()) {
+			LinkedHashMap<String, String> grMap = new LinkedHashMap<String, String>();
+			gr = mismatchData.getString("GR_NO").trim();
+			std = mismatchData.getString("PRESENT_STD").trim();
+			div = mismatchData.getString("PRESENT_DIV").trim();
+			academicYear = mismatchData.getString("ACADEMIC_YEAR").trim();
+			updateSuccessful = updateGeneralRegisterFromClassAllotment(sessionData, gr, std, div, currentAcademicYear);
+			if(!updateSuccessful) {
+				failedGr = failedGr + gr +",";
+				
+			}
+		}
+		if(!failedGr.equalsIgnoreCase("")) {
+			JOptionPane.showMessageDialog(null, "Failed to update for GR :" + failedGr);
+			return false;
+		}
+		return true;
+	}
+	
+	////Update General Register from Class Allotment///
+	public boolean updateGeneralRegisterFromClassAllotment(SessionData sessionData, String gr, String std, 
+			String div, String academicYear) throws Exception {
+
+		String updateQuery = "";
+		
+		try {	
+				updateQuery = "UPDATE "+sessionData.getDBName()+".HS_GENERAL_REGISTER "
+						+ "SET PRESENT_STD='"+std+"', PRESENT_DIV='"+div+"', ACADEMIC_YEAR='"+academicYear+"' "
+						+ "WHERE GR_NO='"+gr+"' AND SECTION_NM='"+sessionData.getSectionName()+"'";
+	
+				statement = connection.createStatement();
+				statement.executeUpdate(updateQuery);
+		}
+		 catch(Exception e) {
+			cm.logException(e);
+			return false;
+		}
+		
+		return true;
+	}
 
 	/////Export from Fees_Data_Mandatory to Fees_Report_Mandatory////////////////
 	public boolean exportFeesDataToReport(SessionData sessionData, String academicYear, String std, String div, 
@@ -25004,8 +24767,6 @@ public class DBValidate {
 	public TreeMap<Integer, LinkedHashMap<String, Double>> getFeesAbstractReport(SessionData sessionData,
 			String academicYear, String std, String div, String category, String fromDateStr, String toDateStr)
 			throws Exception {
-//		logger.info("=========getFeesAbstractReport Query============");
-//		LinkedHashMap<String, LinkedHashMap<String, String>> feesReportMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		TreeMap<Integer, LinkedHashMap<String, Double>> feesReportMap = new TreeMap<Integer, LinkedHashMap<String, Double>>();
 		LinkedHashMap<String, String> receiptDetailMap = new LinkedHashMap<String, String>();
 		LinkedHashMap<String, Double> selFeesHeadMap = new LinkedHashMap<String, Double>();

@@ -1563,10 +1563,17 @@ public class SearchFeeStudentNew extends JFrame {
 	        }
 	        
 	        try {
+	        	JFrame f = new JFrame("Fee defaulter check in progress....Please Don't Close");
+				f.setBounds(screenWidth/2 - 270, screenHeight/2, 90, 50);
+			    f.setSize(600, 0);
+			    f.setResizable(false);
+			    f.setVisible(true);
+			    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			    
 	        	feesHeadMapPrevYear = dbValidate.getFeesHeadData(sessionData, previousAcademic, stdStr, section, categoryClass);
-	        	
 				defaulterList.addAll(dbValidate.getDefaulterFeeReport(sessionData, previousAcademic, "", "", "", 
 						feesHeadMapPrevYear, "DefaulterCheck", grStr));
+				f.setVisible(false);
 			} catch (Exception e1) {
 				commonObj.logException(e1);
 			}

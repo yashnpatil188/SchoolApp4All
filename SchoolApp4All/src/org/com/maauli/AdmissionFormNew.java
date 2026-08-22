@@ -735,11 +735,10 @@ public class AdmissionFormNew extends JFrame {
  		else {
  			studentImage = new ImageIcon(b);
  		}
-//		studentImage = new ImageIcon(b);
  		
  		final JLabel labelStudentImg = new JLabel();
  		labelStudentImg.setIcon(new ImageIcon(studentImage.getImage().getScaledInstance(120, 140, Image.SCALE_DEFAULT)));
-        labelStudentImg.setBounds(960, -130, 120, 417);
+        labelStudentImg.setBounds(970, -130, 120, 417);
  		bottombandPanel.add(labelStudentImg);
      	
  		// /////////////Student udise ID//////////////
@@ -756,7 +755,6 @@ public class AdmissionFormNew extends JFrame {
  		}
  		else if(classPageStatus.equalsIgnoreCase("EDIT")){
  			suid_text.setText(studentInfo[29]);
-//     			suid_text.setEditable(false);
  		}
  		suid_text.setFont(new Font("Book Antiqua", Font.BOLD, 16));
  		suid_text.setForeground(Color.GRAY);
@@ -784,7 +782,7 @@ public class AdmissionFormNew extends JFrame {
  			year_combo.setEnabled(false);
  		}
  		year_combo.setFont(new Font("Book Antiqua", Font.BOLD, 16));
- 		year_combo.setBounds(850, 12, 100, 25);
+ 		year_combo.setBounds(850, 12, 120, 25);
  		bottombandPanel.add(year_combo);
  		
  		// /////////////Last Name//////////////

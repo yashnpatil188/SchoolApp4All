@@ -1636,6 +1636,38 @@ public class HelpPage {
             }
         });
 		
+		height = height + 45;
+		JButton updateGeneralButton = new JButton("Update General Register");
+		updateGeneralButton.setFont(new Font("Book Antiqua", Font.BOLD, 12));
+		updateGeneralButton.setBounds(width, height, 200, 35);
+        panel.add(updateGeneralButton);
+        
+        JLabel updateGeneralLabel = new JLabel("Update General Register STD, DIV & Academic Year from Class Allotment");
+        updateGeneralLabel.setFont(new Font("Book Antiqua", Font.BOLD, 18));
+        updateGeneralLabel.setBounds(260, height, 900, 40);
+		panel.add(updateGeneralLabel);
+
+		updateGeneralButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+				
+            	try {
+            		if (dbValidate.connectDatabase(sessionData)) {
+    	            	boolean isSuccess = dbValidate.getDataMismatchFromGeneralRegister(sessionData);
+    	            	if(isSuccess) {
+    	            		JOptionPane.showMessageDialog(null, "Updated successfully.");
+    	            	}
+    	            	else {
+    	            		JOptionPane.showMessageDialog(null, "Updation failed");
+    	            	}
+    				}
+            	}
+            	catch(Exception e1) {
+            		commonObj.logException(e1);
+            	}
+            }
+        });
+		
 //		if(appType.equalsIgnoreCase("College")) {
 //			height = height + 45;
 //			JButton updateFeeReportIssueButton = new JButton("Update Fee Report");

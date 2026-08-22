@@ -4620,7 +4620,7 @@ public class Common {
 		return false;
 	}
 	
-	public LinkedHashMap getExamTypeMapping(){
+	public LinkedHashMap<String, String> getExamTypeMapping(){
 		LinkedHashMap examTypeMap = new LinkedHashMap();
 		examTypeMap.put("DOB", "dobs");
 		examTypeMap.put("OBT", "obt");

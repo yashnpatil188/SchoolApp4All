@@ -5,25 +5,18 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-
 import java.util.LinkedHashMap;
-import java.util.ResourceBundle;
-import java.util.TreeMap;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import org.com.accesser.DBValidate;
 import org.com.accesser.SessionData;
 
@@ -41,7 +34,6 @@ public class SchoolForAllLoginView {
 	static String log_path = "";
 	static Common commonObj = new Common();
 	static Logger logger 			= Logger.getLogger(SchoolForAllLoginView.class.getName());
-// static ResourceBundle bundle    = ResourceBundle.getBundle("org.com.accesser.school");
 	static SessionData sessionData;
 	private static LinkedHashMap<String, String> initialConfigMap;
 	private static LinkedHashMap<String, String> configMap;
@@ -176,17 +168,10 @@ public class SchoolForAllLoginView {
 		panel.add(selectSchoolLabel);
 
 		String schoolListDisp[] = schoolListData.split(",");
-		final JComboBox school_combo = new JComboBox(schoolListDisp);
+		final JComboBox<Object> school_combo = new JComboBox<Object>(schoolListDisp);
 		school_combo.setFont(new Font("Book Antiqua", Font.BOLD, 13));
 		school_combo.setBounds((screenWidth / 2 - 80), (screenHeight / 2 - 100), 250, 25);
 		panel.add(school_combo);
-
-//		if (schoolMap.size() == 1) {
-//			frame.setVisible(false);
-//			callLoginSection(school_combo.getSelectedItem().toString());
-//		} else {
-//			frame.setVisible(true);
-//		}
 
 		JButton submitButton = new JButton("Submit");
 		submitButton.setFont(new Font("Book Antiqua", Font.BOLD, 16));
@@ -222,40 +207,15 @@ public class SchoolForAllLoginView {
 			}
 		});
 
-		/*
-		 * if(sch_required.equalsIgnoreCase("true")){ JButton schoolButton = new
-		 * JButton("school"); schoolButton.setFont(new Font("Book Antiqua",
-		 * Font.BOLD, 25)); schoolButton.setBounds((screenWidth / 2 - 120),
-		 * (screenHeight / 2 - 200), 200, 30); panel.add(schoolButton);
-		 * 
-		 * schoolButton.addActionListener(new ActionListener() {
-		 * 
-		 * public void actionPerformed(ActionEvent e) {
-		 * sessionData.setDBName(sessionData1.getConfigMap().get("DB_NAME_SCHOOL"));
-		 * sessionData.setAppName(sessionData1.getConfigMap().get("APP_NAME_SCHOOL")
-		 * );
-		 * sessionData.setSchoolName(sessionData1.getConfigMap().get("school_NAME"))
-		 * ; sessionData.setAppType("SCHOOL"); frame.setVisible(false); new
-		 * LoginDetails(sessionData); } }); }
-		 */
 	}
 
 	public static void callLoginSection(String selSchool, String appType) {
-		boolean validateFlag = false;
-//		String school = "SCHOOL";
 		try {
-//		frame.setVisible(false);
-//		new LoginSection(sessionData, selSchool, schoolMap.get(selSchool));
-//		if(schoolMap.get(selSchool).toLowerCase().contains("college")) {
-//			school_college = "COLLEGE";
-//		}
 
 			try {
-//			if(dbValidate.connectDatabase(sessionData)){
 				initialConfigMap = dbValidate.getConfigMap(sessionData, "getschool", "app_connect",
 						selSchool + "|" + schoolMap.get(selSchool));
 				initialConfigMap.put("SchoolApp_IP", sessionData.getSchoolApp_ip());
-//			}
 			} catch (Exception e1) {
 				commonObj.logException(e1);
 			}
@@ -273,8 +233,6 @@ public class SchoolForAllLoginView {
 			} finally {
 			}
 
-//			int refreshInterval = Integer.parseInt(configMap.get("REFRESH_INTERVAL"));
-//			sessionData.setRefreshInterval(refreshInterval);
 			sessionData.setAppName(configMap.get("APP_NAME_" + appType));
 			sessionData.setSchoolName(configMap.get(appType + "_NAME"));
 			sessionData.setAppType(appType);
